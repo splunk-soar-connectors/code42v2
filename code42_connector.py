@@ -22,7 +22,6 @@ class RetVal(tuple):
         return tuple.__new__(RetVal, (val1, val2))
 
 
-# TODO Change this to Code42V2Connector, or just Code42Connector
 class Code42Connector(BaseConnector):
 
     def __init__(self):
