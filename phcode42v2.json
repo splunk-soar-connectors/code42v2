@@ -1,0 +1,67 @@
+{
+    "appid": "4d8f53a7-7b12-4d7d-8b01-6575680acf6f",
+    "name": "phcode42v2",
+    "description": "This app integrates with Code42 to execute various investigate, correct, and containment actions",
+    "type": "information",
+    "product_vendor": "Code42",
+    "logo": "phcode42v2.png",
+    "logo_dark": "phcode42v2_dark.png",
+    "product_name": "Code42",
+    "python_version": "3",
+    "product_version_regex": ".*",
+    "publisher": "Code42",
+    "license": "Copyright (c) Code42, 2021",
+    "app_version": "1.0.0",
+    "utctime_updated": "2021-05-07T19:50:55.080648Z",
+    "package_name": "phantom_phcode42v2",
+    "main_module": "phcode42v2_connector.pyc",
+    "min_phantom_version": "4.10.3.51237",
+    "app_wizard_version": "1.0.0",
+    "pip_dependencies": {
+        "wheel": [
+            {
+                "module": "py42",
+                "input_file": "wheels/py42-1.14.2-py2.py3-none-any.whl"
+            }
+        ]
+    },
+    "configuration": {
+        "cloud_instance": {
+            "description": "Cloud instance to connect to",
+            "data_type": "string",
+            "required": true,
+            "value_list": [],
+            "default": "https://console.us.code42.com",
+            "order": 0
+        },
+        "username": {
+            "description": "Username to connect with",
+            "data_type": "string",
+            "required": true,
+            "value_list": [],
+            "default": "",
+            "order": 1
+        },
+        "password": {
+            "description": "Password to connect with",
+            "data_type": "string",
+            "required": true,
+            "value_list": [],
+            "default": "",
+            "order": 2
+        }
+    },
+    "actions": [
+        {
+            "action": "test connectivity",
+            "identifier": "test_connectivity",
+            "description": "Validate the asset configuration for connectivity using supplied configuration",
+            "verbose": "",
+            "type": "test",
+            "read_only": true,
+            "parameters": {},
+            "output": [],
+            "versions": "EQ(*)"
+        }
+    ]
+}
