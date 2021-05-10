@@ -14,7 +14,7 @@
     "app_version": "1.0.0",
     "utctime_updated": "2021-05-07T19:50:55.080648Z",
     "package_name": "phantom_phcode42v2",
-    "main_module": "phcode42v2_connector.pyc",
+    "main_module": "code42v2_connector.pyc",
     "min_phantom_version": "4.10.3.51237",
     "app_wizard_version": "1.0.0",
     "pip_dependencies": {

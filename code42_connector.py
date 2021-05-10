@@ -1,9 +1,3 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
-# -----------------------------------------
-# Phantom sample App Connector python file
-# -----------------------------------------
-
 # Python 3 Compatibility imports
 from __future__ import print_function, unicode_literals
 
@@ -13,7 +7,7 @@ from phantom.base_connector import BaseConnector
 from phantom.action_result import ActionResult
 
 # Usage of the consts file is recommended
-# from phcode42v2_consts import *
+# from code42_consts import *
 import requests
 import json
 from bs4 import BeautifulSoup
@@ -28,23 +22,17 @@ class RetVal(tuple):
         return tuple.__new__(RetVal, (val1, val2))
 
 
-class Phcode42V2Connector(BaseConnector):
+# TODO Change this to Code42V2Connector, or just Code42Connector
+class Code42Connector(BaseConnector):
 
     def __init__(self):
-
-        # Call the BaseConnectors init first
-        super(Phcode42V2Connector, self).__init__()
+        super(Code42Connector, self).__init__()
 
         self._state = None
         self._cloud_instance = None
         self._username = None
         self._password = None
         self._client = None
-
-        # Variable to hold a base_url in case the app makes REST calls
-        # Do note that the app json defines the asset config, so please
-        # modify this as you deem fit.
-        self._base_url = None
 
     def _create_client(self, action_result):
         try:
@@ -137,40 +125,6 @@ class Phcode42V2Connector(BaseConnector):
 
         return RetVal(action_result.set_status(phantom.APP_ERROR, message), None)
 
-    def _make_rest_call(self, endpoint, action_result, method="get", **kwargs):
-        # **kwargs can be any additional parameters that requests.request accepts
-
-        config = self.get_config()
-
-        resp_json = None
-
-        try:
-            request_func = getattr(requests, method)
-        except AttributeError:
-            return RetVal(
-                action_result.set_status(phantom.APP_ERROR, "Invalid method: {0}".format(method)),
-                resp_json
-            )
-
-        # Create a URL to connect to
-        url = self._base_url + endpoint
-
-        try:
-            r = request_func(
-                url,
-                # auth=(username, password),  # basic authentication
-                verify=config.get('verify_server_cert', False),
-                **kwargs
-            )
-        except Exception as e:
-            return RetVal(
-                action_result.set_status(
-                    phantom.APP_ERROR, "Error Connecting to server. Details: {0}".format(str(e))
-                ), resp_json
-            )
-
-        return self._process_response(r, action_result)
-
     def _handle_test_connectivity(self, param):
         # Add an action result object to self (BaseConnector) to represent the action for this param
         action_result = self.add_action_result(ActionResult(dict(param)))
@@ -182,7 +136,6 @@ class Phcode42V2Connector(BaseConnector):
         response = self._client.users.get_current()
         util.print_response(response)
 
-        # Return success
         self.save_progress("Test Connectivity Passed")
         return action_result.set_status(phantom.APP_SUCCESS)
 
@@ -197,9 +150,6 @@ class Phcode42V2Connector(BaseConnector):
         if action_id == 'test_connectivity':
             ret_val = self._handle_test_connectivity(param)
 
-        elif action_id == 'test_connectivity_py42':
-            ret_val = self._handle_test_connectivity_py42(param)
-
         return ret_val
 
     def initialize(self):
@@ -212,17 +162,6 @@ class Phcode42V2Connector(BaseConnector):
         self._cloud_instance = config['cloud_instance']
         self._username = config['username']
         self._password = config['password']
-        """
-        # Access values in asset config by the name
-
-        # Required values can be accessed directly
-        required_config_name = config['required_config_name']
-
-        # Optional values should use the .get() function
-        optional_config_name = config.get('optional_config_name')
-        """
-
-        self._base_url = config.get('base_url')
 
         return phantom.APP_SUCCESS
 
@@ -258,7 +197,7 @@ def main():
 
     if username and password:
         try:
-            login_url = Phcode42V2Connector._get_phantom_base_url() + '/login'
+            login_url = Code42Connector._get_phantom_base_url() + '/login'
 
             print("Accessing the Login page")
             r = requests.get(login_url, verify=False)
@@ -285,7 +224,7 @@ def main():
         in_json = json.loads(in_json)
         print(json.dumps(in_json, indent=4))
 
-        connector = Phcode42V2Connector()
+        connector = Code42Connector()
         connector.print_progress_message = True
 
         if session_id is not None:
