@@ -10,7 +10,6 @@ from phantom.action_result import ActionResult
 # from code42_consts import *
 import requests
 import json
-from bs4 import BeautifulSoup
 
 import py42.sdk
 import py42.util as util
