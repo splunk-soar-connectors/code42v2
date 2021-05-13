@@ -32,27 +32,19 @@ class Code42Connector(BaseConnector):
         self._password = None
         self._client = None
 
-    def _create_client(self, action_result):
-        try:
-            self._client = py42.sdk.from_local_account(self._cloud_instance, self._username, self._password)
-        except Exception as e:
-            return action_result.set_status(phantom.APP_ERROR, f"Could not create py42 client: {e}")
+    def initialize(self):
+        # Load the state in initialize, use it to store data
+        # that needs to be accessed across actions
+        self._state = self.load_state()
+
+        # get the asset config
+        config = self.get_config()
+        self._cloud_instance = config['cloud_instance']
+        self._username = config['username']
+        self._password = config['password']
+        self._client = py42.sdk.from_local_account(self._cloud_instance, self._username, self._password)
 
         return phantom.APP_SUCCESS
-
-    def _handle_test_connectivity(self, param):
-        # Add an action result object to self (BaseConnector) to represent the action for this param
-        action_result = self.add_action_result(ActionResult(dict(param)))
-        self.save_progress("Connecting to endpoint")
-
-        if not self._create_client(action_result):
-            return action_result.get_status()
-
-        response = self._client.users.get_current()
-        util.print_response(response)
-
-        self.save_progress("Test Connectivity Passed")
-        return action_result.set_status(phantom.APP_SUCCESS)
 
     def handle_action(self, param):
         ret_val = phantom.APP_SUCCESS
@@ -67,18 +59,16 @@ class Code42Connector(BaseConnector):
 
         return ret_val
 
-    def initialize(self):
-        # Load the state in initialize, use it to store data
-        # that needs to be accessed across actions
-        self._state = self.load_state()
+    def _handle_test_connectivity(self, param):
+        # Add an action result object to self (BaseConnector) to represent the action for this param
+        action_result = self.add_action_result(ActionResult(dict(param)))
+        self.save_progress("Connecting to endpoint")
 
-        # get the asset config
-        config = self.get_config()
-        self._cloud_instance = config['cloud_instance']
-        self._username = config['username']
-        self._password = config['password']
+        response = self._client.users.get_current()
+        util.print_response(response)
 
-        return phantom.APP_SUCCESS
+        self.save_progress("Test Connectivity Passed")
+        return action_result.set_status(phantom.APP_SUCCESS)
 
     def finalize(self):
         # Save the state, this data is saved across actions and app upgrades
