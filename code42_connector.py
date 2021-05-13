@@ -48,8 +48,7 @@ class Code42Connector(BaseConnector):
         if not self._create_client(action_result):
             return action_result.get_status()
 
-        response = self._client.users.get_current()
-        util.print_response(response)
+        self._client.users.get_current()
 
         self.save_progress("Test Connectivity Passed")
         return action_result.set_status(phantom.APP_SUCCESS)
