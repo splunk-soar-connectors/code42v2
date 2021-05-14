@@ -1,2 +1,11 @@
 .git*
-*.py
+test_connector.py
+phantom-stubs/*
+__pycache__/*
+setup.py
+util.sh
+*.md
+LICENSE
+dist/*
+phcode42v2.egg-info/*
+tests/*

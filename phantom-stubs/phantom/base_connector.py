@@ -7,3 +7,9 @@ class BaseConnector:
 
     def save_progress(self, status):
         pass
+
+    def get_action_identifier(self):
+        pass
+
+    def debug_print(self, name, value):
+        pass
