@@ -1,4 +1,5 @@
 build
 dist
 phcode42v2.egg-info
-phantom-stubs/phantom_stubs.egg-info
+phantomstubs/phantomstubs.egg-info
+phcode42v2.tgz
