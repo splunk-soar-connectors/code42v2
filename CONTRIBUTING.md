@@ -6,7 +6,9 @@ to create a Phantom account. Phantom will approve your registration and send you
 Next, log in and go [here](https://my.phantom.us/downloads/) to download the Phantom VM image.
 
 Follow these [instructions](https://docs.splunk.com/Documentation/Phantom/4.10.3/Install/InstallOVA) to install Splunk Phantom 
-as a VM image. Use these [default credentials](https://docs.splunk.com/Documentation/Phantom/4.10.3/Install/Reference) to log in.
+as a VM image. You do NOT need to complete the section labeled "Configure the network settings for the virtual machine".
+
+Use these [default credentials](https://docs.splunk.com/Documentation/Phantom/4.10.3/Install/Reference) to log in.
 Confirm that you can connect to the VM via SSH on your host machine. You can use `hostname -I` on the remote machine to look up your IP address.
 Also confirm that you can access the Phantom web app at `https://{phantom VM IP address}`.
 
