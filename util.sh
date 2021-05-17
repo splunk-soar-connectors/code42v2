@@ -5,7 +5,7 @@ main() {
   "")
     echo "Kindly supply a command" && exit 0
     ;;
-  move)
+  deploy)
     echo "Tarring the ball..."
     pushd .. && tar -cvf phcode42v2/phcode42v2.tgz -X phcode42v2/exclude_files.txt phcode42v2/* && popd
     echo "Moving to remote..."

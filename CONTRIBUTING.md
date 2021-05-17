@@ -21,7 +21,7 @@ Run the below command to install the Code42 app on Phantom.
 
 ```bash
 export PHANTOM_VM_IP_ADDR=0.0.0.0 # Replace with IP address for Phantom VM
-./util.sh move
+./util.sh deploy
 ```
 
 Open the Phantom web app and login as the `admin` user. Navigate to `Apps > Unconfigured Apps` and find the Code42 App.
@@ -31,6 +31,8 @@ and Asset Settings. Save the Asset Configuration and then click Test Connectivit
 ## Creating a virtual environment
 
 To run the unit tests you will need to create a Python virtual environment for the Phantom app and its dependencies.
+
+### macOS
 
 Install `pyenv` and `pyenv-virtualenv` via [homebrew](https://brew.sh/):
 
@@ -54,6 +56,25 @@ pyenv activate phantom
 ```
 
 Use `source deactivate` to exit the virtual environment and `pyenv activate phantom` to reactivate it.
+
+### Windows/Linux
+
+Install Python 3.6.13 from [python.org](https://python.org).
+
+Next, in a directory somewhere outside the project, create and activate your virtual environment:
+
+```bash
+python -m venv phantom
+# macOS/Linux
+source phantom/bin/activate
+# Windows
+.\phantom\Scripts\Activate
+```
+
+To leave the virtual environment, simply use:
+```bash
+deactivate
+```
 
 ## Running the tests
 

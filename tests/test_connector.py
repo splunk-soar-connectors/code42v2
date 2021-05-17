@@ -30,7 +30,7 @@ def py42_client(mocker):
 def connector(request, py42_client):
     connector = code42_connector.Code42Connector()
     connector._client = py42_client
-    yield connector
+    return connector
 
 
 def test_handle_connectivity(mocker, connector):
