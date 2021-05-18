@@ -6,13 +6,10 @@ import phantom.app as phantom
 from phantom.base_connector import BaseConnector
 from phantom.action_result import ActionResult
 
-# Usage of the consts file is recommended
-# from code42_consts import *
 import requests
 import json
 
 import py42.sdk
-import py42.util as util
 
 
 class RetVal(tuple):
@@ -64,8 +61,11 @@ class Code42Connector(BaseConnector):
         action_result = self.add_action_result(ActionResult(dict(param)))
         self.save_progress("Connecting to endpoint")
 
-        response = self._client.users.get_current()
-        util.print_response(response)
+        try:
+            self._client.users.get_current()
+        except Exception as e:
+            exception_message = e.args[0].strip()
+            return action_result.set_status(phantom.APP_ERROR, "Unable to connect to Code42.", exception_message),
 
         self.save_progress("Test Connectivity Passed")
         return action_result.set_status(phantom.APP_SUCCESS)
