@@ -36,14 +36,14 @@ class Code42Connector(BaseConnector):
 
         # get the asset config
         config = self.get_config()
-        self._cloud_instance = config['cloud_instance']
-        self._username = config['username']
-        self._password = config['password']
+        self._cloud_instance = config["cloud_instance"]
+        self._username = config["username"]
+        self._password = config["password"]
         self._client = py42.sdk.from_local_account(self._cloud_instance, self._username, self._password)
 
         return phantom.APP_SUCCESS
 
-    def handle_action(self, param):
+    def handle_action(self, param_dict):
         ret_val = phantom.APP_SUCCESS
 
         # Get the action that we are supposed to execute for this App Run
@@ -51,14 +51,17 @@ class Code42Connector(BaseConnector):
 
         self.debug_print("action_id", self.get_action_identifier())
 
-        if action_id == 'test_connectivity':
-            ret_val = self._handle_test_connectivity(param)
-
+        if action_id == "test_connectivity":
+            ret_val = self._handle_test_connectivity(param_dict)
+        elif action_id == "add_departing_employee":
+            ret_val = self._handle_add_departing_employee(param_dict)
+        elif action_id == "remove_departing_employee":
+            ret_val = self._handle_remove_departing_employee(param_dict)
         return ret_val
 
-    def _handle_test_connectivity(self, param):
+    def _handle_test_connectivity(self, param_dict):
         # Add an action result object to self (BaseConnector) to represent the action for this param
-        action_result = self.add_action_result(ActionResult(dict(param)))
+        action_result = self.add_action_result(ActionResult(dict(param_dict)))
         self.save_progress("Connecting to endpoint")
 
         try:
@@ -68,6 +71,14 @@ class Code42Connector(BaseConnector):
             return action_result.set_status(phantom.APP_ERROR, "Unable to connect to Code42.", exception_message),
 
         self.save_progress("Test Connectivity Passed")
+        return action_result.set_status(phantom.APP_SUCCESS)
+
+    def _handle_add_departing_employee(self, param_dict):
+        action_result = self.add_action_result(ActionResult(dict(param_dict)))
+        return action_result.set_status(phantom.APP_SUCCESS)
+
+    def _handle_remove_departing_employee(self, param_dict):
+        action_result = self.add_action_result(ActionResult(dict(param_dict)))
         return action_result.set_status(phantom.APP_SUCCESS)
 
     def finalize(self):
@@ -100,6 +111,8 @@ def main():
         import getpass
         password = getpass.getpass("Password: ")
 
+    csrftoken = None
+    headers = None
     if username and password:
         try:
             login_url = Code42Connector._get_phantom_base_url() + '/login'
@@ -109,17 +122,17 @@ def main():
             csrftoken = r.cookies['csrftoken']
 
             data = dict()
-            data['username'] = username
-            data['password'] = password
-            data['csrfmiddlewaretoken'] = csrftoken
+            data["username"] = username
+            data["password"] = password
+            data["csrfmiddlewaretoken"] = csrftoken
 
             headers = dict()
-            headers['Cookie'] = 'csrftoken=' + csrftoken
-            headers['Referer'] = login_url
+            headers["Cookie"] = "csrftoken=" + csrftoken
+            headers["Referer"] = login_url
 
             print("Logging into Platform to get the session id")
             r2 = requests.post(login_url, verify=False, data=data, headers=headers)
-            session_id = r2.cookies['sessionid']
+            session_id = r2.cookies["sessionid"]
         except Exception as e:
             print("Unable to get session id from the platform. Error: " + str(e))
             exit(1)
@@ -134,9 +147,10 @@ def main():
 
         if session_id is not None:
             in_json['user_session_token'] = session_id
-            connector._set_csrf_info(csrftoken, headers['Referer'])
+            if csrftoken and headers:
+                connector._set_csrf_info(csrftoken, headers["Referer"])
 
-        ret_val = connector._handle_action(json.dumps(in_json), None)
+        ret_val = connector.handle_action(json.dumps(in_json))
         print(json.dumps(json.loads(ret_val), indent=4))
 
     exit(0)

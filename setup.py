@@ -9,5 +9,5 @@ setup(
                       "pytest==4.4.0",
                       "pytest-mock==1.10.3",
                       "py42>=1.14.1",
-                      "phantomstubs"]
+                      "phantom"]
 )

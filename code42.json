@@ -60,6 +60,60 @@
             "parameters": {},
             "output": [],
             "versions": "EQ(*)"
+        },
+        {
+            "action": "add departing employee",
+            "identifier": "add_departing_employee",
+            "description": "Add a departing employee to the departing employees detection list",
+            "verbose": "",
+            "type": "contain",
+            "read_only": false,
+            "parameters": {
+                "username": {
+                    "description": "Username of the employee to add",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": true,
+                    "contains": [
+                        "user name"
+                    ],
+                    "order": 0
+                },
+                "departure_date": {
+                    "description": "Date of departure for employee",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": true,
+                    "contains": [
+                        "departure date"
+                    ],
+                    "order": 0
+                }
+            },
+            "output": [],
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "remove departing employee",
+            "identifier": "remove_departing_employee",
+            "description": "Remove a departing employee from the departing employees detection list",
+            "verbose": "",
+            "type": "correct",
+            "read_only": false,
+            "parameters": {
+                "username": {
+                    "description": "Username of the employee to remove",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": true,
+                    "contains": [
+                        "user name"
+                    ],
+                    "order": 0
+                }
+            },
+            "output": [],
+            "versions": "EQ(*)"
         }
     ]
 }

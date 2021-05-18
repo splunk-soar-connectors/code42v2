@@ -21,6 +21,7 @@ Run the below command to install the Code42 app on Phantom.
 
 ```bash
 export PHANTOM_VM_IP_ADDR=0.0.0.0 # Replace with IP address for Phantom VM
+export PHANTOM_VM_PASSWORD=phantom # Use the password for your phantom admin user.
 ./util.sh deploy
 ```
 
@@ -83,7 +84,7 @@ Make sure you have created a Python virtual environment for the Phantom project 
 Then, activate the virtual environment and install the dependencies before running the tests.
 
 ```bash
-pip install -e phantomstubs
+pip install -e phantom
 pip install -e .
 pytest
 ```
