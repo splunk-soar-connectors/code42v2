@@ -74,11 +74,16 @@ class Code42Connector(BaseConnector):
         return action_result.set_status(phantom.APP_SUCCESS)
 
     def _handle_add_departing_employee(self, param_dict):
-        action_result = self.add_action_result(ActionResult(dict(param_dict)))
+        action_result = self.add_action_result(ActionResult(param_dict))
+        username = param_dict["username"]
+        departure_date = param_dict.get("departure_date")
+        self._client.detectionlists.departing_employee.add(username, departure_date=departure_date)
         return action_result.set_status(phantom.APP_SUCCESS)
 
     def _handle_remove_departing_employee(self, param_dict):
-        action_result = self.add_action_result(ActionResult(dict(param_dict)))
+        action_result = self.add_action_result(ActionResult(param_dict))
+        username = param_dict["username"]
+        self._client.detectionlists.departing_employee.remove(username)
         return action_result.set_status(phantom.APP_SUCCESS)
 
     def finalize(self):
@@ -95,9 +100,9 @@ def main():
 
     argparser = argparse.ArgumentParser()
 
-    argparser.add_argument('input_test_json', help='Input Test JSON file')
-    argparser.add_argument('-u', '--username', help='username', required=False)
-    argparser.add_argument('-p', '--password', help='password', required=False)
+    argparser.add_argument("input_test_json", help="Input Test JSON file")
+    argparser.add_argument("-u", "--username", help="username", required=False)
+    argparser.add_argument("-p", "--password", help="password", required=False)
 
     args = argparser.parse_args()
     session_id = None
@@ -115,11 +120,11 @@ def main():
     headers = None
     if username and password:
         try:
-            login_url = Code42Connector._get_phantom_base_url() + '/login'
+            login_url = Code42Connector._get_phantom_base_url() + "/login"
 
             print("Accessing the Login page")
             r = requests.get(login_url, verify=False)
-            csrftoken = r.cookies['csrftoken']
+            csrftoken = r.cookies["csrftoken"]
 
             data = dict()
             data["username"] = username
