@@ -21,7 +21,10 @@ Run the below command to install the Code42 app on Phantom.
 
 ```bash
 export PHANTOM_VM_IP_ADDR=0.0.0.0 # Replace with IP address for Phantom VM
+<<<<<<< HEAD
 export PHANTOM_VM_PASSWORD=phantom # Use the password for your phantom admin user.
+=======
+>>>>>>> feature/tests
 ./util.sh deploy
 ```
 
