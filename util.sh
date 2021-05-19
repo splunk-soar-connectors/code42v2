@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -eou pipefail
+set -eo pipefail
 
 make_tar() {
   echo "Tarring the ball..."
@@ -43,7 +43,7 @@ main() {
     sshpass -p "${PHANTOM_VM_PASSWORD}" ssh phantom@${PHANTOM_VM_IP_ADDR}
     ;;
   open-web)
-    open https://$PHANTOM_VM_IP_ADDR:9999
+    open https://${PHANTOM_VM_IP_ADDR}:9999
     ;;
   *)
     echo "Not a valid command" && print_usage && exit 0
