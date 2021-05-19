@@ -70,17 +70,23 @@ class Code42Connector(BaseConnector):
         return action_result.set_status(phantom.APP_SUCCESS)
 
     def _handle_add_departing_employee(self, param):
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
         action_result = self.add_action_result(ActionResult(dict(param)))
         username = param["username"]
         departure_date = param.get("departure_date")
         self._client.detectionlists.departing_employee.add(username, departure_date=departure_date)
-        return action_result.set_status(phantom.APP_SUCCESS)
+        action_result.update_summary({})
+        status_message = "{} was added to the departing employee list".format(username)
+        return action_result.set_status(phantom.APP_SUCCESS, status_message=status_message)
 
     def _handle_remove_departing_employee(self, param):
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
         action_result = self.add_action_result(ActionResult(dict(param)))
         username = param["username"]
         self._client.detectionlists.departing_employee.remove(username)
-        return action_result.set_status(phantom.APP_SUCCESS)
+        action_result.update_summary({})
+        status_message = "{} was removed from the departing employee list".format(username)
+        return action_result.set_status(phantom.APP_SUCCESS, status_message=status_message)
 
     def finalize(self):
         # Save the state, this data is saved across actions and app upgrades
@@ -151,7 +157,7 @@ def main():
             if csrftoken and headers:
                 connector._set_csrf_info(csrftoken, headers["Referer"])
 
-        ret_val = connector.handle_action(json.dumps(in_json))
+        ret_val = connector._handle_action(json.dumps(in_json), None)
         print(json.dumps(json.loads(ret_val), indent=4))
 
     exit(0)
