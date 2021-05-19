@@ -67,6 +67,7 @@ Then, create your virtual environment.
 pyenv install 3.6.13
 pyenv virtualenv 3.6.13 phantom
 pyenv activate phantom
+pip install --upgrade pip
 ```
 
 Use `source deactivate` to exit the virtual environment and `pyenv activate phantom` to reactivate it.
@@ -83,6 +84,7 @@ python -m venv phantom
 source phantom/bin/activate
 # Windows
 .\phantom\Scripts\Activate
+pip install --upgrade pip
 ```
 
 To leave the virtual environment, simply use:
@@ -97,7 +99,6 @@ Make sure you have created a Python virtual environment for the Phantom project 
 Then, activate the virtual environment and install the dependencies before running the tests.
 
 ```bash
-pip install -e phantomstubs
 pip install -e .
 pytest
 ```

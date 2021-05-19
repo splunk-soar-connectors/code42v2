@@ -1,6 +1,6 @@
 .git*
 test_connector.py
-phantomstubs/*
+phantom/*
 __pycache__/*
 setup.py
 util.sh

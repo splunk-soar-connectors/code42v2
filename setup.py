@@ -12,6 +12,5 @@ setup(
     install_requires=["requests>=2.3",
                       "pytest==4.4.0",
                       "pytest-mock==1.10.3",
-                      f"py42 @ file://localhost/{path_to_py42_wheel}",
-                      "phantomstubs"]
+                      f"py42 @ file://localhost/{path_to_py42_wheel}"]
 )

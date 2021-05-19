@@ -1,15 +1,13 @@
 from logging import getLogger
 from unittest import mock
 
-import pytest
 from py42.exceptions import Py42UnauthorizedError
-from pytest import fixture, fail
+from pytest import fixture
 
 import code42_connector
 from phantom.action_result import ActionResult
 import phantom.app as phantom
 import py42.sdk
-from requests import HTTPError
 
 logger = getLogger(name=__name__)
 
@@ -26,6 +24,22 @@ def mock_py42_client(mocker):
 @fixture
 def connector(mock_py42_client):
     connector = code42_connector.Code42Connector()
+    connector._client = mock_py42_client
+    return connector
+
+
+def create_fake_connector(action_identifier):
+    def fake_get_action_identifier():
+        return action_identifier
+
+    connector = code42_connector.Code42Connector()
+    connector.get_action_identifier = fake_get_action_identifier
+    return connector
+
+
+@fixture
+def test_connectivity_connector(mock_py42_client):
+    connector = create_fake_connector("test_connectivity")
     connector._client = mock_py42_client
     return connector
 
@@ -58,15 +72,15 @@ class TestCode42Connector(object):
 
         set_status.assert_called_with(phantom.APP_ERROR, mocker.ANY)
 
-    def test_handle_action_calls_handle_connectivity(self, mocker, connector):
+    def test_handle_action_calls_handle_connectivity(self, mocker, test_connectivity_connector):
+        def fake_set_status(self, status, message=None):
+            return status == phantom.APP_SUCCESS
+        mocker.patch("phantom.action_result.ActionResult.set_status", new=fake_set_status)
         param = {}
-        handle_test_connectivity = mocker.patch("code42_connector.Code42Connector._handle_test_connectivity",
-                                                return_value=phantom.APP_SUCCESS)
-        mocker.patch("phantom.base_connector.BaseConnector.get_action_identifier", return_value="test_connectivity")
+        mocker.patch("phantom.base_connector.BaseConnector.add_action_result", return_value=ActionResult(dict(param)))
 
-        ret = connector.handle_action(param)
+        ret = test_connectivity_connector.handle_action(param)
 
-        handle_test_connectivity.assert_called_with(param)
         assert ret == phantom.APP_SUCCESS
 
     def test_initialize_reads_credentials_from_config_and_creates_py42_client_from_local_account(self, mocker,
