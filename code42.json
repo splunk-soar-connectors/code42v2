@@ -85,7 +85,7 @@
                     "required": false,
                     "primary": true,
                     "contains": [
-                        "departure date"
+                        "code42 departure date"
                     ],
                     "order": 0
                 }
