@@ -72,11 +72,13 @@ class Code42Connector(BaseConnector):
     def _handle_add_departing_employee(self, param):
         self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
         action_result = self.add_action_result(ActionResult(dict(param)))
-        username = param["username"]
-        departure_date = param.get("departure_date")
-        self._client.detectionlists.departing_employee.add(username, departure_date=departure_date)
-        action_result.update_summary({})
-        status_message = "{} was added to the departing employee list".format(username)
+        # username = param["username"]
+        # departure_date = param.get("departure_date")
+        # self._client.detectionlists.departing_employee.add(username, departure_date=departure_date)
+        # action_result.update_summary({})
+        # status_message = "{} was added to the departing employee list".format(username)
+
+        status_message = "TEST"
         return action_result.set_status(phantom.APP_SUCCESS, status_message=status_message)
 
     def _handle_remove_departing_employee(self, param):

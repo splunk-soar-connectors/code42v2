@@ -66,6 +66,7 @@
             "identifier": "add_departing_employee",
             "description": "Add a departing employee to the departing employees detection list",
             "verbose": "",
+            "undo": "remove_departing_employee",
             "type": "contain",
             "read_only": false,
             "parameters": {
@@ -87,7 +88,23 @@
                     "order": 1
                 }
             },
-            "output": [],
+            "output": [
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string",
+                    "example_values": [
+                        "test@example.com was added to the departing employees list"
+                    ]
+                }
+            ],
             "versions": "EQ(*)"
         },
         {
@@ -95,6 +112,7 @@
             "identifier": "remove_departing_employee",
             "description": "Remove a departing employee from the departing employees detection list",
             "verbose": "",
+            "undo": "add_departing_employee",
             "type": "correct",
             "read_only": false,
             "parameters": {
@@ -109,7 +127,23 @@
                     "order": 0
                 }
             },
-            "output": [],
+            "output": [
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string",
+                    "example_values": [
+                        "test@example.com was removed from the departing employees list"
+                    ]
+                }
+            ],
             "versions": "EQ(*)"
         }
     ]
