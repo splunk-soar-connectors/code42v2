@@ -13,3 +13,9 @@ class BaseConnector:
 
     def debug_print(self, name, value):
         pass
+
+    def load_state(self):
+        pass
+
+    def get_config(self):
+        pass
