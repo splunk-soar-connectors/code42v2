@@ -84,7 +84,7 @@
                     "data_type": "string",
                     "required": false,
                     "primary": true,
-                    "order": 0
+                    "order": 1
                 }
             },
             "output": [],
