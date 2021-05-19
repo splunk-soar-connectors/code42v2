@@ -63,9 +63,8 @@ class Code42Connector(BaseConnector):
 
         try:
             self._client.users.get_current()
-        except Exception as e:
-            exception_message = e.args[0].strip()
-            return action_result.set_status(phantom.APP_ERROR, f"Unable to connect to Code42: {exception_message}")
+        except Exception as exception:
+            return action_result.set_status(phantom.APP_ERROR, f"Unable to connect to Code42: {str(exception)}")
 
         self.save_progress("Test Connectivity Passed")
         return action_result.set_status(phantom.APP_SUCCESS)
