@@ -65,7 +65,6 @@ class Code42Connector(BaseConnector):
             # Ideally the client instantiation would happen in `initialize()` but that function does not have access
             # to the action, so it cannot effectively report errors to the UI.
             # Fix this with a decorator or something similar.
-            print(type(py42.sdk))
             self._client = py42.sdk.from_local_account(self._cloud_instance, self._username, self._password)
             self._client.users.get_current()
         except Exception as exception:
