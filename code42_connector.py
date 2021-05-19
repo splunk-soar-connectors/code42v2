@@ -43,21 +43,17 @@ class Code42Connector(BaseConnector):
 
         return phantom.APP_SUCCESS
 
-    def handle_action(self, param_dict):
-        ret_val = phantom.APP_SUCCESS
-
-        # Get the action that we are supposed to execute for this App Run
+    def handle_action(self, param):
         action_id = self.get_action_identifier()
-
-        self.debug_print("action_id", self.get_action_identifier())
+        self.debug_print("action_id", action_id)
 
         if action_id == "test_connectivity":
-            ret_val = self._handle_test_connectivity(param_dict)
+            return self._handle_test_connectivity(param)
         elif action_id == "add_departing_employee":
-            ret_val = self._handle_add_departing_employee(param_dict)
+            return self._handle_add_departing_employee(param)
         elif action_id == "remove_departing_employee":
-            ret_val = self._handle_remove_departing_employee(param_dict)
-        return ret_val
+            return self._handle_remove_departing_employee(param)
+        return phantom.APP_SUCCESS
 
     def _handle_test_connectivity(self, param_dict):
         # Add an action result object to self (BaseConnector) to represent the action for this param
@@ -73,16 +69,16 @@ class Code42Connector(BaseConnector):
         self.save_progress("Test Connectivity Passed")
         return action_result.set_status(phantom.APP_SUCCESS)
 
-    def _handle_add_departing_employee(self, param_dict):
-        action_result = self.add_action_result(ActionResult(param_dict))
-        username = param_dict["username"]
-        departure_date = param_dict.get("departure_date")
+    def _handle_add_departing_employee(self, param):
+        action_result = self.add_action_result(ActionResult(dict(param)))
+        username = param["username"]
+        departure_date = param.get("departure_date")
         self._client.detectionlists.departing_employee.add(username, departure_date=departure_date)
         return action_result.set_status(phantom.APP_SUCCESS)
 
-    def _handle_remove_departing_employee(self, param_dict):
-        action_result = self.add_action_result(ActionResult(param_dict))
-        username = param_dict["username"]
+    def _handle_remove_departing_employee(self, param):
+        action_result = self.add_action_result(ActionResult(dict(param)))
+        username = param["username"]
         self._client.detectionlists.departing_employee.remove(username)
         return action_result.set_status(phantom.APP_SUCCESS)
 
@@ -151,7 +147,7 @@ def main():
         connector.print_progress_message = True
 
         if session_id is not None:
-            in_json['user_session_token'] = session_id
+            in_json["user_session_token"] = session_id
             if csrftoken and headers:
                 connector._set_csrf_info(csrftoken, headers["Referer"])
 
@@ -161,5 +157,5 @@ def main():
     exit(0)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

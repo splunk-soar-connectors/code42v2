@@ -20,7 +20,7 @@ deploy() {
 }
 
 print_usage() {
-  echo "./util.sh <tar, clean, deploy, open-web>"
+  echo "./util.sh <tar, clean, deploy, ssh, open-web>"
 }
 
 main() {
@@ -38,6 +38,9 @@ main() {
   deploy)
     make_tar
     deploy
+    ;;
+  ssh)
+    sshpass -p "${PHANTOM_VM_PASSWORD}" ssh phantom@${PHANTOM_VM_IP_ADDR}
     ;;
   open-web)
     open https://$PHANTOM_VM_IP_ADDR:9999
