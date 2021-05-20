@@ -82,24 +82,24 @@ class Code42Connector(BaseConnector):
         return action_result.set_status(phantom.APP_SUCCESS)
 
     def _handle_add_departing_employee(self, param):
-        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        self.save_progress(f"In action handler for: {self.get_action_identifier()}")
         action_result = self.add_action_result(ActionResult(dict(param)))
         username = param["username"]
         departure_date = param.get("departure_date")
         user_id = self._get_user_id(username)
         self.client.detectionlists.departing_employee.add(user_id, departure_date=departure_date)
         action_result.update_summary({})
-        status_message = "{} was added to the departing employee list".format(username)
+        status_message = f"{username} was added to the departing employee list"
         return action_result.set_status(phantom.APP_SUCCESS, status_message)
 
     def _handle_remove_departing_employee(self, param):
-        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        self.save_progress(f"In action handler for: {self.get_action_identifier()}")
         action_result = self.add_action_result(ActionResult(dict(param)))
         username = param["username"]
         user_id = self._get_user_id(username)
         self.client.detectionlists.departing_employee.remove(user_id)
         action_result.update_summary({})
-        status_message = "{} was removed from the departing employee list".format(username)
+        status_message = f"{username} was removed from the departing employee list"
         return action_result.set_status(phantom.APP_SUCCESS, status_message)
 
     def finalize(self):
@@ -110,7 +110,7 @@ class Code42Connector(BaseConnector):
     def _get_user_id(self, username):
         users = self.client.users.get_by_username(username)["users"]
         if not users:
-            raise Exception("User '{}' does not exist".format(username))
+            raise Exception(f"User '{username}' does not exist")
         return users[0]["userUid"]
 
 
