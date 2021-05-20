@@ -1,8 +1,14 @@
 #!/bin/bash
-
+# Usage:
+#  ./util.sh <cmd>
+#
 # Commands:
+#   tar: Bundles up required files for the Python app.
+#   clean: Remove local app bundle (tar file).
 #   deploy: Bundles up required files for the Python app, deploys to Phantom VM, and invokes the Phantom app compilation script.
 #   deploy-bypass: BBypass the password prompts using the PHANTOM_VM_PASSWORD environment variable.
+#   ssh: SSH into your Phantom VM.
+#   open-web: Open your default web browser at `https://<phantom-vm-ip:9999`.
 
 set -eo pipefail
 
