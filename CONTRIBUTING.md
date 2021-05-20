@@ -30,15 +30,15 @@ export PHANTOM_VM_PASSWORD=phantom  # Use the password for your phantom admin us
 If you are working on macOS you can install `sshpass` [here](https://stackoverflow.com/questions/32255660/how-to-install-sshpass-on-mac/62623099#62623099) 
 and bypass the VM SSH password prompts.
 
+```bash
+export PHANTOM_VM_IP_ADDR=0.0.0.0 # Replace with IP address for Phantom VM
+export PHANTOM_PWD=password # Replace with password for phantom user on Phantom VM
+./util.sh deploy-bypass
+```
+
 Open the Phantom web app and login as the `admin` user. Navigate to `Apps > Unconfigured Apps` and find the Code42 App.
 Click Configure New Asset to supply the Console URL, username, and password to connect with. Fill out the fields in Asset Info
 and Asset Settings. Save the Asset Configuration and then click Test Connectivity to test your connection. 
-
-## Creating a virtual environment
-
-To run the unit tests you will need to create a Python virtual environment for the Phantom app and its dependencies.
-
-### macOS
 
 ## Unit Testing
 
