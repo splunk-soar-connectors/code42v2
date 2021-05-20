@@ -48,7 +48,7 @@ def create_fake_connector(action_identifier):
 
 @fixture
 def test_connectivity_connector(mock_py42_client):
-    connector = create_fake_connector(Code42Connector.TEST_CONNECTIVITY_ACTION_ID)
+    connector = create_fake_connector("test_connectivity")
     connector._client = mock_py42_client
     return connector
 
@@ -120,7 +120,7 @@ class TestCode42Connector(object):
         http_response = mocker.MagicMock(spec=Response)
         http_response.text = json.dumps({"users": [{"userUid": "TEST_USER_UID"}]})
         mock_py42_client.users.get_by_username.return_value = Py42Response(http_response)
-        connector = create_fake_connector(Code42Connector.ADD_DEPARTING_EMPLOYEE_ACTION_ID)
+        connector = create_fake_connector("add_departing_employee")
         connector._client = mock_py42_client
         connector.handle_action(param)
         mock_py42_client.detectionlists.departing_employee.add.assert_called_once_with(
@@ -137,7 +137,7 @@ class TestCode42Connector(object):
         http_response = mocker.MagicMock(spec=Response)
         http_response.text = json.dumps({"users": [{"userUid": "TEST_USER_UID"}]})
         mock_py42_client.users.get_by_username.return_value = Py42Response(http_response)
-        connector = create_fake_connector(Code42Connector.REMOVE_DEPARTING_EMPLOYEE_ACTION_ID)
+        connector = create_fake_connector("remove_departing_employee")
         connector._client = mock_py42_client
         connector.handle_action(param)
         mock_py42_client.detectionlists.departing_employee.remove.assert_called_once_with(
