@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Commands:
+#   deploy: Bundles up required files for the Python app, deploys to Phantom VM, and invokes the Phantom app compilation script.
+#   deploy-bypass: BBypass the password prompts using the PHANTOM_VM_PASSWORD environment variable.
+
 set -eo pipefail
 
 make_tar() {
@@ -11,12 +15,19 @@ clean() {
   rm -f phcode42v2.tgz
 }
 
-deploy() {
+deploy_bypass() {
   echo "Moving to remote..."
   sshpass -p "${PHANTOM_VM_PASSWORD}" scp phcode42v2.tgz "phantom@${PHANTOM_VM_IP_ADDR}":/home/phantom
   echo "Untarring on remote..."
   sshpass -p "${PHANTOM_VM_PASSWORD}" ssh phantom@${PHANTOM_VM_IP_ADDR} \
 		"rm -rf phcode42v2 && tar -xvf phcode42v2.tgz && cd phcode42v2 && phenv python /opt/phantom/bin/compile_app.pyc -i"
+}
+
+deploy() {
+  scp phcode42v2.tgz "phantom@${PHANTOM_VM_IP_ADDR}":/home/phantom
+  echo "Untarring on remote..."
+  ssh "phantom@${PHANTOM_VM_IP_ADDR}" \
+    "rm -rf phcode42v2 && tar -xvf phcode42v2.tgz && cd phcode42v2 && phenv python /opt/phantom/bin/compile_app.pyc -i"
 }
 
 print_usage() {
@@ -38,6 +49,10 @@ main() {
   deploy)
     make_tar
     deploy
+    ;;
+  deploy-bypass)
+    make_tar
+    deploy_bypass
     ;;
   ssh)
     sshpass -p "${PHANTOM_VM_PASSWORD}" ssh phantom@${PHANTOM_VM_IP_ADDR}

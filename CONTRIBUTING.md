@@ -10,23 +10,25 @@ as a VM image. You do NOT need to complete the section labeled "Configure the ne
 
 Use these [default credentials](https://docs.splunk.com/Documentation/Phantom/4.10.3/Install/Reference) to log in.
 Confirm that you can connect to the VM via SSH on your host machine. You can use `hostname -I` on the remote machine to look up your IP address.
-Also confirm that you can access the Phantom web app at `https://{phantom VM IP address}`.
+Also confirm that you can access the Phantom web app at `https://{phantom_VM_IP_address}`.
 
 NOTE: If you are consistently getting timeouts connecting to the Phantom VM, try disconnecting from the VPN and re-attempting.
 
 
 ## Deploying the app
 
+To test the Code42 Phantom app, you must deploy it to a running Phantom VM and run a compilation script on that VM.
+
 Run the below command to install the Code42 app on Phantom. 
 
 ```bash
-export PHANTOM_VM_IP_ADDR=0.0.0.0 # Replace with IP address for Phantom VM
-<<<<<<< HEAD
-export PHANTOM_VM_PASSWORD=phantom # Use the password for your phantom admin user.
-=======
->>>>>>> feature/tests
+export PHANTOM_VM_IP_ADDR=0.0.0.0  # Replace with IP address for Phantom VM
+export PHANTOM_VM_PASSWORD=phantom  # Use the password for your phantom admin user.
 ./util.sh deploy
 ```
+
+If you are working on macOS you can install `sshpass` [here](https://stackoverflow.com/questions/32255660/how-to-install-sshpass-on-mac/62623099#62623099) 
+and bypass the VM SSH password prompts.
 
 Open the Phantom web app and login as the `admin` user. Navigate to `Apps > Unconfigured Apps` and find the Code42 App.
 Click Configure New Asset to supply the Console URL, username, and password to connect with. Fill out the fields in Asset Info
@@ -37,6 +39,15 @@ and Asset Settings. Save the Asset Configuration and then click Test Connectivit
 To run the unit tests you will need to create a Python virtual environment for the Phantom app and its dependencies.
 
 ### macOS
+
+## Unit Testing
+
+### Creating a virtual environment
+
+To run the unit tests you will need to create a Python virtual environment for the Phantom app and its dependencies.
+Creating a virtual environment is *not* necessary to run or deploy the app to a Phantom VM. It's only necessary if you want to run unit tests. 
+
+#### macOS
 
 Install `pyenv` and `pyenv-virtualenv` via [homebrew](https://brew.sh/):
 
@@ -57,11 +68,12 @@ Then, create your virtual environment.
 pyenv install 3.6.13
 pyenv virtualenv 3.6.13 phantom
 pyenv activate phantom
+pip install --upgrade pip
 ```
 
 Use `source deactivate` to exit the virtual environment and `pyenv activate phantom` to reactivate it.
 
-### Windows/Linux
+#### Windows/Linux
 
 Install Python 3.6.13 from [python.org](https://python.org).
 
@@ -73,6 +85,7 @@ python -m venv phantom
 source phantom/bin/activate
 # Windows
 .\phantom\Scripts\Activate
+pip install --upgrade pip
 ```
 
 To leave the virtual environment, simply use:
@@ -80,17 +93,21 @@ To leave the virtual environment, simply use:
 deactivate
 ```
 
-## Running the tests
+### Running the unit tests
 
 Make sure you have created a Python virtual environment for the Phantom project as described above.
 
 Then, activate the virtual environment and install the dependencies before running the tests.
 
 ```bash
-pip install -e phantom
 pip install -e .
 pytest
 ```
+
+### Stubs
+
+This app is built on top of several modules developed by Phantom. Since we don't have access to the source for these modules, 
+we've stubbed them out in the `phantom` directory so that they can be imported by the test code.
 
 # TODO
 

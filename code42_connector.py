@@ -39,7 +39,6 @@ class Code42Connector(BaseConnector):
         self._cloud_instance = config["cloud_instance"]
         self._username = config["username"]
         self._password = config["password"]
-        self._client = py42.sdk.from_local_account(self._cloud_instance, self._username, self._password)
 
         return phantom.APP_SUCCESS
 
@@ -61,10 +60,14 @@ class Code42Connector(BaseConnector):
         self.save_progress("Connecting to endpoint")
 
         try:
+            # TODO
+            # Ideally the client instantiation would happen in `initialize()` but that function does not have access
+            # to the action, so it cannot effectively report errors to the UI.
+            # Fix this with a decorator or something similar.
+            self._client = py42.sdk.from_local_account(self._cloud_instance, self._username, self._password)
             self._client.users.get_current()
-        except Exception as e:
-            exception_message = e.args[0].strip()
-            return action_result.set_status(phantom.APP_ERROR, "Unable to connect to Code42.", exception_message),
+        except Exception as exception:
+            return action_result.set_status(phantom.APP_ERROR, f"Unable to connect to Code42: {str(exception)}")
 
         self.save_progress("Test Connectivity Passed")
         return action_result.set_status(phantom.APP_SUCCESS)
