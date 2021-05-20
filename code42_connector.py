@@ -61,11 +61,8 @@ class Code42Connector(BaseConnector):
     def handle_action(self, param):
         action_id = self.get_action_identifier()
         self.debug_print("action_id", action_id)
-        action = self._action_map.get(action_id)
-        if action:
-            action(param)
-
-        return phantom.APP_SUCCESS
+        action = self._action_map[action_id]
+        return action(param)
 
     def _handle_test_connectivity(self, param):
         # Add an action result object to self (BaseConnector) to represent the action for this param
