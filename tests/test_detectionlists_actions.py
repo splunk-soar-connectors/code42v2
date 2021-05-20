@@ -1,21 +1,15 @@
-import json
 from pytest import fixture
 
-from py42.response import Py42Response
-from requests import Response
-
 from phantom.action_result import ActionResult
-from tests.conftest import create_fake_connector
-
+from tests.conftest import create_fake_connector, create_mock_response
 
 _TEST_USER_UID = "TEST_USER_UID"
 
 
 @fixture
 def mock_py42_with_user(mocker, mock_py42_client):
-    http_response = mocker.MagicMock(spec=Response)
-    http_response.text = json.dumps({"users": [{"userUid": _TEST_USER_UID}]})
-    mock_py42_client.users.get_by_username.return_value = Py42Response(http_response)
+    response_data = {"users": [{"userUid": _TEST_USER_UID}]}
+    mock_py42_client.users.get_by_username.return_value = create_mock_response(mocker, response_data)
     return mock_py42_client
 
 
@@ -63,9 +57,9 @@ class TestCode42DetectionListsConnector(object):
                 "test@example.com"
             ]
         }
-        response = mocker.MagicMock(spec=Response)
-        response.text = json.dumps(response_data)
-        mock_py42_with_user.detectionlists.departing_employee.add.return_value = Py42Response(response)
+        mock_py42_with_user.detectionlists.departing_employee.add.return_value = create_mock_response(
+            mocker, response_data
+        )
         result = ActionResult(dict(param))
         add_data_mock = mocker.MagicMock()
         result.add_data = add_data_mock
@@ -106,9 +100,9 @@ class TestCode42DetectionListsConnector(object):
     ):
         param = {"username": "test@example.com", "departure_date": "2030-01-01"}
         response_data = {}
-        response = mocker.MagicMock(spec=Response)
-        response.text = json.dumps(response_data)
-        mock_py42_with_user.detectionlists.departing_employee.remove.return_value = Py42Response(response)
+        mock_py42_with_user.detectionlists.departing_employee.remove.return_value = create_mock_response(
+            mocker, response_data
+        )
         result = ActionResult(dict(param))
         add_data_mock = mocker.MagicMock()
         result.add_data = add_data_mock

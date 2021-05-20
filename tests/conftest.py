@@ -1,6 +1,10 @@
+import json
+
 import py42.sdk
+from py42.response import Py42Response
 from py42.services.users import UserService
 from pytest import fixture
+from requests import Response
 
 from code42_connector import Code42Connector
 
@@ -31,3 +35,9 @@ def create_fake_connector(action_identifier):
     connector = Code42Connector()
     connector.get_action_identifier = fake_get_action_identifier
     return connector
+
+
+def create_mock_response(mocker, response_data):
+    response = mocker.MagicMock(spec=Response)
+    response.text = json.dumps(response_data)
+    return Py42Response(response)
