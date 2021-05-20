@@ -87,8 +87,9 @@ class Code42Connector(BaseConnector):
         username = param["username"]
         departure_date = param.get("departure_date")
         user_id = self._get_user_id(username)
-        self.client.detectionlists.departing_employee.add(user_id, departure_date=departure_date)
-        action_result.update_summary({})
+        response = self.client.detectionlists.departing_employee.add(user_id, departure_date=departure_date)
+        action_result.add_data(response.data)
+        action_result.update_summary({"userId": user_id})
         status_message = f"{username} was added to the departing employee list"
         return action_result.set_status(phantom.APP_SUCCESS, status_message)
 
@@ -97,8 +98,9 @@ class Code42Connector(BaseConnector):
         action_result = self.add_action_result(ActionResult(dict(param)))
         username = param["username"]
         user_id = self._get_user_id(username)
-        self.client.detectionlists.departing_employee.remove(user_id)
-        action_result.update_summary({})
+        response = self.client.detectionlists.departing_employee.remove(user_id)
+        action_result.add_data(response.data)
+        action_result.update_summary({"userId": user_id})
         status_message = f"{username} was removed from the departing employee list"
         return action_result.set_status(phantom.APP_SUCCESS, status_message)
 
