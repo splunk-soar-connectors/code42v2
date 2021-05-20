@@ -187,39 +187,6 @@
                 "type": "table"
             },
             "versions": "EQ(*)"
-        },
-        {
-            "action": "list departing employees",
-            "identifier": "list_departing_employees",
-            "description": "Returns a list of users who are on the departing employees list",
-            "verbose": "",
-            "type": "investigate",
-            "read_only": false,
-            "parameters": {},
-            "output": [
-                {
-                    "data_path": "action_result.status",
-                    "data_type": "string",
-                    "column_name": "status",
-                    "column_order": 0
-                },
-                {
-                    "data_path": "action_result.message",
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "summary.total_objects",
-                    "data_type": "numeric"
-                },
-                {
-                    "data_path": "summary.total_objects_successful",
-                    "data_type": "numeric"
-                }
-            ],
-            "render": {
-                "type": "table"
-            },
-            "versions": "EQ(*)"
         }
     ]
 }

@@ -29,6 +29,14 @@ class Code42Connector(BaseConnector):
         self._password = None
         self._client = None
 
+    @property
+    def client(self):
+        if self._client is None:
+            self._client = py42.sdk.from_local_account(
+                self._cloud_instance, self._username, self._password
+            )
+        return self._client
+
     def initialize(self):
         # Load the state in initialize, use it to store data
         # that needs to be accessed across actions
@@ -64,8 +72,7 @@ class Code42Connector(BaseConnector):
             # Ideally the client instantiation would happen in `initialize()` but that function does not have access
             # to the action, so it cannot effectively report errors to the UI.
             # Fix this with a decorator or something similar.
-            self._client = py42.sdk.from_local_account(self._cloud_instance, self._username, self._password)
-            self._client.users.get_current()
+            self.client.users.get_current()
         except Exception as exception:
             return action_result.set_status(phantom.APP_ERROR, f"Unable to connect to Code42: {str(exception)}")
 
@@ -77,7 +84,8 @@ class Code42Connector(BaseConnector):
         action_result = self.add_action_result(ActionResult(dict(param)))
         username = param["username"]
         departure_date = param.get("departure_date")
-        self._client.detectionlists.departing_employee.add(username, departure_date=departure_date)
+        user_id = self._get_user_id(username)
+        self.client.detectionlists.departing_employee.add(user_id, departure_date=departure_date)
         action_result.update_summary({})
         status_message = "{} was added to the departing employee list".format(username)
         return action_result.set_status(phantom.APP_SUCCESS, status_message=status_message)
@@ -86,20 +94,30 @@ class Code42Connector(BaseConnector):
         self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
         action_result = self.add_action_result(ActionResult(dict(param)))
         username = param["username"]
-        self._client.detectionlists.departing_employee.remove(username)
+        user_id = self._get_user_id(username)
+        self.client.detectionlists.departing_employee.remove(user_id)
         action_result.update_summary({})
         status_message = "{} was removed from the departing employee list".format(username)
         return action_result.set_status(phantom.APP_SUCCESS, status_message=status_message)
-
-    def _handle_list_departing_employees(self, param):
-        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
-        action_result = self.add_action_result(ActionResult(dict(param)))
-        return action_result.set_status(phantom.APP_ERROR, "Action not yet implemented")
 
     def finalize(self):
         # Save the state, this data is saved across actions and app upgrades
         self.save_state(self._state)
         return phantom.APP_SUCCESS
+
+    def _get_user_id(self, username):
+        """Returns the user's UID (referred to by `user_id` in detection lists).
+        Raises `UserDoesNotExistError` if the user doesn't exist in the Code42 server.
+        Args:
+            sdk (py42.sdk.SDKClient): The py42 sdk.
+            username (str or unicode): The username of the user to get an ID for.
+        Returns:
+             str: The user ID for the user with the given username.
+        """
+        users = self.client.users.get_by_username(username)["users"]
+        if not users:
+            raise Exception("User '{}' does not exist".format(username))
+        return users[0]["userUid"]
 
 
 def main():
@@ -165,7 +183,8 @@ def main():
             if csrftoken and headers:
                 connector._set_csrf_info(csrftoken, headers["Referer"])
 
-        ret_val = connector._handle_action(json.dumps(in_json), None)
+        json_string = json.dumps(in_json)
+        ret_val = connector._handle_action(json_string, None)
         print(json.dumps(json.loads(ret_val), indent=4))
 
     exit(0)
