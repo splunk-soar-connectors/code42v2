@@ -19,6 +19,9 @@ class RetVal(tuple):
 
 
 class Code42Connector(BaseConnector):
+    TEST_CONNECTIVITY_ACTION_ID = "test_connectivity"
+    ADD_DEPARTING_EMPLOYEE_ACTION_ID = "add_departing_employee"
+    REMOVE_DEPARTING_EMPLOYEE_ACTION_ID = "remove_departing_employee"
 
     def __init__(self):
         super(Code42Connector, self).__init__()
@@ -28,6 +31,11 @@ class Code42Connector(BaseConnector):
         self._username = None
         self._password = None
         self._client = None
+        self._action_map = {
+            self.TEST_CONNECTIVITY_ACTION_ID: lambda x: self._handle_test_connectivity(x),
+            self.ADD_DEPARTING_EMPLOYEE_ACTION_ID: lambda x: self._handle_add_departing_employee(x),
+            self.REMOVE_DEPARTING_EMPLOYEE_ACTION_ID: lambda x: self._handle_remove_departing_employee(x)
+        }
 
     @property
     def client(self):
@@ -53,18 +61,15 @@ class Code42Connector(BaseConnector):
     def handle_action(self, param):
         action_id = self.get_action_identifier()
         self.debug_print("action_id", action_id)
+        action = self._action_map.get(action_id)
+        if action:
+            action(param)
 
-        if action_id == "test_connectivity":
-            return self._handle_test_connectivity(param)
-        elif action_id == "add_departing_employee":
-            return self._handle_add_departing_employee(param)
-        elif action_id == "remove_departing_employee":
-            return self._handle_remove_departing_employee(param)
         return phantom.APP_SUCCESS
 
-    def _handle_test_connectivity(self, param_dict):
+    def _handle_test_connectivity(self, param):
         # Add an action result object to self (BaseConnector) to represent the action for this param
-        action_result = self.add_action_result(ActionResult(dict(param_dict)))
+        action_result = self.add_action_result(ActionResult(dict(param)))
         self.save_progress("Connecting to endpoint")
 
         try:
@@ -88,7 +93,7 @@ class Code42Connector(BaseConnector):
         self.client.detectionlists.departing_employee.add(user_id, departure_date=departure_date)
         action_result.update_summary({})
         status_message = "{} was added to the departing employee list".format(username)
-        return action_result.set_status(phantom.APP_SUCCESS, status_message=status_message)
+        return action_result.set_status(phantom.APP_SUCCESS, status_message)
 
     def _handle_remove_departing_employee(self, param):
         self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
@@ -98,7 +103,7 @@ class Code42Connector(BaseConnector):
         self.client.detectionlists.departing_employee.remove(user_id)
         action_result.update_summary({})
         status_message = "{} was removed from the departing employee list".format(username)
-        return action_result.set_status(phantom.APP_SUCCESS, status_message=status_message)
+        return action_result.set_status(phantom.APP_SUCCESS, status_message)
 
     def finalize(self):
         # Save the state, this data is saved across actions and app upgrades
@@ -106,14 +111,6 @@ class Code42Connector(BaseConnector):
         return phantom.APP_SUCCESS
 
     def _get_user_id(self, username):
-        """Returns the user's UID (referred to by `user_id` in detection lists).
-        Raises `UserDoesNotExistError` if the user doesn't exist in the Code42 server.
-        Args:
-            sdk (py42.sdk.SDKClient): The py42 sdk.
-            username (str or unicode): The username of the user to get an ID for.
-        Returns:
-             str: The user ID for the user with the given username.
-        """
         users = self.client.users.get_by_username(username)["users"]
         if not users:
             raise Exception("User '{}' does not exist".format(username))

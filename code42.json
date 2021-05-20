@@ -141,8 +141,6 @@
                     "data_type": "string",
                     "required": false,
                     "primary": false,
-                    "contains": [],
-                    "value_list": [],
                     "default": "",
                     "order": 1
                 }
