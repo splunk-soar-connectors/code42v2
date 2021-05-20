@@ -49,7 +49,7 @@ class TestCode42DetectionListsConnector(object):
         mock_result_adder.return_value = result
         connector = _create_add_de_connector(mock_py42_with_user)
         connector.handle_action(param)
-        update_summary_mock.assert_called_once_with({"userId": _TEST_USER_UID})
+        update_summary_mock.assert_called_once_with({"userId": _TEST_USER_UID, "username": "test@example.com"})
 
     def test_handle_action_when_add_departing_employee_adds_response_to_data(
         self, mocker, mock_py42_with_user, mock_result_adder
@@ -113,7 +113,7 @@ class TestCode42DetectionListsConnector(object):
         mock_result_adder.return_value = result
         connector = _create_remove_de_connector(mock_py42_with_user)
         connector.handle_action(param)
-        update_summary_mock.assert_called_once_with({"userId": _TEST_USER_UID})
+        update_summary_mock.assert_called_once_with({"userId": _TEST_USER_UID, "username": "test@example.com"})
 
     def test_handle_action_when_remove_departing_employee_adds_response_to_data(
         self, mocker, mock_py42_with_user, mock_result_adder
