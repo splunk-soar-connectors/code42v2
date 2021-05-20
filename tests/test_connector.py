@@ -1,49 +1,17 @@
-import json
 from logging import getLogger
 from unittest import mock
 
 from py42.exceptions import Py42UnauthorizedError
-from py42.response import Py42Response
 from pytest import fixture
-from requests import Response
 
+import phantom.app as phantom
 from code42_connector import Code42Connector
 from phantom.action_result import ActionResult
-import phantom.app as phantom
-import py42.sdk
-from py42.services.users import UserService
+from tests.conftest import create_fake_connector
 
 logger = getLogger(name=__name__)
 
 NULL_VALUE = object()
-
-
-@fixture(autouse=True)
-def mock_py42_client(mocker):
-    client = mocker.MagicMock(spec=py42.sdk.SDKClient)
-    client.users = mocker.MagicMock(spec=UserService)
-    mocker.patch("py42.sdk.from_local_account", return_value=client)
-    return client
-
-
-@fixture
-def mock_result_adder(mocker):
-    return mocker.patch("phantom.base_connector.BaseConnector.add_action_result")
-
-
-@fixture
-def connector():
-    connector = Code42Connector()
-    return connector
-
-
-def create_fake_connector(action_identifier):
-    def fake_get_action_identifier():
-        return action_identifier
-
-    connector = Code42Connector()
-    connector.get_action_identifier = fake_get_action_identifier
-    return connector
 
 
 @fixture
@@ -109,37 +77,3 @@ class TestCode42Connector(object):
         assert connector._cloud_instance == config["cloud_instance"]
         assert connector._username == config["username"]
         assert connector._password == config["password"]
-
-    def test_handle_action_when_add_departing_employee_calls_add_with_expected_args(
-        self, mocker, mock_py42_client, mock_result_adder
-    ):
-        param = {"username": "test@example.com", "departure_date": "2030-01-01"}
-        result = ActionResult(dict(param))
-        result.update_summary = mocker.MagicMock()
-        mock_result_adder.return_value = result
-        http_response = mocker.MagicMock(spec=Response)
-        http_response.text = json.dumps({"users": [{"userUid": "TEST_USER_UID"}]})
-        mock_py42_client.users.get_by_username.return_value = Py42Response(http_response)
-        connector = create_fake_connector("add_departing_employee")
-        connector._client = mock_py42_client
-        connector.handle_action(param)
-        mock_py42_client.detectionlists.departing_employee.add.assert_called_once_with(
-            "TEST_USER_UID", departure_date="2030-01-01"
-        )
-
-    def test_handle_action_when_remove_departing_employee_calls_remove_with_expected_args(
-        self, mocker, mock_py42_client, mock_result_adder
-    ):
-        param = {"username": "test@example.com"}
-        result = ActionResult(dict(param))
-        result.update_summary = mocker.MagicMock()
-        mock_result_adder.return_value = result
-        http_response = mocker.MagicMock(spec=Response)
-        http_response.text = json.dumps({"users": [{"userUid": "TEST_USER_UID"}]})
-        mock_py42_client.users.get_by_username.return_value = Py42Response(http_response)
-        connector = create_fake_connector("remove_departing_employee")
-        connector._client = mock_py42_client
-        connector.handle_action(param)
-        mock_py42_client.detectionlists.departing_employee.remove.assert_called_once_with(
-            "TEST_USER_UID"
-        )
