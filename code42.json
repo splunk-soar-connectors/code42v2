@@ -65,7 +65,7 @@
             "action": "remove departing employee",
             "identifier": "remove_departing_employee",
             "description": "Remove a departing employee from the departing employees detection list",
-            "verbose": "",
+            "verbose": "There is a short delay before you can query the updated results.",
             "type": "contain",
             "read_only": false,
             "parameters": {
@@ -150,7 +150,7 @@
             "action": "add departing employee",
             "identifier": "add_departing_employee",
             "description": "Add a departing employee to the departing employees detection list",
-            "verbose": "",
+            "verbose": "There is a short delay before you can query the updated results.",
             "type": "contain",
             "read_only": false,
             "parameters": {
@@ -173,6 +173,14 @@
                     "primary": false,
                     "default": "",
                     "order": 1
+                },
+                "note": {
+                    "description": "A note to include",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": false,
+                    "default": "",
+                    "order": 2
                 }
             },
             "output": [
@@ -192,10 +200,16 @@
                     "column_order": 1
                 },
                 {
+                    "data_path": "action_result.parameter.note",
+                    "data_type": "string",
+                    "column_name": "note",
+                    "column_order": 2
+                },
+                {
                     "data_path": "action_result.status",
                     "data_type": "string",
                     "column_name": "status",
-                    "column_order": 2
+                    "column_order": 3
                 },
                 {
                     "data_path": "action_result.message",
