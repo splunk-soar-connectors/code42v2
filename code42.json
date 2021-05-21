@@ -112,16 +112,7 @@
                 },
                 {
                     "column_name": "UserId",
-                    "data_path": "action_result.data.*.userId",
-                    "data_type": "string",
-                    "example_values": [
-                        "1"
-                    ],
-                    "column_order": 1
-                },
-                {
-                    "column_name": "Username",
-                    "data_path": "action_result.data.*.userName",
+                    "data_path": "action_result.data.*.user_id",
                     "data_type": "string",
                     "example_values": [
                         "1"
@@ -130,7 +121,7 @@
                 },
                 {
                     "column_name": "CreatedAt",
-                    "data_path": "action_result.data.*.createdAt",
+                    "data_path": "action_result.data.*.created_at",
                     "data_type": "string",
                     "example_values": [
                         "2021-05-20T19:40:14.8909434Z"
@@ -225,7 +216,7 @@
                 },
                 {
                     "column_name": "UserId",
-                    "data_path": "action_result.data.*.userId",
+                    "data_path": "action_result.data.*.user_id",
                     "data_type": "string",
                     "example_values": [
                         "1"
@@ -234,7 +225,7 @@
                 },
                 {
                     "column_name": "Username",
-                    "data_path": "action_result.data.*.userName",
+                    "data_path": "action_result.data.*.username",
                     "data_type": "string",
                     "example_values": [
                         "1"
@@ -242,8 +233,8 @@
                     "column_order": 1
                 },
                 {
-                    "column_name": "CreatedAt",
-                    "data_path": "action_result.data.*.createdAt",
+                    "column_name": "Created At",
+                    "data_path": "action_result.data.*.created_at",
                     "data_type": "string",
                     "example_values": [
                         "2021-05-20T19:40:14.8909434Z"
