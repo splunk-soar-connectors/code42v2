@@ -9,3 +9,5 @@ LICENSE
 dist/*
 phcode42v2.egg-info/*
 tests/*
+*.tgz
+venv/
