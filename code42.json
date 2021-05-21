@@ -120,23 +120,6 @@
                     "column_order": 1
                 },
                 {
-                    "column_name": "Username",
-                    "data_path": "action_result.data.*.userName",
-                    "data_type": "string",
-                    "example_values": [
-                        "1"
-                    ],
-                    "column_order": 1
-                },
-                {
-                    "column_name": "CreatedAt",
-                    "data_path": "action_result.data.*.createdAt",
-                    "data_type": "string",
-                    "example_values": [
-                        "2021-05-20T19:40:14.8909434Z"
-                    ]
-                },
-                {
                     "data_path": "action_result.summary",
                     "data_type": "string"
                 }
@@ -363,6 +346,14 @@
                     "value_list": [],
                     "default": "",
                     "order": 0
+                },
+                "note": {
+                    "description": "A note to include",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": false,
+                    "default": "",
+                    "order": 1
                 }
             },
             "output": [
