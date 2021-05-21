@@ -146,9 +146,10 @@ class TestCode42DetectionListsConnector(object):
         self, mocker, mock_py42_with_user, mock_result_adder
     ):
         param = {"username": "test@example.com"}
-        response_data = {}
+
+        # This API call does not have response data.
         mock_py42_with_user.detectionlists.departing_employee.remove.return_value = create_mock_response(
-            mocker, response_data
+            mocker, {}
         )
         result = ActionResult(dict(param))
         add_data_mock = mocker.MagicMock()
@@ -156,7 +157,7 @@ class TestCode42DetectionListsConnector(object):
         mock_result_adder.return_value = result
         connector = _create_remove_de_connector(mock_py42_with_user)
         connector.handle_action(param)
-        add_data_mock.assert_called_once_with(response_data)
+        add_data_mock.assert_called_once_with({"userId": _TEST_USER_UID})
 
     def test_handle_action_when_remove_departing_employee_and_is_successful_sets_success_status(
         self, mocker, mock_py42_with_user, mock_result_adder
