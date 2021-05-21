@@ -129,8 +129,8 @@ class Code42Connector(BaseConnector):
         action_result = self._add_action_result(param)
         username = param["username"]
         user_id = self._get_user_id(username)
-        response = self.client.detectionlists.high_risk_employee.remove(user_id)
-        action_result.add_data(response.data)
+        self.client.detectionlists.high_risk_employee.remove(user_id)
+        action_result.add_data({"userId": user_id})
         action_result.update_summary({"user_id": user_id, "username": username})
         status_message = f"{username} was removed from the high risk employees list"
         return action_result.set_status(phantom.APP_SUCCESS, status_message)
