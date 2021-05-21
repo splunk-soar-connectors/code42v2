@@ -246,8 +246,8 @@
             "versions": "EQ(*)"
         },
         {
-            "action": "remove high risk employee",
-            "identifier": "remove_high_risk_employee",
+            "action": "remove highrisk employee",
+            "identifier": "remove_highrisk_employee",
             "description": "Remove a high risk employee from the high risk employees detection list",
             "verbose": "",
             "type": "contain",
@@ -293,6 +293,36 @@
                 {
                     "data_path": "summary.total_objects_successful",
                     "data_type": "numeric"
+                },
+                {
+                    "column_name": "UserId",
+                    "data_path": "action_result.data.*.userId",
+                    "data_type": "string",
+                    "example_values": [
+                        "1"
+                    ],
+                    "column_order": 1
+                },
+                {
+                    "column_name": "Username",
+                    "data_path": "action_result.data.*.userName",
+                    "data_type": "string",
+                    "example_values": [
+                        "1"
+                    ],
+                    "column_order": 1
+                },
+                {
+                    "column_name": "CreatedAt",
+                    "data_path": "action_result.data.*.createdAt",
+                    "data_type": "string",
+                    "example_values": [
+                        "2021-05-20T19:40:14.8909434Z"
+                    ]
+                },
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
                 }
             ],
             "render": {
@@ -301,8 +331,8 @@
             "versions": "EQ(*)"
         },
         {
-            "action": "add high risk employee",
-            "identifier": "add_high_risk_employee",
+            "action": "add highrisk employee",
+            "identifier": "add_highrisk_employee",
             "description": "Add a high risk employee to the high risk employees detection list",
             "verbose": "",
             "type": "contain",
@@ -332,13 +362,6 @@
                     "column_order": 0
                 },
                 {
-                    "data_path": "action_result.parameter.departure_date",
-                    "data_type": "string",
-                    "contains": [],
-                    "column_name": "departure_date",
-                    "column_order": 1
-                },
-                {
                     "data_path": "action_result.status",
                     "data_type": "string",
                     "column_name": "status",
@@ -355,6 +378,36 @@
                 {
                     "data_path": "summary.total_objects_successful",
                     "data_type": "numeric"
+                },
+                {
+                    "column_name": "UserId",
+                    "data_path": "action_result.data.*.userId",
+                    "data_type": "string",
+                    "example_values": [
+                        "1"
+                    ],
+                    "column_order": 1
+                },
+                {
+                    "column_name": "Username",
+                    "data_path": "action_result.data.*.userName",
+                    "data_type": "string",
+                    "example_values": [
+                        "1"
+                    ],
+                    "column_order": 1
+                },
+                {
+                    "column_name": "CreatedAt",
+                    "data_path": "action_result.data.*.createdAt",
+                    "data_type": "string",
+                    "example_values": [
+                        "2021-05-20T19:40:14.8909434Z"
+                    ]
+                },
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
                 }
             ],
             "render": {
