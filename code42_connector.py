@@ -22,6 +22,8 @@ class Code42Connector(BaseConnector):
     TEST_CONNECTIVITY_ACTION_ID = "test_connectivity"
     ADD_DEPARTING_EMPLOYEE_ACTION_ID = "add_departing_employee"
     REMOVE_DEPARTING_EMPLOYEE_ACTION_ID = "remove_departing_employee"
+    ADD_HIGH_RISK_EMPLOYEE_ACTION_ID = "add_high_risk_employee"
+    REMOVE_HIGH_RISK_EMPLOYEE_ACTION_ID = "remove_high_risk_employee"
 
     def __init__(self):
         super(Code42Connector, self).__init__()
@@ -34,7 +36,9 @@ class Code42Connector(BaseConnector):
         self._action_map = {
             self.TEST_CONNECTIVITY_ACTION_ID: lambda x: self._handle_test_connectivity(x),
             self.ADD_DEPARTING_EMPLOYEE_ACTION_ID: lambda x: self._handle_add_departing_employee(x),
-            self.REMOVE_DEPARTING_EMPLOYEE_ACTION_ID: lambda x: self._handle_remove_departing_employee(x)
+            self.REMOVE_DEPARTING_EMPLOYEE_ACTION_ID: lambda x: self._handle_remove_departing_employee(x),
+            self.ADD_HIGH_RISK_EMPLOYEE_ACTION_ID: lambda x: self._handle_add_high_risk_employee(x),
+            self.REMOVE_HIGH_RISK_EMPLOYEE_ACTION_ID: lambda x: self._handle_remove_high_risk_employee(x)
         }
 
     @property
@@ -90,7 +94,7 @@ class Code42Connector(BaseConnector):
         response = self.client.detectionlists.departing_employee.add(user_id, departure_date=departure_date)
         action_result.add_data(response.data)
         action_result.update_summary({"user_id": user_id, "username": username})
-        status_message = f"{username} was added to the departing employee list"
+        status_message = f"{username} was added to the departing employees list"
         return action_result.set_status(phantom.APP_SUCCESS, status_message)
 
     def _handle_remove_departing_employee(self, param):
@@ -101,7 +105,29 @@ class Code42Connector(BaseConnector):
         response = self.client.detectionlists.departing_employee.remove(user_id)
         action_result.add_data(response.data)
         action_result.update_summary({"user_id": user_id, "username": username})
-        status_message = f"{username} was removed from the departing employee list"
+        status_message = f"{username} was removed from the departing employees list"
+        return action_result.set_status(phantom.APP_SUCCESS, status_message)
+
+    def _handle_add_high_risk_employee(self, param):
+        self._log_action_handler()
+        action_result = self._add_action_result(param)
+        username = param["username"]
+        user_id = self._get_user_id(username)
+        response = self.client.detectionlists.high_risk_employee.add(user_id)
+        action_result.add_data(response.data)
+        action_result.update_summary({"user_id": user_id, "username": username})
+        status_message = f"{username} was added to the high risk employees list"
+        return action_result.set_status(phantom.APP_SUCCESS, status_message)
+
+    def _handle_remove_high_risk_employee(self, param):
+        self._log_action_handler()
+        action_result = self._add_action_result(param)
+        username = param["username"]
+        user_id = self._get_user_id(username)
+        response = self.client.detectionlists.high_risk_employee.remove(user_id)
+        action_result.add_data(response.data)
+        action_result.update_summary({"user_id": user_id, "username": username})
+        status_message = f"{username} was removed from the high risk employees list"
         return action_result.set_status(phantom.APP_SUCCESS, status_message)
 
     def finalize(self):
