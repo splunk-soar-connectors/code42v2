@@ -89,7 +89,7 @@
                     "contains": [
                         "email"
                     ],
-                    "column_name": "username",
+                    "column_name": "Username",
                     "column_order": 0
                 },
                 {
@@ -111,30 +111,13 @@
                     "data_type": "numeric"
                 },
                 {
-                    "column_name": "UserId",
+                    "column_name": "User ID ",
                     "data_path": "action_result.data.*.userId",
                     "data_type": "string",
                     "example_values": [
                         "1"
                     ],
                     "column_order": 1
-                },
-                {
-                    "column_name": "Username",
-                    "data_path": "action_result.data.*.userName",
-                    "data_type": "string",
-                    "example_values": [
-                        "1"
-                    ],
-                    "column_order": 1
-                },
-                {
-                    "column_name": "CreatedAt",
-                    "data_path": "action_result.data.*.createdAt",
-                    "data_type": "string",
-                    "example_values": [
-                        "2021-05-20T19:40:14.8909434Z"
-                    ]
                 },
                 {
                     "data_path": "action_result.summary",
@@ -190,19 +173,19 @@
                     "contains": [
                         "email"
                     ],
-                    "column_name": "username",
+                    "column_name": "Username",
                     "column_order": 0
                 },
                 {
                     "data_path": "action_result.parameter.departure_date",
                     "data_type": "string",
-                    "column_name": "departure_date",
+                    "column_name": "Departure Date",
                     "column_order": 1
                 },
                 {
                     "data_path": "action_result.parameter.note",
                     "data_type": "string",
-                    "column_name": "note",
+                    "column_name": "Note",
                     "column_order": 2
                 },
                 {
@@ -224,7 +207,7 @@
                     "data_type": "numeric"
                 },
                 {
-                    "column_name": "UserId",
+                    "column_name": "User ID",
                     "data_path": "action_result.data.*.userId",
                     "data_type": "string",
                     "example_values": [
@@ -239,10 +222,13 @@
                     "example_values": [
                         "1"
                     ],
+                    "contains": [
+                        "email"
+                    ],
                     "column_order": 1
                 },
                 {
-                    "column_name": "CreatedAt",
+                    "column_name": "Created At",
                     "data_path": "action_result.data.*.createdAt",
                     "data_type": "string",
                     "example_values": [
