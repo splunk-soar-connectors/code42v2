@@ -89,7 +89,7 @@
                     "contains": [
                         "email"
                     ],
-                    "column_name": "username",
+                    "column_name": "Username",
                     "column_order": 0
                 },
                 {
@@ -173,19 +173,19 @@
                     "contains": [
                         "email"
                     ],
-                    "column_name": "username",
+                    "column_name": "Username",
                     "column_order": 0
                 },
                 {
                     "data_path": "action_result.parameter.departure_date",
                     "data_type": "string",
-                    "column_name": "departure_date",
+                    "column_name": "Departure Date",
                     "column_order": 1
                 },
                 {
                     "data_path": "action_result.parameter.note",
                     "data_type": "string",
-                    "column_name": "note",
+                    "column_name": "Note",
                     "column_order": 2
                 },
                 {
