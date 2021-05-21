@@ -158,7 +158,6 @@
                 {
                     "data_path": "action_result.parameter.departure_date",
                     "data_type": "string",
-                    "contains": [],
                     "column_name": "departure_date",
                     "column_order": 1
                 },
