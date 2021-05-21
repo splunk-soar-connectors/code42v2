@@ -15,12 +15,15 @@ def mock_py42_with_user(mocker, mock_py42_client):
 
 def _create_add_de_connector(client):
     connector = create_fake_connector("add_departing_employee")
-    connector._client = client
-    return connector
+    return _attach_connector(connector, client)
 
 
 def _create_remove_de_connector(client):
     connector = create_fake_connector("remove_departing_employee")
+    return _attach_connector(connector, client)
+
+
+def _attach_connector(connector, client):
     connector._client = client
     return connector
 
@@ -39,7 +42,7 @@ class TestCode42DetectionListsConnector(object):
             "TEST_USER_UID", departure_date="2030-01-01"
         )
 
-    def test_handle_action_when_add_departing_employee_adds_user_id_to_summary(
+    def test_handle_action_when_add_departing_employee_adds_info_to_summary(
         self, mocker, mock_py42_with_user, mock_result_adder
     ):
         param = {"username": "test@example.com", "departure_date": "2030-01-01"}
@@ -103,10 +106,10 @@ class TestCode42DetectionListsConnector(object):
             "TEST_USER_UID"
         )
 
-    def test_handle_action_when_remove_departing_employee_adds_user_id_to_summary(
+    def test_handle_action_when_remove_departing_employee_adds_info_to_summary(
         self, mocker, mock_py42_with_user, mock_result_adder
     ):
-        param = {"username": "test@example.com", "departure_date": "2030-01-01"}
+        param = {"username": "test@example.com"}
         result = ActionResult(dict(param))
         update_summary_mock = mocker.MagicMock()
         result.update_summary = update_summary_mock
@@ -118,7 +121,7 @@ class TestCode42DetectionListsConnector(object):
     def test_handle_action_when_remove_departing_employee_adds_response_to_data(
         self, mocker, mock_py42_with_user, mock_result_adder
     ):
-        param = {"username": "test@example.com", "departure_date": "2030-01-01"}
+        param = {"username": "test@example.com"}
         response_data = {}
         mock_py42_with_user.detectionlists.departing_employee.remove.return_value = create_mock_response(
             mocker, response_data
