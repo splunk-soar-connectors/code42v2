@@ -88,6 +88,11 @@ class Code42Connector(BaseConnector):
         departure_date = param.get("departure_date")
         user_id = self._get_user_id(username)
         response = self.client.detectionlists.departing_employee.add(user_id, departure_date=departure_date)
+
+        note = param.get("note")
+        if note:
+            self.client.detectionlists.update_user_notes(user_id, note)
+
         action_result.add_data(response.data)
         action_result.update_summary({"user_id": user_id, "username": username})
         status_message = f"{username} was added to the departing employee list"

@@ -94,6 +94,20 @@ class TestCode42DetectionListsConnector(object):
         expected_message = f"test@example.com was added to the departing employee list"
         set_status_mock.assert_called_once_with(1, expected_message)
 
+    def test_handle_action_when_add_departing_employee_and_including_note_adds_note(
+        self, mocker, mock_py42_with_user, mock_result_adder
+    ):
+        param = {"username": "test@example.com", "note": "Test Note"}
+        result = ActionResult(dict(param))
+        set_status_mock = mocker.MagicMock()
+        result.set_status = set_status_mock
+        mock_result_adder.return_value = result
+        connector = _create_add_de_connector(mock_py42_with_user)
+        connector.handle_action(param)
+        mock_py42_with_user.detectionlists.update_user_notes.assert_called_once_with(
+            _TEST_USER_UID, "Test Note"
+        )
+
     def test_handle_action_when_remove_departing_employee_calls_remove_with_expected_args(
         self, mock_py42_with_user, mock_result_adder
     ):

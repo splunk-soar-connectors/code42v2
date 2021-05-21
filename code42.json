@@ -173,6 +173,14 @@
                     "primary": false,
                     "default": "",
                     "order": 1
+                },
+                "note": {
+                    "description": "A note to include",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": false,
+                    "default": "",
+                    "order": 2
                 }
             },
             "output": [
@@ -192,10 +200,16 @@
                     "column_order": 1
                 },
                 {
+                    "data_path": "action_result.parameter.note",
+                    "data_type": "string",
+                    "column_name": "note",
+                    "column_order": 2
+                },
+                {
                     "data_path": "action_result.status",
                     "data_type": "string",
                     "column_name": "status",
-                    "column_order": 2
+                    "column_order": 3
                 },
                 {
                     "data_path": "action_result.message",
