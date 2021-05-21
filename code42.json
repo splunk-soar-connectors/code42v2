@@ -65,7 +65,7 @@
             "action": "remove departing employee",
             "identifier": "remove_departing_employee",
             "description": "Remove a departing employee from the departing employees detection list",
-            "verbose": "",
+            "verbose": "There is a short delay before you can query the updated results.",
             "type": "contain",
             "read_only": false,
             "parameters": {
@@ -150,7 +150,7 @@
             "action": "add departing employee",
             "identifier": "add_departing_employee",
             "description": "Add a departing employee to the departing employees detection list",
-            "verbose": "",
+            "verbose": "There is a short delay before you can query the updated results.",
             "type": "contain",
             "read_only": false,
             "parameters": {
