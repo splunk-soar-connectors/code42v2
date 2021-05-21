@@ -22,6 +22,7 @@ class Code42Connector(BaseConnector):
     TEST_CONNECTIVITY_ACTION_ID = "test_connectivity"
     ADD_DEPARTING_EMPLOYEE_ACTION_ID = "add_departing_employee"
     REMOVE_DEPARTING_EMPLOYEE_ACTION_ID = "remove_departing_employee"
+    GET_ALERT_DETAILS_ACTION_ID = "get_alert_details"
 
     def __init__(self):
         super(Code42Connector, self).__init__()
@@ -34,7 +35,8 @@ class Code42Connector(BaseConnector):
         self._action_map = {
             self.TEST_CONNECTIVITY_ACTION_ID: lambda x: self._handle_test_connectivity(x),
             self.ADD_DEPARTING_EMPLOYEE_ACTION_ID: lambda x: self._handle_add_departing_employee(x),
-            self.REMOVE_DEPARTING_EMPLOYEE_ACTION_ID: lambda x: self._handle_remove_departing_employee(x)
+            self.REMOVE_DEPARTING_EMPLOYEE_ACTION_ID: lambda x: self._handle_remove_departing_employee(x),
+            self.GET_ALERT_DETAILS_ACTION_ID: lambda x: self._handle_get_alert_details(x)
         }
 
     @property
@@ -102,6 +104,29 @@ class Code42Connector(BaseConnector):
         action_result.add_data(response.data)
         action_result.update_summary({"user_id": user_id, "username": username})
         status_message = f"{username} was removed from the departing employee list"
+        return action_result.set_status(phantom.APP_SUCCESS, status_message)
+
+    def _handle_get_alert_details(self, param):
+        self.save_progress(f"In action handler for: {self.get_action_identifier()}")
+        action_result = self.add_action_result(ActionResult(dict(param)))
+        alert_id = param["alert_id"]
+        response = self.client.alerts.get_details([alert_id])
+        alert = response.data["alerts"][0]
+        resp_dict = {
+            "alert_id": alert["id"],
+            "username": alert["actor"],
+            "occurred": alert["createdAt"],
+            "description": alert["description"],
+            "state": alert["state"],
+            "type": alert["type"],
+            "severity": alert["severity"],
+            "name": alert["name"]
+        }
+        action_result.add_data(response.data)
+        # action_result.add_data(resp_dict)
+        # alert_name = response.data["alerts"][0]["name"]
+        action_result.update_summary(resp_dict)
+        status_message = f"Got alert details for alert {alert_id}"
         return action_result.set_status(phantom.APP_SUCCESS, status_message)
 
     def finalize(self):
