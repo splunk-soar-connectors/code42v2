@@ -1,15 +1,15 @@
 # Python 3 Compatibility imports
 from __future__ import print_function, unicode_literals
 
-# Phantom App imports
-import phantom.app as phantom
-from phantom.base_connector import BaseConnector
-from phantom.action_result import ActionResult
-
-import requests
 import json
 
 import py42.sdk
+import requests
+
+# Phantom App imports
+import phantom.app as phantom
+from phantom.action_result import ActionResult
+from phantom.base_connector import BaseConnector
 
 
 class RetVal(tuple):
@@ -19,6 +19,9 @@ class RetVal(tuple):
 
 
 class Code42Connector(BaseConnector):
+    TEST_CONNECTIVITY_ACTION_ID = "test_connectivity"
+    ADD_DEPARTING_EMPLOYEE_ACTION_ID = "add_departing_employee"
+    REMOVE_DEPARTING_EMPLOYEE_ACTION_ID = "remove_departing_employee"
 
     def __init__(self):
         super(Code42Connector, self).__init__()
@@ -28,6 +31,19 @@ class Code42Connector(BaseConnector):
         self._username = None
         self._password = None
         self._client = None
+        self._action_map = {
+            self.TEST_CONNECTIVITY_ACTION_ID: lambda x: self._handle_test_connectivity(x),
+            self.ADD_DEPARTING_EMPLOYEE_ACTION_ID: lambda x: self._handle_add_departing_employee(x),
+            self.REMOVE_DEPARTING_EMPLOYEE_ACTION_ID: lambda x: self._handle_remove_departing_employee(x)
+        }
+
+    @property
+    def client(self):
+        if self._client is None:
+            self._client = py42.sdk.from_local_account(
+                self._cloud_instance, self._username, self._password
+            )
+        return self._client
 
     def initialize(self):
         # Load the state in initialize, use it to store data
@@ -36,24 +52,17 @@ class Code42Connector(BaseConnector):
 
         # get the asset config
         config = self.get_config()
-        self._cloud_instance = config['cloud_instance']
-        self._username = config['username']
-        self._password = config['password']
+        self._cloud_instance = config["cloud_instance"]
+        self._username = config["username"]
+        self._password = config["password"]
 
         return phantom.APP_SUCCESS
 
     def handle_action(self, param):
-        ret_val = phantom.APP_SUCCESS
-
-        # Get the action that we are supposed to execute for this App Run
         action_id = self.get_action_identifier()
-
-        self.debug_print("action_id", self.get_action_identifier())
-
-        if action_id == 'test_connectivity':
-            ret_val = self._handle_test_connectivity(param)
-
-        return ret_val
+        self.debug_print("action_id", action_id)
+        action = self._action_map[action_id]
+        return action(param)
 
     def _handle_test_connectivity(self, param):
         # Add an action result object to self (BaseConnector) to represent the action for this param
@@ -65,18 +74,46 @@ class Code42Connector(BaseConnector):
             # Ideally the client instantiation would happen in `initialize()` but that function does not have access
             # to the action, so it cannot effectively report errors to the UI.
             # Fix this with a decorator or something similar.
-            self._client = py42.sdk.from_local_account(self._cloud_instance, self._username, self._password)
-            self._client.users.get_current()
+            self.client.users.get_current()
         except Exception as exception:
             return action_result.set_status(phantom.APP_ERROR, f"Unable to connect to Code42: {str(exception)}")
 
         self.save_progress("Test Connectivity Passed")
         return action_result.set_status(phantom.APP_SUCCESS)
 
+    def _handle_add_departing_employee(self, param):
+        self.save_progress(f"In action handler for: {self.get_action_identifier()}")
+        action_result = self.add_action_result(ActionResult(dict(param)))
+        username = param["username"]
+        departure_date = param.get("departure_date")
+        user_id = self._get_user_id(username)
+        response = self.client.detectionlists.departing_employee.add(user_id, departure_date=departure_date)
+        action_result.add_data(response.data)
+        action_result.update_summary({"user_id": user_id, "username": username})
+        status_message = f"{username} was added to the departing employee list"
+        return action_result.set_status(phantom.APP_SUCCESS, status_message)
+
+    def _handle_remove_departing_employee(self, param):
+        self.save_progress(f"In action handler for: {self.get_action_identifier()}")
+        action_result = self.add_action_result(ActionResult(dict(param)))
+        username = param["username"]
+        user_id = self._get_user_id(username)
+        response = self.client.detectionlists.departing_employee.remove(user_id)
+        action_result.add_data(response.data)
+        action_result.update_summary({"user_id": user_id, "username": username})
+        status_message = f"{username} was removed from the departing employee list"
+        return action_result.set_status(phantom.APP_SUCCESS, status_message)
+
     def finalize(self):
         # Save the state, this data is saved across actions and app upgrades
         self.save_state(self._state)
         return phantom.APP_SUCCESS
+
+    def _get_user_id(self, username):
+        users = self.client.users.get_by_username(username)["users"]
+        if not users:
+            raise Exception(f"User '{username}' does not exist")
+        return users[0]["userUid"]
 
 
 def main():
@@ -87,9 +124,9 @@ def main():
 
     argparser = argparse.ArgumentParser()
 
-    argparser.add_argument('input_test_json', help='Input Test JSON file')
-    argparser.add_argument('-u', '--username', help='username', required=False)
-    argparser.add_argument('-p', '--password', help='password', required=False)
+    argparser.add_argument("input_test_json", help="Input Test JSON file")
+    argparser.add_argument("-u", "--username", help="username", required=False)
+    argparser.add_argument("-p", "--password", help="password", required=False)
 
     args = argparser.parse_args()
     session_id = None
@@ -103,26 +140,28 @@ def main():
         import getpass
         password = getpass.getpass("Password: ")
 
+    csrftoken = None
+    headers = None
     if username and password:
         try:
-            login_url = Code42Connector._get_phantom_base_url() + '/login'
+            login_url = Code42Connector._get_phantom_base_url() + "/login"
 
             print("Accessing the Login page")
             r = requests.get(login_url, verify=False)
-            csrftoken = r.cookies['csrftoken']
+            csrftoken = r.cookies["csrftoken"]
 
             data = dict()
-            data['username'] = username
-            data['password'] = password
-            data['csrfmiddlewaretoken'] = csrftoken
+            data["username"] = username
+            data["password"] = password
+            data["csrfmiddlewaretoken"] = csrftoken
 
             headers = dict()
-            headers['Cookie'] = 'csrftoken=' + csrftoken
-            headers['Referer'] = login_url
+            headers["Cookie"] = "csrftoken=" + csrftoken
+            headers["Referer"] = login_url
 
             print("Logging into Platform to get the session id")
             r2 = requests.post(login_url, verify=False, data=data, headers=headers)
-            session_id = r2.cookies['sessionid']
+            session_id = r2.cookies["sessionid"]
         except Exception as e:
             print("Unable to get session id from the platform. Error: " + str(e))
             exit(1)
@@ -136,14 +175,16 @@ def main():
         connector.print_progress_message = True
 
         if session_id is not None:
-            in_json['user_session_token'] = session_id
-            connector._set_csrf_info(csrftoken, headers['Referer'])
+            in_json["user_session_token"] = session_id
+            if csrftoken and headers:
+                connector._set_csrf_info(csrftoken, headers["Referer"])
 
-        ret_val = connector._handle_action(json.dumps(in_json), None)
+        json_string = json.dumps(in_json)
+        ret_val = connector._handle_action(json_string, None)
         print(json.dumps(json.loads(ret_val), indent=4))
 
     exit(0)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

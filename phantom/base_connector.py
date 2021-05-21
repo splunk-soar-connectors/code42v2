@@ -19,3 +19,16 @@ class BaseConnector:
 
     def get_config(self):
         pass
+
+    def save_state(self, state):
+        pass
+
+    @classmethod
+    def _get_phantom_base_url(cls):
+        pass
+
+    def _handle_action(self, param, param2):
+        pass
+
+    def _set_csrf_info(self, token, referer):
+        pass

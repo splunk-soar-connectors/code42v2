@@ -7,3 +7,9 @@ class ActionResult:
 
     def set_status(self, status, message=None):
         pass
+
+    def add_data(self, data):
+        pass
+
+    def update_summary(self, message):
+        pass

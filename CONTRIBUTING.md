@@ -22,7 +22,8 @@ To test the Code42 Phantom app, you must deploy it to a running Phantom VM and r
 Run the below command to install the Code42 app on Phantom. 
 
 ```bash
-export PHANTOM_VM_IP_ADDR=0.0.0.0 # Replace with IP address for Phantom VM
+export PHANTOM_VM_IP_ADDR=0.0.0.0  # Replace with IP address for Phantom VM
+export PHANTOM_VM_PASSWORD=phantom  # Use the password for your phantom admin user.
 ./util.sh deploy
 ```
 
@@ -106,7 +107,7 @@ pytest
 ### Stubs
 
 This app is built on top of several modules developed by Phantom. Since we don't have access to the source for these modules, 
-we've stubbed them out in `phantomstubs` so that they can be imported by the test code.
+we've stubbed them out in the `phantom` directory so that they can be imported by the test code.
 
 # TODO
 
