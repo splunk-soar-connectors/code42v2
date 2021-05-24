@@ -4,6 +4,7 @@ from __future__ import print_function, unicode_literals
 import json
 
 import py42.sdk
+from py42.services.detectionlists.departing_employee import DepartingEmployeeFilters
 import requests
 
 # Phantom App imports
@@ -22,6 +23,7 @@ class Code42Connector(BaseConnector):
     TEST_CONNECTIVITY_ACTION_ID = "test_connectivity"
     ADD_DEPARTING_EMPLOYEE_ACTION_ID = "add_departing_employee"
     REMOVE_DEPARTING_EMPLOYEE_ACTION_ID = "remove_departing_employee"
+    LIST_DEPARTING_EMPLOYEES_ACTION_ID = "list_departing_employees"
     ADD_HIGH_RISK_EMPLOYEE_ACTION_ID = "add_highrisk_employee"
     REMOVE_HIGH_RISK_EMPLOYEE_ACTION_ID = "remove_highrisk_employee"
 
@@ -36,6 +38,7 @@ class Code42Connector(BaseConnector):
         self._action_map = {
             self.TEST_CONNECTIVITY_ACTION_ID: lambda x: self._handle_test_connectivity(x),
             self.ADD_DEPARTING_EMPLOYEE_ACTION_ID: lambda x: self._handle_add_departing_employee(x),
+            self.LIST_DEPARTING_EMPLOYEES_ACTION_ID: lambda x: self._handle_list_departing_employees(x),
             self.REMOVE_DEPARTING_EMPLOYEE_ACTION_ID: lambda x: self._handle_remove_departing_employee(x),
             self.ADD_HIGH_RISK_EMPLOYEE_ACTION_ID: lambda x: self._handle_add_high_risk_employee(x),
             self.REMOVE_HIGH_RISK_EMPLOYEE_ACTION_ID: lambda x: self._handle_remove_high_risk_employee(x)
@@ -111,6 +114,18 @@ class Code42Connector(BaseConnector):
         action_result.add_data({"userId": user_id})
         action_result.update_summary({"user_id": user_id, "username": username})
         status_message = f"{username} was removed from the departing employees list"
+        return action_result.set_status(phantom.APP_SUCCESS, status_message)
+
+    def _handle_list_departing_employees(self, param):
+        self._log_action_handler()
+        action_result = self._add_action_result(param)
+        filter_type = param.get("filter_type", DepartingEmployeeFilters.OPEN)
+        results_generator = self.client.detectionlists.departing_employee.get_all(filter_type=filter_type)
+        results = []
+        for page in results_generator:
+            results.append(page.json)
+        action_result.add_data(results)
+        status_message = f"Successfully retrieved the list of departing employees"
         return action_result.set_status(phantom.APP_SUCCESS, status_message)
 
     def _handle_add_high_risk_employee(self, param):
