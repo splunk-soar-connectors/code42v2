@@ -202,7 +202,7 @@ class TestCode42DetectionListsConnector(object):
         mock_result_adder.return_value = result
         connector = _create_add_de_connector(mock_py42_with_user)
         connector.handle_action(param)
-        expected_message = f"test@example.com was added to the departing employees list"
+        expected_message = "test@example.com was added to the departing employees list"
         set_status_mock.assert_called_once_with(1, expected_message)
 
     def test_handle_action_when_add_departing_employee_and_including_note_adds_note(
@@ -270,7 +270,7 @@ class TestCode42DetectionListsConnector(object):
         mock_result_adder.return_value = result
         connector = _create_remove_de_connector(mock_py42_with_user)
         connector.handle_action(param)
-        expected_message = f"test@example.com was removed from the departing employees list"
+        expected_message = "test@example.com was removed from the departing employees list"
         set_status_mock.assert_called_once_with(1, expected_message)
 
     def test_handle_action_when_list_departing_employees_and_given_filter_type_calls_get_all_with_given_filter(
@@ -395,7 +395,7 @@ class TestCode42DetectionListsConnector(object):
         mock_result_adder.return_value = result
         connector = _create_add_hr_connector(mock_py42_with_user)
         connector.handle_action(param)
-        expected_message = f"test@example.com was added to the high risk employees list"
+        expected_message = "test@example.com was added to the high risk employees list"
         set_status_mock.assert_called_once_with(1, expected_message)
 
     def test_handle_action_when_remove_high_risk_employee_calls_remove_with_expected_args(
@@ -449,7 +449,7 @@ class TestCode42DetectionListsConnector(object):
         mock_result_adder.return_value = result
         connector = _create_remove_hr_connector(mock_py42_with_user)
         connector.handle_action(param)
-        expected_message = f"test@example.com was removed from the high risk employees list"
+        expected_message = "test@example.com was removed from the high risk employees list"
         set_status_mock.assert_called_once_with(1, expected_message)
 
     def test_handle_action_when_list_high_risk_employees_and_given_filter_type_calls_get_all_with_given_filter(
