@@ -32,25 +32,15 @@ class Code42Connector(BaseConnector):
         self._password = None
         self._client = None
         self._action_map = {
-            self.TEST_CONNECTIVITY_ACTION_ID: lambda x: self._handle_test_connectivity(x),
-            self.ADD_DEPARTING_EMPLOYEE_ACTION_ID: lambda x: self._handle_add_departing_employee(x),
-            self.REMOVE_DEPARTING_EMPLOYEE_ACTION_ID: lambda x: self._handle_remove_departing_employee(x)
+            self.TEST_CONNECTIVITY_ACTION_ID: self._handle_test_connectivity,
+            self.ADD_DEPARTING_EMPLOYEE_ACTION_ID: self._handle_add_departing_employee,
+            self.REMOVE_DEPARTING_EMPLOYEE_ACTION_ID: self._handle_remove_departing_employee
         }
 
-    @property
-    def client(self):
-        if self._client is None:
-            self._client = py42.sdk.from_local_account(
-                self._cloud_instance, self._username, self._password
-            )
-        return self._client
-
     def initialize(self):
-        # Load the state in initialize, use it to store data
-        # that needs to be accessed across actions
+        # use this to store data that needs to be accessed across actions
         self._state = self.load_state()
 
-        # get the asset config
         config = self.get_config()
         self._cloud_instance = config["cloud_instance"]
         self._username = config["username"]
@@ -61,41 +51,38 @@ class Code42Connector(BaseConnector):
     def handle_action(self, param):
         action_id = self.get_action_identifier()
         self.debug_print("action_id", action_id)
-        action = self._action_map[action_id]
-        return action(param)
 
-    def _handle_test_connectivity(self, param):
-        # Add an action result object to self (BaseConnector) to represent the action for this param
+        action_handler = self._action_map.get(action_id)
         action_result = self.add_action_result(ActionResult(dict(param)))
-        self.save_progress("Connecting to endpoint")
+
+        if not action_handler:
+            return action_result.set_status(phantom.APP_ERROR, f"Code42: Action {action_id} does not exist.")
 
         try:
-            # TODO
-            # Ideally the client instantiation would happen in `initialize()` but that function does not have access
-            # to the action, so it cannot effectively report errors to the UI.
-            # Fix this with a decorator or something similar.
-            self.client.users.get_current()
+            if not self._client:
+                self._client = py42.sdk.from_local_account(self._cloud_instance, self._username, self._password)
+            self.save_progress(f"Code42: handling action {action_id}...")
+            return action_handler(param, action_result)
         except Exception as exception:
-            return action_result.set_status(phantom.APP_ERROR, f"Unable to connect to Code42: {str(exception)}")
+            msg = f"Code42: Failed to execution of action {action_id}: {str(exception)}"
+            return action_result.set_status(phantom.APP_ERROR, msg)
 
+    def _handle_test_connectivity(self, param, action_result):
+        self._client.users.get_current()
         self.save_progress("Test Connectivity Passed")
         return action_result.set_status(phantom.APP_SUCCESS)
 
-    def _handle_add_departing_employee(self, param):
-        self.save_progress(f"In action handler for: {self.get_action_identifier()}")
-        action_result = self.add_action_result(ActionResult(dict(param)))
+    def _handle_add_departing_employee(self, param, action_result):
         username = param["username"]
         departure_date = param.get("departure_date")
         user_id = self._get_user_id(username)
-        response = self.client.detectionlists.departing_employee.add(user_id, departure_date=departure_date)
+        response = self._client.detectionlists.departing_employee.add(user_id, departure_date=departure_date)
         action_result.add_data(response.data)
         action_result.update_summary({"user_id": user_id, "username": username})
         status_message = f"{username} was added to the departing employee list"
         return action_result.set_status(phantom.APP_SUCCESS, status_message)
 
-    def _handle_remove_departing_employee(self, param):
-        self.save_progress(f"In action handler for: {self.get_action_identifier()}")
-        action_result = self.add_action_result(ActionResult(dict(param)))
+    def _handle_remove_departing_employee(self, param, action_result):
         username = param["username"]
         user_id = self._get_user_id(username)
         response = self.client.detectionlists.departing_employee.remove(user_id)

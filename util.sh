@@ -8,13 +8,13 @@
 #   deploy: Bundles up required files for the Python app, deploys to Phantom VM, and invokes the Phantom app compilation script.
 #   deploy-bypass: Bypass the password prompts using the PHANTOM_VM_PASSWORD environment variable.
 #   ssh: SSH into your Phantom VM.
-#   open-web: Open your default web browser at `https://<phantom-vm-ip:9999`.
+#   open-web: Open your default web browser at `https://<phantom-vm-ip:9999>`.
 
 set -eo pipefail
 
 make_tar() {
   echo "Tarring the ball..."
-  pushd .. && tar -cvf phcode42v2/phcode42v2.tgz -X phcode42v2/exclude_files.txt phcode42v2/* && popd
+  pushd .. && tar -cvf phcode42v2/phcode42v2.tgz -X phcode42v2/exclude_files.txt phcode42v2/src/* && popd
 }
 
 clean() {

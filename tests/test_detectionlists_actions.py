@@ -1,7 +1,7 @@
 from pytest import fixture
 
 from phantom.action_result import ActionResult
-from tests.conftest import create_fake_connector, create_mock_response
+from .conftest import create_fake_connector, create_mock_response
 
 _TEST_USER_UID = "TEST_USER_UID"
 

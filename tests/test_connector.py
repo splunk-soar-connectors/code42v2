@@ -7,12 +7,7 @@ from pytest import fixture
 import phantom.app as phantom
 from code42_connector import Code42Connector
 from phantom.action_result import ActionResult
-from tests.conftest import create_fake_connector
-
-logger = getLogger(name=__name__)
-
-NULL_VALUE = object()
-
+from .conftest import create_fake_connector
 
 @fixture
 def test_connectivity_connector(mock_py42_client):
@@ -22,26 +17,20 @@ def test_connectivity_connector(mock_py42_client):
 
 
 class TestCode42Connector(object):
-    def test_handle_test_connectivity(self, mocker, connector, mock_result_adder):
+    def test_handle_test_connectivity(self, mocker, test_connectivity_connector):
+        result = test_connectivity_connector.handle_action({})
+        status = result.data["status"]
+        assert status == phantom.APP_SUCCESS
+
+    def test_handle_test_connectivity_calls_users_get_current(self, connector):
         param = {}
-        mock_result_adder.return_value = ActionResult(dict(param))
-        set_status = mocker.patch("phantom.action_result.ActionResult.set_status")
-
         connector._handle_test_connectivity(param)
-
-        set_status.assert_called_with(phantom.APP_SUCCESS)
-
-    def test_handle_test_connectivity_calls_users_get_current(self, connector, mock_result_adder):
-        param = {}
-        mock_result_adder.return_value = ActionResult(dict(param))
-        connector._handle_test_connectivity(param)
-        connector._client.users.get_current.assert_called_with()
+        connector._client.users.get_current.assert_called_once_with()
 
     def test_handle_connectivity_sets_error_status_if_sdk_throws_exception(
-        self, mocker, mock_py42_client, connector, mock_result_adder
+        self, mocker, mock_py42_client, connector
     ):
         param = {}
-        mock_result_adder.return_value = ActionResult(dict(param))
         mock_py42_client.users.get_current.side_effect = Py42UnauthorizedError(mock.Mock(status=401))
         set_status = mocker.patch("phantom.action_result.ActionResult.set_status")
 
