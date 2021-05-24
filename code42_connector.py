@@ -133,8 +133,7 @@ class Code42Connector(BaseConnector):
 
         total_count = page.data.get("totalCount", 0) if page else None
         action_result.update_summary({"total_count": total_count})
-        status_message = "Successfully retrieved the list of departing employees"
-        return action_result.set_status(phantom.APP_SUCCESS, status_message)
+        return action_result.set_status(phantom.APP_SUCCESS)
 
     def _handle_add_high_risk_employee(self, param):
         self._log_action_handler()
@@ -172,8 +171,7 @@ class Code42Connector(BaseConnector):
 
         total_count = page.data.get("totalCount", 0) if page else None
         action_result.update_summary({"total_count": total_count})
-        status_message = "Successfully retrieved the list of high risk employees"
-        return action_result.set_status(phantom.APP_SUCCESS, status_message)
+        return action_result.set_status(phantom.APP_SUCCESS)
 
     def finalize(self):
         # Save the state, this data is saved across actions and app upgrades

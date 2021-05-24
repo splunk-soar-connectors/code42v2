@@ -331,8 +331,7 @@ class TestCode42DetectionListsConnector(object):
         mock_result_adder.return_value = result
         connector = _create_list_de_connector(mock_py42_with_departing_employees)
         connector.handle_action({})
-        expected_message = "Successfully retrieved the list of departing employees"
-        set_status_mock.assert_called_once_with(1, expected_message)
+        set_status_mock.assert_called_once_with(1)
 
     def test_handle_action_when_add_high_risk_employee_calls_add_with_expected_args(
         self, mock_py42_with_user, mock_result_adder
@@ -510,5 +509,4 @@ class TestCode42DetectionListsConnector(object):
         mock_result_adder.return_value = result
         connector = _create_list_hr_connector(mock_py42_with_high_risk_employees)
         connector.handle_action({})
-        expected_message = "Successfully retrieved the list of high risk employees"
-        set_status_mock.assert_called_once_with(1, expected_message)
+        set_status_mock.assert_called_once_with(1)
