@@ -124,14 +124,14 @@ class Code42Connector(BaseConnector):
         action_result = self._add_action_result(param)
         filter_type = param.get("filter_type", DepartingEmployeeFilters.OPEN)
         results_generator = self.client.detectionlists.departing_employee.get_all(filter_type=filter_type)
-        total_count = None
+
+        page = None
         for page in results_generator:
             employees = page.data.get("items", [])
             for employee in employees:
                 action_result.add_data(employee)
-            if total_count is None:
-                total_count = page.data.get("totalCount", 0)
 
+        total_count = page.data.get("totalCount", 0) if page else None
         action_result.update_summary({"total_count": total_count})
         status_message = "Successfully retrieved the list of departing employees"
         return action_result.set_status(phantom.APP_SUCCESS, status_message)
@@ -163,14 +163,14 @@ class Code42Connector(BaseConnector):
         action_result = self._add_action_result(param)
         filter_type = param.get("filter_type", HighRiskEmployeeFilters.OPEN)
         results_generator = self.client.detectionlists.high_risk_employee.get_all(filter_type=filter_type)
-        total_count = None
+
+        page = None
         for page in results_generator:
             employees = page.data.get("items", [])
             for employee in employees:
                 action_result.add_data(employee)
-            if total_count is None:
-                total_count = page.data.get("totalCount", 0)
 
+        total_count = page.data.get("totalCount", 0) if page else None
         action_result.update_summary({"total_count": total_count})
         status_message = "Successfully retrieved the list of high risk employees"
         return action_result.set_status(phantom.APP_SUCCESS, status_message)
