@@ -5,7 +5,7 @@ from pytest import fixture
 
 import phantom.app as phantom
 from code42_connector import Code42Connector
-from .conftest import create_fake_connector
+from .conftest import assert_fail, create_fake_connector, assert_success
 
 @fixture
 def test_connectivity_connector(mock_py42_client):
@@ -15,26 +15,17 @@ def test_connectivity_connector(mock_py42_client):
 
 
 class TestCode42Connector(object):
-    def test_handle_test_connectivity(self, test_connectivity_connector):
-        test_connectivity_connector.handle_action({})
-        action_results = test_connectivity_connector.get_action_results()
-        assert len(action_results) == 1
-        status = action_results[0].get_status()
-        assert status == phantom.APP_SUCCESS
-
     def test_handle_test_connectivity_calls_users_get_current(self, test_connectivity_connector):
         test_connectivity_connector.handle_action({})
         test_connectivity_connector._client.users.get_current.assert_called_once_with()
+        assert_success(test_connectivity_connector)
 
     def test_handle_connectivity_sets_error_status_if_sdk_throws_exception(
         self, test_connectivity_connector
     ):
         test_connectivity_connector._client.users.get_current.side_effect = Py42UnauthorizedError(mock.Mock(status=401))
         test_connectivity_connector.handle_action({})
-        action_results = test_connectivity_connector.get_action_results()
-        assert len(action_results) == 1
-        status = action_results[0].get_status()
-        assert status == phantom.APP_ERROR
+        assert_fail(test_connectivity_connector)
 
     def test_initialize_reads_credentials_from_config(self, mocker):
         connector = Code42Connector()

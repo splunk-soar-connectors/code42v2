@@ -1,5 +1,6 @@
 import json
 
+import phantom.app
 import py42.sdk
 from py42.response import Py42Response
 from py42.services.users import UserService
@@ -15,12 +16,6 @@ def mock_py42_client(mocker):
     client.users = mocker.MagicMock(spec=UserService)
     mocker.patch("py42.sdk.from_local_account", return_value=client)
     return client
-
-
-@fixture
-def mock_result_adder(mocker):
-    return mocker.patch("phantom.base_connector.BaseConnector.add_action_result")
-
 
 @fixture
 def connector():
@@ -41,3 +36,36 @@ def create_mock_response(mocker, response_data):
     response = mocker.MagicMock(spec=Response)
     response.text = json.dumps(response_data)
     return Py42Response(response)
+
+
+def assert_success(connector):
+    action_results = connector.get_action_results()
+    assert len(action_results) == 1
+    status = action_results[0].get_status()
+    assert status == phantom.app.APP_SUCCESS
+
+def assert_fail(connector):
+    action_results = connector.get_action_results()
+    assert len(action_results) == 1
+    status = action_results[0].get_status()
+    assert status == phantom.app.APP_ERROR
+
+def assert_successful_single_data(connector, expected_data):
+    action_results = connector.get_action_results()
+    assert len(action_results) == 1
+    data = action_results[0].get_data()
+    status = action_results[0].get_status()
+    assert data[0] == expected_data
+    assert status == phantom.app.APP_SUCCESS
+
+def assert_succesful_summary(connector, expected_summary):
+    action_results = connector.get_action_results()
+    assert len(action_results) == 1
+    summary = action_results[0].get_summary()
+    assert summary == expected_summary
+
+def assert_successful_message(connector, expected_message):
+    action_results = connector.get_action_results()
+    assert len(action_results) == 1
+    msg = action_results[0].get_message()
+    assert msg == expected_message
