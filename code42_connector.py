@@ -172,7 +172,7 @@ class Code42Connector(BaseConnector):
                 total_count = page.data.get("totalCount", 0)
 
         action_result.update_summary({"total_count": total_count})
-        status_message = "Successfully retrieved the list of departing employees"
+        status_message = "Successfully retrieved the list of high risk employees"
         return action_result.set_status(phantom.APP_SUCCESS, status_message)
 
     def finalize(self):
