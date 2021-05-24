@@ -63,8 +63,8 @@ class Code42Connector(BaseConnector):
                 self._client = py42.sdk.from_local_account(self._cloud_instance, self._username, self._password)
             self.save_progress(f"Code42: handling action {action_id}...")
             return action_handler(param, action_result)
-        except Exception as exception:
-            msg = f"Code42: Failed to execution of action {action_id}: {str(exception)}"
+        except Exception as ex:
+            msg = f"Code42: Failed execution of action {action_id}: {str(ex)}"
             return action_result.set_status(phantom.APP_ERROR, msg)
 
     def _handle_test_connectivity(self, param, action_result):
@@ -72,29 +72,25 @@ class Code42Connector(BaseConnector):
         self.save_progress("Test Connectivity Passed")
         return action_result.set_status(phantom.APP_SUCCESS)
 
-    def _handle_add_departing_employee(self, param):
-        self._log_action_handler()
-        action_result = self._add_action_result(param)
+    def _handle_add_departing_employee(self, param, action_result):
         username = param["username"]
         departure_date = param.get("departure_date")
         user_id = self._get_user_id(username)
-        response = self.client.detectionlists.departing_employee.add(user_id, departure_date=departure_date)
+        response = self._client.detectionlists.departing_employee.add(user_id, departure_date=departure_date)
 
         note = param.get("note")
         if note:
-            self.client.detectionlists.update_user_notes(user_id, note)
+            self._client.detectionlists.update_user_notes(user_id, note)
 
         action_result.add_data(response.data)
         action_result.update_summary({"user_id": user_id, "username": username})
         status_message = f"{username} was added to the departing employee list"
         return action_result.set_status(phantom.APP_SUCCESS, status_message)
 
-    def _handle_remove_departing_employee(self, param):
-        self._log_action_handler()
-        action_result = self._add_action_result(param)
+    def _handle_remove_departing_employee(self, param, action_result):
         username = param["username"]
         user_id = self._get_user_id(username)
-        self.client.detectionlists.departing_employee.remove(user_id)
+        self._client.detectionlists.departing_employee.remove(user_id)
         action_result.add_data({"userId": user_id})
         action_result.update_summary({"user_id": user_id, "username": username})
         status_message = f"{username} was removed from the departing employee list"
@@ -106,17 +102,10 @@ class Code42Connector(BaseConnector):
         return phantom.APP_SUCCESS
 
     def _get_user_id(self, username):
-        users = self.client.users.get_by_username(username)["users"]
+        users = self._client.users.get_by_username(username)["users"]
         if not users:
             raise Exception(f"User '{username}' does not exist")
         return users[0]["userUid"]
-
-    def _log_action_handler(self):
-        self.save_progress(f"In action handler for: {self.get_action_identifier()}")
-
-    def _add_action_result(self, param):
-        return self.add_action_result(ActionResult(dict(param)))
-
 
 def main():
     import pudb

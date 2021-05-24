@@ -31,11 +31,9 @@ def _attach_client(connector, client):
 class TestCode42DetectionListsConnector(object):
 
     def test_handle_action_when_add_departing_employee_calls_add_with_expected_args(
-        self, mock_py42_with_user, mock_result_adder
+        self, mock_py42_with_user
     ):
         param = {"username": "test@example.com", "departure_date": "2030-01-01"}
-        result = ActionResult(dict(param))
-        mock_result_adder.return_value = result
         connector = _create_add_de_connector(mock_py42_with_user)
         connector.handle_action(param)
         mock_py42_with_user.detectionlists.departing_employee.add.assert_called_once_with(
@@ -43,19 +41,18 @@ class TestCode42DetectionListsConnector(object):
         )
 
     def test_handle_action_when_add_departing_employee_adds_info_to_summary(
-        self, mocker, mock_py42_with_user, mock_result_adder
+        self, mock_py42_with_user
     ):
         param = {"username": "test@example.com", "departure_date": "2030-01-01"}
-        result = ActionResult(dict(param))
-        update_summary_mock = mocker.MagicMock()
-        result.update_summary = update_summary_mock
-        mock_result_adder.return_value = result
         connector = _create_add_de_connector(mock_py42_with_user)
         connector.handle_action(param)
-        update_summary_mock.assert_called_once_with({"user_id": _TEST_USER_UID, "username": "test@example.com"})
+        action_results = connector.get_action_results()
+        assert len(action_results) == 1
+        summary = action_results[0].get_summary()
+        assert summary == {"user_id": _TEST_USER_UID, "username": "test@example.com"}
 
     def test_handle_action_when_add_departing_employee_adds_response_to_data(
-        self, mocker, mock_py42_with_user, mock_result_adder
+        self, mocker, mock_py42_with_user
     ):
         param = {"username": "test@example.com", "departure_date": "2030-01-01"}
         response_data = {
@@ -73,35 +70,29 @@ class TestCode42DetectionListsConnector(object):
         mock_py42_with_user.detectionlists.departing_employee.add.return_value = create_mock_response(
             mocker, response_data
         )
-        result = ActionResult(dict(param))
-        add_data_mock = mocker.MagicMock()
-        result.add_data = add_data_mock
-        mock_result_adder.return_value = result
+
         connector = _create_add_de_connector(mock_py42_with_user)
         connector.handle_action(param)
-        add_data_mock.assert_called_once_with(response_data)
+        action_results = connector.get_action_results()
+        assert len(action_results) == 1
+        data = action_results[0].get_data()
+        assert data[0] == response_data
 
     def test_handle_action_when_add_departing_employee_and_is_successful_sets_success_status(
-        self, mocker, mock_py42_with_user, mock_result_adder
+        self, mock_py42_with_user
     ):
         param = {"username": "test@example.com", "departure_date": "2030-01-01"}
-        result = ActionResult(dict(param))
-        set_status_mock = mocker.MagicMock()
-        result.set_status = set_status_mock
-        mock_result_adder.return_value = result
         connector = _create_add_de_connector(mock_py42_with_user)
         connector.handle_action(param)
-        expected_message = f"test@example.com was added to the departing employee list"
-        set_status_mock.assert_called_once_with(1, expected_message)
+        action_results = connector.get_action_results()
+        assert len(action_results) == 1
+        msg = action_results[0].get_message()
+        assert msg == f"test@example.com was added to the departing employee list"
 
     def test_handle_action_when_add_departing_employee_and_including_note_adds_note(
-        self, mocker, mock_py42_with_user, mock_result_adder
+        self, mock_py42_with_user
     ):
         param = {"username": "test@example.com", "note": "Test Note"}
-        result = ActionResult(dict(param))
-        set_status_mock = mocker.MagicMock()
-        result.set_status = set_status_mock
-        mock_result_adder.return_value = result
         connector = _create_add_de_connector(mock_py42_with_user)
         connector.handle_action(param)
         mock_py42_with_user.detectionlists.update_user_notes.assert_called_once_with(
@@ -121,19 +112,18 @@ class TestCode42DetectionListsConnector(object):
         )
 
     def test_handle_action_when_remove_departing_employee_adds_info_to_summary(
-        self, mocker, mock_py42_with_user, mock_result_adder
+        self, mock_py42_with_user
     ):
         param = {"username": "test@example.com"}
-        result = ActionResult(dict(param))
-        update_summary_mock = mocker.MagicMock()
-        result.update_summary = update_summary_mock
-        mock_result_adder.return_value = result
         connector = _create_remove_de_connector(mock_py42_with_user)
         connector.handle_action(param)
-        update_summary_mock.assert_called_once_with({"user_id": _TEST_USER_UID, "username": "test@example.com"})
+        action_results = connector.get_action_results()
+        assert len(action_results) == 1
+        summary = action_results[0].get_summary()
+        assert summary == {"user_id": _TEST_USER_UID, "username": "test@example.com"}
 
     def test_handle_action_when_remove_departing_employee_adds_response_to_data(
-        self, mocker, mock_py42_with_user, mock_result_adder
+        self, mocker, mock_py42_with_user,
     ):
         param = {"username": "test@example.com"}
 
@@ -141,23 +131,20 @@ class TestCode42DetectionListsConnector(object):
         mock_py42_with_user.detectionlists.departing_employee.remove.return_value = create_mock_response(
             mocker, {}
         )
-        result = ActionResult(dict(param))
-        add_data_mock = mocker.MagicMock()
-        result.add_data = add_data_mock
-        mock_result_adder.return_value = result
         connector = _create_remove_de_connector(mock_py42_with_user)
         connector.handle_action(param)
-        add_data_mock.assert_called_once_with({"userId": _TEST_USER_UID})
+        action_results = connector.get_action_results()
+        assert len(action_results) == 1
+        data = action_results[0].get_data()
+        assert data[0] == {"userId": _TEST_USER_UID}
 
     def test_handle_action_when_remove_departing_employee_and_is_successful_sets_success_status(
-        self, mocker, mock_py42_with_user, mock_result_adder
+        self, mocker, mock_py42_with_user
     ):
         param = {"username": "test@example.com"}
-        result = ActionResult(dict(param))
-        set_status_mock = mocker.MagicMock()
-        result.set_status = set_status_mock
-        mock_result_adder.return_value = result
         connector = _create_remove_de_connector(mock_py42_with_user)
         connector.handle_action(param)
-        expected_message = f"test@example.com was removed from the departing employee list"
-        set_status_mock.assert_called_once_with(1, expected_message)
+        action_results = connector.get_action_results()
+        assert len(action_results) == 1
+        msg = action_results[0].get_message()
+        assert msg == f"test@example.com was removed from the departing employee list"
