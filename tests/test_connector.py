@@ -7,7 +7,7 @@ from pytest import fixture
 import phantom.app as phantom
 from code42_connector import Code42Connector
 from phantom.action_result import ActionResult
-from tests.conftest import create_fake_connector
+from tests.conftest import create_fake_connector, attach_client
 
 logger = getLogger(name=__name__)
 
@@ -17,8 +17,7 @@ NULL_VALUE = object()
 @fixture
 def test_connectivity_connector(mock_py42_client):
     connector = create_fake_connector("test_connectivity")
-    connector._client = mock_py42_client
-    return connector
+    return attach_client(connector, mock_py42_client)
 
 
 class TestCode42Connector(object):

@@ -1,7 +1,7 @@
 from pytest import fixture
 
 from phantom.action_result import ActionResult
-from tests.conftest import create_fake_connector, create_mock_response
+from tests.conftest import create_fake_connector, create_mock_response, attach_client
 
 _TEST_USER_UID = "TEST_USER_UID"
 
@@ -15,17 +15,12 @@ def mock_py42_with_user(mocker, mock_py42_client):
 
 def _create_add_de_connector(client):
     connector = create_fake_connector("add_departing_employee")
-    return _attach_client(connector, client)
+    return attach_client(connector, client)
 
 
 def _create_remove_de_connector(client):
     connector = create_fake_connector("remove_departing_employee")
-    return _attach_client(connector, client)
-
-
-def _attach_client(connector, client):
-    connector._client = client
-    return connector
+    return attach_client(connector, client)
 
 
 class TestCode42DetectionListsConnector(object):

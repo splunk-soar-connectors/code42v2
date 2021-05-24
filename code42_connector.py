@@ -117,22 +117,9 @@ class Code42Connector(BaseConnector):
         alert_id = param["alert_id"]
         response = self.client.alerts.get_details([alert_id])
         alert = response.data["alerts"][0]
-        resp_dict = {
-            "alert_id": alert["id"],
-            "username": alert["actor"],
-            "occurred": alert["createdAt"],
-            "description": alert["description"],
-            "state": alert["state"],
-            "type": alert["type"],
-            "severity": alert["severity"],
-            "name": alert["name"]
-        }
-        action_result.add_data(response.data)
-        # action_result.add_data(resp_dict)
-        # alert_name = response.data["alerts"][0]["name"]
-        action_result.update_summary(resp_dict)
-        status_message = f"Got alert details for alert {alert_id}"
-        return action_result.set_status(phantom.APP_SUCCESS, status_message)
+        action_result.add_data(alert)
+        action_result.update_summary({"username": alert["actor"], "user_id": alert["actorId"]})
+        return action_result.set_status(phantom.APP_SUCCESS)
 
     def finalize(self):
         # Save the state, this data is saved across actions and app upgrades

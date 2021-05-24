@@ -37,6 +37,11 @@ def create_fake_connector(action_identifier):
     return connector
 
 
+def attach_client(connector, client):
+    connector._client = client
+    return connector
+
+
 def create_mock_response(mocker, response_data):
     response = mocker.MagicMock(spec=Response)
     response.text = json.dumps(response_data)
