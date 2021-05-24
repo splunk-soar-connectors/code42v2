@@ -37,7 +37,7 @@ deploy() {
 }
 
 print_usage() {
-  echo "./util.sh <tar, clean, deploy, ssh, open-web>"
+  echo "./util.sh <tar, clean, deploy, deploy-bypass, ssh, open-web>"
 }
 
 main() {
