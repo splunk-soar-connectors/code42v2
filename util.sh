@@ -14,7 +14,7 @@ set -eo pipefail
 
 make_tar() {
   echo "Tarring the ball..."
-  pushd .. && tar -cvf phcode42v2/phcode42v2.tgz -X phcode42v2/exclude_files.txt phcode42v2/src/* && popd
+  tar -cvf phcode42v2.tgz -X ./exclude_files.txt -H .
 }
 
 clean() {

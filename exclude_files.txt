@@ -1,6 +1,9 @@
 .git*
+.pytest_cache/
+.vscode/
+.DS_Store
 test_connector.py
-phantom/*
+src/*
 __pycache__/*
 setup.py
 util.sh
