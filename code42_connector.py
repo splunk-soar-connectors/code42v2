@@ -125,7 +125,7 @@ class Code42Connector(BaseConnector):
         for page in results_generator:
             results.append(page.json)
         action_result.add_data(results)
-        status_message = f"Successfully retrieved the list of departing employees"
+        status_message = "Successfully retrieved the list of departing employees"
         return action_result.set_status(phantom.APP_SUCCESS, status_message)
 
     def _handle_add_high_risk_employee(self, param):
