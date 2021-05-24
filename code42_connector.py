@@ -40,8 +40,8 @@ class Code42Connector(BaseConnector):
         self._action_map = {
             self.TEST_CONNECTIVITY_ACTION_ID: lambda x: self._handle_test_connectivity(x),
             self.ADD_DEPARTING_EMPLOYEE_ACTION_ID: lambda x: self._handle_add_departing_employee(x),
-            self.LIST_DEPARTING_EMPLOYEES_ACTION_ID: lambda x: self._handle_list_departing_employees(x),
             self.REMOVE_DEPARTING_EMPLOYEE_ACTION_ID: lambda x: self._handle_remove_departing_employee(x),
+            self.LIST_DEPARTING_EMPLOYEES_ACTION_ID: lambda x: self._handle_list_departing_employees(x),
             self.ADD_HIGH_RISK_EMPLOYEE_ACTION_ID: lambda x: self._handle_add_high_risk_employee(x),
             self.REMOVE_HIGH_RISK_EMPLOYEE_ACTION_ID: lambda x: self._handle_remove_high_risk_employee(x),
             self.LIST_HIGH_RISK_EMPLOYEES_ACTION_ID: lambda x: self._handle_list_high_risk_employees(x)
