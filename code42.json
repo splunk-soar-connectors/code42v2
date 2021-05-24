@@ -169,15 +169,8 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.summary.user_id",
+                    "data_path": "action_result.summary",
                     "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.summary.username",
-                    "data_type": "string",
-                    "contains": [
-                        "email"
-                    ]
                 }
             ],
             "render": {
@@ -245,15 +238,8 @@
                     "column_order": 2
                 },
                 {
-                    "data_path": "action_result.summary.user_id",
+                    "data_path": "action_result.summary",
                     "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.summary.username",
-                    "data_type": "string",
-                    "contains": [
-                        "email"
-                    ]
                 }
             ],
             "render": {
@@ -461,15 +447,8 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.summary.user_id",
+                    "data_path": "action_result.summary",
                     "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.summary.username",
-                    "data_type": "string",
-                    "contains": [
-                        "email"
-                    ]
                 }
             ],
             "render": {
@@ -537,15 +516,8 @@
                     "column_order": 2
                 },
                 {
-                    "data_path": "action_result.summary.user_id",
+                    "data_path": "action_result.summary",
                     "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.summary.username",
-                    "data_type": "string",
-                    "contains": [
-                        "email"
-                    ]
                 }
             ],
             "render": {

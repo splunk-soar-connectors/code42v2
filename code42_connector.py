@@ -104,7 +104,6 @@ class Code42Connector(BaseConnector):
             self.client.detectionlists.update_user_notes(user_id, note)
 
         action_result.add_data(response.data)
-        action_result.update_summary({"user_id": user_id, "username": username})
         status_message = f"{username} was added to the departing employees list"
         return action_result.set_status(phantom.APP_SUCCESS, status_message)
 
@@ -115,7 +114,6 @@ class Code42Connector(BaseConnector):
         user_id = self._get_user_id(username)
         self.client.detectionlists.departing_employee.remove(user_id)
         action_result.add_data({"userId": user_id})
-        action_result.update_summary({"user_id": user_id, "username": username})
         status_message = f"{username} was removed from the departing employees list"
         return action_result.set_status(phantom.APP_SUCCESS, status_message)
 
@@ -142,7 +140,6 @@ class Code42Connector(BaseConnector):
         user_id = self._get_user_id(username)
         response = self.client.detectionlists.high_risk_employee.add(user_id)
         action_result.add_data(response.data)
-        action_result.update_summary({"user_id": user_id, "username": username})
         status_message = f"{username} was added to the high risk employees list"
         return action_result.set_status(phantom.APP_SUCCESS, status_message)
 
@@ -153,7 +150,6 @@ class Code42Connector(BaseConnector):
         user_id = self._get_user_id(username)
         self.client.detectionlists.high_risk_employee.remove(user_id)
         action_result.add_data({"userId": user_id})
-        action_result.update_summary({"user_id": user_id, "username": username})
         status_message = f"{username} was removed from the high risk employees list"
         return action_result.set_status(phantom.APP_SUCCESS, status_message)
 

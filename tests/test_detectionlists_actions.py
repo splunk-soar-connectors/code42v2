@@ -153,18 +153,6 @@ class TestCode42DetectionListsConnector(object):
             "TEST_USER_UID", departure_date="2030-01-01"
         )
 
-    def test_handle_action_when_add_departing_employee_adds_info_to_summary(
-        self, mocker, mock_py42_with_user, mock_result_adder
-    ):
-        param = {"username": "test@example.com", "departure_date": "2030-01-01"}
-        result = ActionResult(dict(param))
-        update_summary_mock = mocker.MagicMock()
-        result.update_summary = update_summary_mock
-        mock_result_adder.return_value = result
-        connector = _create_add_de_connector(mock_py42_with_user)
-        connector.handle_action(param)
-        update_summary_mock.assert_called_once_with({"user_id": _TEST_USER_UID, "username": "test@example.com"})
-
     def test_handle_action_when_add_departing_employee_adds_response_to_data(
         self, mocker, mock_py42_with_user, mock_result_adder
     ):
@@ -230,18 +218,6 @@ class TestCode42DetectionListsConnector(object):
         mock_py42_with_user.detectionlists.departing_employee.remove.assert_called_once_with(
             "TEST_USER_UID"
         )
-
-    def test_handle_action_when_remove_departing_employee_adds_info_to_summary(
-        self, mocker, mock_py42_with_user, mock_result_adder
-    ):
-        param = {"username": "test@example.com"}
-        result = ActionResult(dict(param))
-        update_summary_mock = mocker.MagicMock()
-        result.update_summary = update_summary_mock
-        mock_result_adder.return_value = result
-        connector = _create_remove_de_connector(mock_py42_with_user)
-        connector.handle_action(param)
-        update_summary_mock.assert_called_once_with({"user_id": _TEST_USER_UID, "username": "test@example.com"})
 
     def test_handle_action_when_remove_departing_employee_adds_response_to_data(
         self, mocker, mock_py42_with_user, mock_result_adder
@@ -345,18 +321,6 @@ class TestCode42DetectionListsConnector(object):
             "TEST_USER_UID"
         )
 
-    def test_handle_action_when_add_high_risk_employee_adds_user_info_to_summary(
-        self, mocker, mock_py42_with_user, mock_result_adder
-    ):
-        param = {"username": "test@example.com"}
-        result = ActionResult(dict(param))
-        update_summary_mock = mocker.MagicMock()
-        result.update_summary = update_summary_mock
-        mock_result_adder.return_value = result
-        connector = _create_add_hr_connector(mock_py42_with_user)
-        connector.handle_action(param)
-        update_summary_mock.assert_called_once_with({"user_id": _TEST_USER_UID, "username": "test@example.com"})
-
     def test_handle_action_when_add_high_risk_employee_adds_response_to_data(
         self, mocker, mock_py42_with_user, mock_result_adder
     ):
@@ -408,18 +372,6 @@ class TestCode42DetectionListsConnector(object):
         mock_py42_with_user.detectionlists.high_risk_employee.remove.assert_called_once_with(
             "TEST_USER_UID"
         )
-
-    def test_handle_action_when_remove_high_risk_employee_adds_user_info_to_summary(
-        self, mocker, mock_py42_with_user, mock_result_adder
-    ):
-        param = {"username": "test@example.com"}
-        result = ActionResult(dict(param))
-        update_summary_mock = mocker.MagicMock()
-        result.update_summary = update_summary_mock
-        mock_result_adder.return_value = result
-        connector = _create_remove_hr_connector(mock_py42_with_user)
-        connector.handle_action(param)
-        update_summary_mock.assert_called_once_with({"user_id": _TEST_USER_UID, "username": "test@example.com"})
 
     def test_handle_action_when_remove_high_risk_employee_adds_response_to_data(
         self, mocker, mock_py42_with_user, mock_result_adder
