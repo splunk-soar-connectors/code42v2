@@ -311,6 +311,9 @@
                     "example_values": [
                         "test@example.com"
                     ],
+                    "contains": [
+                        "email"
+                    ],
                     "column_order": 3
                 },
                 {
@@ -584,6 +587,9 @@
                     "data_type": "string",
                     "example_values": [
                         "test@example.com"
+                    ],
+                    "contains": [
+                        "email"
                     ],
                     "column_order": 3
                 },
