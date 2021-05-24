@@ -22,8 +22,8 @@ class Code42Connector(BaseConnector):
     TEST_CONNECTIVITY_ACTION_ID = "test_connectivity"
     ADD_DEPARTING_EMPLOYEE_ACTION_ID = "add_departing_employee"
     REMOVE_DEPARTING_EMPLOYEE_ACTION_ID = "remove_departing_employee"
-    ADD_HIGH_RISK_EMPLOYEE_ACTION_ID = "add_high_risk_employee"
-    REMOVE_HIGH_RISK_EMPLOYEE_ACTION_ID = "remove_high_risk_employee"
+    ADD_HIGH_RISK_EMPLOYEE_ACTION_ID = "add_highrisk_employee"
+    REMOVE_HIGH_RISK_EMPLOYEE_ACTION_ID = "remove_highrisk_employee"
 
     def __init__(self):
         super(Code42Connector, self).__init__()
