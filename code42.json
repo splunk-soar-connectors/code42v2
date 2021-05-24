@@ -169,8 +169,15 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.summary",
+                    "data_path": "action_result.summary.user_id",
                     "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.summary.username",
+                    "data_type": "string",
+                    "contains": [
+                        "email"
+                    ]
                 }
             ],
             "render": {
@@ -238,8 +245,15 @@
                     "column_order": 2
                 },
                 {
-                    "data_path": "action_result.summary",
+                    "data_path": "action_result.summary.user_id",
                     "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.summary.username",
+                    "data_type": "string",
+                    "contains": [
+                        "email"
+                    ]
                 }
             ],
             "render": {
@@ -344,8 +358,8 @@
                     "column_order": 6
                 },
                 {
-                    "data_path": "action_result.summary",
-                    "data_type": "string"
+                    "data_path": "action_result.summary.total_count",
+                    "data_type": "numeric"
                 }
             ],
             "render": {
@@ -447,8 +461,15 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.summary",
+                    "data_path": "action_result.summary.user_id",
                     "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.summary.username",
+                    "data_type": "string",
+                    "contains": [
+                        "email"
+                    ]
                 }
             ],
             "render": {
@@ -516,8 +537,15 @@
                     "column_order": 2
                 },
                 {
-                    "data_path": "action_result.summary",
+                    "data_path": "action_result.summary.user_id",
                     "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.summary.username",
+                    "data_type": "string",
+                    "contains": [
+                        "email"
+                    ]
                 }
             ],
             "render": {
@@ -621,8 +649,8 @@
                     "column_order": 6
                 },
                 {
-                    "data_path": "action_result.summary",
-                    "data_type": "string"
+                    "data_path": "action_result.summary.total_count",
+                    "data_type": "numeric"
                 }
             ],
             "render": {
