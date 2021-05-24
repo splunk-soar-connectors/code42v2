@@ -25,9 +25,13 @@ class Code42Connector(BaseConnector):
     ADD_DEPARTING_EMPLOYEE_ACTION_ID = "add_departing_employee"
     REMOVE_DEPARTING_EMPLOYEE_ACTION_ID = "remove_departing_employee"
     LIST_DEPARTING_EMPLOYEES_ACTION_ID = "list_departing_employees"
+    GET_DEPARTING_EMPLOYEE_ACTION_ID = "get_departing_employee"
     ADD_HIGH_RISK_EMPLOYEE_ACTION_ID = "add_highrisk_employee"
     REMOVE_HIGH_RISK_EMPLOYEE_ACTION_ID = "remove_highrisk_employee"
     LIST_HIGH_RISK_EMPLOYEES_ACTION_ID = "list_highrisk_employees"
+    GET_HIGHRISK_EMPLOYEE_ACTION_ID = "get_highrisk_employee"
+    ADD_RISK_TAGS_ACTION_ID = "add_highrisk_tags"
+    REMOVE_RISK_TAGS_ACTION_ID = "remove_highrisk_tags"
 
     def __init__(self):
         super(Code42Connector, self).__init__()
@@ -42,9 +46,13 @@ class Code42Connector(BaseConnector):
             self.ADD_DEPARTING_EMPLOYEE_ACTION_ID: lambda x: self._handle_add_departing_employee(x),
             self.REMOVE_DEPARTING_EMPLOYEE_ACTION_ID: lambda x: self._handle_remove_departing_employee(x),
             self.LIST_DEPARTING_EMPLOYEES_ACTION_ID: lambda x: self._handle_list_departing_employees(x),
+            self.GET_DEPARTING_EMPLOYEE_ACTION_ID: lambda x: self._handle_get_departing_employee(x),
             self.ADD_HIGH_RISK_EMPLOYEE_ACTION_ID: lambda x: self._handle_add_high_risk_employee(x),
             self.REMOVE_HIGH_RISK_EMPLOYEE_ACTION_ID: lambda x: self._handle_remove_high_risk_employee(x),
-            self.LIST_HIGH_RISK_EMPLOYEES_ACTION_ID: lambda x: self._handle_list_high_risk_employees(x)
+            self.LIST_HIGH_RISK_EMPLOYEES_ACTION_ID: lambda x: self._handle_list_high_risk_employees(x),
+            self.GET_HIGHRISK_EMPLOYEE_ACTION_ID: lambda x: self._handle_get_high_risk_employee(x),
+            self.ADD_RISK_TAGS_ACTION_ID: lambda x: self._handle_add_high_risk_tags(x),
+            self.REMOVE_RISK_TAGS_ACTION_ID: lambda x: self._handle_remove_high_risk_tags(x)
         }
 
     @property
@@ -133,6 +141,9 @@ class Code42Connector(BaseConnector):
         action_result.update_summary({"total_count": total_count})
         return action_result.set_status(phantom.APP_SUCCESS)
 
+    def _handle_get_departing_employee(self, param):
+        pass
+
     def _handle_add_high_risk_employee(self, param):
         self._log_action_handler()
         action_result = self._add_action_result(param)
@@ -168,6 +179,15 @@ class Code42Connector(BaseConnector):
         total_count = page.data.get("totalCount", 0) if page else None
         action_result.update_summary({"total_count": total_count})
         return action_result.set_status(phantom.APP_SUCCESS)
+
+    def _handle_get_high_risk_employee(self, param):
+        pass
+
+    def _handle_add_high_risk_tags(self, param):
+        pass
+
+    def _handle_remove_high_risk_tags(self, param):
+        pass
 
     def finalize(self):
         # Save the state, this data is saved across actions and app upgrades
