@@ -314,8 +314,8 @@
                     "column_order": 3
                 },
                 {
-                    "column_name": "Note",
-                    "data_path": "action_result.data.*.note",
+                    "column_name": "Notes",
+                    "data_path": "action_result.data.*.notes",
                     "data_type": "string",
                     "example_values": [
                         "note"
@@ -324,7 +324,7 @@
                 },
                 {
                     "column_name": "Creation Date",
-                    "data_path": "action_result.data.*.creationDate",
+                    "data_path": "action_result.data.*.createdAt",
                     "data_type": "string",
                     "example_values": [
                         "2021-05-21T00:00:00.0000000Z"
@@ -511,6 +511,108 @@
                         "1"
                     ],
                     "column_order": 2
+                },
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "list highrisk employees",
+            "identifier": "list_highrisk_employees",
+            "description": "Returns a list of users who are on the high-risk employees list",
+            "verbose": "",
+            "type": "investigate",
+            "read_only": true,
+            "parameters": {
+                "filter_type": {
+                    "description": "Filters the results based on specific filters",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": false,
+                    "value_list": [
+                        "EXFILTRATION_30_DAYS",
+                        "EXFILTRATION_24_HOURS",
+                        "OPEN"
+                    ],
+                    "default": "OPEN",
+                    "order": 0
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.parameter.filter_type",
+                    "data_type": "string",
+                    "column_name": "Filter Type",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "status",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
+                },
+                {
+                    "column_name": "User ID",
+                    "data_path": "action_result.data.*.userId",
+                    "data_type": "string",
+                    "example_values": [
+                        "1"
+                    ],
+                    "column_order": 2
+                },
+                {
+                    "column_name": "Username",
+                    "data_path": "action_result.data.*.userName",
+                    "data_type": "string",
+                    "example_values": [
+                        "test@example.com"
+                    ],
+                    "column_order": 3
+                },
+                {
+                    "column_name": "Notes",
+                    "data_path": "action_result.data.*.notes",
+                    "data_type": "string",
+                    "example_values": [
+                        "note"
+                    ],
+                    "column_order": 4
+                },
+                {
+                    "column_name": "Creation Date",
+                    "data_path": "action_result.data.*.createdAt",
+                    "data_type": "string",
+                    "example_values": [
+                        "2021-05-21T00:00:00.0000000Z"
+                    ],
+                    "column_order": 5
+                },
+                {
+                    "column_name": "Num Events",
+                    "data_path": "action_result.data.*.numEvents",
+                    "data_type": "numeric",
+                    "example_values": [
+                        0
+                    ],
+                    "column_order": 6
                 },
                 {
                     "data_path": "action_result.summary",

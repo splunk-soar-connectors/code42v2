@@ -5,6 +5,7 @@ import json
 
 import py42.sdk
 from py42.services.detectionlists.departing_employee import DepartingEmployeeFilters
+from py42.services.detectionlists.high_risk_employee import HighRiskEmployeeFilters
 import requests
 
 # Phantom App imports
@@ -26,6 +27,7 @@ class Code42Connector(BaseConnector):
     LIST_DEPARTING_EMPLOYEES_ACTION_ID = "list_departing_employees"
     ADD_HIGH_RISK_EMPLOYEE_ACTION_ID = "add_highrisk_employee"
     REMOVE_HIGH_RISK_EMPLOYEE_ACTION_ID = "remove_highrisk_employee"
+    LIST_HIGH_RISK_EMPLOYEES_ACTION_ID = "list_highrisk_employees"
 
     def __init__(self):
         super(Code42Connector, self).__init__()
@@ -41,7 +43,8 @@ class Code42Connector(BaseConnector):
             self.LIST_DEPARTING_EMPLOYEES_ACTION_ID: lambda x: self._handle_list_departing_employees(x),
             self.REMOVE_DEPARTING_EMPLOYEE_ACTION_ID: lambda x: self._handle_remove_departing_employee(x),
             self.ADD_HIGH_RISK_EMPLOYEE_ACTION_ID: lambda x: self._handle_add_high_risk_employee(x),
-            self.REMOVE_HIGH_RISK_EMPLOYEE_ACTION_ID: lambda x: self._handle_remove_high_risk_employee(x)
+            self.REMOVE_HIGH_RISK_EMPLOYEE_ACTION_ID: lambda x: self._handle_remove_high_risk_employee(x),
+            self.LIST_HIGH_RISK_EMPLOYEES_ACTION_ID: lambda x: self._handle_list_high_risk_employees(x)
         }
 
     @property
@@ -121,10 +124,15 @@ class Code42Connector(BaseConnector):
         action_result = self._add_action_result(param)
         filter_type = param.get("filter_type", DepartingEmployeeFilters.OPEN)
         results_generator = self.client.detectionlists.departing_employee.get_all(filter_type=filter_type)
-        results = []
+        total_count = None
         for page in results_generator:
-            results.append(page.json)
-        action_result.add_data(results)
+            employees = page.data.get("items", [])
+            for employee in employees:
+                action_result.add_data(employee)
+            if total_count is None:
+                total_count = page.data.get("totalCount", 0)
+
+        action_result.update_summary({"total_count": total_count})
         status_message = "Successfully retrieved the list of departing employees"
         return action_result.set_status(phantom.APP_SUCCESS, status_message)
 
@@ -148,6 +156,23 @@ class Code42Connector(BaseConnector):
         action_result.add_data({"userId": user_id})
         action_result.update_summary({"user_id": user_id, "username": username})
         status_message = f"{username} was removed from the high risk employees list"
+        return action_result.set_status(phantom.APP_SUCCESS, status_message)
+
+    def _handle_list_high_risk_employees(self, param):
+        self._log_action_handler()
+        action_result = self._add_action_result(param)
+        filter_type = param.get("filter_type", HighRiskEmployeeFilters.OPEN)
+        results_generator = self.client.detectionlists.high_risk_employee.get_all(filter_type=filter_type)
+        total_count = None
+        for page in results_generator:
+            employees = page.data.get("items", [])
+            for employee in employees:
+                action_result.add_data(employee)
+            if total_count is None:
+                total_count = page.data.get("totalCount", 0)
+
+        action_result.update_summary({"total_count": total_count})
+        status_message = "Successfully retrieved the list of departing employees"
         return action_result.set_status(phantom.APP_SUCCESS, status_message)
 
     def finalize(self):
