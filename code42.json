@@ -62,78 +62,11 @@
             "versions": "EQ(*)"
         },
         {
-            "action": "remove departing employee",
-            "identifier": "remove_departing_employee",
-            "description": "Remove a departing employee from the departing employees detection list",
-            "verbose": "There is a short delay before you can query the updated results.",
-            "type": "contain",
-            "read_only": false,
-            "parameters": {
-                "username": {
-                    "description": "Username of the employee to remove",
-                    "data_type": "string",
-                    "required": true,
-                    "primary": true,
-                    "contains": [
-                        "email"
-                    ],
-                    "value_list": [],
-                    "default": "",
-                    "order": 0
-                }
-            },
-            "output": [
-                {
-                    "data_path": "action_result.parameter.username",
-                    "data_type": "string",
-                    "contains": [
-                        "email"
-                    ],
-                    "column_name": "Username",
-                    "column_order": 0
-                },
-                {
-                    "data_path": "action_result.status",
-                    "data_type": "string",
-                    "column_name": "status",
-                    "column_order": 1
-                },
-                {
-                    "data_path": "action_result.message",
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "summary.total_objects",
-                    "data_type": "numeric"
-                },
-                {
-                    "data_path": "summary.total_objects_successful",
-                    "data_type": "numeric"
-                },
-                {
-                    "column_name": "User ID ",
-                    "data_path": "action_result.data.*.userId",
-                    "data_type": "string",
-                    "example_values": [
-                        "1"
-                    ],
-                    "column_order": 1
-                },
-                {
-                    "data_path": "action_result.summary",
-                    "data_type": "string"
-                }
-            ],
-            "render": {
-                "type": "table"
-            },
-            "versions": "EQ(*)"
-        },
-        {
             "action": "add departing employee",
             "identifier": "add_departing_employee",
             "description": "Add a departing employee to the departing employees detection list",
             "verbose": "There is a short delay before you can query the updated results.",
+            "undo": "remove departing employee",
             "type": "contain",
             "read_only": false,
             "parameters": {
@@ -213,7 +146,7 @@
                     "example_values": [
                         "1"
                     ],
-                    "column_order": 1
+                    "column_order": 4
                 },
                 {
                     "column_name": "Username",
@@ -225,7 +158,7 @@
                     "contains": [
                         "email"
                     ],
-                    "column_order": 1
+                    "column_order": 5
                 },
                 {
                     "column_name": "Created At",
@@ -238,6 +171,458 @@
                 {
                     "data_path": "action_result.summary",
                     "data_type": "string"
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "remove departing employee",
+            "identifier": "remove_departing_employee",
+            "description": "Remove a departing employee from the departing employees detection list",
+            "verbose": "There is a short delay before you can query the updated results.",
+            "undo": "add departing employee",
+            "type": "contain",
+            "read_only": false,
+            "parameters": {
+                "username": {
+                    "description": "Username of the employee to remove",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": true,
+                    "contains": [
+                        "email"
+                    ],
+                    "value_list": [],
+                    "default": "",
+                    "order": 0
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.parameter.username",
+                    "data_type": "string",
+                    "contains": [
+                        "email"
+                    ],
+                    "column_name": "Username",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "status",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
+                },
+                {
+                    "column_name": "User ID ",
+                    "data_path": "action_result.data.*.userId",
+                    "data_type": "string",
+                    "example_values": [
+                        "1"
+                    ],
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "list departing employees",
+            "identifier": "list_departing_employees",
+            "description": "Returns a list of users who are on the departing employees list",
+            "verbose": "",
+            "type": "investigate",
+            "read_only": true,
+            "parameters": {
+                "filter_type": {
+                    "description": "Filters the results based on specific filters",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": false,
+                    "value_list": [
+                        "EXFILTRATION_30_DAYS",
+                        "EXFILTRATION_24_HOURS",
+                        "OPEN",
+                        "LEAVING_TODAY"
+                    ],
+                    "default": "OPEN",
+                    "order": 0
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.parameter.filter_type",
+                    "data_type": "string",
+                    "column_name": "Filter Type",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "status",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
+                },
+                {
+                    "column_name": "User ID",
+                    "data_path": "action_result.data.*.userId",
+                    "data_type": "string",
+                    "example_values": [
+                        "1"
+                    ],
+                    "column_order": 2
+                },
+                {
+                    "column_name": "Username",
+                    "data_path": "action_result.data.*.userName",
+                    "data_type": "string",
+                    "example_values": [
+                        "test@example.com"
+                    ],
+                    "contains": [
+                        "email"
+                    ],
+                    "column_order": 3
+                },
+                {
+                    "column_name": "Notes",
+                    "data_path": "action_result.data.*.notes",
+                    "data_type": "string",
+                    "example_values": [
+                        "note"
+                    ],
+                    "column_order": 4
+                },
+                {
+                    "column_name": "Creation Date",
+                    "data_path": "action_result.data.*.createdAt",
+                    "data_type": "string",
+                    "example_values": [
+                        "2021-05-21T00:00:00.0000000Z"
+                    ],
+                    "column_order": 5
+                },
+                {
+                    "column_name": "Num Events",
+                    "data_path": "action_result.data.*.numEvents",
+                    "data_type": "numeric",
+                    "example_values": [
+                        0
+                    ],
+                    "column_order": 6
+                },
+                {
+                    "data_path": "action_result.summary.total_count",
+                    "data_type": "numeric"
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "add highrisk employee",
+            "identifier": "add_highrisk_employee",
+            "description": "Add a high risk employee to the high risk employees detection list",
+            "verbose": "",
+            "undo": "remove highrisk employee",
+            "type": "contain",
+            "read_only": false,
+            "parameters": {
+                "username": {
+                    "description": "Username of the employee to add",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": true,
+                    "contains": [
+                        "email"
+                    ],
+                    "value_list": [],
+                    "default": "",
+                    "order": 0
+                },
+                "note": {
+                    "description": "A note to include",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": false,
+                    "default": "",
+                    "order": 1
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.parameter.username",
+                    "data_type": "string",
+                    "contains": [
+                        "email"
+                    ],
+                    "column_name": "Username",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.parameter.note",
+                    "data_type": "string",
+                    "column_name": "Note",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "status",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
+                },
+                {
+                    "column_name": "User ID",
+                    "data_path": "action_result.data.*.userId",
+                    "data_type": "string",
+                    "example_values": [
+                        "1"
+                    ],
+                    "column_order": 3
+                },
+                {
+                    "column_name": "Username",
+                    "data_path": "action_result.data.*.userName",
+                    "data_type": "string",
+                    "example_values": [
+                        "1"
+                    ],
+                    "contains": [
+                        "email"
+                    ],
+                    "column_order": 4
+                },
+                {
+                    "column_name": "Created At",
+                    "data_path": "action_result.data.*.createdAt",
+                    "data_type": "string",
+                    "example_values": [
+                        "2021-05-20T19:40:14.8909434Z"
+                    ]
+                },
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "remove highrisk employee",
+            "identifier": "remove_highrisk_employee",
+            "description": "Remove a high risk employee from the high risk employees detection list",
+            "verbose": "",
+            "undo": "add highrisk employee",
+            "type": "contain",
+            "read_only": false,
+            "parameters": {
+                "username": {
+                    "description": "Username of the employee to remove",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": true,
+                    "contains": [
+                        "email"
+                    ],
+                    "value_list": [],
+                    "default": "",
+                    "order": 0
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.parameter.username",
+                    "data_type": "string",
+                    "contains": [
+                        "email"
+                    ],
+                    "column_name": "Username",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "Status",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
+                },
+                {
+                    "column_name": "User ID",
+                    "data_path": "action_result.data.*.userId",
+                    "data_type": "string",
+                    "example_values": [
+                        "1"
+                    ],
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "list highrisk employees",
+            "identifier": "list_highrisk_employees",
+            "description": "Returns a list of users who are on the high-risk employees list",
+            "verbose": "",
+            "type": "investigate",
+            "read_only": true,
+            "parameters": {
+                "filter_type": {
+                    "description": "Filters the results based on specific filters",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": false,
+                    "value_list": [
+                        "EXFILTRATION_30_DAYS",
+                        "EXFILTRATION_24_HOURS",
+                        "OPEN"
+                    ],
+                    "default": "OPEN",
+                    "order": 0
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.parameter.filter_type",
+                    "data_type": "string",
+                    "column_name": "Filter Type",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "status",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
+                },
+                {
+                    "column_name": "User ID",
+                    "data_path": "action_result.data.*.userId",
+                    "data_type": "string",
+                    "example_values": [
+                        "1"
+                    ],
+                    "column_order": 2
+                },
+                {
+                    "column_name": "Username",
+                    "data_path": "action_result.data.*.userName",
+                    "data_type": "string",
+                    "example_values": [
+                        "test@example.com"
+                    ],
+                    "contains": [
+                        "email"
+                    ],
+                    "column_order": 3
+                },
+                {
+                    "column_name": "Notes",
+                    "data_path": "action_result.data.*.notes",
+                    "data_type": "string",
+                    "example_values": [
+                        "note"
+                    ],
+                    "column_order": 4
+                },
+                {
+                    "column_name": "Creation Date",
+                    "data_path": "action_result.data.*.createdAt",
+                    "data_type": "string",
+                    "example_values": [
+                        "2021-05-21T00:00:00.0000000Z"
+                    ],
+                    "column_order": 5
+                },
+                {
+                    "column_name": "Num Events",
+                    "data_path": "action_result.data.*.numEvents",
+                    "data_type": "numeric",
+                    "example_values": [
+                        0
+                    ],
+                    "column_order": 6
+                },
+                {
+                    "data_path": "action_result.summary.total_count",
+                    "data_type": "numeric"
                 }
             ],
             "render": {
