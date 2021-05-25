@@ -167,9 +167,13 @@ class Code42Connector(BaseConnector):
         tags = param["risk_tags"].split(",")
         user_id = self._get_user_id(username)
         response = self._client.detectionlists.add_user_risk_tags(user_id, tags)
+        all_tags = response.data.get("riskFactors", [])
+
+        # Transform scalar list to list of objects
+        response["riskFactors"] = [{"tag": tag} for tag in all_tags]
+
         action_result.add_data(response.data)
-        total_user_risk_tags = response.data.get("riskFactors", [])
-        action_result.update_summary({"all_risk_tags_for_user": total_user_risk_tags})
+        action_result.update_summary({"all_risk_tags_for_user": ",".join(all_tags)})
         return action_result.set_status(phantom.APP_SUCCESS)
 
     @action_handler_for("remove_highrisk_tags")
@@ -178,9 +182,13 @@ class Code42Connector(BaseConnector):
         tags = param["risk_tags"].split(",")
         user_id = self._get_user_id(username)
         response = self._client.detectionlists.remove_user_risk_tags(user_id, tags)
+        all_tags = response.data.get("riskFactors", [])
+
+        # Transform scalar list to list of objects
+        response["riskFactors"] = [{"tag": tag} for tag in all_tags]
+
         action_result.add_data(response.data)
-        total_user_risk_tags = response.data.get("riskFactors", [])
-        action_result.update_summary({"all_risk_tags_for_user": total_user_risk_tags})
+        action_result.update_summary({"all_risk_tags_for_user": ",".join(all_tags)})
         return action_result.set_status(phantom.APP_SUCCESS)
 
     def finalize(self):
