@@ -752,7 +752,15 @@
                     "data_type": "string",
                     "required": true,
                     "primary": false,
-                    "value_list": [],
+                    "value_list": [
+                        "HIGH_IMPACT_EMPLOYEE",
+                        "CONTRACT_EMPLOYEE",
+                        "POOR_SECURITY_PRACTICES",
+                        "PERFORMANCE_CONCERNS",
+                        "FLIGHT_RISK",
+                        "ELEVATED_ACCESS_PRIVILEGES",
+                        "SUSPICIOUS_SYSTEM_ACTIVITY"
+                    ],
                     "default": "",
                     "order": 1
                 }
