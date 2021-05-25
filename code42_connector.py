@@ -19,15 +19,16 @@ class RetVal(tuple):
     def __new__(cls, val1, val2=None):
         return tuple.__new__(RetVal, (val1, val2))
 
+ACTION_MAP = {}
+
+def action_handler_for(key):
+    def wrapper(f):
+        ACTION_MAP[key] = f
+        return f
+
+    return wrapper
 
 class Code42Connector(BaseConnector):
-    TEST_CONNECTIVITY_ACTION_ID = "test_connectivity"
-    ADD_DEPARTING_EMPLOYEE_ACTION_ID = "add_departing_employee"
-    REMOVE_DEPARTING_EMPLOYEE_ACTION_ID = "remove_departing_employee"
-    LIST_DEPARTING_EMPLOYEES_ACTION_ID = "list_departing_employees"
-    ADD_HIGH_RISK_EMPLOYEE_ACTION_ID = "add_highrisk_employee"
-    REMOVE_HIGH_RISK_EMPLOYEE_ACTION_ID = "remove_highrisk_employee"
-    LIST_HIGH_RISK_EMPLOYEES_ACTION_ID = "list_highrisk_employees"
 
     def __init__(self):
         super(Code42Connector, self).__init__()
@@ -37,15 +38,6 @@ class Code42Connector(BaseConnector):
         self._username = None
         self._password = None
         self._client = None
-        self._action_map = {
-            self.TEST_CONNECTIVITY_ACTION_ID: self._handle_test_connectivity,
-            self.ADD_DEPARTING_EMPLOYEE_ACTION_ID: self._handle_add_departing_employee,
-            self.REMOVE_DEPARTING_EMPLOYEE_ACTION_ID: self._handle_remove_departing_employee,
-            self.LIST_DEPARTING_EMPLOYEES_ACTION_ID: self._handle_list_departing_employees,
-            self.ADD_HIGH_RISK_EMPLOYEE_ACTION_ID: self._handle_add_high_risk_employee,
-            self.REMOVE_HIGH_RISK_EMPLOYEE_ACTION_ID: self._handle_remove_high_risk_employee,
-            self.LIST_HIGH_RISK_EMPLOYEES_ACTION_ID: self._handle_list_high_risk_employees
-        }
 
     def initialize(self):
         # use this to store data that needs to be accessed across actions
@@ -62,7 +54,7 @@ class Code42Connector(BaseConnector):
         action_id = self.get_action_identifier()
         self.debug_print("action_id", action_id)
 
-        action_handler = self._action_map.get(action_id)
+        action_handler = ACTION_MAP.get(action_id)
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         if not action_handler:
@@ -72,11 +64,12 @@ class Code42Connector(BaseConnector):
             if not self._client:
                 self._client = py42.sdk.from_local_account(self._cloud_instance, self._username, self._password)
             self.save_progress(f"Code42: handling action {action_id}...")
-            return action_handler(param, action_result)
+            return action_handler(self, param, action_result)
         except Exception as ex:
             msg = f"Code42: Failed execution of action {action_id}: {ex}"
             return action_result.set_status(phantom.APP_ERROR, msg)
 
+    @action_handler_for("test_connectivity")
     def _handle_test_connectivity(self, param, action_result):
         self._client.users.get_current()
         self.save_progress("Test Connectivity Passed")
@@ -84,6 +77,7 @@ class Code42Connector(BaseConnector):
 
     """ DEPARTING EMPLOYEE ACTIONS """
 
+    @action_handler_for("add_departing_employee")
     def _handle_add_departing_employee(self, param, action_result):
         username = param["username"]
         departure_date = param.get("departure_date")
@@ -98,6 +92,7 @@ class Code42Connector(BaseConnector):
         status_message = f"{username} was added to the departing employees list"
         return action_result.set_status(phantom.APP_SUCCESS, status_message)
 
+    @action_handler_for("remove_departing_employee")
     def _handle_remove_departing_employee(self, param, action_result):
         username = param["username"]
         user_id = self._get_user_id(username)
@@ -106,6 +101,7 @@ class Code42Connector(BaseConnector):
         status_message = f"{username} was removed from the departing employees list"
         return action_result.set_status(phantom.APP_SUCCESS, status_message)
 
+    @action_handler_for("list_departing_employees")
     def _handle_list_departing_employees(self, param, action_result):
         filter_type = param.get("filter_type", DepartingEmployeeFilters.OPEN)
         results_generator = self._client.detectionlists.departing_employee.get_all(filter_type=filter_type)
@@ -122,6 +118,7 @@ class Code42Connector(BaseConnector):
 
     """ HIGH RISK EMPLOYEE ACTIONS """
 
+    @action_handler_for("add_highrisk_employee")
     def _handle_add_high_risk_employee(self, param, action_result):
         username = param["username"]
         user_id = self._get_user_id(username)
@@ -130,6 +127,7 @@ class Code42Connector(BaseConnector):
         status_message = f"{username} was added to the high risk employees list"
         return action_result.set_status(phantom.APP_SUCCESS, status_message)
 
+    @action_handler_for("remove_highrisk_employee")
     def _handle_remove_high_risk_employee(self, param, action_result):
         username = param["username"]
         user_id = self._get_user_id(username)
@@ -138,6 +136,7 @@ class Code42Connector(BaseConnector):
         status_message = f"{username} was removed from the high risk employees list"
         return action_result.set_status(phantom.APP_SUCCESS, status_message)
 
+    @action_handler_for("list_highrisk_employees")
     def _handle_list_high_risk_employees(self, param, action_result):
         filter_type = param.get("filter_type", HighRiskEmployeeFilters.OPEN)
         results_generator = self._client.detectionlists.high_risk_employee.get_all(filter_type=filter_type)
