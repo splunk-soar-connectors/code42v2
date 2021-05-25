@@ -74,7 +74,7 @@ class Code42Connector(BaseConnector):
             self.save_progress(f"Code42: handling action {action_id}...")
             return action_handler(param, action_result)
         except Exception as ex:
-            msg = f"Code42: Failed execution of action {action_id}: {str(ex)}"
+            msg = f"Code42: Failed execution of action {action_id}: {ex}"
             return action_result.set_status(phantom.APP_ERROR, msg)
 
     def _handle_test_connectivity(self, param, action_result):
@@ -82,7 +82,8 @@ class Code42Connector(BaseConnector):
         self.save_progress("Test Connectivity Passed")
         return action_result.set_status(phantom.APP_SUCCESS)
 
-    # DEPARTING EMPLOYEE ACTIONS
+    """ DEPARTING EMPLOYEE ACTIONS """
+
     def _handle_add_departing_employee(self, param, action_result):
         username = param["username"]
         departure_date = param.get("departure_date")
@@ -119,7 +120,8 @@ class Code42Connector(BaseConnector):
         action_result.update_summary({"total_count": total_count})
         return action_result.set_status(phantom.APP_SUCCESS)
 
-    # HIGH RISK EMPLOYEE ACTIONS
+    """ HIGH RISK EMPLOYEE ACTIONS """
+
     def _handle_add_high_risk_employee(self, param, action_result):
         username = param["username"]
         user_id = self._get_user_id(username)

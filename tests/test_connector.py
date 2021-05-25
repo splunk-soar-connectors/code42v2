@@ -4,7 +4,7 @@ from py42.exceptions import Py42UnauthorizedError
 from pytest import fixture
 
 from code42_connector import Code42Connector
-from .conftest import assert_fail, create_fake_connector, assert_success
+from tests.conftest import assert_fail, create_fake_connector, assert_success
 
 @fixture
 def test_connectivity_connector(mock_py42_client):

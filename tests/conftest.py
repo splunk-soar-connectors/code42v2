@@ -73,3 +73,4 @@ def assert_successful_message(connector, expected_message):
     status = action_results[0].get_status()
     assert msg == expected_message
     assert status == phantom.app.APP_SUCCESS
+    
