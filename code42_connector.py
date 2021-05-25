@@ -7,6 +7,9 @@ import py42.sdk
 import requests
 
 # Phantom App imports
+from py42.sdk.queries.alerts.alert_query import AlertQuery
+from py42.sdk.queries.alerts.filters import Actor, AlertState, DateObserved
+
 import phantom.app as phantom
 from phantom.action_result import ActionResult
 from phantom.base_connector import BaseConnector
@@ -23,6 +26,7 @@ class Code42Connector(BaseConnector):
     ADD_DEPARTING_EMPLOYEE_ACTION_ID = "add_departing_employee"
     REMOVE_DEPARTING_EMPLOYEE_ACTION_ID = "remove_departing_employee"
     GET_ALERT_DETAILS_ACTION_ID = "get_alert_details"
+    SEARCH_ALERTS_ACTION_ID = "search_alerts"
 
     def __init__(self):
         super(Code42Connector, self).__init__()
@@ -36,7 +40,8 @@ class Code42Connector(BaseConnector):
             self.TEST_CONNECTIVITY_ACTION_ID: lambda x: self._handle_test_connectivity(x),
             self.ADD_DEPARTING_EMPLOYEE_ACTION_ID: lambda x: self._handle_add_departing_employee(x),
             self.REMOVE_DEPARTING_EMPLOYEE_ACTION_ID: lambda x: self._handle_remove_departing_employee(x),
-            self.GET_ALERT_DETAILS_ACTION_ID: lambda x: self._handle_get_alert_details(x)
+            self.GET_ALERT_DETAILS_ACTION_ID: lambda x: self._handle_get_alert_details(x),
+            self.SEARCH_ALERTS_ACTION_ID: lambda x: self._handle_search_alerts(x)
         }
 
     @property
@@ -121,10 +126,52 @@ class Code42Connector(BaseConnector):
         action_result.update_summary({"username": alert["actor"], "user_id": alert["actorId"]})
         return action_result.set_status(phantom.APP_SUCCESS)
 
+    def _handle_search_alerts(self, param):
+        self.save_progress(f"In action handler for: {self.get_action_identifier()}")
+        action_result = self.add_action_result(ActionResult(dict(param)))
+        username = param.get("username")
+        start_date = param.get("start_date")
+        end_date = param.get("end_date")
+        alert_state = param.get("alert_state")
+
+        if username is None and start_date is None and end_date is None and alert_state is None:
+            return action_result.set_status(phantom.APP_ERROR, "Must supply a search term.")
+
+        if not self._validate_date_range(start_date, end_date):
+            return action_result.set_status(phantom.APP_ERROR, "Start Date and End Date are both required to search by "
+                                                               "date range.")
+        try:
+            query = self._build_alerts_query(username, start_date, end_date, alert_state)
+        except ValueError as exception:
+            return action_result.set_status(phantom.APP_ERROR, f"Start Date and End Date must be in format YYYY-mm-dd: {exception}")
+
+        response = self.client.alerts.search(query)
+        action_result.add_data(response.data)
+        return action_result.set_status(phantom.APP_SUCCESS)
+
     def finalize(self):
         # Save the state, this data is saved across actions and app upgrades
         self.save_state(self._state)
         return phantom.APP_SUCCESS
+
+    def _validate_date_range(self, start_date, end_date):
+        # Should we worry about whitespace param values?
+        return (not start_date and not end_date) or (start_date is not None and end_date is not None)
+
+    def _build_alerts_query(self, username, start_date, end_date, alert_status):
+        filters = []
+        if username is not None:
+            filters.append(Actor.eq(username))
+        if start_date is not None and end_date is not None:
+            # This will raise a ValueError if dates not in Y-m-d H:M:S format
+            filters.append(DateObserved.in_range(f"{start_date} 00:00:00", f"{end_date} 00:00:00"))
+        if alert_status is not None:
+            filters.append(self._build_alert_state_filter(alert_status))
+        query = AlertQuery.all(*filters)
+        return query
+
+    def _build_alert_state_filter(self, alert_status):
+        return AlertState.eq(AlertState.OPEN)
 
     def _get_user_id(self, username):
         users = self.client.users.get_by_username(username)["users"]

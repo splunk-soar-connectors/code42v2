@@ -369,6 +369,113 @@
                 "type": "table"
             },
             "versions": "EQ(*)"
+        },
+        {
+            "action": "search alerts",
+            "identifier": "search_alerts",
+            "description": "Search Alerts",
+            "verbose": "",
+            "type": "investigate",
+            "read_only": true,
+            "parameters": {
+                "username": {
+                    "description": "Username",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": false,
+                    "contains": [],
+                    "value_list": [],
+                    "default": "",
+                    "order": 0
+                },
+                "alert_state": {
+                    "description": "Alert State",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": false,
+                    "contains": [],
+                    "value_list": [
+                        "Open",
+                        "Dismissed",
+                        "Pending",
+                        "In Progress"
+                    ],
+                    "default": "",
+                    "order": 1
+                },
+                "start_date": {
+                    "description": "Start Date",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": false,
+                    "contains": [],
+                    "value_list": [],
+                    "default": "",
+                    "order": 2
+                },
+                "end_date": {
+                    "description": "End Date",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": false,
+                    "contains": [],
+                    "value_list": [],
+                    "default": "",
+                    "order": 3
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.parameter.username",
+                    "data_type": "string",
+                    "contains": [],
+                    "column_name": "username",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.parameter.alert_state",
+                    "data_type": "string",
+                    "contains": [],
+                    "column_name": "alert_state",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.parameter.start_date",
+                    "data_type": "string",
+                    "contains": [],
+                    "column_name": "start_date",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.parameter.end_date",
+                    "data_type": "string",
+                    "contains": [],
+                    "column_name": "end_date",
+                    "column_order": 3
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "status",
+                    "column_order": 4
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
         }
     ]
 }
