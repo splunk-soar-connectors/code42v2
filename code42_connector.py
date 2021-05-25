@@ -17,6 +17,7 @@ from phantom.base_connector import BaseConnector
 
 
 class RetVal(tuple):
+
     def __new__(cls, val1, val2=None):
         return tuple.__new__(RetVal, (val1, val2))
 
@@ -51,11 +52,9 @@ class Code42Connector(BaseConnector):
         return self._client
 
     def initialize(self):
-        # Load the state in initialize, use it to store data
-        # that needs to be accessed across actions
+        # use this to store data that needs to be accessed across actions
         self._state = self.load_state()
 
-        # get the asset config
         config = self.get_config()
         self._cloud_instance = config["cloud_instance"]
         self._username = config["username"]
@@ -66,67 +65,57 @@ class Code42Connector(BaseConnector):
     def handle_action(self, param):
         action_id = self.get_action_identifier()
         self.debug_print("action_id", action_id)
-        action = ACTION_MAP[action_id]
-        return action(self, param)
-
-    @action_key("test_connectivity")
-    def _handle_test_connectivity(self, param):
-        # Add an action result object to self (BaseConnector) to represent the action for this param
+        
+        action_handler = ACTION_MAP[action_id]
         action_result = self.add_action_result(ActionResult(dict(param)))
-        self.save_progress("Connecting to endpoint")
-
+        
+        if not action_handler:
+            return action_result.set_status(phantom.APP_ERROR, f"Code42: Action {action_id} does not exist.")
+        
         try:
-            # TODO
-            # Ideally the client instantiation would happen in `initialize()` but that function does not have access
-            # to the action, so it cannot effectively report errors to the UI.
-            # Fix this with a decorator or something similar.
-            self.client.users.get_current()
-        except Exception as exception:
-            return action_result.set_status(
-                phantom.APP_ERROR, f"Unable to connect to Code42: {str(exception)}"
-            )
-
+            if not self._client:
+                self._client = py42.sdk.from_local_account(self._cloud_instance, self._username, self._password)
+            self.save_progress(f"Code42: handling action {action_id}...")
+            return action_handler(param, action_result)
+        except Exception as ex:
+            msg = f"Code42: Failed execution of action {action_id}: {str(ex)}"
+            return action_result.set_status(phantom.APP_ERROR, msg)
+    
+    @action_key("test_connectivity")
+    def _handle_test_connectivity(self, param, action_result):
+        self._client.users.get_current()
         self.save_progress("Test Connectivity Passed")
         return action_result.set_status(phantom.APP_SUCCESS)
 
+    # DEPARTING EMPLOYEE ACTIONS
     @action_key("add_departing_employee")
-    def _handle_add_departing_employee(self, param):
-        self._log_action_handler()
-        action_result = self._add_action_result(param)
+    def _handle_add_departing_employee(self, param, action_result):
         username = param["username"]
         departure_date = param.get("departure_date")
         user_id = self._get_user_id(username)
-        response = self.client.detectionlists.departing_employee.add(
-            user_id, departure_date=departure_date
-        )
+        response = self._client.detectionlists.departing_employee.add(user_id, departure_date=departure_date)
 
         note = param.get("note")
         if note:
-            self.client.detectionlists.update_user_notes(user_id, note)
+            self._client.detectionlists.update_user_notes(user_id, note)
 
         action_result.add_data(response.data)
         status_message = f"{username} was added to the departing employees list"
         return action_result.set_status(phantom.APP_SUCCESS, status_message)
 
     @action_key("remove_departing_employee")
-    def _handle_remove_departing_employee(self, param):
-        self._log_action_handler()
-        action_result = self._add_action_result(param)
+    def _handle_remove_departing_employee(self, param, action_result):
         username = param["username"]
         user_id = self._get_user_id(username)
-        self.client.detectionlists.departing_employee.remove(user_id)
+        self._client.detectionlists.departing_employee.remove(user_id)
         action_result.add_data({"userId": user_id})
         status_message = f"{username} was removed from the departing employees list"
         return action_result.set_status(phantom.APP_SUCCESS, status_message)
 
     @action_key("list_departing_employees")
-    def _handle_list_departing_employees(self, param):
-        self._log_action_handler()
-        action_result = self._add_action_result(param)
+    def _handle_list_departing_employees(self, param, action_result):
         filter_type = param.get("filter_type", DepartingEmployeeFilters.OPEN)
-        results_generator = self.client.detectionlists.departing_employee.get_all(
-            filter_type=filter_type
-        )
+        results_generator = self._client.detectionlists.departing_employee.get_all(filter_type=filter_type)
 
         page = None
         for page in results_generator:
@@ -138,36 +127,29 @@ class Code42Connector(BaseConnector):
         action_result.update_summary({"total_count": total_count})
         return action_result.set_status(phantom.APP_SUCCESS)
 
+    # HIGH RISK EMPLOYEE ACTIONS
     @action_key("add_highrisk_employee")
-    def _handle_add_high_risk_employee(self, param):
-        self._log_action_handler()
-        action_result = self._add_action_result(param)
+    def _handle_add_high_risk_employee(self, param, action_result):
         username = param["username"]
         user_id = self._get_user_id(username)
-        response = self.client.detectionlists.high_risk_employee.add(user_id)
+        response = self._client.detectionlists.high_risk_employee.add(user_id)
         action_result.add_data(response.data)
         status_message = f"{username} was added to the high risk employees list"
         return action_result.set_status(phantom.APP_SUCCESS, status_message)
 
     @action_key("remove_highrisk_employee")
-    def _handle_remove_high_risk_employee(self, param):
-        self._log_action_handler()
-        action_result = self._add_action_result(param)
+    def _handle_remove_high_risk_employee(self, param, action_result):
         username = param["username"]
         user_id = self._get_user_id(username)
-        self.client.detectionlists.high_risk_employee.remove(user_id)
+        self._client.detectionlists.high_risk_employee.remove(user_id)
         action_result.add_data({"userId": user_id})
         status_message = f"{username} was removed from the high risk employees list"
         return action_result.set_status(phantom.APP_SUCCESS, status_message)
 
     @action_key("list_highrisk_employees")
-    def _handle_list_high_risk_employees(self, param):
-        self._log_action_handler()
-        action_result = self._add_action_result(param)
+    def _handle_list_high_risk_employees(self, param, action_result):
         filter_type = param.get("filter_type", HighRiskEmployeeFilters.OPEN)
-        results_generator = self.client.detectionlists.high_risk_employee.get_all(
-            filter_type=filter_type
-        )
+        results_generator = self._client.detectionlists.high_risk_employee.get_all(filter_type=filter_type)
 
         page = None
         for page in results_generator:
@@ -264,12 +246,6 @@ class Code42Connector(BaseConnector):
 
     def _get_user_id(self, username):
         return self._get_user(username)["userUid"]
-
-    def _log_action_handler(self):
-        self.save_progress(f"In action handler for: {self.get_action_identifier()}")
-
-    def _add_action_result(self, param):
-        return self.add_action_result(ActionResult(dict(param)))
 
 
 def main():
