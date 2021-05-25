@@ -100,8 +100,23 @@ Make sure you have created a Python virtual environment for the Phantom project 
 Then, activate the virtual environment and install the dependencies before running the tests.
 
 ```bash
-pip install -e .
+pip install -e .[dev]
 pytest
+```
+
+#### Running tests within a Phantom deployment
+
+You can clone this repository directly onto a Phantom server and run the tests on it. When you do this, the tests will use the Phantom SDK instead of the stubs this project has defined in the `stubs` folder:
+
+```bash
+phenv pip install -e . # note: exclude [dev] to skip installing the stubs
+phenv pytest
+```
+
+If you accidentally install the stubs into the Phantom environment, you can remove them via:
+
+```bash
+phenv pip uninstall stubs
 ```
 
 ### Stubs
