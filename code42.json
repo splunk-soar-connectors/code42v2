@@ -725,7 +725,7 @@
                     "column_order": 4
                 },
                 {
-                    "data_path": "action_result.summary",
+                    "data_path": "action_result.summary.all_risk_tags_for_user",
                     "data_type": "string"
                 }
             ],
