@@ -12,6 +12,9 @@ setup(
     py_modules=["code42_connector"],
     install_requires=["pytest==4.4.0",
                       "pytest-mock==1.10.3",
-                      f"py42 @ file://localhost/{path_to_py42_wheel}",
-                      f"stubs @ file://localhost/{path_to_stubs}"],
+                      f"py42 @ file://localhost/{path_to_py42_wheel}"
+    ],
+    extras_require={
+        "dev": [f"stubs @ file://localhost/{path_to_stubs}"]
+    }
 )
