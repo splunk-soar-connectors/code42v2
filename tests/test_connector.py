@@ -33,9 +33,12 @@ class TestCode42Connector(object):
             "username": "user.name",
             "password": "password123!"
         }
+
+        connector.load_state = mocker.MagicMock()
         connector.get_config = mocker.MagicMock(return_value=config)
         connector.initialize()
 
+        assert connector.load_state.call_count == 1
         assert connector._cloud_instance == config["cloud_instance"]
         assert connector._username == config["username"]
         assert connector._password == config["password"]
