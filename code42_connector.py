@@ -164,9 +164,9 @@ class Code42Connector(BaseConnector):
     @action_handler_for("add_highrisk_tags")
     def _handle_add_high_risk_tags(self, param, action_result):
         username = param["username"]
-        tags = param["risk_tags"]
+        tags = param["risk_tags"].split(",")
         user_id = self._get_user_id(username)
-        response = self._client.detectionlists.add_user_risk_tags(user_id, tags.split(","))
+        response = self._client.detectionlists.add_user_risk_tags(user_id, tags)
         action_result.add_data(response.data)
         total_user_risk_tags = response.data.get("riskFactors", [])
         action_result.update_summary({"all_risk_tags_for_user": total_user_risk_tags})
@@ -175,9 +175,9 @@ class Code42Connector(BaseConnector):
     @action_handler_for("remove_highrisk_tags")
     def _handle_remove_high_risk_tags(self, param, action_result):
         username = param["username"]
-        tags = param["risk_tags"]
+        tags = param["risk_tags"].split(",")
         user_id = self._get_user_id(username)
-        response = self._client.detectionlists.remove_user_risk_tags(user_id, tags.split(","))
+        response = self._client.detectionlists.remove_user_risk_tags(user_id, tags)
         action_result.add_data(response.data)
         total_user_risk_tags = response.data.get("riskFactors", [])
         action_result.update_summary({"all_risk_tags_for_user": total_user_risk_tags})
