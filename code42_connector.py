@@ -187,7 +187,7 @@ class Code42Connector(BaseConnector):
         self._log_action_handler()
         action_result = self._add_action_result(param)
         username = param["username"]
-        tags = param["riskTags"].split(",")
+        tags = param["risk_tags"].split(",")
         user_id = self._get_user_id(username)
         response = self.client.detectionlists.add_user_risk_tags(user_id, tags)
         action_result.add_data(response.data)
@@ -198,7 +198,7 @@ class Code42Connector(BaseConnector):
         self._log_action_handler()
         action_result = self._add_action_result(param)
         username = param["username"]
-        tags = param["riskTags"].split(",")
+        tags = param["risk_tags"].split(",")
         user_id = self._get_user_id(username)
         response = self.client.detectionlists.remove_user_risk_tags(user_id, tags)
         action_result.add_data(response.data)
