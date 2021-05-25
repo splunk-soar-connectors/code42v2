@@ -470,7 +470,9 @@ class TestCode42DetectionListsConnector(object):
             "FLIGHT_RISK",
             "HIGH_IMPACT_EMPLOYEE",
         ]
-        assert_succesful_summary(connector, risk_tags_from_add_response)
+
+        expected_summary = {"all_risk_tags_for_user": risk_tags_from_add_response}
+        assert_succesful_summary(connector, expected_summary)
 
     def test_handle_action_when_remove_high_risk_tags_calls_remove_with_expected_args(
         self, mock_py42_for_risk_tags
