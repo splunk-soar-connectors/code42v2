@@ -3,7 +3,6 @@ from unittest import mock
 from py42.exceptions import Py42UnauthorizedError
 from pytest import fixture
 
-import phantom.app as phantom
 from code42_connector import Code42Connector
 from .conftest import assert_fail, create_fake_connector, assert_success
 

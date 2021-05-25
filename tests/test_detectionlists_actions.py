@@ -1,7 +1,5 @@
 from pytest import fixture
 
-import phantom.app
-from phantom.action_result import ActionResult
 from .conftest import assert_success, create_fake_connector, create_mock_response, assert_successful_single_data, assert_successful_message, assert_succesful_summary
 
 _TEST_USER_UID = "TEST_USER_UID"
