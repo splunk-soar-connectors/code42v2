@@ -134,6 +134,16 @@ def _create_list_hr_connector(client):
     return _attach_client(connector, client)
 
 
+def _create_add_risk_tags_connector(client):
+    connector = create_fake_connector("add_highrisk_tags")
+    return _attach_client(connector, client)
+
+
+def _create_remove_risk_tags_connector(client):
+    connector = create_fake_connector("remove_highrisk_tags")
+    return _attach_client(connector, client)
+
+
 def _attach_client(connector, client):
     connector._client = client
     return connector
@@ -462,3 +472,135 @@ class TestCode42DetectionListsConnector(object):
         connector = _create_list_hr_connector(mock_py42_with_high_risk_employees)
         connector.handle_action({})
         set_status_mock.assert_called_once_with(1)
+
+    def test_handle_action_when_add_high_risk_tags_calls_add_with_expected_args(
+        self, mock_py42_with_user, mock_result_adder
+    ):
+        param = {
+            "username": "test@example.com",
+            "riskTags": ["FLIGHT_RISK"]
+        }
+        result = ActionResult(dict(param))
+        mock_result_adder.return_value = result
+        connector = _create_add_risk_tags_connector(mock_py42_with_user)
+        connector.handle_action(param)
+        mock_py42_with_user.detectionlists.add_user_risk_tags.assert_called_once_with(
+            "TEST_USER_UID", ["FLIGHT_RISK"]
+        )
+
+    def test_handle_action_when_add_high_risk_tags_adds_response_items_to_data(
+        self, mocker, mock_py42_with_user, mock_result_adder
+    ):
+        param = {
+            "username": "test@example.com",
+            "riskTags": [
+                "FLIGHT_RISK",
+                "HIGH_IMPACT_EMPLOYEE",
+                "ELEVATED_ACCESS_PRIVILEGES"
+            ]
+        }
+        response_data = {
+            "type$": "USER_V2",
+            "tenantId": "11114444-2222-3333-4444-666634888863",
+            "userId": _TEST_USER_UID,
+            "userName": "test@example.com",
+            "displayName": "Test Testerson",
+            "cloudUsernames": [
+                "test@example.com"
+            ],
+            "riskFactors": [
+                "FLIGHT_RISK",
+                "HIGH_IMPACT_EMPLOYEE",
+                "ELEVATED_ACCESS_PRIVILEGES"
+            ]
+        }
+        mock_py42_with_user.detectionlists.add_user_risk_tags.return_value = create_mock_response(
+            mocker, response_data
+        )
+        result = ActionResult(dict(param))
+        add_data_mock = mocker.MagicMock()
+        result.add_data = add_data_mock
+        mock_result_adder.return_value = result
+        connector = _create_add_risk_tags_connector(mock_py42_with_user)
+        connector.handle_action(param)
+        add_data_mock.assert_called_once_with(response_data)
+
+    def test_handle_action_when_add_high_risk_tags_and_is_successful_sets_success_status(
+        self, mocker, mock_py42_with_user, mock_result_adder
+    ):
+        param = {
+            "username": "test@example.com",
+            "riskTags": ["FLIGHT_RISK"]
+        }
+        result = ActionResult(dict(param))
+        set_status_mock = mocker.MagicMock()
+        result.set_status = set_status_mock
+        mock_result_adder.return_value = result
+        connector = _create_add_risk_tags_connector(mock_py42_with_user)
+        connector.handle_action(param)
+        expected_message = "test@example.com has been tagged with ['FLIGHT_RISK']"
+        set_status_mock.assert_called_once_with(1, expected_message)
+
+    def test_handle_action_when_remove_high_risk_tags_calls_remove_with_expected_args(
+        self, mock_py42_with_user, mock_result_adder
+    ):
+        param = {
+            "username": "test@example.com",
+            "riskTags": ["FLIGHT_RISK"]
+        }
+        result = ActionResult(dict(param))
+        mock_result_adder.return_value = result
+        connector = _create_remove_risk_tags_connector(mock_py42_with_user)
+        connector.handle_action(param)
+        mock_py42_with_user.detectionlists.remove_user_risk_tags.assert_called_once_with(
+            "TEST_USER_UID", ["FLIGHT_RISK"]
+        )
+
+    def test_handle_action_when_remove_high_risk_tags_adds_response_items_to_data(
+        self, mocker, mock_py42_with_user, mock_result_adder
+    ):
+        param = {
+            "username": "test@example.com",
+            "riskTags": [
+                "FLIGHT_RISK",
+                "HIGH_IMPACT_EMPLOYEE",
+                "ELEVATED_ACCESS_PRIVILEGES"
+            ]
+        }
+        response_data = {
+            "type$": "USER_V2",
+            "tenantId": "11114444-2222-3333-4444-666634888863",
+            "userId": _TEST_USER_UID,
+            "userName": "test@example.com",
+            "displayName": "Test Testerson",
+            "cloudUsernames": [
+                "test@example.com"
+            ],
+            "riskFactors": []
+        }
+        mock_py42_with_user.detectionlists.remove_user_risk_tags.return_value = create_mock_response(
+            mocker, response_data
+        )
+        result = ActionResult(dict(param))
+        add_data_mock = mocker.MagicMock()
+        result.add_data = add_data_mock
+        mock_result_adder.return_value = result
+        connector = _create_remove_risk_tags_connector(mock_py42_with_user)
+        connector.handle_action(param)
+        add_data_mock.assert_called_once_with(response_data)
+
+    def test_handle_action_when_remove_high_risk_tags_and_is_successful_sets_success_status(
+        self, mocker, mock_py42_with_user, mock_result_adder
+    ):
+        param = {
+            "username": "test@example.com",
+            "riskTags": ["FLIGHT_RISK"]
+        }
+        result = ActionResult(dict(param))
+        set_status_mock = mocker.MagicMock()
+        result.set_status = set_status_mock
+        mock_result_adder.return_value = result
+        connector = _create_remove_risk_tags_connector(mock_py42_with_user)
+        connector.handle_action(param)
+        expected_message = "test@example.com has been untagged from ['FLIGHT_RISK']"
+        set_status_mock.assert_called_once_with(1, expected_message)

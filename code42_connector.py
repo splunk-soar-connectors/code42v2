@@ -184,10 +184,26 @@ class Code42Connector(BaseConnector):
         pass
 
     def _handle_add_high_risk_tags(self, param):
-        pass
+        self._log_action_handler()
+        action_result = self._add_action_result(param)
+        username = param["username"]
+        tags = param["riskTags"]
+        user_id = self._get_user_id(username)
+        response = self.client.detectionlists.add_user_risk_tags(user_id, tags)
+        action_result.add_data(response.data)
+        status_message = f"{username} has been tagged with {tags}"
+        return action_result.set_status(phantom.APP_SUCCESS, status_message)
 
     def _handle_remove_high_risk_tags(self, param):
-        pass
+        self._log_action_handler()
+        action_result = self._add_action_result(param)
+        username = param["username"]
+        tags = param["riskTags"]
+        user_id = self._get_user_id(username)
+        response = self.client.detectionlists.remove_user_risk_tags(user_id, tags)
+        action_result.add_data(response.data)
+        status_message = f"{username} has been untagged from {tags}"
+        return action_result.set_status(phantom.APP_SUCCESS, status_message)
 
     def finalize(self):
         # Save the state, this data is saved across actions and app upgrades
