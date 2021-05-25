@@ -192,7 +192,7 @@ class Code42Connector(BaseConnector):
         response = self.client.detectionlists.add_user_risk_tags(user_id, tags.split(","))
         action_result.add_data(response.data)
         total_user_risk_tags = response.data.get("riskFactors", [])
-        action_result.update_summary({"all_user_risk_tags": total_user_risk_tags})
+        action_result.update_summary({"all_risk_tags_for_user": total_user_risk_tags})
         return action_result.set_status(phantom.APP_SUCCESS)
 
     def _handle_remove_high_risk_tags(self, param):
@@ -204,7 +204,7 @@ class Code42Connector(BaseConnector):
         response = self.client.detectionlists.remove_user_risk_tags(user_id, tags.split(","))
         action_result.add_data(response.data)
         total_user_risk_tags = response.data.get("riskFactors", [])
-        action_result.update_summary({"all_user_risk_tags": total_user_risk_tags})
+        action_result.update_summary({"all_risk_tags_for_user": total_user_risk_tags})
         return action_result.set_status(phantom.APP_SUCCESS)
 
     def finalize(self):

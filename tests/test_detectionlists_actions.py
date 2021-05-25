@@ -560,7 +560,7 @@ class TestCode42DetectionListsConnector(object):
         ]
 
         update_summary_mock.assert_called_once_with(
-            {"all_user_risk_tags": risk_tags_from_add_response}
+            {"all_risk_tags_for_user": risk_tags_from_add_response}
         )
 
     def test_handle_action_when_remove_high_risk_tags_calls_remove_with_expected_args(
@@ -611,5 +611,5 @@ class TestCode42DetectionListsConnector(object):
         risk_tags_from_remove_response = ["ELEVATED_ACCESS_PRIVILEGES"]
 
         update_summary_mock.assert_called_once_with(
-            {"all_user_risk_tags": risk_tags_from_remove_response}
+            {"all_risk_tags_for_user": risk_tags_from_remove_response}
         )
