@@ -1,9 +1,13 @@
 class BaseConnector:
     def __init__(self):
-        pass
+        self._action_results = []
 
     def add_action_result(self, action_result):
-        pass
+        self._action_results.append(action_result)
+        return action_result
+
+    def get_action_results(self):
+        return self._action_results
 
     def save_progress(self, status):
         pass

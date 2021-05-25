@@ -1,0 +1,2 @@
+APP_ERROR = False
+APP_SUCCESS = True
