@@ -62,10 +62,14 @@ def assert_succesful_summary(connector, expected_summary):
     action_results = connector.get_action_results()
     assert len(action_results) == 1
     summary = action_results[0].get_summary()
+    status = action_results[0].get_status()
     assert summary == expected_summary
+    assert status == phantom.app.APP_SUCCESS
 
 def assert_successful_message(connector, expected_message):
     action_results = connector.get_action_results()
     assert len(action_results) == 1
     msg = action_results[0].get_message()
+    status = action_results[0].get_status()
     assert msg == expected_message
+    assert status == phantom.app.APP_SUCCESS
