@@ -1,12 +1,12 @@
 import os
 
-from setuptools import find_packages, setup
+from setuptools import setup
 
 path_to_py42_wheel = os.path.join(os.getcwd(), 'wheels', 'py42-1.14.2-py2.py3-none-any.whl')
 path_to_stubs = os.path.join(os.getcwd(), 'stubs#egg=phantom')
 
 setup(
-    name="code42_connector",
+    name="ph_code42_connector",
     version="1.0.0",
     description="Code42 for Phantom",
     py_modules=["code42_connector"],

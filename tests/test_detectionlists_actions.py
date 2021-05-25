@@ -1,6 +1,6 @@
 from pytest import fixture
 
-from .conftest import assert_success, create_fake_connector, create_mock_response, assert_successful_single_data, assert_successful_message, assert_succesful_summary
+from tests.conftest import assert_success, create_fake_connector, create_mock_response, assert_successful_single_data, assert_successful_message, assert_succesful_summary
 
 _TEST_USER_UID = "TEST_USER_UID"
 _MOCK_LIST_DEPARTING_EMPLOYEES_RESPONSE = {
@@ -174,7 +174,7 @@ class TestCode42DetectionListsConnector(object):
         connector.handle_action(param)
         assert_successful_single_data(connector, response_data)
 
-    def test_handle_action_when_add_departing_employee_and_is_successful_sets_success_status(
+    def test_handle_action_when_add_departing_employee_and_is_successful_sets_success_message(
         self, mock_py42_with_user
     ):
         param = {"username": "test@example.com", "departure_date": "2030-01-01"}
@@ -217,7 +217,7 @@ class TestCode42DetectionListsConnector(object):
         connector.handle_action(param)
         assert_successful_single_data(connector, {"userId": _TEST_USER_UID})
         
-    def test_handle_action_when_remove_departing_employee_and_is_successful_sets_success_status(
+    def test_handle_action_when_remove_departing_employee_and_is_successful_sets_success_message(
         self, mock_py42_with_user
     ):
         param = {"username": "test@example.com"}
@@ -299,7 +299,7 @@ class TestCode42DetectionListsConnector(object):
         connector.handle_action(param)
         assert_successful_single_data(connector, response_data)
 
-    def test_handle_action_when_add_high_risk_employee_and_is_successful_sets_success_status(
+    def test_handle_action_when_add_high_risk_employee_and_is_successful_sets_success_message(
         self, mock_py42_with_user
     ):
         param = {"username": "test@example.com"}
@@ -318,7 +318,7 @@ class TestCode42DetectionListsConnector(object):
         )
         assert_success(connector)
 
-    def test_handle_action_when_remove_high_risk_employee_adds_response_to_data(
+    def test_handle_action_when_remove_high_risk_employee_adds_user_id_to_data(
         self, mocker, mock_py42_with_user
     ):
         param = {"username": "test@example.com"}
@@ -331,7 +331,7 @@ class TestCode42DetectionListsConnector(object):
         connector.handle_action(param)
         assert_successful_single_data(connector, {"userId": _TEST_USER_UID})
 
-    def test_handle_action_when_remove_departing_employee_and_is_successful_sets_success_status(
+    def test_handle_action_when_remove_high_risk_employee_and_is_successful_sets_success_message(
         self, mock_py42_with_user
     ):
         param = {"username": "test@example.com"}
