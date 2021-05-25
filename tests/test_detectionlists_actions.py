@@ -478,14 +478,14 @@ class TestCode42DetectionListsConnector(object):
     ):
         param = {
             "username": "test@example.com",
-            "riskTags": ["FLIGHT_RISK"]
+            "riskTags": "FLIGHT_RISK,HIGH_IMPACT_EMPLOYEE"
         }
         result = ActionResult(dict(param))
         mock_result_adder.return_value = result
         connector = _create_add_risk_tags_connector(mock_py42_with_user)
         connector.handle_action(param)
         mock_py42_with_user.detectionlists.add_user_risk_tags.assert_called_once_with(
-            "TEST_USER_UID", ["FLIGHT_RISK"]
+            "TEST_USER_UID", ["FLIGHT_RISK", "HIGH_IMPACT_EMPLOYEE"]
         )
 
     def test_handle_action_when_add_high_risk_tags_adds_response_items_to_data(
@@ -493,11 +493,7 @@ class TestCode42DetectionListsConnector(object):
     ):
         param = {
             "username": "test@example.com",
-            "riskTags": [
-                "FLIGHT_RISK",
-                "HIGH_IMPACT_EMPLOYEE",
-                "ELEVATED_ACCESS_PRIVILEGES"
-            ]
+            "riskTags": "FLIGHT_RISK,HIGH_IMPACT_EMPLOYEE,ELEVATED_ACCESS_PRIVILEGES"
         }
         response_data = {
             "type$": "USER_V2",
@@ -530,7 +526,7 @@ class TestCode42DetectionListsConnector(object):
     ):
         param = {
             "username": "test@example.com",
-            "riskTags": ["FLIGHT_RISK"]
+            "riskTags": "FLIGHT_RISK,HIGH_IMPACT_EMPLOYEE"
         }
         result = ActionResult(dict(param))
         set_status_mock = mocker.MagicMock()
@@ -538,7 +534,7 @@ class TestCode42DetectionListsConnector(object):
         mock_result_adder.return_value = result
         connector = _create_add_risk_tags_connector(mock_py42_with_user)
         connector.handle_action(param)
-        expected_message = "test@example.com has been tagged with ['FLIGHT_RISK']"
+        expected_message = "test@example.com has been tagged with ['FLIGHT_RISK', 'HIGH_IMPACT_EMPLOYEE']"
         set_status_mock.assert_called_once_with(1, expected_message)
 
     def test_handle_action_when_remove_high_risk_tags_calls_remove_with_expected_args(
@@ -546,14 +542,14 @@ class TestCode42DetectionListsConnector(object):
     ):
         param = {
             "username": "test@example.com",
-            "riskTags": ["FLIGHT_RISK"]
+            "riskTags": "FLIGHT_RISK,HIGH_IMPACT_EMPLOYEE"
         }
         result = ActionResult(dict(param))
         mock_result_adder.return_value = result
         connector = _create_remove_risk_tags_connector(mock_py42_with_user)
         connector.handle_action(param)
         mock_py42_with_user.detectionlists.remove_user_risk_tags.assert_called_once_with(
-            "TEST_USER_UID", ["FLIGHT_RISK"]
+            "TEST_USER_UID", ["FLIGHT_RISK", "HIGH_IMPACT_EMPLOYEE"]
         )
 
     def test_handle_action_when_remove_high_risk_tags_adds_response_items_to_data(
@@ -561,11 +557,7 @@ class TestCode42DetectionListsConnector(object):
     ):
         param = {
             "username": "test@example.com",
-            "riskTags": [
-                "FLIGHT_RISK",
-                "HIGH_IMPACT_EMPLOYEE",
-                "ELEVATED_ACCESS_PRIVILEGES"
-            ]
+            "riskTags": "FLIGHT_RISK,HIGH_IMPACT_EMPLOYEE,ELEVATED_ACCESS_PRIVILEGES"
         }
         response_data = {
             "type$": "USER_V2",
@@ -594,7 +586,7 @@ class TestCode42DetectionListsConnector(object):
     ):
         param = {
             "username": "test@example.com",
-            "riskTags": ["FLIGHT_RISK"]
+            "riskTags": "FLIGHT_RISK,HIGH_IMPACT_EMPLOYEE"
         }
         result = ActionResult(dict(param))
         set_status_mock = mocker.MagicMock()
@@ -602,5 +594,5 @@ class TestCode42DetectionListsConnector(object):
         mock_result_adder.return_value = result
         connector = _create_remove_risk_tags_connector(mock_py42_with_user)
         connector.handle_action(param)
-        expected_message = "test@example.com has been untagged from ['FLIGHT_RISK']"
+        expected_message = "test@example.com has been untagged from ['FLIGHT_RISK', 'HIGH_IMPACT_EMPLOYEE']"
         set_status_mock.assert_called_once_with(1, expected_message)

@@ -629,6 +629,198 @@
                 "type": "table"
             },
             "versions": "EQ(*)"
+        },
+        {
+            "action": "add highrisk tags",
+            "identifier": "add_highrisk_tags",
+            "description": "Add risk tags to a user",
+            "verbose": "",
+            "undo": "remove highrisk tags",
+            "type": "contain",
+            "read_only": false,
+            "parameters": {
+                "username": {
+                    "description": "Username of the employee to add risk tags to",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": true,
+                    "contains": [
+                        "email"
+                    ],
+                    "value_list": [],
+                    "default": "",
+                    "order": 0
+                },
+                "risk_tags": {
+                    "description": "Comma separated list of risk tags",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": false,
+                    "value_list": [],
+                    "default": "",
+                    "order": 1
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.parameter.username",
+                    "data_type": "string",
+                    "contains": [
+                        "email"
+                    ],
+                    "column_name": "Username",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.parameter.risk_tags",
+                    "data_type": "string",
+                    "column_name": "Risk Tags",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "Status",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
+                },
+                {
+                    "column_name": "User ID",
+                    "data_path": "action_result.data.*.userId",
+                    "data_type": "string",
+                    "example_values": [
+                        "1"
+                    ],
+                    "column_order": 3
+                },
+                {
+                    "column_name": "Username",
+                    "data_path": "action_result.data.*.userName",
+                    "data_type": "string",
+                    "example_values": [
+                        "1"
+                    ],
+                    "contains": [
+                        "email"
+                    ],
+                    "column_order": 4
+                },
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "remove highrisk tags",
+            "identifier": "remove_highrisk_tags",
+            "description": "Remove risk tags from a user",
+            "verbose": "",
+            "undo": "add highrisk tags",
+            "type": "contain",
+            "read_only": false,
+            "parameters": {
+                "username": {
+                    "description": "Username of the employee to remove risk tags from",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": true,
+                    "contains": [
+                        "email"
+                    ],
+                    "value_list": [],
+                    "default": "",
+                    "order": 0
+                },
+                "risk_tags": {
+                    "description": "Comma separated list of risk tags",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": false,
+                    "value_list": [],
+                    "default": "",
+                    "order": 1
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.parameter.username",
+                    "data_type": "string",
+                    "contains": [
+                        "email"
+                    ],
+                    "column_name": "Username",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.parameter.risk_tags",
+                    "data_type": "string",
+                    "column_name": "Risk Tags",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "Status",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
+                },
+                {
+                    "column_name": "User ID",
+                    "data_path": "action_result.data.*.userId",
+                    "data_type": "string",
+                    "example_values": [
+                        "1"
+                    ],
+                    "column_order": 3
+                },
+                {
+                    "column_name": "Username",
+                    "data_path": "action_result.data.*.userName",
+                    "data_type": "string",
+                    "example_values": [
+                        "1"
+                    ],
+                    "contains": [
+                        "email"
+                    ],
+                    "column_order": 4
+                },
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
         }
     ]
 }
