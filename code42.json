@@ -579,9 +579,6 @@
                     "example_values": [
                         "1"
                     ],
-                    "contains": [
-                        "email"
-                    ],
                     "column_order": 2
                 },
                 {
