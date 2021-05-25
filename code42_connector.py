@@ -119,11 +119,14 @@ class Code42Connector(BaseConnector):
         status_message = f"{username} was removed from the departing employees list"
         return action_result.set_status(phantom.APP_SUCCESS, status_message)
 
+    @action_key("list_departing_employees")
     def _handle_list_departing_employees(self, param):
         self._log_action_handler()
         action_result = self._add_action_result(param)
         filter_type = param.get("filter_type", DepartingEmployeeFilters.OPEN)
-        results_generator = self.client.detectionlists.departing_employee.get_all(filter_type=filter_type)
+        results_generator = self.client.detectionlists.departing_employee.get_all(
+            filter_type=filter_type
+        )
 
         page = None
         for page in results_generator:
@@ -135,6 +138,7 @@ class Code42Connector(BaseConnector):
         action_result.update_summary({"total_count": total_count})
         return action_result.set_status(phantom.APP_SUCCESS)
 
+    @action_key("add_highrisk_employee")
     def _handle_add_high_risk_employee(self, param):
         self._log_action_handler()
         action_result = self._add_action_result(param)
@@ -145,6 +149,7 @@ class Code42Connector(BaseConnector):
         status_message = f"{username} was added to the high risk employees list"
         return action_result.set_status(phantom.APP_SUCCESS, status_message)
 
+    @action_key("remove_highrisk_employee")
     def _handle_remove_high_risk_employee(self, param):
         self._log_action_handler()
         action_result = self._add_action_result(param)
@@ -154,12 +159,15 @@ class Code42Connector(BaseConnector):
         action_result.add_data({"userId": user_id})
         status_message = f"{username} was removed from the high risk employees list"
         return action_result.set_status(phantom.APP_SUCCESS, status_message)
-    
+
+    @action_key("list_highrisk_employees")
     def _handle_list_high_risk_employees(self, param):
         self._log_action_handler()
         action_result = self._add_action_result(param)
         filter_type = param.get("filter_type", HighRiskEmployeeFilters.OPEN)
-        results_generator = self.client.detectionlists.high_risk_employee.get_all(filter_type=filter_type)
+        results_generator = self.client.detectionlists.high_risk_employee.get_all(
+            filter_type=filter_type
+        )
 
         page = None
         for page in results_generator:
