@@ -49,11 +49,13 @@ def assert_success(connector):
     status = action_results[0].get_status()
     assert status == phantom.app.APP_SUCCESS
 
+
 def assert_fail(connector):
     action_results = connector.get_action_results()
     assert len(action_results) == 1
     status = action_results[0].get_status()
     assert status == phantom.app.APP_ERROR
+
 
 def assert_successful_single_data(connector, expected_data):
     action_results = connector.get_action_results()
@@ -63,13 +65,15 @@ def assert_successful_single_data(connector, expected_data):
     assert data[0] == expected_data
     assert status == phantom.app.APP_SUCCESS
 
-def assert_succesful_summary(connector, expected_summary):
+
+def assert_successful_summary(connector, expected_summary):
     action_results = connector.get_action_results()
     assert len(action_results) == 1
     summary = action_results[0].get_summary()
     status = action_results[0].get_status()
     assert summary == expected_summary
     assert status == phantom.app.APP_SUCCESS
+
 
 def assert_successful_message(connector, expected_message):
     action_results = connector.get_action_results()
@@ -78,4 +82,8 @@ def assert_successful_message(connector, expected_message):
     status = action_results[0].get_status()
     assert msg == expected_message
     assert status == phantom.app.APP_SUCCESS
-    
+
+
+def attach_client(connector, client):
+    connector._client = client
+    return connector

@@ -766,10 +766,10 @@
                     "primary": false,
                     "contains": [],
                     "value_list": [
-                        "Open",
-                        "Dismissed",
-                        "Pending",
-                        "In Progress"
+                        "OPEN",
+                        "DISMISSED",
+                        "PENDING",
+                        "IN_PROGRESS"
                     ],
                     "default": "",
                     "order": 1
