@@ -453,7 +453,16 @@ class TestCode42DetectionListsConnector(object):
         }
         connector = _create_add_risk_tags_connector(mock_py42_for_risk_tags)
         connector.handle_action(param)
-        assert_successful_single_data(connector, _MOCK_ADD_RISK_TAGS_RESPONSE)
+        expected_response = dict(_MOCK_ADD_RISK_TAGS_RESPONSE)
+
+        # Transforms its scalar list to be a list of objects
+        # These tags are found in _MOCK_ADD_RISK_TAGS_RESPONSE.
+        expected_response["riskFactors"] = [
+            {"tag": "FLIGHT_RISK"},
+            {"tag": "HIGH_IMPACT_EMPLOYEE"}
+        ]
+
+        assert_successful_single_data(connector, expected_response)
 
     def test_handle_action_when_add_high_risk_tags_updates_summary(
         self, mock_py42_for_risk_tags
@@ -466,10 +475,7 @@ class TestCode42DetectionListsConnector(object):
         connector.handle_action(param)
 
         # Found in _MOCK_ADD_RISK_TAGS_RESPONSE
-        risk_tags_from_add_response = [
-            "FLIGHT_RISK",
-            "HIGH_IMPACT_EMPLOYEE",
-        ]
+        risk_tags_from_add_response = "FLIGHT_RISK,HIGH_IMPACT_EMPLOYEE"
 
         expected_summary = {"all_risk_tags_for_user": risk_tags_from_add_response}
         assert_succesful_summary(connector, expected_summary)
@@ -496,7 +502,15 @@ class TestCode42DetectionListsConnector(object):
         }
         connector = _create_remove_risk_tags_connector(mock_py42_for_risk_tags)
         connector.handle_action(param)
-        assert_successful_single_data(connector, _MOCK_REMOVE_RISK_TAGS_RESPONSE)
+
+        # Transforms its scalar list to be a list of objects
+        # These tags are found in _MOCK_ADD_RISK_TAGS_RESPONSE.
+        expected_response = dict(_MOCK_REMOVE_RISK_TAGS_RESPONSE)
+        expected_response["riskFactors"] = [
+            {"tag": "ELEVATED_ACCESS_PRIVILEGES"}
+        ]
+
+        assert_successful_single_data(connector, expected_response)
 
     def test_handle_action_when_remove_high_risk_tags_updates_summary(
         self, mock_py42_for_risk_tags
@@ -509,7 +523,7 @@ class TestCode42DetectionListsConnector(object):
         connector.handle_action(param)
 
         # Found in _MOCK_REMOVE_RISK_TAGS_RESPONSE
-        risk_tags_from_remove_response = ["ELEVATED_ACCESS_PRIVILEGES"]
+        risk_tags_from_remove_response = "ELEVATED_ACCESS_PRIVILEGES"
 
         expected_summary = {"all_risk_tags_for_user": risk_tags_from_remove_response}
         assert_succesful_summary(connector, expected_summary)
