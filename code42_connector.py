@@ -82,7 +82,6 @@ class Code42Connector(BaseConnector):
         self.save_progress("Test Connectivity Passed")
         return action_result.set_status(phantom.APP_SUCCESS)
 
-
     # DEPARTING EMPLOYEE ACTIONS
     def _handle_add_departing_employee(self, param, action_result):
         username = param["username"]
@@ -120,7 +119,6 @@ class Code42Connector(BaseConnector):
         action_result.update_summary({"total_count": total_count})
         return action_result.set_status(phantom.APP_SUCCESS)
 
-
     # HIGH RISK EMPLOYEE ACTIONS
     def _handle_add_high_risk_employee(self, param, action_result):
         username = param["username"]
@@ -152,7 +150,6 @@ class Code42Connector(BaseConnector):
         action_result.update_summary({"total_count": total_count})
         return action_result.set_status(phantom.APP_SUCCESS)
 
-
     def finalize(self):
         # Save the state, this data is saved across actions and app upgrades
         self.save_state(self._state)
@@ -163,6 +160,7 @@ class Code42Connector(BaseConnector):
         if not users:
             raise Exception(f"User '{username}' does not exist")
         return users[0]["userUid"]
+
 
 def main():
     import pudb

@@ -26,14 +26,14 @@ deploy_bypass() {
   sshpass -p "${PHANTOM_VM_PASSWORD}" scp phcode42v2.tgz "phantom@${PHANTOM_VM_IP_ADDR}":/home/phantom
   echo "Untarring on remote..."
   sshpass -p "${PHANTOM_VM_PASSWORD}" ssh phantom@${PHANTOM_VM_IP_ADDR} \
-		"rm -rf phcode42v2 && tar -xvf phcode42v2.tgz && cd phcode42v2 && phenv python /opt/phantom/bin/compile_app.pyc -i"
+		"rm -rf phcode42v2deploy && mkdir phcode42v2deploy && tar -xvf phcode42v2.tgz -C phcode42v2deploy && cd phcode42v2deploy && phenv python /opt/phantom/bin/compile_app.pyc -i"
 }
 
 deploy() {
   scp phcode42v2.tgz "phantom@${PHANTOM_VM_IP_ADDR}":/home/phantom
   echo "Untarring on remote..."
   ssh "phantom@${PHANTOM_VM_IP_ADDR}" \
-    "rm -rf phcode42v2 && tar -xvf phcode42v2.tgz && cd phcode42v2 && phenv python /opt/phantom/bin/compile_app.pyc -i"
+    "rm -rf phcode42v2deploy && mkdir phcode42v2deploy && tar -xvf phcode42v2.tgz -C phcode42v2deploy && cd phcode42v2deploy && phenv python /opt/phantom/bin/compile_app.pyc -i"
 }
 
 print_usage() {
