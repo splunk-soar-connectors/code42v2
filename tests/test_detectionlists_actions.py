@@ -77,6 +77,33 @@ _MOCK_LIST_HIGH_RISK_EMPLOYEES_RESPONSE = {
         }
     ]
 }
+_MOCK_ADD_RISK_TAGS_RESPONSE = {
+    "type$": "USER_V2",
+    "tenantId": "11114444-2222-3333-4444-666634888863",
+    "userId": _TEST_USER_UID,
+    "userName": "test@example.com",
+    "displayName": "Test Testerson",
+    "cloudUsernames": [
+        "test@example.com"
+    ],
+    "riskFactors": [
+        "FLIGHT_RISK",
+        "HIGH_IMPACT_EMPLOYEE",
+    ]
+}
+_MOCK_REMOVE_RISK_TAGS_RESPONSE = {
+    "type$": "USER_V2",
+    "tenantId": "11114444-2222-3333-4444-666634888863",
+    "userId": _TEST_USER_UID,
+    "userName": "test@example.com",
+    "displayName": "Test Testerson",
+    "cloudUsernames": [
+        "test@example.com"
+    ],
+    "riskFactors": [
+        "ELEVATED_ACCESS_PRIVILEGES"
+    ]
+}
 
 
 @fixture
@@ -102,6 +129,15 @@ def mock_py42_with_high_risk_employees(mocker, mock_py42_client):
 
     mock_py42_client.detectionlists.high_risk_employee.get_all.side_effect = gen
     return mock_py42_client
+
+
+@fixture
+def mock_py42_for_risk_tags(mocker, mock_py42_with_user):
+    add_response = create_mock_response(mocker, _MOCK_ADD_RISK_TAGS_RESPONSE)
+    remove_response = create_mock_response(mocker, _MOCK_REMOVE_RISK_TAGS_RESPONSE)
+    mock_py42_with_user.detectionlists.add_user_risk_tags.return_value = add_response
+    mock_py42_with_user.detectionlists.remove_user_risk_tags.return_value = remove_response
+    return mock_py42_with_user
 
 
 def _create_add_de_connector(client):
@@ -283,7 +319,7 @@ class TestCode42DetectionListsConnector(object):
             filter_type="OPEN"
         )
 
-    def test_handle_action_when_list_departing_employee_adds_info_to_summary(
+    def test_handle_action_when_list_departing_employee_updates_summary(
         self, mocker, mock_py42_with_departing_employees, mock_result_adder
     ):
         result = ActionResult(dict({}))
@@ -437,7 +473,7 @@ class TestCode42DetectionListsConnector(object):
             filter_type="OPEN"
         )
 
-    def test_handle_action_when_list_high_risk_employee_adds_info_to_summary(
+    def test_handle_action_when_list_high_risk_employee_updates_summary(
         self, mocker, mock_py42_with_high_risk_employees, mock_result_adder
     ):
         result = ActionResult(dict({}))
@@ -474,125 +510,106 @@ class TestCode42DetectionListsConnector(object):
         set_status_mock.assert_called_once_with(1)
 
     def test_handle_action_when_add_high_risk_tags_calls_add_with_expected_args(
-        self, mock_py42_with_user, mock_result_adder
+        self, mock_py42_for_risk_tags, mock_result_adder
     ):
         param = {
             "username": "test@example.com",
-            "riskTags": "FLIGHT_RISK,HIGH_IMPACT_EMPLOYEE"
+            "risk_tags": "FLIGHT_RISK,HIGH_IMPACT_EMPLOYEE"
         }
         result = ActionResult(dict(param))
         mock_result_adder.return_value = result
-        connector = _create_add_risk_tags_connector(mock_py42_with_user)
+        connector = _create_add_risk_tags_connector(mock_py42_for_risk_tags)
         connector.handle_action(param)
-        mock_py42_with_user.detectionlists.add_user_risk_tags.assert_called_once_with(
+        mock_py42_for_risk_tags.detectionlists.add_user_risk_tags.assert_called_once_with(
             "TEST_USER_UID", ["FLIGHT_RISK", "HIGH_IMPACT_EMPLOYEE"]
         )
 
     def test_handle_action_when_add_high_risk_tags_adds_response_items_to_data(
-        self, mocker, mock_py42_with_user, mock_result_adder
+        self, mocker, mock_py42_for_risk_tags, mock_result_adder
     ):
         param = {
             "username": "test@example.com",
-            "riskTags": "FLIGHT_RISK,HIGH_IMPACT_EMPLOYEE,ELEVATED_ACCESS_PRIVILEGES"
+            "risk_tags": "FLIGHT_RISK,HIGH_IMPACT_EMPLOYEE,ELEVATED_ACCESS_PRIVILEGES"
         }
-        response_data = {
-            "type$": "USER_V2",
-            "tenantId": "11114444-2222-3333-4444-666634888863",
-            "userId": _TEST_USER_UID,
-            "userName": "test@example.com",
-            "displayName": "Test Testerson",
-            "cloudUsernames": [
-                "test@example.com"
-            ],
-            "riskFactors": [
-                "FLIGHT_RISK",
-                "HIGH_IMPACT_EMPLOYEE",
-                "ELEVATED_ACCESS_PRIVILEGES"
-            ]
-        }
-        mock_py42_with_user.detectionlists.add_user_risk_tags.return_value = create_mock_response(
-            mocker, response_data
-        )
         result = ActionResult(dict(param))
         add_data_mock = mocker.MagicMock()
         result.add_data = add_data_mock
         mock_result_adder.return_value = result
-        connector = _create_add_risk_tags_connector(mock_py42_with_user)
+        connector = _create_add_risk_tags_connector(mock_py42_for_risk_tags)
         connector.handle_action(param)
-        add_data_mock.assert_called_once_with(response_data)
+        add_data_mock.assert_called_once_with(_MOCK_ADD_RISK_TAGS_RESPONSE)
 
-    def test_handle_action_when_add_high_risk_tags_and_is_successful_sets_success_status(
-        self, mocker, mock_py42_with_user, mock_result_adder
+    def test_handle_action_when_add_high_risk_tags_updates_summary(
+        self, mocker, mock_py42_for_risk_tags, mock_result_adder
     ):
         param = {
             "username": "test@example.com",
-            "riskTags": "FLIGHT_RISK,HIGH_IMPACT_EMPLOYEE"
+            "risk_tags": "FLIGHT_RISK,HIGH_IMPACT_EMPLOYEE"
         }
         result = ActionResult(dict(param))
-        set_status_mock = mocker.MagicMock()
-        result.set_status = set_status_mock
+        update_summary_mock = mocker.MagicMock()
+        result.update_summary = update_summary_mock
         mock_result_adder.return_value = result
-        connector = _create_add_risk_tags_connector(mock_py42_with_user)
+        connector = _create_add_risk_tags_connector(mock_py42_for_risk_tags)
         connector.handle_action(param)
-        expected_message = "test@example.com has been tagged with ['FLIGHT_RISK', 'HIGH_IMPACT_EMPLOYEE']"
-        set_status_mock.assert_called_once_with(1, expected_message)
+
+        # Found in _MOCK_ADD_RISK_TAGS_RESPONSE
+        risk_tags_from_add_response = [
+            "FLIGHT_RISK",
+            "HIGH_IMPACT_EMPLOYEE",
+        ]
+
+        update_summary_mock.assert_called_once_with(
+            {"all_user_risk_tags": risk_tags_from_add_response}
+        )
 
     def test_handle_action_when_remove_high_risk_tags_calls_remove_with_expected_args(
-        self, mock_py42_with_user, mock_result_adder
+        self, mock_py42_for_risk_tags, mock_result_adder
     ):
         param = {
             "username": "test@example.com",
-            "riskTags": "FLIGHT_RISK,HIGH_IMPACT_EMPLOYEE"
+            "risk_tags": "FLIGHT_RISK,HIGH_IMPACT_EMPLOYEE"
         }
         result = ActionResult(dict(param))
         mock_result_adder.return_value = result
-        connector = _create_remove_risk_tags_connector(mock_py42_with_user)
+        connector = _create_remove_risk_tags_connector(mock_py42_for_risk_tags)
         connector.handle_action(param)
-        mock_py42_with_user.detectionlists.remove_user_risk_tags.assert_called_once_with(
+        mock_py42_for_risk_tags.detectionlists.remove_user_risk_tags.assert_called_once_with(
             "TEST_USER_UID", ["FLIGHT_RISK", "HIGH_IMPACT_EMPLOYEE"]
         )
 
     def test_handle_action_when_remove_high_risk_tags_adds_response_items_to_data(
-        self, mocker, mock_py42_with_user, mock_result_adder
+        self, mocker, mock_py42_for_risk_tags, mock_result_adder
     ):
         param = {
             "username": "test@example.com",
-            "riskTags": "FLIGHT_RISK,HIGH_IMPACT_EMPLOYEE,ELEVATED_ACCESS_PRIVILEGES"
+            "risk_tags": "FLIGHT_RISK,HIGH_IMPACT_EMPLOYEE,ELEVATED_ACCESS_PRIVILEGES"
         }
-        response_data = {
-            "type$": "USER_V2",
-            "tenantId": "11114444-2222-3333-4444-666634888863",
-            "userId": _TEST_USER_UID,
-            "userName": "test@example.com",
-            "displayName": "Test Testerson",
-            "cloudUsernames": [
-                "test@example.com"
-            ],
-            "riskFactors": []
-        }
-        mock_py42_with_user.detectionlists.remove_user_risk_tags.return_value = create_mock_response(
-            mocker, response_data
-        )
         result = ActionResult(dict(param))
         add_data_mock = mocker.MagicMock()
         result.add_data = add_data_mock
         mock_result_adder.return_value = result
-        connector = _create_remove_risk_tags_connector(mock_py42_with_user)
+        connector = _create_remove_risk_tags_connector(mock_py42_for_risk_tags)
         connector.handle_action(param)
-        add_data_mock.assert_called_once_with(response_data)
+        add_data_mock.assert_called_once_with(_MOCK_REMOVE_RISK_TAGS_RESPONSE)
 
-    def test_handle_action_when_remove_high_risk_tags_and_is_successful_sets_success_status(
-        self, mocker, mock_py42_with_user, mock_result_adder
+    def test_handle_action_when_remove_high_risk_tags_updates_summary(
+        self, mocker, mock_py42_for_risk_tags, mock_result_adder
     ):
         param = {
             "username": "test@example.com",
-            "riskTags": "FLIGHT_RISK,HIGH_IMPACT_EMPLOYEE"
+            "risk_tags": "FLIGHT_RISK,HIGH_IMPACT_EMPLOYEE"
         }
         result = ActionResult(dict(param))
-        set_status_mock = mocker.MagicMock()
-        result.set_status = set_status_mock
+        update_summary_mock = mocker.MagicMock()
+        result.update_summary = update_summary_mock
         mock_result_adder.return_value = result
-        connector = _create_remove_risk_tags_connector(mock_py42_with_user)
+        connector = _create_remove_risk_tags_connector(mock_py42_for_risk_tags)
         connector.handle_action(param)
-        expected_message = "test@example.com has been untagged from ['FLIGHT_RISK', 'HIGH_IMPACT_EMPLOYEE']"
-        set_status_mock.assert_called_once_with(1, expected_message)
+
+        # Found in _MOCK_REMOVE_RISK_TAGS_RESPONSE
+        risk_tags_from_remove_response = ["ELEVATED_ACCESS_PRIVILEGES"]
+
+        update_summary_mock.assert_called_once_with(
+            {"all_user_risk_tags": risk_tags_from_remove_response}
+        )

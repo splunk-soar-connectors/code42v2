@@ -187,23 +187,25 @@ class Code42Connector(BaseConnector):
         self._log_action_handler()
         action_result = self._add_action_result(param)
         username = param["username"]
-        tags = param["risk_tags"].split(",")
+        tags = param["risk_tags"]
         user_id = self._get_user_id(username)
-        response = self.client.detectionlists.add_user_risk_tags(user_id, tags)
+        response = self.client.detectionlists.add_user_risk_tags(user_id, tags.split(","))
         action_result.add_data(response.data)
-        status_message = f"{username} has been tagged with {tags}"
-        return action_result.set_status(phantom.APP_SUCCESS, status_message)
+        total_user_risk_tags = response.data.get("riskFactors", [])
+        action_result.update_summary({"all_user_risk_tags": total_user_risk_tags})
+        return action_result.set_status(phantom.APP_SUCCESS)
 
     def _handle_remove_high_risk_tags(self, param):
         self._log_action_handler()
         action_result = self._add_action_result(param)
         username = param["username"]
-        tags = param["risk_tags"].split(",")
+        tags = param["risk_tags"]
         user_id = self._get_user_id(username)
-        response = self.client.detectionlists.remove_user_risk_tags(user_id, tags)
+        response = self.client.detectionlists.remove_user_risk_tags(user_id, tags.split(","))
         action_result.add_data(response.data)
-        status_message = f"{username} has been untagged from {tags}"
-        return action_result.set_status(phantom.APP_SUCCESS, status_message)
+        total_user_risk_tags = response.data.get("riskFactors", [])
+        action_result.update_summary({"all_user_risk_tags": total_user_risk_tags})
+        return action_result.set_status(phantom.APP_SUCCESS)
 
     def finalize(self):
         # Save the state, this data is saved across actions and app upgrades
