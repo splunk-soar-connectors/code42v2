@@ -3,15 +3,15 @@ import os
 from setuptools import find_packages, setup
 
 path_to_py42_wheel = os.path.join(os.getcwd(), 'wheels', 'py42-1.14.2-py2.py3-none-any.whl')
+path_to_stubs = os.path.join(os.getcwd(), 'stubs#egg=phantom')
 
 setup(
-    name="phcode42v2",
+    name="code42_connector",
     version="1.0.0",
     description="Code42 for Phantom",
-    packages=find_packages("src"),
-    package_dir={"":"src"},
-    install_requires=["requests>=2.3",
-                      "pytest==4.4.0",
+    py_modules=["code42_connector"],
+    install_requires=["pytest==4.4.0",
                       "pytest-mock==1.10.3",
-                      f"py42 @ file://localhost/{path_to_py42_wheel}"]
+                      f"py42 @ file://localhost/{path_to_py42_wheel}",
+                      f"stubs @ file://localhost/{path_to_stubs}"],
 )

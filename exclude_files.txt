@@ -3,7 +3,7 @@
 .vscode/
 .DS_Store
 test_connector.py
-src/*
+stubs/*
 __pycache__/*
 setup.py
 util.sh
