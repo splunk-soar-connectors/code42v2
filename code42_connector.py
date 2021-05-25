@@ -19,7 +19,9 @@ class RetVal(tuple):
     def __new__(cls, val1, val2=None):
         return tuple.__new__(RetVal, (val1, val2))
 
+
 ACTION_MAP = {}
+
 
 def action_handler_for(key):
     def wrapper(f):
@@ -27,6 +29,7 @@ def action_handler_for(key):
         return f
 
     return wrapper
+
 
 class Code42Connector(BaseConnector):
 
