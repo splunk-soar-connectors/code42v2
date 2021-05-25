@@ -106,14 +106,14 @@ pytest
 
 #### Running tests within a Phantom deployment
 
-You can clone this repository directly onto a Phantom server and run the tests on it. When you do this, the tests will use the phantom SDK instead of the stubs this project has defined in the `stubs` folder:
+You can clone this repository directly onto a Phantom server and run the tests on it. When you do this, the tests will use the Phantom SDK instead of the stubs this project has defined in the `stubs` folder:
 
 ```bash
 phenv pip install -e . # note: exclude [dev] to skip installing the stubs
 phenv pytest
 ```
 
-If you accidentally install the stubs into the Phantom environment, you can remove it via:
+If you accidentally install the stubs into the Phantom environment, you can remove them via:
 
 ```bash
 phenv pip uninstall stubs
