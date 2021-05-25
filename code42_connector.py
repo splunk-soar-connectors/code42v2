@@ -17,7 +17,6 @@ from phantom.base_connector import BaseConnector
 
 
 class RetVal(tuple):
-
     def __new__(cls, val1, val2=None):
         return tuple.__new__(RetVal, (val1, val2))
 
@@ -34,7 +33,6 @@ def action_handler_for(key):
 
 
 class Code42Connector(BaseConnector):
-
     def __init__(self):
         super(Code42Connector, self).__init__()
 
@@ -61,13 +59,17 @@ class Code42Connector(BaseConnector):
 
         action_handler = ACTION_MAP.get(action_id)
         action_result = self.add_action_result(ActionResult(dict(param)))
-        
+
         if not action_handler:
-            return action_result.set_status(phantom.APP_ERROR, f"Code42: Action {action_id} does not exist.")
-        
+            return action_result.set_status(
+                phantom.APP_ERROR, f"Code42: Action {action_id} does not exist."
+            )
+
         try:
             if not self._client:
-                self._client = py42.sdk.from_local_account(self._cloud_instance, self._username, self._password)
+                self._client = py42.sdk.from_local_account(
+                    self._cloud_instance, self._username, self._password
+                )
             self.save_progress(f"Code42: handling action {action_id}...")
             return action_handler(self, param, action_result)
         except Exception as ex:
@@ -87,7 +89,9 @@ class Code42Connector(BaseConnector):
         username = param["username"]
         departure_date = param.get("departure_date")
         user_id = self._get_user_id(username)
-        response = self._client.detectionlists.departing_employee.add(user_id, departure_date=departure_date)
+        response = self._client.detectionlists.departing_employee.add(
+            user_id, departure_date=departure_date
+        )
 
         note = param.get("note")
         if note:
@@ -109,7 +113,9 @@ class Code42Connector(BaseConnector):
     @action_handler_for("list_departing_employees")
     def _handle_list_departing_employees(self, param, action_result):
         filter_type = param.get("filter_type", DepartingEmployeeFilters.OPEN)
-        results_generator = self._client.detectionlists.departing_employee.get_all(filter_type=filter_type)
+        results_generator = self._client.detectionlists.departing_employee.get_all(
+            filter_type=filter_type
+        )
 
         page = None
         for page in results_generator:
@@ -144,7 +150,9 @@ class Code42Connector(BaseConnector):
     @action_handler_for("list_highrisk_employees")
     def _handle_list_high_risk_employees(self, param, action_result):
         filter_type = param.get("filter_type", HighRiskEmployeeFilters.OPEN)
-        results_generator = self._client.detectionlists.high_risk_employee.get_all(filter_type=filter_type)
+        results_generator = self._client.detectionlists.high_risk_employee.get_all(
+            filter_type=filter_type
+        )
 
         page = None
         for page in results_generator:
@@ -156,13 +164,13 @@ class Code42Connector(BaseConnector):
         action_result.update_summary({"total_count": total_count})
         return action_result.set_status(phantom.APP_SUCCESS)
 
-    @action_key("create_user")
-    def _handle_create_user(self, param):
-        self._log_action_handler()
-        action_result = self._add_action_result(param)
+    """ USER ACTIONS """
+
+    @action_handler_for("create_user")
+    def _handle_create_user(self, param, action_result):
         username = param["username"]
         password = param.get("password") or _generate_password()
-        response = self.client.users.create_user(
+        response = self._client.users.create_user(
             org_uid=param["org_uid"],
             username=username,
             email=username,
@@ -178,50 +186,42 @@ class Code42Connector(BaseConnector):
             phantom.APP_SUCCESS, f"{username} was created with user_id: {user_id}"
         )
 
-    @action_key("block_user")
-    def _handle_block_user(self, param):
-        self._log_action_handler()
-        action_result = self._add_action_result(param)
+    @action_handler_for("block_user")
+    def _handle_block_user(self, param, action_result):
         username = param["username"]
         user = self._get_user(username)
-        response = self.client.users.block(user["userId"])
+        response = self._client.users.block(user["userId"])
         action_result.add_data(response.data)
         action_result.update_summary({"user_id": user["userUid"], "username": username})
         return action_result.set_status(phantom.APP_SUCCESS, f"{username} was blocked")
 
-    @action_key("unblock_user")
-    def _handle_unblock_user(self, param):
-        self._log_action_handler()
-        action_result = self._add_action_result(param)
+    @action_handler_for("unblock_user")
+    def _handle_unblock_user(self, param, action_result):
         username = param["username"]
         user = self._get_user(username)
-        response = self.client.users.unblock(user["userId"])
+        response = self._client.users.unblock(user["userId"])
         action_result.add_data(response.data)
         action_result.update_summary({"user_id": user["userUid"], "username": username})
         return action_result.set_status(
             phantom.APP_SUCCESS, f"{username} was unblocked"
         )
 
-    @action_key("deactivate_user")
-    def _handle_deactivate_user(self, param):
-        self._log_action_handler()
-        action_result = self._add_action_result(param)
+    @action_handler_for("deactivate_user")
+    def _handle_deactivate_user(self, param, action_result):
         username = param["username"]
         user = self._get_user(username)
-        response = self.client.users.deactivate(user["userId"])
+        response = self._client.users.deactivate(user["userId"])
         action_result.add_data(response.data)
         action_result.update_summary({"user_id": user["userUid"], "username": username})
         return action_result.set_status(
             phantom.APP_SUCCESS, f"{username} was deactivated"
         )
 
-    @action_key("reactivate_user")
-    def _handle_reactivate_user(self, param):
-        self._log_action_handler()
-        action_result = self._add_action_result(param)
+    @action_handler_for("reactivate_user")
+    def _handle_reactivate_user(self, param, action_result):
         username = param["username"]
         user = self._get_user(username)
-        response = self.client.users.reactivate(user["userId"])
+        response = self._client.users.reactivate(user["userId"])
         action_result.add_data(response.data)
         action_result.update_summary({"user_id": user["userUid"], "username": username})
         return action_result.set_status(
@@ -234,7 +234,7 @@ class Code42Connector(BaseConnector):
         return phantom.APP_SUCCESS
 
     def _get_user(self, username):
-        users = self.client.users.get_by_username(username)["users"]
+        users = self._client.users.get_by_username(username)["users"]
         if not users:
             raise Exception(f"User '{username}' does not exist")
         return users[0]
