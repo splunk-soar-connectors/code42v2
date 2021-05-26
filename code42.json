@@ -631,16 +631,16 @@
             "versions": "EQ(*)"
         },
         {
-            "action": "add highrisk tags",
-            "identifier": "add_highrisk_tags",
+            "action": "add highrisk tag",
+            "identifier": "add_highrisk_tag",
             "description": "Add risk tags to a user",
             "verbose": "",
-            "undo": "remove highrisk tags",
+            "undo": "remove highrisk tag",
             "type": "contain",
             "read_only": false,
             "parameters": {
                 "username": {
-                    "description": "Username of the employee to add risk tags to",
+                    "description": "Username of the employee to add a risk tag to",
                     "data_type": "string",
                     "required": true,
                     "primary": true,
@@ -652,11 +652,20 @@
                     "order": 0
                 },
                 "risk_tags": {
-                    "description": "Comma separated list including values HIGH_IMPACT_EMPLOYEE, CONTRACT_EMPLOYEE, POOR_SECURITY_PRACTICES, PERFORMANCE_CONCERNS, FLIGHT_RISK, ELEVATED_ACCESS_PRIVILEGES, or SUSPICIOUS_SYSTEM_ACTIVITY",
+                    "description": "A risk tag to add to the user",
                     "data_type": "string",
                     "required": true,
                     "primary": false,
                     "default": "",
+                    "value_list": [
+                        "HIGH_IMPACT_EMPLOYEE",
+                        "CONTRACT_EMPLOYEE",
+                        "POOR_SECURITY_PRACTICES",
+                        "PERFORMANCE_CONCERNS",
+                        "FLIGHT_RISK",
+                        "ELEVATED_ACCESS_PRIVILEGES",
+                        "SUSPICIOUS_SYSTEM_ACTIVITY"
+                    ],
                     "order": 1
                 }
             },
@@ -671,9 +680,9 @@
                     "column_order": 0
                 },
                 {
-                    "data_path": "action_result.parameter.risk_tags",
+                    "data_path": "action_result.parameter.risk_tag",
                     "data_type": "string",
-                    "column_name": "Risk Tags",
+                    "column_name": "Risk Tag",
                     "column_order": 1
                 },
                 {
@@ -732,16 +741,16 @@
             "versions": "EQ(*)"
         },
         {
-            "action": "remove highrisk tags",
-            "identifier": "remove_highrisk_tags",
+            "action": "remove highrisk tag",
+            "identifier": "remove_highrisk_tag",
             "description": "Remove risk tags from a user",
             "verbose": "",
-            "undo": "add highrisk tags",
+            "undo": "add highrisk tag",
             "type": "contain",
             "read_only": false,
             "parameters": {
                 "username": {
-                    "description": "Username of the employee to remove risk tags from",
+                    "description": "Username of the employee to remove a risk tag from",
                     "data_type": "string",
                     "required": true,
                     "primary": true,
@@ -752,11 +761,20 @@
                     "default": "",
                     "order": 0
                 },
-                "risk_tags": {
-                    "description": "Comma separated list including values HIGH_IMPACT_EMPLOYEE, CONTRACT_EMPLOYEE, POOR_SECURITY_PRACTICES, PERFORMANCE_CONCERNS, FLIGHT_RISK, ELEVATED_ACCESS_PRIVILEGES, or SUSPICIOUS_SYSTEM_ACTIVITY",
+                "risk_tag": {
+                    "description": "A risk tag to remove from the user",
                     "data_type": "string",
                     "required": true,
                     "primary": false,
+                    "value_list": [
+                        "HIGH_IMPACT_EMPLOYEE",
+                        "CONTRACT_EMPLOYEE",
+                        "POOR_SECURITY_PRACTICES",
+                        "PERFORMANCE_CONCERNS",
+                        "FLIGHT_RISK",
+                        "ELEVATED_ACCESS_PRIVILEGES",
+                        "SUSPICIOUS_SYSTEM_ACTIVITY"
+                    ],
                     "default": "",
                     "order": 1
                 }
@@ -772,9 +790,9 @@
                     "column_order": 0
                 },
                 {
-                    "data_path": "action_result.parameter.risk_tags",
+                    "data_path": "action_result.parameter.risk_tag",
                     "data_type": "string",
-                    "column_name": "Risk Tags",
+                    "column_name": "Risk Tag",
                     "column_order": 1
                 },
                 {

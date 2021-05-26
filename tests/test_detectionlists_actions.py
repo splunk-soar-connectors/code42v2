@@ -207,13 +207,13 @@ def _create_get_hr_connector(client):
     return _attach_client(connector, client)
 
 
-def _create_add_risk_tags_connector(client):
-    connector = create_fake_connector("add_highrisk_tags")
+def _create_add_risk_tag_connector(client):
+    connector = create_fake_connector("add_highrisk_tag")
     return _attach_client(connector, client)
 
 
-def _create_remove_risk_tags_connector(client):
-    connector = create_fake_connector("remove_highrisk_tags")
+def _create_remove_risk_tag_connector(client):
+    connector = create_fake_connector("remove_highrisk_tag")
     return _attach_client(connector, client)
 
 
@@ -548,27 +548,27 @@ class TestCode42DetectionListsConnector(object):
         connector.handle_action(param)
         assert_successful_message(connector, "test@example.com is not a high-risk employee")
 
-    def test_handle_action_when_add_high_risk_tags_calls_add_with_expected_args(
+    def test_handle_action_when_add_high_risk_tag_calls_add_with_expected_args(
         self, mock_py42_for_risk_tags
     ):
         param = {
             "username": "test@example.com",
-            "risk_tags": "FLIGHT_RISK,HIGH_IMPACT_EMPLOYEE",
+            "risk_tag": "FLIGHT_RISK",
         }
-        connector = _create_add_risk_tags_connector(mock_py42_for_risk_tags)
+        connector = _create_add_risk_tag_connector(mock_py42_for_risk_tags)
         connector.handle_action(param)
         mock_py42_for_risk_tags.detectionlists.add_user_risk_tags.assert_called_once_with(
-            "TEST_USER_UID", ["FLIGHT_RISK", "HIGH_IMPACT_EMPLOYEE"]
+            "TEST_USER_UID", "FLIGHT_RISK"
         )
 
-    def test_handle_action_when_add_high_risk_tags_adds_response_items_to_data(
+    def test_handle_action_when_add_high_risk_tag_adds_response_items_to_data(
         self, mock_py42_for_risk_tags
     ):
         param = {
             "username": "test@example.com",
-            "risk_tags": "FLIGHT_RISK,HIGH_IMPACT_EMPLOYEE,ELEVATED_ACCESS_PRIVILEGES",
+            "risk_tag": "HIGH_IMPACT_EMPLOYEE",
         }
-        connector = _create_add_risk_tags_connector(mock_py42_for_risk_tags)
+        connector = _create_add_risk_tag_connector(mock_py42_for_risk_tags)
         connector.handle_action(param)
         expected_response = dict(_MOCK_ADD_RISK_TAGS_RESPONSE)
 
@@ -581,14 +581,14 @@ class TestCode42DetectionListsConnector(object):
 
         assert_successful_single_data(connector, expected_response)
 
-    def test_handle_action_when_add_high_risk_tags_updates_summary(
+    def test_handle_action_when_add_high_risk_tag_updates_summary(
         self, mock_py42_for_risk_tags
     ):
         param = {
             "username": "test@example.com",
-            "risk_tags": "FLIGHT_RISK,HIGH_IMPACT_EMPLOYEE",
+            "risk_tag": "FLIGHT_RISK",
         }
-        connector = _create_add_risk_tags_connector(mock_py42_for_risk_tags)
+        connector = _create_add_risk_tag_connector(mock_py42_for_risk_tags)
         connector.handle_action(param)
 
         # Found in _MOCK_ADD_RISK_TAGS_RESPONSE
@@ -597,27 +597,27 @@ class TestCode42DetectionListsConnector(object):
         expected_summary = {"all_risk_tags_for_user": risk_tags_from_add_response}
         assert_succesful_summary(connector, expected_summary)
 
-    def test_handle_action_when_remove_high_risk_tags_calls_remove_with_expected_args(
+    def test_handle_action_when_remove_high_risk_tag_calls_remove_with_expected_args(
         self, mock_py42_for_risk_tags
     ):
         param = {
             "username": "test@example.com",
-            "risk_tags": "FLIGHT_RISK,HIGH_IMPACT_EMPLOYEE",
+            "risk_tag": "HIGH_IMPACT_EMPLOYEE",
         }
-        connector = _create_remove_risk_tags_connector(mock_py42_for_risk_tags)
+        connector = _create_remove_risk_tag_connector(mock_py42_for_risk_tags)
         connector.handle_action(param)
         mock_py42_for_risk_tags.detectionlists.remove_user_risk_tags.assert_called_once_with(
-            "TEST_USER_UID", ["FLIGHT_RISK", "HIGH_IMPACT_EMPLOYEE"]
+            "TEST_USER_UID", "HIGH_IMPACT_EMPLOYEE"
         )
 
-    def test_handle_action_when_remove_high_risk_tags_adds_response_items_to_data(
+    def test_handle_action_when_remove_high_risk_tag_adds_response_items_to_data(
         self, mock_py42_for_risk_tags
     ):
         param = {
             "username": "test@example.com",
-            "risk_tags": "FLIGHT_RISK,HIGH_IMPACT_EMPLOYEE,ELEVATED_ACCESS_PRIVILEGES",
+            "risk_tag": "ELEVATED_ACCESS_PRIVILEGES",
         }
-        connector = _create_remove_risk_tags_connector(mock_py42_for_risk_tags)
+        connector = _create_remove_risk_tag_connector(mock_py42_for_risk_tags)
         connector.handle_action(param)
 
         # Transforms its scalar list to be a list of objects
@@ -627,14 +627,14 @@ class TestCode42DetectionListsConnector(object):
 
         assert_successful_single_data(connector, expected_response)
 
-    def test_handle_action_when_remove_high_risk_tags_updates_summary(
+    def test_handle_action_when_remove_high_risk_tag_updates_summary(
         self, mock_py42_for_risk_tags
     ):
         param = {
             "username": "test@example.com",
-            "risk_tags": "FLIGHT_RISK,HIGH_IMPACT_EMPLOYEE",
+            "risk_tag": "FLIGHT_RISK",
         }
-        connector = _create_remove_risk_tags_connector(mock_py42_for_risk_tags)
+        connector = _create_remove_risk_tag_connector(mock_py42_for_risk_tags)
         connector.handle_action(param)
 
         # Found in _MOCK_REMOVE_RISK_TAGS_RESPONSE

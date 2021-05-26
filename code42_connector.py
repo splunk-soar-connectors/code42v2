@@ -35,10 +35,6 @@ def _convert_to_obj_list(scalar_list, sub_object_key="item"):
     return [{sub_object_key: item} for item in scalar_list]
 
 
-def _convert_csv_to_list(comma_sep_string):
-    return comma_sep_string.replace(" ", "").split(",")
-
-
 class Code42Connector(BaseConnector):
     def __init__(self):
         super(Code42Connector, self).__init__()
@@ -198,24 +194,24 @@ class Code42Connector(BaseConnector):
             status_message = f"{username} is not a high-risk employee"
             return action_result.set_status(phantom.APP_SUCCESS, status_message)
 
-    @action_handler_for("add_highrisk_tags")
-    def _handle_add_high_risk_tags(self, param, action_result):
+    @action_handler_for("add_highrisk_tag")
+    def _handle_add_high_risk_tag(self, param, action_result):
         username = param["username"]
-        tags = _convert_csv_to_list(param["risk_tags"])
+        risk_tag = param["risk_tag"]
         user_id = self._get_user_id(username)
-        response = self._client.detectionlists.add_user_risk_tags(user_id, tags)
+        response = self._client.detectionlists.add_user_risk_tags(user_id, risk_tag)
         all_tags = response.data.get("riskFactors", [])
         response["riskFactors"] = _convert_to_obj_list(all_tags, "tag")
         action_result.add_data(response.data)
         action_result.update_summary({"all_risk_tags_for_user": ",".join(all_tags)})
         return action_result.set_status(phantom.APP_SUCCESS)
 
-    @action_handler_for("remove_highrisk_tags")
-    def _handle_remove_high_risk_tags(self, param, action_result):
+    @action_handler_for("remove_highrisk_tag")
+    def _handle_remove_high_risk_tag(self, param, action_result):
         username = param["username"]
-        tags = _convert_csv_to_list(param["risk_tags"])
+        risk_tag = param["risk_tag"]
         user_id = self._get_user_id(username)
-        response = self._client.detectionlists.remove_user_risk_tags(user_id, tags)
+        response = self._client.detectionlists.remove_user_risk_tags(user_id, risk_tag)
         all_tags = response.data.get("riskFactors", [])
         response["riskFactors"] = _convert_to_obj_list(all_tags, "tag")
         action_result.add_data(response.data)
