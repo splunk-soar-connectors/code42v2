@@ -8,7 +8,7 @@ test_connector.py
 stubs
 __pycache__
 setup.py
-util.sh
+Makefile
 *.md
 LICENSE
 dist
