@@ -651,7 +651,7 @@
                     "default": "",
                     "order": 0
                 },
-                "risk_tags": {
+                "risk_tag": {
                     "description": "A risk tag to add to the user",
                     "data_type": "string",
                     "required": true,
