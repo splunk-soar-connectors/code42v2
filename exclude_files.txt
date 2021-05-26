@@ -17,3 +17,4 @@ tests
 venv
 build-scripts
 .compile_app.ignore
+.pre-commit-config.yaml
