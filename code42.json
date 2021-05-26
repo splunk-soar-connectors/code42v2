@@ -767,7 +767,7 @@
                     "contains": [],
                     "value_list": [
                         "OPEN",
-                        "DISMISSED",
+                        "RESOLVED",
                         "PENDING",
                         "IN_PROGRESS"
                     ],
@@ -829,6 +829,87 @@
                     "data_type": "string",
                     "column_name": "status",
                     "column_order": 4
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "set alert state",
+            "identifier": "set_alert_state",
+            "description": "Set the state of the alert",
+            "verbose": "",
+            "type": "investigate",
+            "read_only": false,
+            "parameters": {
+                "alert_id": {
+                    "description": "Alert ID",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": true,
+                    "contains": [],
+                    "value_list": [],
+                    "default": "",
+                    "order": 0
+                },
+                "alert_state": {
+                    "description": "Alert State",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": true,
+                    "contains": [],
+                    "value_list": [
+                        "OPEN",
+                        "RESOLVED",
+                        "PENDING",
+                        "IN_PROGRESS"
+                    ],
+                    "default": "",
+                    "order": 1
+                },
+                "note": {
+                    "description": "A note to include",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": false,
+                    "default": "",
+                    "order": 2
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.parameter.alert_id",
+                    "data_type": "string",
+                    "contains": [],
+                    "column_name": "alert_id",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.parameter.alert_state",
+                    "data_type": "string",
+                    "contains": [],
+                    "column_name": "alert_state",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "status",
+                    "column_order": 2
                 },
                 {
                     "data_path": "action_result.message",
