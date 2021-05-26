@@ -634,7 +634,7 @@
             "action": "get alert details",
             "identifier": "get_alert_details",
             "description": "Get alert details",
-            "verbose": "Get details for a Code42 alert",
+            "verbose": "",
             "type": "investigate",
             "read_only": true,
             "parameters": {
@@ -745,7 +745,7 @@
             "action": "search alerts",
             "identifier": "search_alerts",
             "description": "Search Alerts",
-            "verbose": "",
+            "verbose": "Defaults to last 30 days if no date range is provided.",
             "type": "investigate",
             "read_only": true,
             "parameters": {
@@ -754,7 +754,9 @@
                     "data_type": "string",
                     "required": false,
                     "primary": false,
-                    "contains": [],
+                    "contains": [
+                        "email"
+                    ],
                     "value_list": [],
                     "default": "",
                     "order": 0
@@ -764,7 +766,6 @@
                     "data_type": "string",
                     "required": false,
                     "primary": false,
-                    "contains": [],
                     "value_list": [
                         "OPEN",
                         "RESOLVED",
@@ -779,7 +780,6 @@
                     "data_type": "string",
                     "required": false,
                     "primary": false,
-                    "contains": [],
                     "value_list": [],
                     "default": "",
                     "order": 2
@@ -789,7 +789,6 @@
                     "data_type": "string",
                     "required": false,
                     "primary": false,
-                    "contains": [],
                     "value_list": [],
                     "default": "",
                     "order": 3
@@ -799,29 +798,28 @@
                 {
                     "data_path": "action_result.parameter.username",
                     "data_type": "string",
-                    "contains": [],
-                    "column_name": "username",
+                    "contains": [
+                        "email"
+                    ],
+                    "column_name": "Username",
                     "column_order": 0
                 },
                 {
                     "data_path": "action_result.parameter.alert_state",
                     "data_type": "string",
-                    "contains": [],
-                    "column_name": "alert_state",
+                    "column_name": "Alert State",
                     "column_order": 1
                 },
                 {
                     "data_path": "action_result.parameter.start_date",
                     "data_type": "string",
-                    "contains": [],
-                    "column_name": "start_date",
+                    "column_name": "Start Date",
                     "column_order": 2
                 },
                 {
                     "data_path": "action_result.parameter.end_date",
                     "data_type": "string",
-                    "contains": [],
-                    "column_name": "end_date",
+                    "column_name": "End Date",
                     "column_order": 3
                 },
                 {
@@ -829,6 +827,24 @@
                     "data_type": "string",
                     "column_name": "status",
                     "column_order": 4
+                },
+                {
+                    "data_path": "action_result.data.name",
+                    "data_type": "string",
+                    "column_name": "Alert Name",
+                    "column_order": 5
+                },
+                {
+                    "data_path": "action_result.data.severity",
+                    "data_type": "string",
+                    "column_name": "Severity",
+                    "column_order": 6
+                },
+                {
+                    "data_path": "action_result.data.description",
+                    "data_type": "string",
+                    "column_name": "Description",
+                    "column_order": 7
                 },
                 {
                     "data_path": "action_result.message",
@@ -841,6 +857,10 @@
                 {
                     "data_path": "summary.total_objects_successful",
                     "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
                 }
             ],
             "render": {
@@ -861,7 +881,6 @@
                     "data_type": "string",
                     "required": true,
                     "primary": true,
-                    "contains": [],
                     "value_list": [],
                     "default": "",
                     "order": 0
@@ -871,7 +890,6 @@
                     "data_type": "string",
                     "required": true,
                     "primary": true,
-                    "contains": [],
                     "value_list": [
                         "OPEN",
                         "RESOLVED",
@@ -894,22 +912,26 @@
                 {
                     "data_path": "action_result.parameter.alert_id",
                     "data_type": "string",
-                    "contains": [],
-                    "column_name": "alert_id",
+                    "column_name": "Alert Id",
                     "column_order": 0
                 },
                 {
                     "data_path": "action_result.parameter.alert_state",
                     "data_type": "string",
-                    "contains": [],
-                    "column_name": "alert_state",
+                    "column_name": "Alert State",
                     "column_order": 1
+                },
+                {
+                    "data_path": "action_result.parameter.note",
+                    "data_type": "string",
+                    "column_name": "Note",
+                    "column_order": 2
                 },
                 {
                     "data_path": "action_result.status",
                     "data_type": "string",
                     "column_name": "status",
-                    "column_order": 2
+                    "column_order": 3
                 },
                 {
                     "data_path": "action_result.message",
@@ -922,6 +944,10 @@
                 {
                     "data_path": "summary.total_objects_successful",
                     "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
                 }
             ],
             "render": {

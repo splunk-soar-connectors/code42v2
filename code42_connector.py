@@ -186,12 +186,7 @@ class Code42Connector(BaseConnector):
         end_date = param.get("end_date")
         alert_state = param.get("alert_state")
 
-        if (
-            username is None
-            and start_date is None
-            and end_date is None
-            and alert_state is None
-        ):
+        if username is None and start_date is None and end_date is None and alert_state is None:
             return action_result.set_status(
                 phantom.APP_ERROR, "Must supply a search term."
             )
