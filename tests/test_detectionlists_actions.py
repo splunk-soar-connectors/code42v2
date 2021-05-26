@@ -66,10 +66,7 @@ _MOCK_GET_HIGH_RISK_EMPLOYEE_RESPONSE = {
     "createdAt": "2021-05-25T18:43:29.6890000Z",
     "status": "OPEN",
     "cloudUsernames": ["alias1"],
-    "riskFactors": [
-        "FLIGHT_RISK",
-        "CONTRACT_EMPLOYEE"
-    ]
+    "riskFactors": ["FLIGHT_RISK", "CONTRACT_EMPLOYEE"],
 }
 _MOCK_LIST_HIGH_RISK_EMPLOYEES_RESPONSE = {
     "totalCount": 2,
@@ -109,10 +106,7 @@ _MOCK_ADD_RISK_TAGS_RESPONSE = {
     "userName": "test@example.com",
     "displayName": "Test Testerson",
     "cloudUsernames": ["test@example.com"],
-    "riskFactors": [
-        "FLIGHT_RISK",
-        "HIGH_IMPACT_EMPLOYEE",
-    ],
+    "riskFactors": ["FLIGHT_RISK", "HIGH_IMPACT_EMPLOYEE",],
 }
 _MOCK_REMOVE_RISK_TAGS_RESPONSE = {
     "type$": "USER_V2",
@@ -244,8 +238,8 @@ class TestCode42DetectionListsConnector(object):
             "status": "OPEN",
             "cloudUsernames": ["test@example.com"],
         }
-        mock_py42_with_user.detectionlists.departing_employee.add.return_value = (
-            create_mock_response(mocker, response_data)
+        mock_py42_with_user.detectionlists.departing_employee.add.return_value = create_mock_response(
+            mocker, response_data
         )
 
         connector = _create_add_de_connector(mock_py42_with_user)
@@ -290,8 +284,8 @@ class TestCode42DetectionListsConnector(object):
         param = {"username": "test@example.com"}
 
         # This API call does not have response data.
-        mock_py42_with_user.detectionlists.departing_employee.remove.return_value = (
-            create_mock_response(mocker, {})
+        mock_py42_with_user.detectionlists.departing_employee.remove.return_value = create_mock_response(
+            mocker, {}
         )
         connector = _create_remove_de_connector(mock_py42_with_user)
         connector.handle_action(param)
@@ -361,8 +355,8 @@ class TestCode42DetectionListsConnector(object):
         self, mocker, mock_py42_with_user
     ):
         param = {"username": "test@example.com"}
-        mock_py42_with_user.detectionlists.departing_employee.get.return_value = (
-            create_mock_response(mocker, _MOCK_GET_DEPARTING_EMPLOYEE_RESPONSE)
+        mock_py42_with_user.detectionlists.departing_employee.get.return_value = create_mock_response(
+            mocker, _MOCK_GET_DEPARTING_EMPLOYEE_RESPONSE
         )
         connector = _create_get_de_connector(mock_py42_with_user)
         connector.handle_action(param)
@@ -380,8 +374,8 @@ class TestCode42DetectionListsConnector(object):
         self, mock_py42_with_user
     ):
         param = {"username": "test@example.com"}
-        mock_py42_with_user.detectionlists.departing_employee.get.side_effect = (
-            Py42NotFoundError(mock.Mock(status=404))
+        mock_py42_with_user.detectionlists.departing_employee.get.side_effect = Py42NotFoundError(
+            mock.Mock(status=404)
         )
         connector = _create_get_de_connector(mock_py42_with_user)
         connector.handle_action(param)
@@ -412,8 +406,8 @@ class TestCode42DetectionListsConnector(object):
             "status": "OPEN",
             "cloudUsernames": ["test@example.com"],
         }
-        mock_py42_with_user.detectionlists.high_risk_employee.add.return_value = (
-            create_mock_response(mocker, response_data)
+        mock_py42_with_user.detectionlists.high_risk_employee.add.return_value = create_mock_response(
+            mocker, response_data
         )
 
         connector = _create_add_hr_connector(mock_py42_with_user)
@@ -447,8 +441,8 @@ class TestCode42DetectionListsConnector(object):
         param = {"username": "test@example.com"}
 
         # This API call does not have response data.
-        mock_py42_with_user.detectionlists.high_risk_employee.remove.return_value = (
-            create_mock_response(mocker, {})
+        mock_py42_with_user.detectionlists.high_risk_employee.remove.return_value = create_mock_response(
+            mocker, {}
         )
         connector = _create_remove_hr_connector(mock_py42_with_user)
         connector.handle_action(param)
@@ -518,15 +512,15 @@ class TestCode42DetectionListsConnector(object):
         self, mocker, mock_py42_with_user
     ):
         param = {"username": "test@example.com"}
-        mock_py42_with_user.detectionlists.high_risk_employee.get.return_value = (
-            create_mock_response(mocker, _MOCK_GET_HIGH_RISK_EMPLOYEE_RESPONSE)
+        mock_py42_with_user.detectionlists.high_risk_employee.get.return_value = create_mock_response(
+            mocker, _MOCK_GET_HIGH_RISK_EMPLOYEE_RESPONSE
         )
         connector = _create_get_hr_connector(mock_py42_with_user)
         connector.handle_action(param)
         expected_response = dict(_MOCK_GET_HIGH_RISK_EMPLOYEE_RESPONSE)
         expected_response["riskFactors"] = [
             {"tag": "FLIGHT_RISK"},
-            {"tag": "CONTRACT_EMPLOYEE"}
+            {"tag": "CONTRACT_EMPLOYEE"},
         ]
         assert_successful_single_data(connector, expected_response)
 
@@ -542,8 +536,8 @@ class TestCode42DetectionListsConnector(object):
         self, mock_py42_with_user
     ):
         param = {"username": "test@example.com"}
-        mock_py42_with_user.detectionlists.high_risk_employee.get.side_effect = (
-            Py42NotFoundError(mock.Mock(status=404))
+        mock_py42_with_user.detectionlists.high_risk_employee.get.side_effect = Py42NotFoundError(
+            mock.Mock(status=404)
         )
         connector = _create_get_hr_connector(mock_py42_with_user)
         connector.handle_action(param)
