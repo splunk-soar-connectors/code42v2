@@ -1,5 +1,6 @@
 from phantom.app import APP_ERROR
 
+
 class ActionResult:
     def __init__(self, param):
         self._status_code = APP_ERROR
