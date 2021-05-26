@@ -35,6 +35,10 @@ def _convert_to_obj_list(scalar_list, sub_object_key="item"):
     return [{sub_object_key: item} for item in scalar_list]
 
 
+def _convert_csv_to_list(comma_sep_string):
+    return comma_sep_string.replace(" ", "").split(",")
+
+
 class Code42Connector(BaseConnector):
     def __init__(self):
         super(Code42Connector, self).__init__()
@@ -168,7 +172,7 @@ class Code42Connector(BaseConnector):
     @action_handler_for("add_highrisk_tags")
     def _handle_add_high_risk_tags(self, param, action_result):
         username = param["username"]
-        tags = param["risk_tags"].replace(" ", "").split(",")
+        tags = _convert_csv_to_list(param["risk_tags"])
         user_id = self._get_user_id(username)
         response = self._client.detectionlists.add_user_risk_tags(user_id, tags)
         all_tags = response.data.get("riskFactors", [])
@@ -180,7 +184,7 @@ class Code42Connector(BaseConnector):
     @action_handler_for("remove_highrisk_tags")
     def _handle_remove_high_risk_tags(self, param, action_result):
         username = param["username"]
-        tags = param["risk_tags"].replace(" ", "").split(",")
+        tags = _convert_csv_to_list(param["risk_tags"])
         user_id = self._get_user_id(username)
         response = self._client.detectionlists.remove_user_risk_tags(user_id, tags)
         all_tags = response.data.get("riskFactors", [])
