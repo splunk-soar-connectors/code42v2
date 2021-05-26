@@ -1096,8 +1096,9 @@
                     "order": 1
                 },
                 "password": {
-                    "description":  "Password for newly created user (defaults to randomly generated password, requiring reset before login)",
-                    "data_type": "string",
+                    "description":  "Password for newly created user",
+                    "verbose": "Defaults to no password set, which leaves user in 'invited' state. They will need to reset password via email prior to first login.",
+                    "data_type": "password",
                     "required": false,
                     "primary": false,
                     "default": null,

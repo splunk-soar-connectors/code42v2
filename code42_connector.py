@@ -232,12 +232,11 @@ class Code42Connector(BaseConnector):
     @action_handler_for("create_user")
     def _handle_create_user(self, param, action_result):
         username = param["username"]
-        password = param.get("password") or _generate_password()
         response = self._client.users.create_user(
             org_uid=param["org_uid"],
             username=username,
             email=username,
-            password=password,
+            password=param.get("password"),
             first_name=param.get("first_name"),
             last_name=param.get("last_name"),
             notes=param.get("notes"),
@@ -375,17 +374,6 @@ def main():
         print(json.dumps(json.loads(ret_val), indent=4))
 
     exit(0)
-
-
-def _generate_password():
-    upper = random.choices(string.ascii_uppercase, k=5)
-    lower = random.choices(string.ascii_lowercase, k=5)
-    numbers = random.choices(string.digits, k=5)
-    special = random.choices(string.punctuation, k=5)
-    chars = upper + lower + numbers + special
-    for _ in range(random.choice(range(1000))):
-        random.shuffle(chars)
-    return "".join(chars)
 
 
 if __name__ == "__main__":
