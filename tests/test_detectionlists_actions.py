@@ -569,6 +569,7 @@ class TestCode42DetectionListsConnector(object):
         mock_py42_for_risk_tags.detectionlists.add_user_risk_tags.assert_called_once_with(
             "TEST_USER_UID", "FLIGHT_RISK"
         )
+        assert_success(connector)
 
     def test_handle_action_when_add_high_risk_tag_adds_response_items_to_data(
         self, mock_py42_for_risk_tags
@@ -618,6 +619,7 @@ class TestCode42DetectionListsConnector(object):
         mock_py42_for_risk_tags.detectionlists.remove_user_risk_tags.assert_called_once_with(
             "TEST_USER_UID", "HIGH_IMPACT_EMPLOYEE"
         )
+        assert_success(connector)
 
     def test_handle_action_when_remove_high_risk_tag_adds_response_items_to_data(
         self, mock_py42_for_risk_tags
