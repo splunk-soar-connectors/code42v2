@@ -731,7 +731,7 @@
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.summary.all_risk_tags_for_user",
+                    "data_path": "action_result.summary",
                     "data_type": "string"
                 }
             ],
@@ -841,7 +841,7 @@
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.summary.all_risk_tags_for_user",
+                    "data_path": "action_result.summary",
                     "data_type": "string"
                 }
             ],
