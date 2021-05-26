@@ -354,6 +354,111 @@
             "versions": "EQ(*)"
         },
         {
+            "action": "get departing employee",
+            "identifier": "get_departing_employee",
+            "description": "Get a departing employee",
+            "verbose": "This action is useful for checking if a user is on t",
+            "type": "investigate",
+            "read_only": true,
+            "parameters": {
+                "username": {
+                    "description": "The username of the departing employee to get",
+                    "data_type": "string",
+                    "contains": [
+                        "email"
+                    ],
+                    "required": true,
+                    "primary": true,
+                    "order": 0
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.parameter.username",
+                    "data_type": "string",
+                    "column_name": "Filter Type",
+                    "contains": [
+                        "email"
+                    ],
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "status",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
+                },
+                {
+                    "column_name": "User ID",
+                    "data_path": "action_result.data.*.userId",
+                    "data_type": "string",
+                    "example_values": [
+                        "1"
+                    ],
+                    "column_order": 2
+                },
+                {
+                    "column_name": "Username",
+                    "data_path": "action_result.data.*.userName",
+                    "data_type": "string",
+                    "example_values": [
+                        "test@example.com"
+                    ],
+                    "contains": [
+                        "email"
+                    ],
+                    "column_order": 3
+                },
+                {
+                    "column_name": "Notes",
+                    "data_path": "action_result.data.*.notes",
+                    "data_type": "string",
+                    "example_values": [
+                        "note"
+                    ],
+                    "column_order": 4
+                },
+                {
+                    "column_name": "Creation Date",
+                    "data_path": "action_result.data.*.createdAt",
+                    "data_type": "string",
+                    "example_values": [
+                        "2021-05-21T00:00:00.0000000Z"
+                    ],
+                    "column_order": 5
+                },
+                {
+                    "column_name": "Num Events",
+                    "data_path": "action_result.data.*.numEvents",
+                    "data_type": "numeric",
+                    "example_values": [
+                        0
+                    ],
+                    "column_order": 6
+                },
+                {
+                    "data_path": "action_result.summary.is_departing_employee",
+                    "data_type": "boolean"
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
             "action": "add highrisk employee",
             "identifier": "add_highrisk_employee",
             "description": "Add a high risk employee to the high risk employees detection list",
@@ -623,6 +728,337 @@
                 {
                     "data_path": "action_result.summary.total_count",
                     "data_type": "numeric"
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "get highrisk employee",
+            "identifier": "get_highrisk_employee",
+            "description": "Get a high risk employee",
+            "verbose": "",
+            "type": "investigate",
+            "read_only": true,
+            "parameters": {
+                "username": {
+                    "description": "The username of the high risk employee to get",
+                    "data_type": "string",
+                    "contains": [
+                        "email"
+                    ],
+                    "required": true,
+                    "primary": true,
+                    "order": 0
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.parameter.username",
+                    "data_type": "string",
+                    "column_name": "Filter Type",
+                    "contains": [
+                        "email"
+                    ],
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "status",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
+                },
+                {
+                    "column_name": "User ID",
+                    "data_path": "action_result.data.*.userId",
+                    "data_type": "string",
+                    "example_values": [
+                        "1"
+                    ],
+                    "column_order": 2
+                },
+                {
+                    "column_name": "Username",
+                    "data_path": "action_result.data.*.userName",
+                    "data_type": "string",
+                    "example_values": [
+                        "test@example.com"
+                    ],
+                    "contains": [
+                        "email"
+                    ],
+                    "column_order": 3
+                },
+                {
+                    "column_name": "Notes",
+                    "data_path": "action_result.data.*.notes",
+                    "data_type": "string",
+                    "example_values": [
+                        "note"
+                    ],
+                    "column_order": 4
+                },
+                {
+                    "column_name": "Creation Date",
+                    "data_path": "action_result.data.*.createdAt",
+                    "data_type": "string",
+                    "example_values": [
+                        "2021-05-21T00:00:00.0000000Z"
+                    ],
+                    "column_order": 5
+                },
+                {
+                    "column_name": "Num Events",
+                    "data_path": "action_result.data.*.numEvents",
+                    "data_type": "numeric",
+                    "example_values": [
+                        0
+                    ],
+                    "column_order": 6
+                },
+                {
+                    "column_name": "Risk Tag",
+                    "data_path": "action_result.data.*.riskFactors.*.tag",
+                    "column_order": 7,
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.summary.is_high_risk_employee",
+                    "data_type": "boolean"
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "add highrisk tag",
+            "identifier": "add_highrisk_tag",
+            "description": "Add a risk tag to a user",
+            "verbose": "",
+            "undo": "remove highrisk tag",
+            "type": "contain",
+            "read_only": false,
+            "parameters": {
+                "username": {
+                    "description": "Username of the employee to add a risk tag to",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": true,
+                    "contains": [
+                        "email"
+                    ],
+                    "value_list": [],
+                    "default": "",
+                    "order": 0
+                },
+                "risk_tag": {
+                    "description": "A risk tag to add to the user",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": false,
+                    "default": "",
+                    "value_list": [
+                        "HIGH_IMPACT_EMPLOYEE",
+                        "CONTRACT_EMPLOYEE",
+                        "POOR_SECURITY_PRACTICES",
+                        "PERFORMANCE_CONCERNS",
+                        "FLIGHT_RISK",
+                        "ELEVATED_ACCESS_PRIVILEGES",
+                        "SUSPICIOUS_SYSTEM_ACTIVITY"
+                    ],
+                    "order": 1
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.parameter.username",
+                    "data_type": "string",
+                    "contains": [
+                        "email"
+                    ],
+                    "column_name": "Username",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.parameter.risk_tag",
+                    "data_type": "string",
+                    "column_name": "Risk Tag",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "Status",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
+                },
+                {
+                    "column_name": "User ID",
+                    "data_path": "action_result.data.*.userId",
+                    "data_type": "string",
+                    "example_values": [
+                        "1"
+                    ],
+                    "column_order": 3
+                },
+                {
+                    "column_name": "Username",
+                    "data_path": "action_result.data.*.userName",
+                    "data_type": "string",
+                    "example_values": [
+                        "1"
+                    ],
+                    "contains": [
+                        "email"
+                    ],
+                    "column_order": 4
+                },
+                {
+                    "column_name": "Risk Tag",
+                    "data_path": "action_result.data.*.riskFactors.*.tag",
+                    "column_order": 5,
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "remove highrisk tag",
+            "identifier": "remove_highrisk_tag",
+            "description": "Remove a risk tag from a user",
+            "verbose": "",
+            "undo": "add highrisk tag",
+            "type": "contain",
+            "read_only": false,
+            "parameters": {
+                "username": {
+                    "description": "Username of the employee to remove a risk tag from",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": true,
+                    "contains": [
+                        "email"
+                    ],
+                    "value_list": [],
+                    "default": "",
+                    "order": 0
+                },
+                "risk_tag": {
+                    "description": "A risk tag to remove from the user",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": false,
+                    "value_list": [
+                        "HIGH_IMPACT_EMPLOYEE",
+                        "CONTRACT_EMPLOYEE",
+                        "POOR_SECURITY_PRACTICES",
+                        "PERFORMANCE_CONCERNS",
+                        "FLIGHT_RISK",
+                        "ELEVATED_ACCESS_PRIVILEGES",
+                        "SUSPICIOUS_SYSTEM_ACTIVITY"
+                    ],
+                    "default": "",
+                    "order": 1
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.parameter.username",
+                    "data_type": "string",
+                    "contains": [
+                        "email"
+                    ],
+                    "column_name": "Username",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.parameter.risk_tag",
+                    "data_type": "string",
+                    "column_name": "Risk Tag",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "Status",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
+                },
+                {
+                    "column_name": "User ID",
+                    "data_path": "action_result.data.*.userId",
+                    "data_type": "string",
+                    "example_values": [
+                        "1"
+                    ],
+                    "column_order": 3
+                },
+                {
+                    "column_name": "Username",
+                    "data_path": "action_result.data.*.userName",
+                    "data_type": "string",
+                    "example_values": [
+                        "test@example.com"
+                    ],
+                    "contains": [
+                        "email"
+                    ],
+                    "column_order": 4
+                },
+                {
+                    "column_name": "Risk Tag",
+                    "data_path": "action_result.data.*.riskFactors.*.tag",
+                    "column_order": 5,
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
                 }
             ],
             "render": {

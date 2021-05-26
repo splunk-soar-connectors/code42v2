@@ -6,6 +6,7 @@ from pytest import fixture
 from code42_connector import Code42Connector
 from tests.conftest import assert_fail, create_fake_connector, assert_success
 
+
 @fixture
 def test_connectivity_connector(mock_py42_client):
     connector = create_fake_connector("test_connectivity")
@@ -14,7 +15,9 @@ def test_connectivity_connector(mock_py42_client):
 
 
 class TestCode42Connector(object):
-    def test_handle_test_connectivity_calls_users_get_current(self, test_connectivity_connector):
+    def test_handle_test_connectivity_calls_users_get_current(
+        self, test_connectivity_connector
+    ):
         test_connectivity_connector.handle_action({})
         test_connectivity_connector._client.users.get_current.assert_called_once_with()
         assert_success(test_connectivity_connector)
@@ -22,7 +25,9 @@ class TestCode42Connector(object):
     def test_handle_connectivity_sets_error_status_if_sdk_throws_exception(
         self, test_connectivity_connector
     ):
-        test_connectivity_connector._client.users.get_current.side_effect = Py42UnauthorizedError(mock.Mock(status=401))
+        test_connectivity_connector._client.users.get_current.side_effect = Py42UnauthorizedError(
+            mock.Mock(status=401)
+        )
         test_connectivity_connector.handle_action({})
         assert_fail(test_connectivity_connector)
 
@@ -31,7 +36,7 @@ class TestCode42Connector(object):
         config = {
             "cloud_instance": "http://cloud.code42.com",
             "username": "user.name",
-            "password": "password123!"
+            "password": "password123!",
         }
 
         connector.load_state = mocker.MagicMock()

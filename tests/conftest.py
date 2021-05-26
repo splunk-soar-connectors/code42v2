@@ -17,6 +17,7 @@ def mock_py42_client(mocker):
     mocker.patch("py42.sdk.from_local_account", return_value=client)
     return client
 
+
 @fixture
 def connector():
     connector = Code42Connector()
