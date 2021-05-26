@@ -4,6 +4,7 @@ from __future__ import print_function, unicode_literals
 import json
 
 import py42.sdk
+from py42.exceptions import Py42NotFoundError
 from py42.services.detectionlists.departing_employee import DepartingEmployeeFilters
 from py42.services.detectionlists.high_risk_employee import HighRiskEmployeeFilters
 import requests
@@ -28,6 +29,10 @@ def action_handler_for(key):
         return f
 
     return wrapper
+
+
+def _convert_to_obj_list(scalar_list, sub_object_key="item"):
+    return [{sub_object_key: item} for item in scalar_list]
 
 
 class Code42Connector(BaseConnector):
@@ -125,6 +130,20 @@ class Code42Connector(BaseConnector):
         action_result.update_summary({"total_count": total_count})
         return action_result.set_status(phantom.APP_SUCCESS)
 
+    @action_handler_for("get_departing_employee")
+    def _handle_get_departing_employee(self, param, action_result):
+        username = param["username"]
+        user_id = self._get_user_id(username)
+
+        try:
+            response = self._client.detectionlists.departing_employee.get(user_id)
+            action_result.add_data(response.data)
+            action_result.update_summary({"is_departing_employee": True})
+        except Py42NotFoundError:
+            action_result.update_summary({"is_departing_employee": False})
+
+        return action_result.set_status(phantom.APP_SUCCESS)
+
     """ HIGH RISK EMPLOYEE ACTIONS """
 
     @action_handler_for("add_highrisk_employee")
@@ -161,6 +180,50 @@ class Code42Connector(BaseConnector):
         total_count = page.data.get("totalCount", 0) if page else None
         action_result.update_summary({"total_count": total_count})
         return action_result.set_status(phantom.APP_SUCCESS)
+
+    @action_handler_for("get_highrisk_employee")
+    def _handle_get_high_risk_employee(self, param, action_result):
+        username = param["username"]
+        user_id = self._get_user_id(username)
+
+        try:
+            response = self._client.detectionlists.high_risk_employee.get(user_id)
+            all_tags = response.data.get("riskFactors", [])
+            response["riskFactors"] = _convert_to_obj_list(all_tags, "tag")
+            action_result.add_data(response.data)
+            action_result.update_summary({"is_high_risk_employee": True})
+        except Py42NotFoundError:
+            action_result.update_summary({"is_high_risk_employee": False})
+
+        return action_result.set_status(phantom.APP_SUCCESS)
+
+    @action_handler_for("add_highrisk_tag")
+    def _handle_add_high_risk_tag(self, param, action_result):
+        username = param["username"]
+        risk_tag = param["risk_tag"]
+        user_id = self._get_user_id(username)
+        response = self._client.detectionlists.add_user_risk_tags(user_id, risk_tag)
+        all_tags = response.data.get("riskFactors", [])
+        response["riskFactors"] = _convert_to_obj_list(all_tags, "tag")
+        action_result.add_data(response.data)
+        message = f"All risk tags for user: {','.join(all_tags)}"
+        return action_result.set_status(phantom.APP_SUCCESS, message)
+
+    @action_handler_for("remove_highrisk_tag")
+    def _handle_remove_high_risk_tag(self, param, action_result):
+        username = param["username"]
+        risk_tag = param["risk_tag"]
+        user_id = self._get_user_id(username)
+        response = self._client.detectionlists.remove_user_risk_tags(user_id, risk_tag)
+        all_tags = response.data.get("riskFactors", [])
+        response["riskFactors"] = _convert_to_obj_list(all_tags, "tag")
+        action_result.add_data(response.data)
+        message = (
+            f"All risk tags for user: {','.join(all_tags)}"
+            if all_tags
+            else "User has no risk tags"
+        )
+        return action_result.set_status(phantom.APP_SUCCESS, message)
 
     def finalize(self):
         # Save the state, this data is saved across actions and app upgrades
