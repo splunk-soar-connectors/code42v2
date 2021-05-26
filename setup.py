@@ -18,9 +18,6 @@ setup(
         "requests>=2.24.0",
         f"py42 @ file://localhost/{path_to_py42_wheel}",
     ],
-<<<<<<< HEAD
-    extras_require={"dev": [f"stubs @ file://localhost/{path_to_stubs}"]},
-=======
     extras_require={
         "dev": [
             f"stubs @ file://localhost/{path_to_stubs}",
@@ -29,5 +26,4 @@ setup(
             "pre-commit",
         ]
     },
->>>>>>> main
 )
