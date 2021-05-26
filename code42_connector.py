@@ -188,6 +188,8 @@ class Code42Connector(BaseConnector):
 
         try:
             response = self._client.detectionlists.high_risk_employee.get(user_id)
+            all_tags = response.data.get("riskFactors", [])
+            response["riskFactors"] = _convert_to_obj_list(all_tags, "tag")
             action_result.add_data(response.data)
             action_result.update_summary({"is_high_risk_employee": True})
         except Py42NotFoundError:

@@ -70,6 +70,10 @@ _MOCK_GET_HIGH_RISK_EMPLOYEE_RESPONSE = {
     "createdAt": "2021-05-25T18:43:29.6890000Z",
     "status": "OPEN",
     "cloudUsernames": ["alias1"],
+    "riskFactors": [
+        "FLIGHT_RISK",
+        "CONTRACT_EMPLOYEE"
+    ]
 }
 _MOCK_LIST_HIGH_RISK_EMPLOYEES_RESPONSE = {
     "totalCount": 2,
@@ -527,7 +531,12 @@ class TestCode42DetectionListsConnector(object):
         )
         connector = _create_get_hr_connector(mock_py42_with_user)
         connector.handle_action(param)
-        assert_successful_single_data(connector, _MOCK_GET_HIGH_RISK_EMPLOYEE_RESPONSE)
+        expected_response = dict(_MOCK_GET_HIGH_RISK_EMPLOYEE_RESPONSE)
+        expected_response["riskFactors"] = [
+            {"tag": "FLIGHT_RISK"},
+            {"tag": "CONTRACT_EMPLOYEE"}
+        ]
+        assert_successful_single_data(connector, expected_response)
 
     def test_handle_action_when_get_high_risk_employee_updates_summary(
         self, mock_py42_with_user
