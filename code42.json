@@ -643,9 +643,6 @@
                     "data_type": "string",
                     "required": true,
                     "primary": true,
-                    "contains": [
-                        "alert"
-                    ],
                     "value_list": [],
                     "default": "",
                     "order": 0
@@ -655,9 +652,6 @@
                 {
                     "data_path": "action_result.parameter.alert_id",
                     "data_type": "string",
-                    "contains": [
-                        "alert"
-                    ],
                     "column_name": "Alert ID",
                     "column_order": 0
                 },

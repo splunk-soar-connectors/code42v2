@@ -194,7 +194,7 @@ class Code42Connector(BaseConnector):
         if not self._validate_date_range(start_date, end_date):
             return action_result.set_status(
                 phantom.APP_ERROR,
-                "Start Date and End Date are both required to search by " "date range.",
+                "Start Date and End Date are both required to search by date range.",
             )
         try:
             query = self._build_alerts_query(
