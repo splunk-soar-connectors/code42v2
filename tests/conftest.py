@@ -58,6 +58,15 @@ def assert_fail(connector):
     assert status == phantom.app.APP_ERROR
 
 
+def assert_fail_message(connector, expected_message):
+    action_results = connector.get_action_results()
+    assert len(action_results) == 1
+    msg = action_results[0].get_message()
+    status = action_results[0].get_status()
+    assert msg == expected_message
+    assert status == phantom.app.APP_ERROR
+
+
 def assert_successful_single_data(connector, expected_data):
     action_results = connector.get_action_results()
     assert len(action_results) == 1

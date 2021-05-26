@@ -12,6 +12,7 @@ from tests.conftest import (
     assert_fail,
     assert_successful_message,
     assert_success,
+    assert_fail_message,
 )
 
 
@@ -157,17 +158,20 @@ class TestCode42AlertsConnector(object):
         param = {}
         connector = _create_search_alerts_connector(mock_py42_client)
         connector.handle_action(param)
-        assert_fail(connector)
+        expected_message = (
+            "Code42: Must supply a search term when calling action 'search_alerts`."
+        )
+        assert_fail_message(connector, expected_message)
 
-    def test_handle_action_when_search_alerts_and_date_range_incomplete_sets_error_message(
+    def test_handle_action_when_search_alerts_and_date_range_incomplete_calls_search(
         self, mock_py42_client
     ):
         param = {"start_date": "2031-01-01"}
         connector = _create_search_alerts_connector(mock_py42_client)
         connector.handle_action(param)
-        assert_fail(connector)
+        assert_success(connector)
 
-    def test_handle_action_when_search_alerts_and_date_format_invalid_sets_error_message(
+    def test_handle_action_when_search_alerts_and_date_format_invalid_sets_error_status(
         self, mock_py42_client
     ):
         param = {
@@ -233,7 +237,7 @@ class TestCode42AlertsConnector(object):
         connector.handle_action(param)
         assert_successful_summary(connector, {"alert_id": param["alert_id"]})
 
-    def test_handle_action_when_set_alert_state_and_alert_doesnt_exist_sets_error_message(
+    def test_handle_action_when_set_alert_state_and_alert_doesnt_exist_sets_error_status(
         self, mock_py42_client
     ):
         param = {"alert_id": "1234-doesnt-exist-5678", "alert_state": "OPEN"}

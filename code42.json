@@ -1075,7 +1075,7 @@
             "read_only": true,
             "parameters": {
                 "alert_id": {
-                    "description": "Alert ID",
+                    "description": "ID of the alert to retrieve",
                     "data_type": "string",
                     "required": true,
                     "primary": true,
@@ -1180,7 +1180,7 @@
             "read_only": true,
             "parameters": {
                 "username": {
-                    "description": "Username",
+                    "description": "Username of the actor listed on alert",
                     "data_type": "string",
                     "required": false,
                     "primary": false,
@@ -1192,7 +1192,7 @@
                     "order": 0
                 },
                 "alert_state": {
-                    "description": "Alert State",
+                    "description": "Alert state",
                     "data_type": "string",
                     "required": false,
                     "primary": false,
@@ -1206,7 +1206,7 @@
                     "order": 1
                 },
                 "start_date": {
-                    "description": "Start Date",
+                    "description": "Beginning of date range to search. Time (in UTC) may also be supplied but is not required.",
                     "data_type": "string",
                     "required": false,
                     "primary": false,
@@ -1215,7 +1215,7 @@
                     "order": 2
                 },
                 "end_date": {
-                    "description": "End Date",
+                    "description": "End of date range to search. Time (in UTC) may also be supplied but is not required.",
                     "data_type": "string",
                     "required": false,
                     "primary": false,

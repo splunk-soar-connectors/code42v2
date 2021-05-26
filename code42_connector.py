@@ -9,6 +9,7 @@ from py42.services.detectionlists.departing_employee import DepartingEmployeeFil
 from py42.services.detectionlists.high_risk_employee import HighRiskEmployeeFilters
 import requests
 from datetime import datetime, timedelta
+import dateutil.parser
 
 from py42.sdk.queries.alerts.alert_query import AlertQuery
 from py42.sdk.queries.alerts.filters import Actor, AlertState, DateObserved
@@ -254,22 +255,7 @@ class Code42Connector(BaseConnector):
                 phantom.APP_ERROR,
                 "Code42: Must supply a search term when calling action 'search_alerts`.",
             )
-
-        if not self._validate_date_range(start_date, end_date):
-            return action_result.set_status(
-                phantom.APP_ERROR,
-                "Code42: Start Date and End Date are both required to search by date range for action 'search_alerts'.",
-            )
-        try:
-            query = self._build_alerts_query(
-                username, start_date, end_date, alert_state
-            )
-        except ValueError as exception:
-            return action_result.set_status(
-                phantom.APP_ERROR,
-                f"Code42: Start Date and End Date must be in format YYYY-mm-dd: {exception} for action 'search_alerts'",
-            )
-
+        query = self._build_alerts_query(username, start_date, end_date, alert_state)
         response = self._client.alerts.search(query)
         action_result.add_data(response.data)
         action_result.update_summary({"total_count": response["totalCount"]})
@@ -291,28 +277,28 @@ class Code42Connector(BaseConnector):
         self.save_state(self._state)
         return phantom.APP_SUCCESS
 
-    def _validate_date_range(self, start_date, end_date):
-        return (not start_date and not end_date) or (
-            start_date is not None and end_date is not None
-        )
-
     def _build_alerts_query(self, username, start_date, end_date, alert_state):
         filters = []
         if username is not None:
             filters.append(Actor.eq(username))
-        if start_date is not None and end_date is not None:
-            # This will raise a ValueError if dates not in Y-m-d H:M:S format
-            filters.append(
-                DateObserved.in_range(f"{start_date} 00:00:00", f"{end_date} 00:00:00")
-            )
-        else:
-            # If a date range is not provided, default to returning alerts from last 30 days
-            thirty_days_ago = datetime.now() - timedelta(days=30)
-            filters.append(DateObserved.on_or_after(thirty_days_ago))
         if alert_state is not None:
             filters.append(AlertState.eq(alert_state))
+        filters.append(self._build_date_range_filter(start_date, end_date))
         query = AlertQuery.all(*filters)
         return query
+
+    def _build_date_range_filter(self, start_date, end_date):
+        if start_date and not end_date:
+            return DateObserved.on_or_after(dateutil.parser.parse(start_date))
+        elif end_date and not start_date:
+            return DateObserved.on_or_before(dateutil.parser.parse(end_date))
+        elif end_date is not None and start_date is not None:
+            return DateObserved.in_range(
+                dateutil.parser.parse(start_date), dateutil.parser.parse(end_date)
+            )
+        else:
+            thirty_days_ago = datetime.now() - timedelta(days=30)
+            return DateObserved.on_or_after(thirty_days_ago)
 
     def _get_user_id(self, username):
         users = self._client.users.get_by_username(username)["users"]

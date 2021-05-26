@@ -16,6 +16,7 @@ setup(
         "pytest==4.4.0",
         "pytest-mock==1.10.3",
         "requests>=2.24.0",
+        "python-dateutil>=2.8.1",
         f"py42 @ file://localhost/{path_to_py42_wheel}",
     ],
     extras_require={
