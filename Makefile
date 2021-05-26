@@ -1,8 +1,8 @@
 PYTHONPATH=$(pwd)/build-scripts/
 
-.PHONY: all clean test validate lint tar deploy deploy-bypass
+.PHONY: all clean test validate style tar deploy deploy-bypass
 
-all: clean test validate lint tar
+all: clean test validate style tar
 
 clean::
 	rm -f ../phcode42v2.tgz
@@ -13,7 +13,7 @@ test::
 validate::
 	python ./build-scripts/compile_app.pyc -c
 
-lint::
+style::
 	pre-commit run --all-files --show-diff-on-failure
 
 tar:: clean

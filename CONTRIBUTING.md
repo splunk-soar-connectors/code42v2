@@ -14,6 +14,22 @@ Also confirm that you can access the Phantom web app at `https://{phantom_VM_IP_
 
 NOTE: If you are consistently getting timeouts connecting to the Phantom VM, try disconnecting from the VPN and re-attempting.
 
+### Style linter
+
+When you open a PR a series of style checks will run. See the [pre-commit-config.yaml](.pre-commit-config.yaml) file to see a list of the projects involved in this automation. If your code does not pass the style checks, the PR will not be allowed to merge. Many of the style rules can be corrected automatically by running a simple command once you are satisfied with your change:
+
+```bash
+make style
+```
+
+This will output a diff of the files that were changed. Once these have been corrected and re-pushed, the PR checks should pass.
+
+You can optionally also choose to have these checks / automatic adjustments
+occur automatically on each git commit that you make (instead of only when running `make style`.) To do so, install the pre-commit hooks:
+
+```bash
+pre-commit install
+```
 
 ## Deploying the app
 
@@ -24,7 +40,7 @@ Run the below command to install the Code42 app on Phantom.
 ```bash
 export PHANTOM_VM_IP_ADDR=0.0.0.0  # Replace with IP address for Phantom VM
 export PHANTOM_VM_PASSWORD=phantom  # Use the password for your phantom admin user.
-./util.sh deploy
+make deploy
 ```
 
 If you are working on macOS you can install `sshpass` [here](https://stackoverflow.com/questions/32255660/how-to-install-sshpass-on-mac/62623099#62623099)
@@ -33,7 +49,7 @@ and bypass the VM SSH password prompts.
 ```bash
 export PHANTOM_VM_IP_ADDR=0.0.0.0 # Replace with IP address for Phantom VM
 export PHANTOM_PWD=password # Replace with password for phantom user on Phantom VM
-./util.sh deploy-bypass
+make deploy-bypass
 ```
 
 Open the Phantom web app and login as the `admin` user. Navigate to `Apps > Unconfigured Apps` and find the Code42 App.
@@ -93,15 +109,28 @@ To leave the virtual environment, simply use:
 deactivate
 ```
 
-### Running the unit tests
+### Running a complete local build
 
 Make sure you have created a Python virtual environment for the Phantom project as described above.
 
-Then, activate the virtual environment and install the dependencies before running the tests.
+Then, activate the virtual environment and install the dependencies before running the build.
 
 ```bash
 pip install -e .[dev]
-pytest
+make
+```
+
+By default, `make` will run all unit tests, Phantom configuration / lint validators, style checks, and create a local tarball of the app.
+
+Each of these commands can also be run individually if desired:
+
+```bash
+make clean
+make test
+make validate
+make style
+make deploy
+make deploy-bypass
 ```
 
 #### Running tests within a Phantom deployment
