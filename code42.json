@@ -633,7 +633,7 @@
         {
             "action": "add highrisk tag",
             "identifier": "add_highrisk_tag",
-            "description": "Add risk tags to a user",
+            "description": "Add a risk tag to a user",
             "verbose": "",
             "undo": "remove highrisk tag",
             "type": "contain",
@@ -743,7 +743,7 @@
         {
             "action": "remove highrisk tag",
             "identifier": "remove_highrisk_tag",
-            "description": "Remove risk tags from a user",
+            "description": "Remove a risk tag from a user",
             "verbose": "",
             "undo": "add highrisk tag",
             "type": "contain",
