@@ -138,11 +138,11 @@ class Code42Connector(BaseConnector):
         try:
             response = self._client.detectionlists.departing_employee.get(user_id)
             action_result.add_data(response.data)
-            status_message = f"{username} is a departing employee"
-            return action_result.set_status(phantom.APP_SUCCESS, status_message)
+            action_result.update_summary({"is_departing_employee": True})
         except Py42NotFoundError:
-            status_message = f"{username} is not a departing employee"
-            return action_result.set_status(phantom.APP_SUCCESS, status_message)
+            action_result.update_summary({"is_departing_employee": False})
+
+        return action_result.set_status(phantom.APP_SUCCESS)
 
     """ HIGH RISK EMPLOYEE ACTIONS """
 
@@ -185,14 +185,15 @@ class Code42Connector(BaseConnector):
     def _handle_get_high_risk_employee(self, param, action_result):
         username = param["username"]
         user_id = self._get_user_id(username)
+
         try:
             response = self._client.detectionlists.high_risk_employee.get(user_id)
             action_result.add_data(response.data)
-            status_message = f"{username} is a high-risk employee"
-            return action_result.set_status(phantom.APP_SUCCESS, status_message)
+            action_result.update_summary({"is_high_risk_employee": True})
         except Py42NotFoundError:
-            status_message = f"{username} is not a high-risk employee"
-            return action_result.set_status(phantom.APP_SUCCESS, status_message)
+            action_result.update_summary({"is_high_risk_employee": False})
+
+        return action_result.set_status(phantom.APP_SUCCESS)
 
     @action_handler_for("add_highrisk_tag")
     def _handle_add_high_risk_tag(self, param, action_result):

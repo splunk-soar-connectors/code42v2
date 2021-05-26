@@ -357,7 +357,7 @@
             "action": "get departing employee",
             "identifier": "get_departing_employee",
             "description": "Get a departing employee",
-            "verbose": "",
+            "verbose": "This action is useful for checking if a user is on t",
             "type": "investigate",
             "read_only": true,
             "parameters": {
@@ -449,8 +449,8 @@
                     "column_order": 6
                 },
                 {
-                    "data_path": "action_result.summary",
-                    "data_type": "string"
+                    "data_path": "action_result.summary.is_departing_employee",
+                    "data_type": "boolean"
                 }
             ],
             "render": {
@@ -831,8 +831,8 @@
                     "column_order": 6
                 },
                 {
-                    "data_path": "action_result.summary",
-                    "data_type": "string"
+                    "data_path": "action_result.summary.is_high_risk_employee",
+                    "data_type": "boolean"
                 }
             ],
             "render": {

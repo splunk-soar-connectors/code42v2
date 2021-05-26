@@ -372,15 +372,15 @@ class TestCode42DetectionListsConnector(object):
         connector.handle_action(param)
         assert_successful_single_data(connector, _MOCK_GET_DEPARTING_EMPLOYEE_RESPONSE)
 
-    def test_handle_action_when_get_departing_employee_sets_success_message(
+    def test_handle_action_when_get_departing_employee_updates_summary(
         self, mock_py42_with_user
     ):
         param = {"username": "test@example.com"}
         connector = _create_get_de_connector(mock_py42_with_user)
         connector.handle_action(param)
-        assert_successful_message(connector, "test@example.com is a departing employee")
+        assert_succesful_summary(connector, {"is_departing_employee": True})
 
-    def test_handle_action_when_get_departing_employee_and_employee_not_found_sets_success_message(
+    def test_handle_action_when_get_departing_employee_and_employee_not_found_updates_summary(
         self, mock_py42_with_user
     ):
         param = {"username": "test@example.com"}
@@ -389,9 +389,7 @@ class TestCode42DetectionListsConnector(object):
         )
         connector = _create_get_de_connector(mock_py42_with_user)
         connector.handle_action(param)
-        assert_successful_message(
-            connector, "test@example.com is not a departing employee"
-        )
+        assert_succesful_summary(connector, {"is_departing_employee": False})
 
     def test_handle_action_when_add_high_risk_employee_calls_add_with_expected_args(
         self, mock_py42_with_user
@@ -531,15 +529,15 @@ class TestCode42DetectionListsConnector(object):
         connector.handle_action(param)
         assert_successful_single_data(connector, _MOCK_GET_HIGH_RISK_EMPLOYEE_RESPONSE)
 
-    def test_handle_action_when_get_high_risk_employee_sets_success_message(
+    def test_handle_action_when_get_high_risk_employee_updates_summary(
         self, mock_py42_with_user
     ):
         param = {"username": "test@example.com"}
         connector = _create_get_hr_connector(mock_py42_with_user)
         connector.handle_action(param)
-        assert_successful_message(connector, "test@example.com is a high-risk employee")
+        assert_succesful_summary(connector, {"is_high_risk_employee": True})
 
-    def test_handle_action_when_get_high_risk_employee_and_employee_not_found_sets_success_message(
+    def test_handle_action_when_get_high_risk_employee_and_employee_not_found_updates_summary(
         self, mock_py42_with_user
     ):
         param = {"username": "test@example.com"}
@@ -548,9 +546,7 @@ class TestCode42DetectionListsConnector(object):
         )
         connector = _create_get_hr_connector(mock_py42_with_user)
         connector.handle_action(param)
-        assert_successful_message(
-            connector, "test@example.com is not a high-risk employee"
-        )
+        assert_succesful_summary(connector, {"is_high_risk_employee": False})
 
     def test_handle_action_when_add_high_risk_tag_calls_add_with_expected_args(
         self, mock_py42_for_risk_tags
