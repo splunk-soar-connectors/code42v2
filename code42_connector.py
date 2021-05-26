@@ -203,8 +203,8 @@ class Code42Connector(BaseConnector):
         all_tags = response.data.get("riskFactors", [])
         response["riskFactors"] = _convert_to_obj_list(all_tags, "tag")
         action_result.add_data(response.data)
-        action_result.update_summary({"all_risk_tags_for_user": ",".join(all_tags)})
-        return action_result.set_status(phantom.APP_SUCCESS)
+        message = f"All risk tags for user: {','.join(all_tags)}"
+        return action_result.set_status(phantom.APP_SUCCESS, message)
 
     @action_handler_for("remove_highrisk_tag")
     def _handle_remove_high_risk_tag(self, param, action_result):
@@ -215,8 +215,12 @@ class Code42Connector(BaseConnector):
         all_tags = response.data.get("riskFactors", [])
         response["riskFactors"] = _convert_to_obj_list(all_tags, "tag")
         action_result.add_data(response.data)
-        action_result.update_summary({"all_risk_tags_for_user": ",".join(all_tags)})
-        return action_result.set_status(phantom.APP_SUCCESS)
+        message = (
+            f"All risk tags for user: {','.join(all_tags)}"
+            if all_tags
+            else "User has no risk tags"
+        )
+        return action_result.set_status(phantom.APP_SUCCESS, message)
 
     def finalize(self):
         # Save the state, this data is saved across actions and app upgrades
