@@ -95,28 +95,6 @@ class TestCode42UsersConnector(object):
             connector, {"userUid": _TEST_USER_UID, "userId": _TEST_USER_LEGACY_ID},
         )
 
-    def test_handle_action_when_creating_user_without_password_param_generates_password(
-        self, mocker, mock_py42_with_create_user
-    ):
-        mock_passgen = mocker.patch("code42_connector._generate_password")
-        mock_passgen.return_value = "generated_password"
-        param = {
-            "org_uid": _TEST_ORG_UID,
-            "username": _TEST_USERNAME,
-        }
-        connector = create_fake_connector("create_user", mock_py42_with_create_user)
-        connector.handle_action(param)
-        mock_py42_with_create_user.users.create_user.assert_called_once_with(
-            org_uid=_TEST_ORG_UID,
-            username=_TEST_USERNAME,
-            email=_TEST_USERNAME,
-            password="generated_password",
-            first_name=None,
-            last_name=None,
-            notes=None,
-        )
-        assert_success(connector)
-
     def test_handle_action_when_creating_user_sets_error_status_when_duplicate_user(
         self, mock_py42_with_create_user
     ):
