@@ -31,6 +31,10 @@ def action_handler_for(key):
     return wrapper
 
 
+def _convert_to_obj_list(scalar_list, sub_object_key="item"):
+    return [{sub_object_key: item} for item in scalar_list]
+
+
 class Code42Connector(BaseConnector):
     def __init__(self):
         super(Code42Connector, self).__init__()
@@ -168,10 +172,7 @@ class Code42Connector(BaseConnector):
         user_id = self._get_user_id(username)
         response = self._client.detectionlists.add_user_risk_tags(user_id, tags)
         all_tags = response.data.get("riskFactors", [])
-
-        # Transform scalar list to list of objects
-        response["riskFactors"] = [{"tag": tag} for tag in all_tags]
-
+        response["riskFactors"] = _convert_to_obj_list(all_tags, "tag")
         action_result.add_data(response.data)
         action_result.update_summary({"all_risk_tags_for_user": ",".join(all_tags)})
         return action_result.set_status(phantom.APP_SUCCESS)
@@ -183,10 +184,7 @@ class Code42Connector(BaseConnector):
         user_id = self._get_user_id(username)
         response = self._client.detectionlists.remove_user_risk_tags(user_id, tags)
         all_tags = response.data.get("riskFactors", [])
-
-        # Transform scalar list to list of objects
-        response["riskFactors"] = [{"tag": tag} for tag in all_tags]
-
+        response["riskFactors"] = _convert_to_obj_list(all_tags, "tag")
         action_result.add_data(response.data)
         action_result.update_summary({"all_risk_tags_for_user": ",".join(all_tags)})
         return action_result.set_status(phantom.APP_SUCCESS)
