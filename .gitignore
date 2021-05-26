@@ -7,6 +7,7 @@ phcode42v2.tgz
 __pycache__/
 *.py[cod]
 *$py.class
+!build-scripts/**/*.pyc
 
 # C extensions
 *.so

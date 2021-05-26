@@ -4,5 +4,5 @@ setup(
     name="stubs",
     version="1.0.0",
     description="Phantom Stubs for Code42 for Phantom",
-    packages=find_packages()
+    packages=find_packages(),
 )
