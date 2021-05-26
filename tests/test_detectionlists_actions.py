@@ -37,9 +37,7 @@ _MOCK_LIST_DEPARTING_EMPLOYEES_RESPONSE = {
             "notes": "Test test test",
             "createdAt": "2021-04-22T00:00:00.0000000Z",
             "status": "OPEN",
-            "cloudUsernames": [
-                "alias1",
-            ],
+            "cloudUsernames": ["alias1",],
             "totalBytes": 0,
             "numEvents": 3,
         },
@@ -52,9 +50,7 @@ _MOCK_LIST_DEPARTING_EMPLOYEES_RESPONSE = {
             "notes": "Test test test2",
             "createdAt": "2021-04-22T00:00:00.0000000Z",
             "status": "OPEN",
-            "cloudUsernames": [
-                "alias2",
-            ],
+            "cloudUsernames": ["alias2",],
             "totalBytes": 0,
             "numEvents": 6,
         },
@@ -87,9 +83,7 @@ _MOCK_LIST_HIGH_RISK_EMPLOYEES_RESPONSE = {
             "notes": "Test test test",
             "createdAt": "2021-04-22T00:00:00.0000000Z",
             "status": "OPEN",
-            "cloudUsernames": [
-                "alias1",
-            ],
+            "cloudUsernames": ["alias1",],
             "totalBytes": 0,
             "numEvents": 3,
         },
@@ -102,9 +96,7 @@ _MOCK_LIST_HIGH_RISK_EMPLOYEES_RESPONSE = {
             "notes": "Test test test2",
             "createdAt": "2021-04-22T00:00:00.0000000Z",
             "status": "OPEN",
-            "cloudUsernames": [
-                "alias2",
-            ],
+            "cloudUsernames": ["alias2",],
             "totalBytes": 0,
             "numEvents": 6,
         },

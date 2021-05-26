@@ -1,4 +1,4 @@
-name: build
+name: validate
 
 on:
   push:
@@ -23,6 +23,6 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -e .[dev]
-      - name: Run unit tests
+      - name: Validate Phantom configurations and linting rules
         run: |
-          pytest -vv
+          make validate
