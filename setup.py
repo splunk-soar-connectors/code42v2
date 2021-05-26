@@ -21,8 +21,8 @@ setup(
     extras_require={
         "dev": [
             f"stubs @ file://localhost/{path_to_stubs}",
-            "flake8",
-            "termcolor",
+            "flake8==3.8.3",
+            "termcolor==1.1.0",
             "pre-commit",
         ]
     },
