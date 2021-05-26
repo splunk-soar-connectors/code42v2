@@ -16,7 +16,7 @@ NOTE: If you are consistently getting timeouts connecting to the Phantom VM, try
 
 ### Style linter
 
-When you open a PR a series of style checks will run. See the [pre-commit-config.yaml](.pre-commit-config.yaml) file to see a list of the projects involved in this automation. If your code does not pass the style checks, the PR will not be allowed to merge. Many of the style rules can be corrected automatically by running a simple command once you are satisfied with your change:
+When you open a PR, a series of style checks will run. See the [pre-commit-config.yaml](.pre-commit-config.yaml) file to see a list of the projects involved in this automation. If your code does not pass the style checks, the PR will not be allowed to merge. Many of the style rules can be corrected automatically by running a simple command once you are satisfied with your change:
 
 ```bash
 make style
@@ -24,8 +24,7 @@ make style
 
 This will output a diff of the files that were changed. Once these have been corrected and re-pushed, the PR checks should pass.
 
-You can optionally also choose to have these checks / automatic adjustments
-occur automatically on each git commit that you make (instead of only when running `make style`.) To do so, install the pre-commit hooks:
+You can also choose to have these checks / automatic adjustments occur automatically on each git commit that you make (instead of only when running `make style`.) To do so, install the pre-commit hooks:
 
 ```bash
 pre-commit install
