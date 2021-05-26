@@ -1,4 +1,6 @@
+from py42.exceptions import Py42NotFoundError
 from pytest import fixture
+from unittest import mock
 
 from tests.conftest import (
     assert_success,
@@ -9,7 +11,20 @@ from tests.conftest import (
     assert_succesful_summary,
 )
 
+
 _TEST_USER_UID = "TEST_USER_UID"
+_MOCK_GET_DEPARTING_EMPLOYEE_RESPONSE = {
+    "type$": "DEPARTING_EMPLOYEE_V2",
+    "tenantId": "11114444-2222-3333-4444-666634888863",
+    "userId": _TEST_USER_UID,
+    "userName": "test@example.com",
+    "displayName": "Test Testerson",
+    "notes": "Test test test",
+    "createdAt": "2021-05-24T17:19:06.2830000Z",
+    "status": "OPEN",
+    "cloudUsernames": ["alias1"],
+    "departureDate": "2021-02-02",
+}
 _MOCK_LIST_DEPARTING_EMPLOYEES_RESPONSE = {
     "totalCount": 2,
     "items": [
@@ -44,6 +59,17 @@ _MOCK_LIST_DEPARTING_EMPLOYEES_RESPONSE = {
             "numEvents": 6,
         },
     ],
+}
+_MOCK_GET_HIGH_RISK_EMPLOYEE_RESPONSE = {
+    "type$": "HIGH_RISK_EMPLOYEE_V2",
+    "tenantId": "11114444-2222-3333-4444-666634888863",
+    "userId": _TEST_USER_UID,
+    "userName": "test@example.com",
+    "displayName": "Test Testerson",
+    "notes": "Test test test",
+    "createdAt": "2021-05-25T18:43:29.6890000Z",
+    "status": "OPEN",
+    "cloudUsernames": ["alias1"],
 }
 _MOCK_LIST_HIGH_RISK_EMPLOYEES_RESPONSE = {
     "totalCount": 2,
@@ -156,6 +182,11 @@ def _create_list_de_connector(client):
     return _attach_client(connector, client)
 
 
+def _create_get_de_connector(client):
+    connector = create_fake_connector("get_departing_employee")
+    return _attach_client(connector, client)
+
+
 def _create_add_hr_connector(client):
     connector = create_fake_connector("add_highrisk_employee")
     return _attach_client(connector, client)
@@ -168,6 +199,11 @@ def _create_remove_hr_connector(client):
 
 def _create_list_hr_connector(client):
     connector = create_fake_connector("list_highrisk_employees")
+    return _attach_client(connector, client)
+
+
+def _create_get_hr_connector(client):
+    connector = create_fake_connector("get_highrisk_employee")
     return _attach_client(connector, client)
 
 
@@ -314,6 +350,47 @@ class TestCode42DetectionListsConnector(object):
         assert data[0] == _MOCK_LIST_DEPARTING_EMPLOYEES_RESPONSE["items"][0]
         assert data[1] == _MOCK_LIST_DEPARTING_EMPLOYEES_RESPONSE["items"][1]
 
+    def test_handle_action_when_get_departing_employee_calls_get_with_expected_params(
+        self, mock_py42_with_user
+    ):
+        param = {"username": "test@example.com"}
+        connector = _create_get_de_connector(mock_py42_with_user)
+        connector.handle_action(param)
+        mock_py42_with_user.detectionlists.departing_employee.get.assert_called_once_with(
+            _TEST_USER_UID
+        )
+        assert_success(connector)
+
+    def test_handle_action_when_get_departing_employee_adds_response_to_data(
+        self, mocker, mock_py42_with_user
+    ):
+        param = {"username": "test@example.com"}
+        mock_py42_with_user.detectionlists.departing_employee.get.return_value = (
+            create_mock_response(mocker, _MOCK_GET_DEPARTING_EMPLOYEE_RESPONSE)
+        )
+        connector = _create_get_de_connector(mock_py42_with_user)
+        connector.handle_action(param)
+        assert_successful_single_data(connector, _MOCK_GET_DEPARTING_EMPLOYEE_RESPONSE)
+
+    def test_handle_action_when_get_departing_employee_sets_success_message(
+        self, mock_py42_with_user
+    ):
+        param = {"username": "test@example.com"}
+        connector = _create_get_de_connector(mock_py42_with_user)
+        connector.handle_action(param)
+        assert_successful_message(connector, "test@example.com is a departing employee")
+
+    def test_handle_action_when_get_departing_employee_and_employee_not_found_sets_success_message(
+        self, mock_py42_with_user
+    ):
+        param = {"username": "test@example.com"}
+        mock_py42_with_user.detectionlists.departing_employee.get.side_effect = (
+            Py42NotFoundError(mock.Mock(status=404))
+        )
+        connector = _create_get_de_connector(mock_py42_with_user)
+        connector.handle_action(param)
+        assert_successful_message(connector, "test@example.com is not a departing employee")
+
     def test_handle_action_when_add_high_risk_employee_calls_add_with_expected_args(
         self, mock_py42_with_user
     ):
@@ -429,6 +506,47 @@ class TestCode42DetectionListsConnector(object):
         data = action_results[0].get_data()
         assert data[0] == _MOCK_LIST_HIGH_RISK_EMPLOYEES_RESPONSE["items"][0]
         assert data[1] == _MOCK_LIST_HIGH_RISK_EMPLOYEES_RESPONSE["items"][1]
+
+    def test_handle_action_when_get_high_risk_employee_calls_get_with_expected_params(
+        self, mock_py42_with_user
+    ):
+        param = {"username": "test@example.com"}
+        connector = _create_get_hr_connector(mock_py42_with_user)
+        connector.handle_action(param)
+        mock_py42_with_user.detectionlists.high_risk_employee.get.assert_called_once_with(
+            _TEST_USER_UID
+        )
+        assert_success(connector)
+
+    def test_handle_action_when_get_high_risk_employee_adds_response_to_data(
+        self, mocker, mock_py42_with_user
+    ):
+        param = {"username": "test@example.com"}
+        mock_py42_with_user.detectionlists.high_risk_employee.get.return_value = (
+            create_mock_response(mocker, _MOCK_GET_HIGH_RISK_EMPLOYEE_RESPONSE)
+        )
+        connector = _create_get_hr_connector(mock_py42_with_user)
+        connector.handle_action(param)
+        assert_successful_single_data(connector, _MOCK_GET_HIGH_RISK_EMPLOYEE_RESPONSE)
+
+    def test_handle_action_when_get_high_risk_employee_sets_success_message(
+        self, mock_py42_with_user
+    ):
+        param = {"username": "test@example.com"}
+        connector = _create_get_hr_connector(mock_py42_with_user)
+        connector.handle_action(param)
+        assert_successful_message(connector, "test@example.com is a high-risk employee")
+
+    def test_handle_action_when_get_high_risk_employee_and_employee_not_found_sets_success_message(
+        self, mock_py42_with_user
+    ):
+        param = {"username": "test@example.com"}
+        mock_py42_with_user.detectionlists.high_risk_employee.get.side_effect = (
+            Py42NotFoundError(mock.Mock(status=404))
+        )
+        connector = _create_get_hr_connector(mock_py42_with_user)
+        connector.handle_action(param)
+        assert_successful_message(connector, "test@example.com is not a high-risk employee")
 
     def test_handle_action_when_add_high_risk_tags_calls_add_with_expected_args(
         self, mock_py42_for_risk_tags
