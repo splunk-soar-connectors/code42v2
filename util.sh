@@ -68,6 +68,13 @@ main() {
   open-web)
     open https://${PHANTOM_VM_IP_ADDR}:9999
     ;;
+  build)
+    ;;
+  test)
+    pytest -vv
+    ;;
+  lint)
+    ;;
   *)
     echo "Not a valid command" && print_usage && exit 0
   esac

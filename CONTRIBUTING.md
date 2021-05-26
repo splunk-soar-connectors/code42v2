@@ -5,7 +5,7 @@ to create a Phantom account. Phantom will approve your registration and send you
 
 Next, log in and go [here](https://my.phantom.us/downloads/) to download the Phantom VM image.
 
-Follow these [instructions](https://docs.splunk.com/Documentation/Phantom/4.10.3/Install/InstallOVA) to install Splunk Phantom 
+Follow these [instructions](https://docs.splunk.com/Documentation/Phantom/4.10.3/Install/InstallOVA) to install Splunk Phantom
 as a VM image. You do NOT need to complete the section labeled "Configure the network settings for the virtual machine".
 
 Use these [default credentials](https://docs.splunk.com/Documentation/Phantom/4.10.3/Install/Reference) to log in.
@@ -19,7 +19,7 @@ NOTE: If you are consistently getting timeouts connecting to the Phantom VM, try
 
 To test the Code42 Phantom app, you must deploy it to a running Phantom VM and run a compilation script on that VM.
 
-Run the below command to install the Code42 app on Phantom. 
+Run the below command to install the Code42 app on Phantom.
 
 ```bash
 export PHANTOM_VM_IP_ADDR=0.0.0.0  # Replace with IP address for Phantom VM
@@ -27,7 +27,7 @@ export PHANTOM_VM_PASSWORD=phantom  # Use the password for your phantom admin us
 ./util.sh deploy
 ```
 
-If you are working on macOS you can install `sshpass` [here](https://stackoverflow.com/questions/32255660/how-to-install-sshpass-on-mac/62623099#62623099) 
+If you are working on macOS you can install `sshpass` [here](https://stackoverflow.com/questions/32255660/how-to-install-sshpass-on-mac/62623099#62623099)
 and bypass the VM SSH password prompts.
 
 ```bash
@@ -38,14 +38,14 @@ export PHANTOM_PWD=password # Replace with password for phantom user on Phantom 
 
 Open the Phantom web app and login as the `admin` user. Navigate to `Apps > Unconfigured Apps` and find the Code42 App.
 Click Configure New Asset to supply the Console URL, username, and password to connect with. Fill out the fields in Asset Info
-and Asset Settings. Save the Asset Configuration and then click Test Connectivity to test your connection. 
+and Asset Settings. Save the Asset Configuration and then click Test Connectivity to test your connection.
 
 ## Unit Testing
 
 ### Creating a virtual environment
 
 To run the unit tests you will need to create a Python virtual environment for the Phantom app and its dependencies.
-Creating a virtual environment is *not* necessary to run or deploy the app to a Phantom VM. It's only necessary if you want to run unit tests. 
+Creating a virtual environment is *not* necessary to run or deploy the app to a Phantom VM. It's only necessary if you want to run unit tests.
 
 #### macOS
 
@@ -121,11 +121,9 @@ phenv pip uninstall stubs
 
 ### Stubs
 
-This app is built on top of several modules developed by Phantom. Since we don't have access to the source for these modules, 
+This app is built on top of several modules developed by Phantom. Since we don't have access to the source for these modules,
 we've stubbed them out in the `phantom` directory so that they can be imported by the test code.
 
 # TODO
 
 When we implement actions, describe how to create dummy events in the UI and test the actions via a playbook.
-
-

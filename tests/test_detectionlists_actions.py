@@ -1,12 +1,18 @@
 from pytest import fixture
 
-from tests.conftest import assert_success, create_fake_connector, create_mock_response, assert_successful_single_data, assert_successful_message, assert_succesful_summary
+from tests.conftest import (
+    assert_success,
+    create_fake_connector,
+    create_mock_response,
+    assert_successful_single_data,
+    assert_successful_message,
+    assert_succesful_summary,
+)
 
 _TEST_USER_UID = "TEST_USER_UID"
 _MOCK_LIST_DEPARTING_EMPLOYEES_RESPONSE = {
     "totalCount": 2,
-    "items":
-    [
+    "items": [
         {
             "type$": "DEPARTING_EMPLOYEE_V2",
             "tenantId": "11114444-2222-3333-4444-666634888863",
@@ -16,11 +22,9 @@ _MOCK_LIST_DEPARTING_EMPLOYEES_RESPONSE = {
             "notes": "Test test test",
             "createdAt": "2021-04-22T00:00:00.0000000Z",
             "status": "OPEN",
-            "cloudUsernames": [
-                "alias1",
-            ],
+            "cloudUsernames": ["alias1",],
             "totalBytes": 0,
-            "numEvents": 3
+            "numEvents": 3,
         },
         {
             "type$": "DEPARTING_EMPLOYEE_V2",
@@ -31,18 +35,15 @@ _MOCK_LIST_DEPARTING_EMPLOYEES_RESPONSE = {
             "notes": "Test test test2",
             "createdAt": "2021-04-22T00:00:00.0000000Z",
             "status": "OPEN",
-            "cloudUsernames": [
-                "alias2",
-            ],
+            "cloudUsernames": ["alias2",],
             "totalBytes": 0,
-            "numEvents": 6
-        }
-    ]
+            "numEvents": 6,
+        },
+    ],
 }
 _MOCK_LIST_HIGH_RISK_EMPLOYEES_RESPONSE = {
     "totalCount": 2,
-    "items":
-    [
+    "items": [
         {
             "type$": "HIGH_RISK_EMPLOYEE_V2",
             "tenantId": "11114444-2222-3333-4444-666634888863",
@@ -52,11 +53,9 @@ _MOCK_LIST_HIGH_RISK_EMPLOYEES_RESPONSE = {
             "notes": "Test test test",
             "createdAt": "2021-04-22T00:00:00.0000000Z",
             "status": "OPEN",
-            "cloudUsernames": [
-                "alias1",
-            ],
+            "cloudUsernames": ["alias1",],
             "totalBytes": 0,
-            "numEvents": 3
+            "numEvents": 3,
         },
         {
             "type$": "HIGH_RISK_EMPLOYEE_V2",
@@ -67,20 +66,20 @@ _MOCK_LIST_HIGH_RISK_EMPLOYEES_RESPONSE = {
             "notes": "Test test test2",
             "createdAt": "2021-04-22T00:00:00.0000000Z",
             "status": "OPEN",
-            "cloudUsernames": [
-                "alias2",
-            ],
+            "cloudUsernames": ["alias2",],
             "totalBytes": 0,
-            "numEvents": 6
-        }
-    ]
+            "numEvents": 6,
+        },
+    ],
 }
 
 
 @fixture
 def mock_py42_with_user(mocker, mock_py42_client):
     response_data = {"users": [{"userUid": _TEST_USER_UID}]}
-    mock_py42_client.users.get_by_username.return_value = create_mock_response(mocker, response_data)
+    mock_py42_client.users.get_by_username.return_value = create_mock_response(
+        mocker, response_data
+    )
     return mock_py42_client
 
 
@@ -138,7 +137,6 @@ def _attach_client(connector, client):
 
 
 class TestCode42DetectionListsConnector(object):
-
     def test_handle_action_when_add_departing_employee_calls_add_with_expected_args(
         self, mock_py42_with_user
     ):
@@ -162,9 +160,7 @@ class TestCode42DetectionListsConnector(object):
             "displayName": "",
             "createdAt": "2021-05-20T19:40:14.8909434Z",
             "status": "OPEN",
-            "cloudUsernames": [
-                "test@example.com"
-            ]
+            "cloudUsernames": ["test@example.com"],
         }
         mock_py42_with_user.detectionlists.departing_employee.add.return_value = create_mock_response(
             mocker, response_data
@@ -180,7 +176,9 @@ class TestCode42DetectionListsConnector(object):
         param = {"username": "test@example.com", "departure_date": "2030-01-01"}
         connector = _create_add_de_connector(mock_py42_with_user)
         connector.handle_action(param)
-        assert_successful_message(connector, "test@example.com was added to the departing employees list")
+        assert_successful_message(
+            connector, "test@example.com was added to the departing employees list"
+        )
 
     def test_handle_action_when_add_departing_employee_and_including_note_adds_note(
         self, mock_py42_with_user
@@ -216,14 +214,16 @@ class TestCode42DetectionListsConnector(object):
         connector = _create_remove_de_connector(mock_py42_with_user)
         connector.handle_action(param)
         assert_successful_single_data(connector, {"userId": _TEST_USER_UID})
-        
+
     def test_handle_action_when_remove_departing_employee_and_is_successful_sets_success_message(
         self, mock_py42_with_user
     ):
         param = {"username": "test@example.com"}
         connector = _create_remove_de_connector(mock_py42_with_user)
         connector.handle_action(param)
-        assert_successful_message(connector, "test@example.com was removed from the departing employees list")
+        assert_successful_message(
+            connector, "test@example.com was removed from the departing employees list"
+        )
 
     def test_handle_action_when_list_departing_employees_and_given_filter_type_calls_get_all_with_given_filter(
         self, mock_py42_with_user
@@ -287,9 +287,7 @@ class TestCode42DetectionListsConnector(object):
             "displayName": "",
             "createdAt": "2021-05-20T19:40:14.8909434Z",
             "status": "OPEN",
-            "cloudUsernames": [
-                "test@example.com"
-            ]
+            "cloudUsernames": ["test@example.com"],
         }
         mock_py42_with_user.detectionlists.high_risk_employee.add.return_value = create_mock_response(
             mocker, response_data
@@ -305,7 +303,9 @@ class TestCode42DetectionListsConnector(object):
         param = {"username": "test@example.com"}
         connector = _create_add_hr_connector(mock_py42_with_user)
         connector.handle_action(param)
-        assert_successful_message(connector, "test@example.com was added to the high risk employees list")
+        assert_successful_message(
+            connector, "test@example.com was added to the high risk employees list"
+        )
 
     def test_handle_action_when_remove_high_risk_employee_calls_remove_with_expected_args(
         self, mock_py42_with_user
@@ -337,7 +337,9 @@ class TestCode42DetectionListsConnector(object):
         param = {"username": "test@example.com"}
         connector = _create_remove_hr_connector(mock_py42_with_user)
         connector.handle_action(param)
-        assert_successful_message(connector, "test@example.com was removed from the high risk employees list")
+        assert_successful_message(
+            connector, "test@example.com was removed from the high risk employees list"
+        )
 
     def test_handle_action_when_list_high_risk_employees_and_given_filter_type_calls_get_all_with_given_filter(
         self, mock_py42_with_user

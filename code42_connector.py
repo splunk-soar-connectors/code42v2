@@ -15,7 +15,6 @@ from phantom.base_connector import BaseConnector
 
 
 class RetVal(tuple):
-
     def __new__(cls, val1, val2=None):
         return tuple.__new__(RetVal, (val1, val2))
 
@@ -32,7 +31,6 @@ def action_handler_for(key):
 
 
 class Code42Connector(BaseConnector):
-
     def __init__(self):
         super(Code42Connector, self).__init__()
 
@@ -61,11 +59,15 @@ class Code42Connector(BaseConnector):
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         if not action_handler:
-            return action_result.set_status(phantom.APP_ERROR, f"Code42: Action {action_id} does not exist.")
+            return action_result.set_status(
+                phantom.APP_ERROR, f"Code42: Action {action_id} does not exist."
+            )
 
         try:
             if not self._client:
-                self._client = py42.sdk.from_local_account(self._cloud_instance, self._username, self._password)
+                self._client = py42.sdk.from_local_account(
+                    self._cloud_instance, self._username, self._password
+                )
             self.save_progress(f"Code42: handling action {action_id}...")
             return action_handler(self, param, action_result)
         except Exception as ex:
@@ -85,7 +87,9 @@ class Code42Connector(BaseConnector):
         username = param["username"]
         departure_date = param.get("departure_date")
         user_id = self._get_user_id(username)
-        response = self._client.detectionlists.departing_employee.add(user_id, departure_date=departure_date)
+        response = self._client.detectionlists.departing_employee.add(
+            user_id, departure_date=departure_date
+        )
 
         note = param.get("note")
         if note:
@@ -107,7 +111,9 @@ class Code42Connector(BaseConnector):
     @action_handler_for("list_departing_employees")
     def _handle_list_departing_employees(self, param, action_result):
         filter_type = param.get("filter_type", DepartingEmployeeFilters.OPEN)
-        results_generator = self._client.detectionlists.departing_employee.get_all(filter_type=filter_type)
+        results_generator = self._client.detectionlists.departing_employee.get_all(
+            filter_type=filter_type
+        )
 
         page = None
         for page in results_generator:
@@ -142,7 +148,9 @@ class Code42Connector(BaseConnector):
     @action_handler_for("list_highrisk_employees")
     def _handle_list_high_risk_employees(self, param, action_result):
         filter_type = param.get("filter_type", HighRiskEmployeeFilters.OPEN)
-        results_generator = self._client.detectionlists.high_risk_employee.get_all(filter_type=filter_type)
+        results_generator = self._client.detectionlists.high_risk_employee.get_all(
+            filter_type=filter_type
+        )
 
         page = None
         for page in results_generator:
@@ -188,6 +196,7 @@ def main():
 
         # User specified a username but not a password, so ask
         import getpass
+
         password = getpass.getpass("Password: ")
 
     csrftoken = None
