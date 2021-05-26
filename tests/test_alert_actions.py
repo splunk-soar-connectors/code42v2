@@ -11,6 +11,7 @@ from tests.conftest import (
     assert_successful_summary,
     assert_fail,
     assert_successful_message,
+    assert_success,
 )
 
 
@@ -112,10 +113,9 @@ class TestCode42AlertsConnector(object):
     ):
         param = {"alert_id": "123-456-7890"}
         connector = _create_get_alert_details_connector(mock_py42_client)
-
         connector.handle_action(param)
-
         mock_py42_client.alerts.get_details.assert_called_once_with([param["alert_id"]])
+        assert_success(connector)
 
     def test_handle_action_when_alert_detail_adds_response_to_data(
         self, mock_py42_with_alert_details
@@ -149,6 +149,7 @@ class TestCode42AlertsConnector(object):
         connector = _create_search_alerts_connector(mock_py42_client)
         connector.handle_action(param)
         mock_py42_client.alerts.search.assert_called_once()
+        assert_success(connector)
 
     def test_handle_action_when_search_alerts_and_all_params_missing_sets_error_message(
         self, mock_py42_client
@@ -204,6 +205,7 @@ class TestCode42AlertsConnector(object):
         actual_query = mock_py42_client.alerts.search.call_args[0][0]
         # This is not a great assertion...
         assert len(actual_query._filter_group_list) == 2
+        assert_success(connector)
 
     def test_handle_action_when_set_alert_state_calls_update_state(
         self, mock_py42_client
@@ -214,6 +216,7 @@ class TestCode42AlertsConnector(object):
         mock_py42_client.alerts.update_state.assert_called_once_with(
             param["alert_state"], [param["alert_id"]], note=None
         )
+        assert_success(connector)
 
     def test_handle_action_when_set_alert_state_sets_message(self, mock_py42_client):
         param = {"alert_id": "1234-5678-0000", "alert_state": "RESOLVED"}

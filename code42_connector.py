@@ -186,15 +186,15 @@ class Code42Connector(BaseConnector):
         end_date = param.get("end_date")
         alert_state = param.get("alert_state")
 
-        if username is None and start_date is None and end_date is None and alert_state is None:
+        if not username and not start_date and not end_date and not alert_state:
             return action_result.set_status(
-                phantom.APP_ERROR, "Must supply a search term."
+                phantom.APP_ERROR, "Code42: Must supply a search term when calling action 'search_alerts`."
             )
 
         if not self._validate_date_range(start_date, end_date):
             return action_result.set_status(
                 phantom.APP_ERROR,
-                "Start Date and End Date are both required to search by date range.",
+                "Code42: Start Date and End Date are both required to search by date range for action 'search_alerts'.",
             )
         try:
             query = self._build_alerts_query(
@@ -203,7 +203,7 @@ class Code42Connector(BaseConnector):
         except ValueError as exception:
             return action_result.set_status(
                 phantom.APP_ERROR,
-                f"Start Date and End Date must be in format YYYY-mm-dd: {exception}",
+                f"Code42: Start Date and End Date must be in format YYYY-mm-dd: {exception} for action 'search_alerts'",
             )
 
         response = self._client.alerts.search(query)

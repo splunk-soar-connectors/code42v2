@@ -867,7 +867,7 @@
             "identifier": "set_alert_state",
             "description": "Set the state of the alert",
             "verbose": "",
-            "type": "investigate",
+            "type": "contain",
             "read_only": false,
             "parameters": {
                 "alert_id": {
