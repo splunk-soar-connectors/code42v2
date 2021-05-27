@@ -241,7 +241,6 @@ class Code42Connector(BaseConnector):
         )
         user_id = response["userUid"]
         action_result.add_data(response.data)
-        action_result.update_summary({"user_id": user_id, "username": username})
         return action_result.set_status(
             phantom.APP_SUCCESS, f"{username} was created with user_id: {user_id}"
         )
@@ -252,7 +251,6 @@ class Code42Connector(BaseConnector):
         user = self._get_user(username)
         response = self._client.users.block(user["userId"])
         action_result.add_data(response.data)
-        action_result.update_summary({"user_id": user["userUid"], "username": username})
         return action_result.set_status(phantom.APP_SUCCESS, f"{username} was blocked")
 
     @action_handler_for("unblock_user")
@@ -261,7 +259,6 @@ class Code42Connector(BaseConnector):
         user = self._get_user(username)
         response = self._client.users.unblock(user["userId"])
         action_result.add_data(response.data)
-        action_result.update_summary({"user_id": user["userUid"], "username": username})
         return action_result.set_status(
             phantom.APP_SUCCESS, f"{username} was unblocked"
         )
@@ -272,7 +269,6 @@ class Code42Connector(BaseConnector):
         user = self._get_user(username)
         response = self._client.users.deactivate(user["userId"])
         action_result.add_data(response.data)
-        action_result.update_summary({"user_id": user["userUid"], "username": username})
         return action_result.set_status(
             phantom.APP_SUCCESS, f"{username} was deactivated"
         )
@@ -283,7 +279,6 @@ class Code42Connector(BaseConnector):
         user = self._get_user(username)
         response = self._client.users.reactivate(user["userId"])
         action_result.add_data(response.data)
-        action_result.update_summary({"user_id": user["userUid"], "username": username})
         return action_result.set_status(
             phantom.APP_SUCCESS, f"{username} was reactivated"
         )
