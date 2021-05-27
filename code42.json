@@ -1078,9 +1078,6 @@
                     "data_type": "string",
                     "required": true,
                     "primary": true,
-                    "contains": [
-                        "org_id"
-                    ],
                     "default": "",
                     "order": 0
                 },
@@ -1102,7 +1099,7 @@
                     "required": false,
                     "primary": false,
                     "default": null,
-                    "order": 3
+                    "order": 2
                 },
                 "first_name": {
                     "description":  "User's first name",
@@ -1110,7 +1107,7 @@
                     "required": false,
                     "primary": false,
                     "default": "",
-                    "order": 4
+                    "order": 3
                 },
                 "last_name": {
                     "description":  "User's last name",
@@ -1118,7 +1115,7 @@
                     "required": false,
                     "primary": false,
                     "default": "",
-                    "order": 5
+                    "order": 4
                 },
                 "notes": {
                     "description":  "Notes about user",
@@ -1126,7 +1123,7 @@
                     "required": false,
                     "primary": false,
                     "default": "",
-                    "order": 6
+                    "order": 5
                 }
 
             },
@@ -1141,23 +1138,47 @@
                     "column_order": 0
                 },
                 {
+                    "data_path": "action_result.parameter.org_uid",
+                    "data_type": "string",
+                    "column_name": "Org ID",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.parameter.first_name",
+                    "data_type": "string",
+                    "column_name": "First Name",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.parameter.last_name",
+                    "data_type": "string",
+                    "column_name": "Last Name",
+                    "column_order": 3
+                },
+                {
+                    "data_path": "action_result.parameter.notes",
+                    "data_type": "string",
+                    "column_name": "Notes",
+                    "column_order": 4
+                },
+                {
                     "data_path": "action_result.data.userUid",
                     "data_type": "string",
                     "column_name": "User ID",
-                    "column_order": 1
+                    "column_order": 5
                 },
                 {
                     "data_path": "action_result.status",
                     "data_type": "string",
-                    "column_name": "status",
-                    "column_order": 2
+                    "column_name": "Status",
+                    "column_order": 6
                 },
                 {
-                    "data_path": "action_result.message",
+                    "data_path": "action_result.summary.user_id",
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.summary",
+                    "data_path": "action_result.summary.username",
                     "data_type": "string"
                 }
             ],
@@ -1194,6 +1215,10 @@
                     ],
                     "column_name": "Username",
                     "column_order": 0
+                },
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
                 }
             ],
             "versions": "EQ(*)"
@@ -1229,6 +1254,10 @@
                     ],
                     "column_name": "Username",
                     "column_order": 0
+                },
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
                 }
             ],
             "versions": "EQ(*)"
@@ -1264,6 +1293,10 @@
                     ],
                     "column_name": "Username",
                     "column_order": 0
+                },
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
                 }
             ],
             "versions": "EQ(*)"
@@ -1299,6 +1332,10 @@
                     ],
                     "column_name": "Username",
                     "column_order": 0
+                },
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
                 }
             ],
             "versions": "EQ(*)"

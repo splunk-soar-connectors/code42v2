@@ -2,8 +2,6 @@
 from __future__ import print_function, unicode_literals
 
 import json
-import random
-import string
 
 import py42.sdk
 from py42.exceptions import Py42NotFoundError
