@@ -83,7 +83,7 @@
                     "order": 0
                 },
                 "departure_date": {
-                    "description": "Date of departure for employee",
+                    "description": "Date of departure for employee in format yyyy-MM-dd",
                     "data_type": "string",
                     "required": false,
                     "primary": false,
