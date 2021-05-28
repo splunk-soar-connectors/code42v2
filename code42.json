@@ -83,7 +83,7 @@
                     "order": 0
                 },
                 "departure_date": {
-                    "description": "Date of departure for employee",
+                    "description": "Date of departure for employee in format yyyy-MM-dd",
                     "data_type": "string",
                     "required": false,
                     "primary": false,
@@ -1058,6 +1058,335 @@
                 },
                 {
                     "data_path": "action_result.summary",
+                    "data_type": "string"
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "get alert details",
+            "identifier": "get_alert_details",
+            "description": "Get alert details",
+            "verbose": "",
+            "type": "investigate",
+            "read_only": true,
+            "parameters": {
+                "alert_id": {
+                    "description": "ID of the alert to retrieve",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": true,
+                    "value_list": [],
+                    "default": "",
+                    "order": 0
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.parameter.alert_id",
+                    "data_type": "string",
+                    "column_name": "Alert ID",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "Status",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.data.*.username",
+                    "data_type": "string",
+                    "column_name": "username",
+                    "contains": [
+                        "email"
+                    ],
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.data.*.occurred",
+                    "data_type": "string",
+                    "column_name": "Occurred",
+                    "column_order": 3
+                },
+                {
+                    "data_path": "action_result.data.*.description",
+                    "data_type": "string",
+                    "column_name": "Description",
+                    "column_order": 4
+                },
+                {
+                    "data_path": "action_result.data.*.state",
+                    "data_type": "string",
+                    "column_name": "State",
+                    "column_order": 5
+                },
+                {
+                    "data_path": "action_result.data.*.type",
+                    "data_type": "string",
+                    "column_name": "Type",
+                    "column_order": 6
+                },
+                {
+                    "data_path": "action_result.data.*.severity",
+                    "data_type": "string",
+                    "column_name": "Severity",
+                    "column_order": 7
+                },
+                {
+                    "data_path": "action_result.data.*.name",
+                    "data_type": "string",
+                    "column_name": "Name",
+                    "column_order": 8
+                },
+                {
+                    "data_path": "action_result.summary.username",
+                    "data_type": "string",
+                    "column_name": "Username",
+                    "contains": [
+                        "email"
+                    ]
+                },
+                {
+                    "data_path": "action_result.summary.user_id",
+                    "data_type": "string",
+                    "column_name": "User Id"
+                },
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "search alerts",
+            "identifier": "search_alerts",
+            "description": "Search Alerts",
+            "verbose": "Defaults to last 30 days if no date range is provided.",
+            "type": "investigate",
+            "read_only": true,
+            "parameters": {
+                "username": {
+                    "description": "Username of the actor listed on alert",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": false,
+                    "contains": [
+                        "email"
+                    ],
+                    "value_list": [],
+                    "default": "",
+                    "order": 0
+                },
+                "alert_state": {
+                    "description": "Alert state",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": false,
+                    "value_list": [
+                        "OPEN",
+                        "RESOLVED",
+                        "PENDING",
+                        "IN_PROGRESS"
+                    ],
+                    "default": "",
+                    "order": 1
+                },
+                "start_date": {
+                    "description": "Beginning of date range to search. Time (in UTC) may also be supplied but is not required.",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": false,
+                    "value_list": [],
+                    "default": "",
+                    "order": 2
+                },
+                "end_date": {
+                    "description": "End of date range to search. Time (in UTC) may also be supplied but is not required.",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": false,
+                    "value_list": [],
+                    "default": "",
+                    "order": 3
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.parameter.username",
+                    "data_type": "string",
+                    "contains": [
+                        "email"
+                    ],
+                    "column_name": "Username",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.parameter.alert_state",
+                    "data_type": "string",
+                    "column_name": "Alert State",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.parameter.start_date",
+                    "data_type": "string",
+                    "column_name": "Start Date",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.parameter.end_date",
+                    "data_type": "string",
+                    "column_name": "End Date",
+                    "column_order": 3
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "status",
+                    "column_order": 4
+                },
+                {
+                    "data_path": "action_result.data.name",
+                    "data_type": "string",
+                    "column_name": "Alert Name",
+                    "column_order": 5
+                },
+                {
+                    "data_path": "action_result.data.severity",
+                    "data_type": "string",
+                    "column_name": "Severity",
+                    "column_order": 6
+                },
+                {
+                    "data_path": "action_result.data.description",
+                    "data_type": "string",
+                    "column_name": "Description",
+                    "column_order": 7
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "set alert state",
+            "identifier": "set_alert_state",
+            "description": "Set the state of the alert",
+            "verbose": "",
+            "type": "contain",
+            "read_only": false,
+            "parameters": {
+                "alert_id": {
+                    "description": "Alert ID",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": true,
+                    "value_list": [],
+                    "default": "",
+                    "order": 0
+                },
+                "alert_state": {
+                    "description": "Alert State",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": true,
+                    "value_list": [
+                        "OPEN",
+                        "RESOLVED",
+                        "PENDING",
+                        "IN_PROGRESS"
+                    ],
+                    "default": "",
+                    "order": 1
+                },
+                "note": {
+                    "description": "A note to include",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": false,
+                    "default": "",
+                    "order": 2
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.parameter.alert_id",
+                    "data_type": "string",
+                    "column_name": "Alert Id",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.parameter.alert_state",
+                    "data_type": "string",
+                    "column_name": "Alert State",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.parameter.note",
+                    "data_type": "string",
+                    "column_name": "Note",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "status",
+                    "column_order": 3
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data",
                     "data_type": "string"
                 }
             ],
