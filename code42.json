@@ -357,7 +357,7 @@
             "action": "get departing employee",
             "identifier": "get_departing_employee",
             "description": "Get a departing employee",
-            "verbose": "This action is useful for checking if a user is on t",
+            "verbose": "",
             "type": "investigate",
             "read_only": true,
             "parameters": {
@@ -1399,6 +1399,7 @@
             "action": "create user",
             "identifier": "create_user",
             "description": "Create a new Code42 user account",
+            "verbose":"There is a short delay before you will be able to add the new user to departing employee or high risk employee lits.",
             "type": "contain",
             "read_only": false,
             "parameters": {
@@ -1509,15 +1510,26 @@
                 {
                     "data_path": "action_result.summary.username",
                     "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.password",
+                    "data_type": "password"
                 }
             ],
+            "render": {
+                "type": "table"
+            },
             "versions": "EQ(*)"
         },
         {
             "action": "block user",
             "identifier": "block_user",
             "description": "Blocks a user from accessing their Code42 account",
-            "verbose": "Blocks a user from accessing their Code42 account (endpoint backup/security processes continue while blocked)",
+            "verbose": "Blocks a user from accessing their Code42 account (endpoint backup/security processes continue while blocked).",
             "undo": "unblock user",
             "type": "generic",
             "read_only": false,
@@ -1546,10 +1558,27 @@
                     "column_order": 0
                 },
                 {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "status",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.data",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
                     "data_path": "action_result.summary",
                     "data_type": "string"
                 }
             ],
+            "render": {
+                "type": "table"
+            },
             "versions": "EQ(*)"
         },
         {
@@ -1585,10 +1614,27 @@
                     "column_order": 0
                 },
                 {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "status",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.data",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
                     "data_path": "action_result.summary",
                     "data_type": "string"
                 }
             ],
+            "render": {
+                "type": "table"
+            },
             "versions": "EQ(*)"
         },
         {
@@ -1624,10 +1670,27 @@
                     "column_order": 0
                 },
                 {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "status",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.data",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
                     "data_path": "action_result.summary",
                     "data_type": "string"
                 }
             ],
+            "render": {
+                "type": "table"
+            },
             "versions": "EQ(*)"
         },
         {
@@ -1663,10 +1726,27 @@
                     "column_order": 0
                 },
                 {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "status",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.data",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
                     "data_path": "action_result.summary",
                     "data_type": "string"
                 }
             ],
+            "render": {
+                "type": "table"
+            },
             "versions": "EQ(*)"
         }
     ]
