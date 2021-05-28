@@ -1101,6 +1101,9 @@
                     "data_path": "action_result.data.*.username",
                     "data_type": "string",
                     "column_name": "username",
+                    "contains": [
+                        "email"
+                    ],
                     "column_order": 2
                 },
                 {
@@ -1142,7 +1145,10 @@
                 {
                     "data_path": "action_result.summary.username",
                     "data_type": "string",
-                    "column_name": "Username"
+                    "column_name": "Username",
+                    "contains": [
+                        "email"
+                    ]
                 },
                 {
                     "data_path": "action_result.summary.user_id",
