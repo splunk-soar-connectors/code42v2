@@ -211,7 +211,9 @@ class TestCode42AlertsConnector(object):
         connector.handle_action(param)
         actual_query = mock_py42_client.alerts.search.call_args[0][0]
         query_json = json.loads(str(actual_query))
-        actual_date = dateutil.parser.parse(query_json['groups'][1]['filters'][0]['value'])
+        actual_date = dateutil.parser.parse(
+            query_json["groups"][1]["filters"][0]["value"]
+        )
         expected_date = datetime.now(timezone.utc) - timedelta(days=30)
         assert abs((actual_date - expected_date)).seconds < 1
         assert_success(connector)
