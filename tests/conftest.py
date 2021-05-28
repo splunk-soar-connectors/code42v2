@@ -24,12 +24,13 @@ def connector():
     return connector
 
 
-def create_fake_connector(action_identifier):
+def create_fake_connector(action_identifier, client=None):
     def fake_get_action_identifier():
         return action_identifier
 
     connector = Code42Connector()
     connector.get_action_identifier = fake_get_action_identifier
+    connector._client = client
     return connector
 
 
