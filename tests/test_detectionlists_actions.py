@@ -8,7 +8,8 @@ from tests.conftest import (
     create_mock_response,
     assert_successful_single_data,
     assert_successful_message,
-    assert_succesful_summary,
+    assert_successful_summary,
+    attach_client,
 )
 
 
@@ -159,36 +160,37 @@ def mock_py42_for_risk_tags(mocker, mock_py42_with_user):
 
 def _create_add_de_connector(client):
     connector = create_fake_connector("add_departing_employee")
-    return _attach_client(connector, client)
+    return attach_client(connector, client)
 
 
 def _create_remove_de_connector(client):
     connector = create_fake_connector("remove_departing_employee")
-    return _attach_client(connector, client)
+    return attach_client(connector, client)
 
 
 def _create_list_de_connector(client):
     connector = create_fake_connector("list_departing_employees")
-    return _attach_client(connector, client)
+    return attach_client(connector, client)
 
 
 def _create_get_de_connector(client):
     connector = create_fake_connector("get_departing_employee")
-    return _attach_client(connector, client)
+    return attach_client(connector, client)
 
 
 def _create_add_hr_connector(client):
     connector = create_fake_connector("add_highrisk_employee")
-    return _attach_client(connector, client)
+    return attach_client(connector, client)
 
 
 def _create_remove_hr_connector(client):
     connector = create_fake_connector("remove_highrisk_employee")
-    return _attach_client(connector, client)
+    return attach_client(connector, client)
 
 
 def _create_list_hr_connector(client):
     connector = create_fake_connector("list_highrisk_employees")
+    return attach_client(connector, client)
     return _attach_client(connector, client)
 
 
@@ -327,7 +329,7 @@ class TestCode42DetectionListsConnector(object):
     ):
         connector = _create_list_de_connector(mock_py42_with_departing_employees)
         connector.handle_action({})
-        assert_succesful_summary(connector, {"total_count": 2})
+        assert_successful_summary(connector, {"total_count": 2})
 
     def test_handle_action_when_list_departing_employees_adds_response_items_to_data(
         self, mock_py42_with_departing_employees
@@ -368,7 +370,7 @@ class TestCode42DetectionListsConnector(object):
         param = {"username": "test@example.com"}
         connector = _create_get_de_connector(mock_py42_with_user)
         connector.handle_action(param)
-        assert_succesful_summary(connector, {"is_departing_employee": True})
+        assert_successful_summary(connector, {"is_departing_employee": True})
 
     def test_handle_action_when_get_departing_employee_and_employee_not_found_updates_summary(
         self, mock_py42_with_user
@@ -379,7 +381,7 @@ class TestCode42DetectionListsConnector(object):
         )
         connector = _create_get_de_connector(mock_py42_with_user)
         connector.handle_action(param)
-        assert_succesful_summary(connector, {"is_departing_employee": False})
+        assert_successful_summary(connector, {"is_departing_employee": False})
 
     def test_handle_action_when_add_high_risk_employee_calls_add_with_expected_args(
         self, mock_py42_with_user
@@ -484,7 +486,7 @@ class TestCode42DetectionListsConnector(object):
     ):
         connector = _create_list_hr_connector(mock_py42_with_high_risk_employees)
         connector.handle_action({})
-        assert_succesful_summary(connector, {"total_count": 2})
+        assert_successful_summary(connector, {"total_count": 2})
 
     def test_handle_action_when_list_high_risk_employee_adds_response_items_to_data(
         self, mock_py42_with_high_risk_employees
@@ -530,7 +532,7 @@ class TestCode42DetectionListsConnector(object):
         param = {"username": "test@example.com"}
         connector = _create_get_hr_connector(mock_py42_with_user)
         connector.handle_action(param)
-        assert_succesful_summary(connector, {"is_high_risk_employee": True})
+        assert_successful_summary(connector, {"is_high_risk_employee": True})
 
     def test_handle_action_when_get_high_risk_employee_and_employee_not_found_updates_summary(
         self, mock_py42_with_user
@@ -541,7 +543,7 @@ class TestCode42DetectionListsConnector(object):
         )
         connector = _create_get_hr_connector(mock_py42_with_user)
         connector.handle_action(param)
-        assert_succesful_summary(connector, {"is_high_risk_employee": False})
+        assert_successful_summary(connector, {"is_high_risk_employee": False})
 
     def test_handle_action_when_add_high_risk_tag_calls_add_with_expected_args(
         self, mock_py42_for_risk_tags

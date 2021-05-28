@@ -34,6 +34,11 @@ def create_fake_connector(action_identifier, client=None):
     return connector
 
 
+def attach_client(connector, client):
+    connector._client = client
+    return connector
+
+
 def create_mock_response(mocker, response_data):
     response = mocker.MagicMock(spec=Response)
     response.text = json.dumps(response_data)
@@ -54,6 +59,15 @@ def assert_fail(connector):
     assert status == phantom.app.APP_ERROR
 
 
+def assert_fail_message(connector, expected_message):
+    action_results = connector.get_action_results()
+    assert len(action_results) == 1
+    msg = action_results[0].get_message()
+    status = action_results[0].get_status()
+    assert msg == expected_message
+    assert status == phantom.app.APP_ERROR
+
+
 def assert_successful_single_data(connector, expected_data):
     action_results = connector.get_action_results()
     assert len(action_results) == 1
@@ -63,7 +77,7 @@ def assert_successful_single_data(connector, expected_data):
     assert status == phantom.app.APP_SUCCESS
 
 
-def assert_succesful_summary(connector, expected_summary):
+def assert_successful_summary(connector, expected_summary):
     action_results = connector.get_action_results()
     assert len(action_results) == 1
     summary = action_results[0].get_summary()
@@ -79,3 +93,8 @@ def assert_successful_message(connector, expected_message):
     status = action_results[0].get_status()
     assert msg == expected_message
     assert status == phantom.app.APP_SUCCESS
+
+
+def attach_client(connector, client):
+    connector._client = client
+    return connector
