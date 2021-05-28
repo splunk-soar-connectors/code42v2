@@ -8,6 +8,11 @@ from py42.exceptions import Py42NotFoundError
 from py42.services.detectionlists.departing_employee import DepartingEmployeeFilters
 from py42.services.detectionlists.high_risk_employee import HighRiskEmployeeFilters
 import requests
+from datetime import datetime, timedelta
+import dateutil.parser
+
+from py42.sdk.queries.alerts.alert_query import AlertQuery
+from py42.sdk.queries.alerts.filters import Actor, AlertState, DateObserved
 
 # Phantom App imports
 import phantom.app as phantom
@@ -225,10 +230,75 @@ class Code42Connector(BaseConnector):
         )
         return action_result.set_status(phantom.APP_SUCCESS, message)
 
+    """ALERTS ACTIONS"""
+
+    @action_handler_for("get_alert_details")
+    def _handle_get_alert_details(self, param, action_result):
+        alert_id = param["alert_id"]
+        response = self._client.alerts.get_details([alert_id])
+        alert = response.data["alerts"][0]
+        action_result.add_data(alert)
+        action_result.update_summary(
+            {"username": alert["actor"], "user_id": alert["actorId"]}
+        )
+        return action_result.set_status(phantom.APP_SUCCESS)
+
+    @action_handler_for("search_alerts")
+    def _handle_search_alerts(self, param, action_result):
+        username = param.get("username")
+        start_date = param.get("start_date")
+        end_date = param.get("end_date")
+        alert_state = param.get("alert_state")
+
+        if not any([username, start_date, end_date, alert_state]):
+            return action_result.set_status(
+                phantom.APP_ERROR,
+                "Code42: Must supply a search term when calling action 'search_alerts`.",
+            )
+        query = self._build_alerts_query(username, start_date, end_date, alert_state)
+        response = self._client.alerts.search(query)
+        action_result.add_data(response.data)
+        action_result.update_summary({"total_count": response["totalCount"]})
+        return action_result.set_status(phantom.APP_SUCCESS)
+
+    @action_handler_for("set_alert_state")
+    def _handle_set_alert_state(self, param, action_result):
+        alert_id = param["alert_id"]
+        alert_state = param["alert_state"]
+        note = param.get("note")
+        response = self._client.alerts.update_state(alert_state, [alert_id], note=note)
+        action_result.add_data(response.data)
+        status_message = f"State of alert {alert_id} was updated to {alert_state}"
+        action_result.update_summary({"alert_id": alert_id})
+        return action_result.set_status(phantom.APP_SUCCESS, status_message)
+
     def finalize(self):
         # Save the state, this data is saved across actions and app upgrades
         self.save_state(self._state)
         return phantom.APP_SUCCESS
+
+    def _build_alerts_query(self, username, start_date, end_date, alert_state):
+        filters = []
+        if username is not None:
+            filters.append(Actor.eq(username))
+        if alert_state is not None:
+            filters.append(AlertState.eq(alert_state))
+        filters.append(self._build_date_range_filter(start_date, end_date))
+        query = AlertQuery.all(*filters)
+        return query
+
+    def _build_date_range_filter(self, start_date, end_date):
+        if start_date and not end_date:
+            return DateObserved.on_or_after(dateutil.parser.parse(start_date))
+        elif end_date and not start_date:
+            return DateObserved.on_or_before(dateutil.parser.parse(end_date))
+        elif end_date and start_date:
+            return DateObserved.in_range(
+                dateutil.parser.parse(start_date), dateutil.parser.parse(end_date)
+            )
+        else:
+            thirty_days_ago = datetime.utcnow() - timedelta(days=30)
+            return DateObserved.on_or_after(thirty_days_ago)
 
     def _get_user_id(self, username):
         users = self._client.users.get_by_username(username)["users"]
