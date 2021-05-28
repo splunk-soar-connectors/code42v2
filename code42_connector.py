@@ -250,7 +250,7 @@ class Code42Connector(BaseConnector):
         end_date = param.get("end_date")
         alert_state = param.get("alert_state")
 
-        if not username and not start_date and not end_date and not alert_state:
+        if not any([username, start_date, end_date, alert_state]):
             return action_result.set_status(
                 phantom.APP_ERROR,
                 "Code42: Must supply a search term when calling action 'search_alerts`.",
@@ -292,12 +292,12 @@ class Code42Connector(BaseConnector):
             return DateObserved.on_or_after(dateutil.parser.parse(start_date))
         elif end_date and not start_date:
             return DateObserved.on_or_before(dateutil.parser.parse(end_date))
-        elif end_date is not None and start_date is not None:
+        elif end_date and start_date:
             return DateObserved.in_range(
                 dateutil.parser.parse(start_date), dateutil.parser.parse(end_date)
             )
         else:
-            thirty_days_ago = datetime.now() - timedelta(days=30)
+            thirty_days_ago = datetime.utcnow() - timedelta(days=30)
             return DateObserved.on_or_after(thirty_days_ago)
 
     def _get_user_id(self, username):

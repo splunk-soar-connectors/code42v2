@@ -1,5 +1,8 @@
+import json
+from datetime import datetime, timedelta, timezone
 from unittest import mock
 
+import dateutil
 from py42.exceptions import Py42NotFoundError
 from pytest import fixture
 
@@ -207,8 +210,10 @@ class TestCode42AlertsConnector(object):
         connector = _create_search_alerts_connector(mock_py42_client)
         connector.handle_action(param)
         actual_query = mock_py42_client.alerts.search.call_args[0][0]
-        # This is not a great assertion...
-        assert len(actual_query._filter_group_list) == 2
+        query_json = json.loads(str(actual_query))
+        actual_date = dateutil.parser.parse(query_json['groups'][1]['filters'][0]['value'])
+        expected_date = datetime.now(timezone.utc) - timedelta(days=30)
+        assert abs((actual_date - expected_date)).seconds < 1
         assert_success(connector)
 
     def test_handle_action_when_set_alert_state_calls_update_state(
