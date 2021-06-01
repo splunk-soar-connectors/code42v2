@@ -10,12 +10,24 @@ from requests import Response
 from code42_connector import Code42Connector
 
 
+TEST_USER_UID = "TEST_USER_UID"
+
+
 @fixture(autouse=True)
 def mock_py42_client(mocker):
     client = mocker.MagicMock(spec=py42.sdk.SDKClient)
     client.users = mocker.MagicMock(spec=UserService)
     mocker.patch("py42.sdk.from_local_account", return_value=client)
     return client
+
+
+@fixture
+def mock_py42_with_user(mocker, mock_py42_client):
+    response_data = {"users": [{"userUid": TEST_USER_UID}]}
+    mock_py42_client.users.get_by_username.return_value = create_mock_response(
+        mocker, response_data
+    )
+    return mock_py42_client
 
 
 @fixture

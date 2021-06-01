@@ -268,8 +268,31 @@ class Code42Connector(BaseConnector):
         note = param.get("note")
         response = self._client.alerts.update_state(alert_state, [alert_id], note=note)
         action_result.add_data(response.data)
-        status_message = f"State of alert {alert_id} was updated to {alert_state}"
         action_result.update_summary({"alert_id": alert_id})
+        status_message = f"State of alert {alert_id} was updated to {alert_state}"
+        return action_result.set_status(phantom.APP_SUCCESS, status_message)
+
+    @action_handler_for("add_legalhold_user")
+    def _handle_add_legal_hold_user(self, param, action_result):
+        username = param["username"]
+        matter_id = param["matter_id"]
+        user_id = self._get_user_id(username)
+        response = self._client.legalhold.add_to_matter(user_id, matter_id)
+        action_result.add_data(response.data)
+        status_message = f"{username} was added to legal hold matter {matter_id}."
+        return action_result.set_status(phantom.APP_SUCCESS, status_message)
+
+    @action_handler_for("remove_legalhold_user")
+    def _handle_remove_legal_hold_user(self, param, action_result):
+        username = param["username"]
+        matter_id = param["matter_id"]
+        user_id = self._get_user_id(username)
+        legal_hold_membership_id = self._get_legal_hold_membership_id_for_user_and_matter(
+            user_id, matter_id
+        )
+        self._client.legalhold.remove_from_matter(legal_hold_membership_id)
+        action_result.add_data({"userId": user_id})
+        status_message = f"{username} was removed from legal hold matter {matter_id}."
         return action_result.set_status(phantom.APP_SUCCESS, status_message)
 
     def finalize(self):
@@ -305,6 +328,27 @@ class Code42Connector(BaseConnector):
         if not users:
             raise Exception(f"User '{username}' does not exist")
         return users[0]["userUid"]
+
+    # Following two helper functions are copy+pasted from cmds/legal_hold.py in `code42cli`
+    def _get_legal_hold_membership_id_for_user_and_matter(self, user_id, matter_id):
+        memberships = self._get_legal_hold_memberships_for_matter(matter_id)
+        for member in memberships:
+            if member["user"]["userUid"] == user_id:
+                return member["legalHoldMembershipUid"]
+        raise ValueError(
+            f"User is not an active member of legal hold matter {matter_id}"
+        )
+
+    def _get_legal_hold_memberships_for_matter(self, matter_id):
+        memberships_generator = self._client.legalhold.get_all_matter_custodians(
+            legal_hold_uid=matter_id, active=True
+        )
+        memberships = [
+            member
+            for page in memberships_generator
+            for member in page["legalHoldMemberships"]
+        ]
+        return memberships
 
 
 def main():
