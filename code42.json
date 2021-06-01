@@ -1400,7 +1400,7 @@
             "identifier": "create_user",
             "description": "Create a new Code42 user account",
             "verbose": "There is a short delay before you will be able to add the new user to departing employee or high risk employee list.",
-            "type": "contain",
+            "type": "generic",
             "read_only": false,
             "parameters": {
                 "org_uid": {
