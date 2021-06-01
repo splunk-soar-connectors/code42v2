@@ -1498,6 +1498,10 @@
                     "column_order": 5
                 },
                 {
+                    "data_path": "action_result.data",
+                    "data_type": "string"
+                },
+                {
                     "data_path": "action_result.summary.user_id",
                     "data_type": "string"
                 },
