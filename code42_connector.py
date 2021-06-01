@@ -230,6 +230,64 @@ class Code42Connector(BaseConnector):
         )
         return action_result.set_status(phantom.APP_SUCCESS, message)
 
+    """ USER ACTIONS """
+
+    @action_handler_for("create_user")
+    def _handle_create_user(self, param, action_result):
+        username = param["username"]
+        response = self._client.users.create_user(
+            org_uid=param["org_uid"],
+            username=username,
+            email=username,
+            password=param.get("password"),
+            first_name=param.get("first_name"),
+            last_name=param.get("last_name"),
+            notes=param.get("notes"),
+        )
+        user_id = response["userUid"]
+        action_result.add_data(response.data)
+        return action_result.set_status(
+            phantom.APP_SUCCESS, f"{username} was created with user_id: {user_id}"
+        )
+
+    @action_handler_for("block_user")
+    def _handle_block_user(self, param, action_result):
+        username = param["username"]
+        user = self._get_user(username)
+        response = self._client.users.block(user["userId"])
+        action_result.add_data(response.data)
+        return action_result.set_status(phantom.APP_SUCCESS, f"{username} was blocked")
+
+    @action_handler_for("unblock_user")
+    def _handle_unblock_user(self, param, action_result):
+        username = param["username"]
+        user = self._get_user(username)
+        response = self._client.users.unblock(user["userId"])
+        action_result.add_data(response.data)
+        return action_result.set_status(
+            phantom.APP_SUCCESS, f"{username} was unblocked"
+        )
+
+    @action_handler_for("deactivate_user")
+    def _handle_deactivate_user(self, param, action_result):
+        username = param["username"]
+        user = self._get_user(username)
+        response = self._client.users.deactivate(user["userId"])
+        action_result.add_data(response.data)
+        return action_result.set_status(
+            phantom.APP_SUCCESS, f"{username} was deactivated"
+        )
+
+    @action_handler_for("reactivate_user")
+    def _handle_reactivate_user(self, param, action_result):
+        username = param["username"]
+        user = self._get_user(username)
+        response = self._client.users.reactivate(user["userId"])
+        action_result.add_data(response.data)
+        return action_result.set_status(
+            phantom.APP_SUCCESS, f"{username} was reactivated"
+        )
+
     """ALERTS ACTIONS"""
 
     @action_handler_for("get_alert_details")
@@ -323,11 +381,14 @@ class Code42Connector(BaseConnector):
             thirty_days_ago = datetime.utcnow() - timedelta(days=30)
             return DateObserved.on_or_after(thirty_days_ago)
 
-    def _get_user_id(self, username):
+    def _get_user(self, username):
         users = self._client.users.get_by_username(username)["users"]
         if not users:
             raise Exception(f"User '{username}' does not exist")
-        return users[0]["userUid"]
+        return users[0]
+
+    def _get_user_id(self, username):
+        return self._get_user(username)["userUid"]
 
     # Following two helper functions are copy+pasted from cmds/legal_hold.py in `code42cli`
     def _get_legal_hold_membership_id_for_user_and_matter(self, user_id, matter_id):

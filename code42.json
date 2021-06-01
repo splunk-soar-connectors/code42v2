@@ -357,7 +357,7 @@
             "action": "get departing employee",
             "identifier": "get_departing_employee",
             "description": "Get a departing employee",
-            "verbose": "This action is useful for checking if a user is on t",
+            "verbose": "",
             "type": "investigate",
             "read_only": true,
             "parameters": {
@@ -1387,6 +1387,358 @@
                 },
                 {
                     "data_path": "action_result.data",
+                    "data_type": "string"
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "create user",
+            "identifier": "create_user",
+            "description": "Create a new Code42 user account",
+            "verbose": "There is a short delay before you will be able to add the new user to departing employee or high risk employee list.",
+            "type": "contain",
+            "read_only": false,
+            "parameters": {
+                "org_uid": {
+                    "description":  "Org UID to create user in",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": true,
+                    "default": "",
+                    "order": 0
+                },
+                "username": {
+                    "description":  "Username to create",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": true,
+                    "contains": [
+                        "email"
+                    ],
+                    "default": "",
+                    "order": 1
+                },
+                "password": {
+                    "description":  "Password for newly created user",
+                    "verbose": "Defaults to no password set, which leaves user in 'invited' state. They will need to reset password via email prior to first login.",
+                    "data_type": "password",
+                    "required": false,
+                    "primary": false,
+                    "default": null,
+                    "order": 2
+                },
+                "first_name": {
+                    "description":  "User's first name",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": false,
+                    "default": "",
+                    "order": 3
+                },
+                "last_name": {
+                    "description":  "User's last name",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": false,
+                    "default": "",
+                    "order": 4
+                },
+                "notes": {
+                    "description":  "Notes about user",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": false,
+                    "default": "",
+                    "order": 5
+                }
+
+            },
+            "output": [
+                {
+                    "data_path": "action_result.parameter.username",
+                    "data_type": "string",
+                    "contains": [
+                        "email"
+                    ],
+                    "column_name": "Username",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.parameter.org_uid",
+                    "data_type": "string",
+                    "column_name": "Org ID",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.parameter.first_name",
+                    "data_type": "string",
+                    "column_name": "First Name",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.parameter.last_name",
+                    "data_type": "string",
+                    "column_name": "Last Name",
+                    "column_order": 3
+                },
+                {
+                    "data_path": "action_result.parameter.notes",
+                    "data_type": "string",
+                    "column_name": "Notes",
+                    "column_order": 4
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "Status",
+                    "column_order": 5
+                },
+                {
+                    "data_path": "action_result.data",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.summary.user_id",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.summary.username",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.password",
+                    "data_type": "password"
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "block user",
+            "identifier": "block_user",
+            "description": "Blocks a user from accessing their Code42 account",
+            "verbose": "Blocks a user from accessing their Code42 account (endpoint backup/security processes continue while blocked).",
+            "undo": "unblock user",
+            "type": "generic",
+            "read_only": false,
+            "parameters": {
+                "username": {
+                    "description": "Username to block",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": true,
+                    "contains": [
+                        "email"
+                    ],
+                    "value_list": [],
+                    "default": "",
+                    "order": 0
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.parameter.username",
+                    "data_type": "string",
+                    "contains": [
+                        "email"
+                    ],
+                    "column_name": "Username",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "status",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.data",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "deactivate user",
+            "identifier": "deactivate_user",
+            "description": "Deactivates user's Code42 account",
+            "verbose": "",
+            "undo": "reactivate user",
+            "type": "generic",
+            "read_only": false,
+            "parameters": {
+                "username": {
+                    "description": "Username to deactivate",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": true,
+                    "contains": [
+                        "email"
+                    ],
+                    "value_list": [],
+                    "default": "",
+                    "order": 0
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.parameter.username",
+                    "data_type": "string",
+                    "contains": [
+                        "email"
+                    ],
+                    "column_name": "Username",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "status",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.data",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "reactivate user",
+            "identifier": "reactivate_user",
+            "description": "Reactivates a deactivated user's Code42 account",
+            "verbose": "",
+            "undo": "deactivate user",
+            "type": "generic",
+            "read_only": false,
+            "parameters": {
+                "username": {
+                    "description": "Username to reactivate",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": true,
+                    "contains": [
+                        "email"
+                    ],
+                    "value_list": [],
+                    "default": "",
+                    "order": 0
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.parameter.username",
+                    "data_type": "string",
+                    "contains": [
+                        "email"
+                    ],
+                    "column_name": "Username",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "status",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.data",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "unblock user",
+            "identifier": "unblock_user",
+            "description": "Unblocks a user, allowing access to their Code42 account",
+            "verbose": "",
+            "undo": "block user",
+            "type": "generic",
+            "read_only": false,
+            "parameters": {
+                "username": {
+                    "description": "Username to unblock",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": true,
+                    "contains": [
+                        "email"
+                    ],
+                    "value_list": [],
+                    "default": "",
+                    "order": 0
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.parameter.username",
+                    "data_type": "string",
+                    "contains": [
+                        "email"
+                    ],
+                    "column_name": "Username",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "status",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.data",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.summary",
                     "data_type": "string"
                 }
             ],
