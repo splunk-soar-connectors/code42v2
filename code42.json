@@ -1425,7 +1425,7 @@
                 "password": {
                     "description":  "Password for newly created user",
                     "verbose": "Defaults to no password set, which leaves user in 'invited' state. They will need to reset password via email prior to first login.",
-                    "data_type": "password",
+                    "data_type": "string",
                     "required": false,
                     "primary": false,
                     "default": null,
