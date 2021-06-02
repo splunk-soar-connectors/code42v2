@@ -1752,6 +1752,7 @@
             "identifier": "add_legalhold_user",
             "description": "Add a user (custodian) to a legal hold matter",
             "verbose": "",
+            "undo": "remove legalhold user",
             "type": "contain",
             "read_only": false,
             "parameters": {
@@ -1830,6 +1831,7 @@
             "identifier": "remove_legalhold_user",
             "description": "Remove user (custodian) from a legal hold matter",
             "verbose": "",
+            "undo": "add legalhold user",
             "type": "contain",
             "read_only": false,
             "parameters": {

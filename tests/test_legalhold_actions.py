@@ -89,8 +89,8 @@ class TestCode42AlertsConnector(object):
             },
             "user": {
                 "userUid": "990572034162882387",
-                "username": "peter.briggs+partner@code42.com",
-                "email": "peter.briggs+partner@code42.com",
+                "username": "test2@example.com",
+                "email": "test2@example.com",
                 "userExtRef": None,
             },
         }
@@ -116,7 +116,6 @@ class TestCode42AlertsConnector(object):
         self, mock_py42_with_legal_hold_memberships
     ):
         param = {"username": "test@example.com", "matter_id": _TEST_MATTER_ID}
-        # mock_py42_with_legal_hold_memberships.legalhold.get_all_matter_custodians
         connector = _create_remove_legalhold_user_connector(
             mock_py42_with_legal_hold_memberships
         )
@@ -166,5 +165,5 @@ class TestCode42AlertsConnector(object):
         connector.handle_action(param)
         assert_fail_message(
             connector,
-            f"Code42: Failed execution of action remove_legalhold_user: User is not an active member of legal hold matter {_TEST_MATTER_ID}",
+            f"Code42: User is not an active member of legal hold matter {_TEST_MATTER_ID} for action 'remove_legalhold_user'."
         )

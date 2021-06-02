@@ -345,9 +345,14 @@ class Code42Connector(BaseConnector):
         username = param["username"]
         matter_id = param["matter_id"]
         user_id = self._get_user_id(username)
-        legal_hold_membership_id = self._get_legal_hold_membership_id_for_user_and_matter(
+        legal_hold_membership_id = self._get_legal_hold_membership_id(
             user_id, matter_id
         )
+        if legal_hold_membership_id is None:
+            return action_result.set_status(
+                phantom.APP_ERROR,
+                f"Code42: User is not an active member of legal hold matter {matter_id} for action 'remove_legalhold_user'."
+            )
         self._client.legalhold.remove_from_matter(legal_hold_membership_id)
         action_result.add_data({"userId": user_id})
         status_message = f"{username} was removed from legal hold matter {matter_id}."
@@ -391,14 +396,12 @@ class Code42Connector(BaseConnector):
         return self._get_user(username)["userUid"]
 
     # Following two helper functions are copy+pasted from cmds/legal_hold.py in `code42cli`
-    def _get_legal_hold_membership_id_for_user_and_matter(self, user_id, matter_id):
+    def _get_legal_hold_membership_id(self, user_id, matter_id):
         memberships = self._get_legal_hold_memberships_for_matter(matter_id)
         for member in memberships:
             if member["user"]["userUid"] == user_id:
                 return member["legalHoldMembershipUid"]
-        raise ValueError(
-            f"User is not an active member of legal hold matter {matter_id}"
-        )
+        return None
 
     def _get_legal_hold_memberships_for_matter(self, matter_id):
         memberships_generator = self._client.legalhold.get_all_matter_custodians(
