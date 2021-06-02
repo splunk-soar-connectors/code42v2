@@ -1963,27 +1963,13 @@
             "type": "investigate",
             "read_only": true,
             "parameters": {
-                "hash": {
+                "json_query": {
                     "description": "The md5 or sha256 hash of the file to download",
                     "data_type": "string",
                     "required": true,
                     "primary": true,
-                    "contains": [
-                        "md5",
-                        "sha256"
-                    ],
-                    "value_list": [],
                     "default": "",
                     "order": 0
-                },
-                "filename": {
-                    "description": "The name to give to the file after it is downloaded. If not supplied, the hash will be used.",
-                    "data_type": "string",
-                    "required": false,
-                    "primary": true,
-                    "value_list": [],
-                    "default": "",
-                    "order": 1
                 }
             },
             "output": [
