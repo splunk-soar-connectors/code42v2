@@ -18,7 +18,8 @@ from py42.sdk.queries.alerts.filters import Actor, AlertState, DateObserved
 import phantom.app as phantom
 from phantom.action_result import ActionResult
 from phantom.base_connector import BaseConnector
-
+import phantom.utils as utils
+from phantom.vault import Vault
 
 class RetVal(tuple):
     def __new__(cls, val1, val2=None):
@@ -330,6 +331,23 @@ class Code42Connector(BaseConnector):
         action_result.update_summary({"alert_id": alert_id})
         return action_result.set_status(phantom.APP_SUCCESS, status_message)
 
+    """ FILE EVENT ACTIONS """
+    
+    @action_handler_for("hunt_file")
+    def _handle_hunt_file(self, param, action_result):
+        file_hash = param["hash"]
+        filename = param.get("filename")
+        if not filename:
+            param["filename"] = file_hash
+            action_result.update_param(param)
+            filename = file_hash
+
+        file_content = self._get_file_content(file_hash)
+        container_id = self.get_container_id()
+        Vault.create_attachment(file_content, container_id, file_name=filename)
+        status_message = f"{filename} was successfully downloaded and attached to container {container_id}"
+        return action_result.set_status(phantom.APP_SUCCESS, status_message)
+
     def finalize(self):
         # Save the state, this data is saved across actions and app upgrades
         self.save_state(self._state)
@@ -361,11 +379,22 @@ class Code42Connector(BaseConnector):
     def _get_user(self, username):
         users = self._client.users.get_by_username(username)["users"]
         if not users:
-            raise Exception(f"User '{username}' does not exist")
+            raise ValueError(f"User '{username}' does not exist")
         return users[0]
 
     def _get_user_id(self, username):
         return self._get_user(username)["userUid"]
+
+    def _get_file_content(self, file_hash):
+        if utils.is_md5(file_hash):
+            response = self._client.securitydata.stream_file_by_md5(file_hash)
+        elif utils.is_sha256(file_hash):
+            response = self._client.securitydata.stream_file_by_sha256(file_hash)
+        else:
+            raise ValueError("Unsupported hash format. Hash must be either md5 or sha256")
+
+        chunks = [chunk for chunk in response.iter_content(chunk_size=128) if chunk]
+        return b"".join(chunks)
 
 
 def main():
