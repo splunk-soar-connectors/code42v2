@@ -1750,13 +1750,13 @@
         {
             "action": "hunt file",
             "identifier": "hunt_file",
-            "description": "Searches Code42 for a backed-up file with a matching hash and downloads it.",
+            "description": "Searches Code42 for a backed-up file with a matching hash and downloads it",
             "verbose": "",
             "type": "investigate",
             "read_only": true,
             "parameters": {
                 "hash": {
-                    "description": "The md5 or sha256 hash of the file to download.",
+                    "description": "The md5 or sha256 hash of the file to download",
                     "data_type": "string",
                     "required": true,
                     "primary": true,
