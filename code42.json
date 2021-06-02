@@ -1824,8 +1824,8 @@
         {
             "action": "run query",
             "identifier": "run_query",
-            "description": "Searches Code42 for a backed-up file with a matching hash and downloads it",
-            "verbose": "",
+            "description": "Search for Code42 file events",
+            "verbose": "You can use wildcards (*,?) with parameters <b>file_name</b> and <b>file_path</b>. All query parameters are in logical AND with each other.",
             "type": "investigate",
             "read_only": true,
             "parameters": {
@@ -1956,9 +1956,9 @@
             "versions": "EQ(*)"
         },
         {
-            "action": "run raw query",
-            "identifier": "run_raw_query",
-            "description": "Searches Code42 for a backed-up file with a matching hash and downloads it",
+            "action": "run advanced query",
+            "identifier": "run_advanced_query",
+            "description": "Run an advanced query using JSON",
             "verbose": "",
             "type": "investigate",
             "read_only": true,

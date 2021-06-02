@@ -349,6 +349,14 @@ class Code42Connector(BaseConnector):
         status_message = f"{file_name} was successfully downloaded and attached to container {container_id}"
         return action_result.set_status(phantom.APP_SUCCESS, status_message)
 
+    @action_handler_for("run_query")
+    def _handle_run_query(self, param, action_result):
+        pass
+
+    @action_handler_for("run_advanced_query")
+    def _handle_run_json_query(self, param, action_result):
+        pass
+
     def finalize(self):
         # Save the state, this data is saved across actions and app upgrades
         self.save_state(self._state)
