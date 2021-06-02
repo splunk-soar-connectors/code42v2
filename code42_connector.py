@@ -21,6 +21,7 @@ from phantom.base_connector import BaseConnector
 import phantom.utils as utils
 from phantom.vault import Vault
 
+
 class RetVal(tuple):
     def __new__(cls, val1, val2=None):
         return tuple.__new__(RetVal, (val1, val2))
@@ -332,7 +333,7 @@ class Code42Connector(BaseConnector):
         return action_result.set_status(phantom.APP_SUCCESS, status_message)
 
     """ FILE EVENT ACTIONS """
-    
+
     @action_handler_for("hunt_file")
     def _handle_hunt_file(self, param, action_result):
         file_hash = param["hash"]
@@ -391,7 +392,9 @@ class Code42Connector(BaseConnector):
         elif utils.is_sha256(file_hash):
             response = self._client.securitydata.stream_file_by_sha256(file_hash)
         else:
-            raise ValueError("Unsupported hash format. Hash must be either md5 or sha256")
+            raise ValueError(
+                "Unsupported hash format. Hash must be either md5 or sha256"
+            )
 
         chunks = [chunk for chunk in response.iter_content(chunk_size=128) if chunk]
         return b"".join(chunks)

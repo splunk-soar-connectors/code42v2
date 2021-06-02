@@ -17,6 +17,7 @@ def mock_py42_client(mocker):
     mocker.patch("py42.sdk.from_local_account", return_value=client)
     return client
 
+
 @fixture(autouse=True)
 def mock_create_attachment(mocker):
     mock_vault = mocker.patch("phantom.vault.Vault.create_attachment")
@@ -103,6 +104,7 @@ def assert_successful_message(connector, expected_message):
     assert msg == expected_message
     assert status == phantom.app.APP_SUCCESS
 
+
 def assert_successful_params(connector, expected_params):
     action_results = connector.get_action_results()
     assert len(action_results) == 1
@@ -110,6 +112,7 @@ def assert_successful_params(connector, expected_params):
     status = action_results[0].get_status()
     assert params == expected_params
     assert status == phantom.app.APP_SUCCESS
+
 
 def attach_client(connector, client):
     connector._client = client
