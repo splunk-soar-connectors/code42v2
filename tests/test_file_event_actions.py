@@ -45,7 +45,7 @@ class TestCode42FileEventsConnector(object):
     def test_handle_action_when_hunt_file_given_md5_and_filename_outputs_expected_params(
         self, mocker, mock_py42_client
     ):
-        param = {"hash": TEST_MD5, "filename": TEST_FILENAME}
+        param = {"hash": TEST_MD5, "file_name": TEST_FILENAME}
         connector = _create_hunt_file_connector(mocker, mock_py42_client)
         connector.handle_action(param)
         assert_successful_params(connector, param)
@@ -61,7 +61,7 @@ class TestCode42FileEventsConnector(object):
     def test_handle_action_when_hunt_file_given_md5_calls_stream_file_by_md5(
         self, mocker, mock_py42_client
     ):
-        param = {"hash": TEST_MD5, "filename": TEST_FILENAME}
+        param = {"hash": TEST_MD5, "file_name": TEST_FILENAME}
         connector = _create_hunt_file_connector(mocker, mock_py42_client)
         connector.handle_action(param)
         mock_py42_client.securitydata.stream_file_by_md5.assert_called_once_with(
@@ -72,7 +72,7 @@ class TestCode42FileEventsConnector(object):
     def test_handle_action_when_hunt_file_given_md5_and_filename_calls_create_attachment_with_expected_args(
         self, mocker, mock_py42_client, mock_create_attachment
     ):
-        param = {"hash": TEST_MD5, "filename": TEST_FILENAME}
+        param = {"hash": TEST_MD5, "file_name": TEST_FILENAME}
         connector = _create_hunt_file_connector(mocker, mock_py42_client)
         connector.handle_action(param)
         mock_create_attachment.assert_called_once_with(
@@ -94,7 +94,7 @@ class TestCode42FileEventsConnector(object):
     def test_handle_action_when_hunt_file_given_md5_and_filename_sets_success_message(
         self, mocker, mock_py42_client
     ):
-        param = {"hash": TEST_MD5, "filename": TEST_FILENAME}
+        param = {"hash": TEST_MD5, "file_name": TEST_FILENAME}
         connector = _create_hunt_file_connector(mocker, mock_py42_client)
         connector.handle_action(param)
         message = (
@@ -114,7 +114,7 @@ class TestCode42FileEventsConnector(object):
     def test_handle_action_when_hunt_file_given_sha256_and_filename_outputs_expected_params(
         self, mocker, mock_py42_client
     ):
-        param = {"hash": TEST_SHA256, "filename": TEST_FILENAME}
+        param = {"hash": TEST_SHA256, "file_name": TEST_FILENAME}
         connector = _create_hunt_file_connector(mocker, mock_py42_client)
         connector.handle_action(param)
         assert_successful_params(connector, param)
@@ -130,7 +130,7 @@ class TestCode42FileEventsConnector(object):
     def test_handle_action_when_hunt_file_given_sha256_calls_stream_file_by_sha256(
         self, mocker, mock_py42_client
     ):
-        param = {"hash": TEST_SHA256, "filename": TEST_FILENAME}
+        param = {"hash": TEST_SHA256, "file_name": TEST_FILENAME}
         connector = _create_hunt_file_connector(mocker, mock_py42_client)
         connector.handle_action(param)
         mock_py42_client.securitydata.stream_file_by_sha256.assert_called_once_with(
@@ -141,7 +141,7 @@ class TestCode42FileEventsConnector(object):
     def test_handle_action_when_hunt_file_given_sha256_and_filename_calls_create_attachment_with_expected_args(
         self, mocker, mock_py42_client, mock_create_attachment
     ):
-        param = {"hash": TEST_SHA256, "filename": TEST_FILENAME}
+        param = {"hash": TEST_SHA256, "file_name": TEST_FILENAME}
         connector = _create_hunt_file_connector(mocker, mock_py42_client)
         connector.handle_action(param)
         mock_create_attachment.assert_called_once_with(
@@ -163,7 +163,7 @@ class TestCode42FileEventsConnector(object):
     def test_handle_action_when_hunt_file_given_sha256_and_filename_sets_success_message(
         self, mocker, mock_py42_client
     ):
-        param = {"hash": TEST_SHA256, "filename": TEST_FILENAME}
+        param = {"hash": TEST_SHA256, "file_name": TEST_FILENAME}
         connector = _create_hunt_file_connector(mocker, mock_py42_client)
         connector.handle_action(param)
         message = (

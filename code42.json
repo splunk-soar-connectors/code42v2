@@ -1764,16 +1764,14 @@
                         "md5",
                         "sha256"
                     ],
-                    "value_list": [],
                     "default": "",
                     "order": 0
                 },
-                "filename": {
+                "file_name": {
                     "description": "The name to give to the file after it is downloaded. If not supplied, the hash will be used.",
                     "data_type": "string",
                     "required": false,
                     "primary": true,
-                    "value_list": [],
                     "default": "",
                     "order": 1
                 }
@@ -1790,7 +1788,7 @@
                     "column_order": 0
                 },
                 {
-                    "data_path": "action_result.parameter.filename",
+                    "data_path": "action_result.parameter.file_name",
                     "data_type": "string",
                     "column_name": "status",
                     "column_order": 1
@@ -1817,6 +1815,178 @@
                     "data_path": "action_result.summary",
                     "data_type": "string"
                 }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "run query",
+            "identifier": "run_query",
+            "description": "Searches Code42 for a backed-up file with a matching hash and downloads it",
+            "verbose": "",
+            "type": "investigate",
+            "read_only": true,
+            "parameters": {
+                "start_date": {
+                    "description": "Beginning of date range to search. Time (in UTC) may also be supplied but is not required.",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": false,
+                    "default": "",
+                    "order": 0
+                },
+                "end_date": {
+                    "description": "End of date range to search. Time (in UTC) may also be supplied but is not required.",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": false,
+                    "default": "",
+                    "order": 1
+                },
+                "hash": {
+                    "description": "Md5 or sha256 hash of a file",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": true,
+                    "contains": [
+                        "md5",
+                        "sha256"
+                    ],
+                    "value_list": [],
+                    "default": "",
+                    "order": 2
+                },
+                "file_name": {
+                    "description": "The name to give to the file after it is downloaded. If not supplied, the hash will be used.",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": true,
+                    "value_list": [],
+                    "default": "",
+                    "order": 3
+                },
+                "file_path": {
+                    "description": "File path",
+                    "data_type": "string",
+                    "order": 4,
+                    "primary": true,
+                    "contains": [
+                        "file path"
+                    ]
+                },
+                "username": {
+                    "description": "User name",
+                    "data_type": "string",
+                    "order": 5,
+                    "primary": true,
+                    "contains": [
+                        "email"
+                    ]
+                },
+                "hostname": {
+                    "description": "Hostname",
+                    "data_type": "string",
+                    "order": 6,
+                    "primary": false,
+                    "contains": [
+                        "host name"
+                    ]
+                },
+                "private_ip": {
+                    "description": "Private IPv4 or IPv6 address",
+                    "data_type": "string",
+                    "order": 7,
+                    "primary": false,
+                    "contains": [
+                        "ip",
+                        "ipv6"
+                    ]
+                },
+                "public_ip": {
+                    "description": "Public IPv4 or IPv6 address",
+                    "data_type": "string",
+                    "order": 8,
+                    "primary": false,
+                    "contains": [
+                        "ip",
+                        "ipv6"
+                    ]
+                },
+                "exposure_type": {
+                    "description": "Exposure type",
+                    "data_type": "string",
+                    "order": 9,
+                    "primary": false
+                },
+                "process_name": {
+                    "description": "Process name",
+                    "data_type": "string",
+                    "order": 10,
+                    "primary": false
+                },
+                "url": {
+                    "description": "Url",
+                    "data_type": "string",
+                    "order": 11,
+                    "primary": false,
+                    "contains": [
+                        "url"
+                    ]
+                },
+                "window_title": {
+                    "description": "Window title",
+                    "data_type": "string",
+                    "order": 12,
+                    "primary": false
+                },
+                "untrusted_only": {
+                    "description": "Return only events representing untrusted activity",
+                    "data_type": "boolean",
+                    "order": 13,
+                    "primary": false
+                }
+            },
+            "output": [
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "run raw query",
+            "identifier": "run_raw_query",
+            "description": "Searches Code42 for a backed-up file with a matching hash and downloads it",
+            "verbose": "",
+            "type": "investigate",
+            "read_only": true,
+            "parameters": {
+                "hash": {
+                    "description": "The md5 or sha256 hash of the file to download",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": true,
+                    "contains": [
+                        "md5",
+                        "sha256"
+                    ],
+                    "value_list": [],
+                    "default": "",
+                    "order": 0
+                },
+                "filename": {
+                    "description": "The name to give to the file after it is downloaded. If not supplied, the hash will be used.",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": true,
+                    "value_list": [],
+                    "default": "",
+                    "order": 1
+                }
+            },
+            "output": [
             ],
             "render": {
                 "type": "table"

@@ -337,16 +337,16 @@ class Code42Connector(BaseConnector):
     @action_handler_for("hunt_file")
     def _handle_hunt_file(self, param, action_result):
         file_hash = param["hash"]
-        filename = param.get("filename")
-        if not filename:
-            param["filename"] = file_hash
+        file_name = param.get("file_name")
+        if not file_name:
+            param["file_name"] = file_hash
             action_result.update_param(param)
-            filename = file_hash
+            file_name = file_hash
 
         file_content = self._get_file_content(file_hash)
         container_id = self.get_container_id()
-        Vault.create_attachment(file_content, container_id, file_name=filename)
-        status_message = f"{filename} was successfully downloaded and attached to container {container_id}"
+        Vault.create_attachment(file_content, container_id, file_name=file_name)
+        status_message = f"{file_name} was successfully downloaded and attached to container {container_id}"
         return action_result.set_status(phantom.APP_SUCCESS, status_message)
 
     def finalize(self):
