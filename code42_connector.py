@@ -351,7 +351,7 @@ class Code42Connector(BaseConnector):
         if legal_hold_membership_id is None:
             return action_result.set_status(
                 phantom.APP_ERROR,
-                f"Code42: User is not an active member of legal hold matter {matter_id} for action 'remove_legalhold_user'."
+                f"Code42: User is not an active member of legal hold matter {matter_id} for action 'remove_legalhold_user'.",
             )
         self._client.legalhold.remove_from_matter(legal_hold_membership_id)
         action_result.add_data({"userId": user_id})

@@ -165,5 +165,5 @@ class TestCode42LegalHoldConnector(object):
         connector.handle_action(param)
         assert_fail_message(
             connector,
-            f"Code42: User is not an active member of legal hold matter {_TEST_MATTER_ID} for action 'remove_legalhold_user'."
+            f"Code42: User is not an active member of legal hold matter {_TEST_MATTER_ID} for action 'remove_legalhold_user'.",
         )
