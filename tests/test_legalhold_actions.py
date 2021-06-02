@@ -63,7 +63,7 @@ def _create_remove_legalhold_user_connector(client):
     return attach_client(connector, client)
 
 
-class TestCode42AlertsConnector(object):
+class TestCode42LegalholdConnector(object):
     def test_handle_action_when_add_legal_hold_user_calls_add_with_expected_args(
         self, mock_py42_with_user
     ):
