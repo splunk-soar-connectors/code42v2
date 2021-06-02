@@ -1748,11 +1748,11 @@
             "versions": "EQ(*)"
         },
         {
-            "action": "add legalhold user",
-            "identifier": "add_legalhold_user",
+            "action": "add legalhold custodian",
+            "identifier": "add_legalhold_custodian",
             "description": "Add a user (custodian) to a legal hold matter",
             "verbose": "",
-            "undo": "remove legalhold user",
+            "undo": "remove legalhold custodian",
             "type": "contain",
             "read_only": false,
             "parameters": {
@@ -1827,11 +1827,11 @@
             "versions": "EQ(*)"
         },
         {
-            "action": "remove legalhold user",
-            "identifier": "remove_legalhold_user",
+            "action": "remove legalhold custodian",
+            "identifier": "remove_legalhold_custodian",
             "description": "Remove user (custodian) from a legal hold matter",
             "verbose": "",
-            "undo": "add legalhold user",
+            "undo": "add legalhold custodian",
             "type": "contain",
             "read_only": false,
             "parameters": {

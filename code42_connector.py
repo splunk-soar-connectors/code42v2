@@ -330,8 +330,8 @@ class Code42Connector(BaseConnector):
         status_message = f"State of alert {alert_id} was updated to {alert_state}"
         return action_result.set_status(phantom.APP_SUCCESS, status_message)
 
-    @action_handler_for("add_legalhold_user")
-    def _handle_add_legal_hold_user(self, param, action_result):
+    @action_handler_for("add_legalhold_custodian")
+    def _handle_add_legal_hold_custodian(self, param, action_result):
         username = param["username"]
         matter_id = param["matter_id"]
         user_id = self._get_user_id(username)
@@ -340,8 +340,8 @@ class Code42Connector(BaseConnector):
         status_message = f"{username} was added to legal hold matter {matter_id}."
         return action_result.set_status(phantom.APP_SUCCESS, status_message)
 
-    @action_handler_for("remove_legalhold_user")
-    def _handle_remove_legal_hold_user(self, param, action_result):
+    @action_handler_for("remove_legalhold_custodian")
+    def _handle_remove_legal_hold_custodian(self, param, action_result):
         username = param["username"]
         matter_id = param["matter_id"]
         user_id = self._get_user_id(username)
@@ -351,7 +351,7 @@ class Code42Connector(BaseConnector):
         if legal_hold_membership_id is None:
             return action_result.set_status(
                 phantom.APP_ERROR,
-                f"Code42: User is not an active member of legal hold matter {matter_id} for action 'remove_legalhold_user'.",
+                f"Code42: User is not an active member of legal hold matter {matter_id} for action 'remove_legalhold_custodian'.",
             )
         self._client.legalhold.remove_from_matter(legal_hold_membership_id)
         action_result.add_data({"userId": user_id})
