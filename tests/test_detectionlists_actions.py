@@ -191,7 +191,6 @@ def _create_remove_hr_connector(client):
 def _create_list_hr_connector(client):
     connector = create_fake_connector("list_highrisk_employees")
     return attach_client(connector, client)
-    return _attach_client(connector, client)
 
 
 def _create_get_hr_connector(client):
@@ -215,6 +214,14 @@ def _attach_client(connector, client):
 
 
 class TestCode42DetectionListsConnector(object):
+    def test_handler_action_when_acting_on_user_that_does_not_exists_sets_expected_error_message(self):
+        param = {"username": "test@example.com"}
+        connector = _create_add_de_connector(mock_py42_with_user)
+        connector.handle_action(param)
+        mock_py42_with_user.detectionlists.departing_employee.add.assert_called_once_with(
+            "TEST_USER_UID"
+        )
+
     def test_handle_action_when_add_departing_employee_calls_add_with_expected_args(
         self, mock_py42_with_user
     ):
