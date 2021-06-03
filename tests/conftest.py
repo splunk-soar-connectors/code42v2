@@ -24,6 +24,15 @@ def mock_py42_client(mocker):
 @fixture
 def mock_py42_with_user(mocker, mock_py42_client):
     response_data = {"users": [{"userUid": TEST_USER_UID}]}
+    return _set_py42_users(mocker, mock_py42_client, response_data)
+
+
+@fixture
+def mock_py42_without_user(mocker, mock_py42_client):
+    return _set_py42_users(mocker, mock_py42_client, {"users": []})
+
+
+def _set_py42_users(mocker, mock_py42_client, response_data):
     mock_py42_client.users.get_by_username.return_value = create_mock_response(
         mocker, response_data
     )

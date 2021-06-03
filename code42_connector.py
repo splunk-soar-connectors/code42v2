@@ -389,7 +389,9 @@ class Code42Connector(BaseConnector):
     def _get_user(self, username):
         users = self._client.users.get_by_username(username)["users"]
         if not users:
-            raise Exception(f"User '{username}' not found. Do you have the correct permissions?")
+            raise Exception(
+                f"User '{username}' not found. Do you have the correct permissions?"
+            )
         return users[0]
 
     def _get_user_id(self, username):
