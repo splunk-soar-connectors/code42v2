@@ -315,7 +315,8 @@ class Code42Connector(BaseConnector):
             )
         query = self._build_alerts_query(username, start_date, end_date, alert_state)
         response = self._client.alerts.search(query)
-        action_result.add_data(response.data)
+        for alert in response.data["alerts"]:
+            action_result.add_data(alert)
         action_result.update_summary({"total_count": response["totalCount"]})
         return action_result.set_status(phantom.APP_SUCCESS)
 
