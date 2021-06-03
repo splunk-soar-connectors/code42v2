@@ -9,6 +9,7 @@ from tests.conftest import (
     assert_successful_single_data,
     assert_successful_message,
     assert_successful_summary,
+    assert_fail_message,
     attach_client,
     TEST_USER_UID,
 )
@@ -182,7 +183,6 @@ def _create_remove_hr_connector(client):
 def _create_list_hr_connector(client):
     connector = create_fake_connector("list_highrisk_employees")
     return attach_client(connector, client)
-    return _attach_client(connector, client)
 
 
 def _create_get_hr_connector(client):
@@ -206,6 +206,18 @@ def _attach_client(connector, client):
 
 
 class TestCode42DetectionListsConnector(object):
+    def test_handler_action_when_acting_on_user_that_does_not_exists_sets_expected_error_message(
+        self, mock_py42_without_user
+    ):
+        param = {"username": "test@example.com"}
+        connector = _create_add_de_connector(mock_py42_without_user)
+        connector.handle_action(param)
+        expected_message = (
+            "Code42: Failed execution of action add_departing_employee: User 'test@example.com' not found. "
+            "Do you have the correct permissions?"
+        )
+        assert_fail_message(connector, expected_message)
+
     def test_handle_action_when_add_departing_employee_calls_add_with_expected_args(
         self, mock_py42_with_user
     ):
