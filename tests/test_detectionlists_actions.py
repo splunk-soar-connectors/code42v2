@@ -10,14 +10,14 @@ from tests.conftest import (
     assert_successful_message,
     assert_successful_summary,
     attach_client,
+    TEST_USER_UID,
 )
 
 
-_TEST_USER_UID = "TEST_USER_UID"
 _MOCK_GET_DEPARTING_EMPLOYEE_RESPONSE = {
     "type$": "DEPARTING_EMPLOYEE_V2",
     "tenantId": "11114444-2222-3333-4444-666634888863",
-    "userId": _TEST_USER_UID,
+    "userId": TEST_USER_UID,
     "userName": "test@example.com",
     "displayName": "Test Testerson",
     "notes": "Test test test",
@@ -32,7 +32,7 @@ _MOCK_LIST_DEPARTING_EMPLOYEES_RESPONSE = {
         {
             "type$": "DEPARTING_EMPLOYEE_V2",
             "tenantId": "11114444-2222-3333-4444-666634888863",
-            "userId": _TEST_USER_UID,
+            "userId": TEST_USER_UID,
             "userName": "test@example.com",
             "displayName": "Test Testerson",
             "notes": "Test test test",
@@ -60,7 +60,7 @@ _MOCK_LIST_DEPARTING_EMPLOYEES_RESPONSE = {
 _MOCK_GET_HIGH_RISK_EMPLOYEE_RESPONSE = {
     "type$": "HIGH_RISK_EMPLOYEE_V2",
     "tenantId": "11114444-2222-3333-4444-666634888863",
-    "userId": _TEST_USER_UID,
+    "userId": TEST_USER_UID,
     "userName": "test@example.com",
     "displayName": "Test Testerson",
     "notes": "Test test test",
@@ -75,7 +75,7 @@ _MOCK_LIST_HIGH_RISK_EMPLOYEES_RESPONSE = {
         {
             "type$": "HIGH_RISK_EMPLOYEE_V2",
             "tenantId": "11114444-2222-3333-4444-666634888863",
-            "userId": _TEST_USER_UID,
+            "userId": TEST_USER_UID,
             "userName": "test@example.com",
             "displayName": "Test Testerson",
             "notes": "Test test test",
@@ -103,7 +103,7 @@ _MOCK_LIST_HIGH_RISK_EMPLOYEES_RESPONSE = {
 _MOCK_ADD_RISK_TAGS_RESPONSE = {
     "type$": "USER_V2",
     "tenantId": "11114444-2222-3333-4444-666634888863",
-    "userId": _TEST_USER_UID,
+    "userId": TEST_USER_UID,
     "userName": "test@example.com",
     "displayName": "Test Testerson",
     "cloudUsernames": ["test@example.com"],
@@ -112,21 +112,12 @@ _MOCK_ADD_RISK_TAGS_RESPONSE = {
 _MOCK_REMOVE_RISK_TAGS_RESPONSE = {
     "type$": "USER_V2",
     "tenantId": "11114444-2222-3333-4444-666634888863",
-    "userId": _TEST_USER_UID,
+    "userId": TEST_USER_UID,
     "userName": "test@example.com",
     "displayName": "Test Testerson",
     "cloudUsernames": ["test@example.com"],
     "riskFactors": ["ELEVATED_ACCESS_PRIVILEGES"],
 }
-
-
-@fixture
-def mock_py42_with_user(mocker, mock_py42_client):
-    response_data = {"users": [{"userUid": _TEST_USER_UID}]}
-    mock_py42_client.users.get_by_username.return_value = create_mock_response(
-        mocker, response_data
-    )
-    return mock_py42_client
 
 
 @fixture
@@ -240,7 +231,7 @@ class TestCode42DetectionListsConnector(object):
         response_data = {
             "type$": "DEPARTING_EMPLOYEE_V2",
             "tenantId": "11114444-2222-3333-4444-666634888863",
-            "userId": _TEST_USER_UID,
+            "userId": TEST_USER_UID,
             "userName": "test@example.com",
             "displayName": "",
             "createdAt": "2021-05-20T19:40:14.8909434Z",
@@ -272,7 +263,7 @@ class TestCode42DetectionListsConnector(object):
         connector = _create_add_de_connector(mock_py42_with_user)
         connector.handle_action(param)
         mock_py42_with_user.detectionlists.update_user_notes.assert_called_once_with(
-            _TEST_USER_UID, "Test Note"
+            TEST_USER_UID, "Test Note"
         )
         assert_success(connector)
 
@@ -298,7 +289,7 @@ class TestCode42DetectionListsConnector(object):
         )
         connector = _create_remove_de_connector(mock_py42_with_user)
         connector.handle_action(param)
-        assert_successful_single_data(connector, {"userId": _TEST_USER_UID})
+        assert_successful_single_data(connector, {"userId": TEST_USER_UID})
 
     def test_handle_action_when_remove_departing_employee_and_is_successful_sets_success_message(
         self, mock_py42_with_user
@@ -356,7 +347,7 @@ class TestCode42DetectionListsConnector(object):
         connector = _create_get_de_connector(mock_py42_with_user)
         connector.handle_action(param)
         mock_py42_with_user.detectionlists.departing_employee.get.assert_called_once_with(
-            _TEST_USER_UID
+            TEST_USER_UID
         )
         assert_success(connector)
 
@@ -408,7 +399,7 @@ class TestCode42DetectionListsConnector(object):
         response_data = {
             "type$": "HIGH_RISK_EMPLOYEE_V2",
             "tenantId": "11114444-2222-3333-4444-666634888863",
-            "userId": _TEST_USER_UID,
+            "userId": TEST_USER_UID,
             "userName": "test@example.com",
             "displayName": "",
             "createdAt": "2021-05-20T19:40:14.8909434Z",
@@ -455,7 +446,7 @@ class TestCode42DetectionListsConnector(object):
         )
         connector = _create_remove_hr_connector(mock_py42_with_user)
         connector.handle_action(param)
-        assert_successful_single_data(connector, {"userId": _TEST_USER_UID})
+        assert_successful_single_data(connector, {"userId": TEST_USER_UID})
 
     def test_handle_action_when_remove_high_risk_employee_and_is_successful_sets_success_message(
         self, mock_py42_with_user
@@ -513,7 +504,7 @@ class TestCode42DetectionListsConnector(object):
         connector = _create_get_hr_connector(mock_py42_with_user)
         connector.handle_action(param)
         mock_py42_with_user.detectionlists.high_risk_employee.get.assert_called_once_with(
-            _TEST_USER_UID
+            TEST_USER_UID
         )
         assert_success(connector)
 
