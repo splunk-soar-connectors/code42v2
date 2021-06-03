@@ -1271,6 +1271,29 @@
                     "column_order": 5
                 },
                 {
+                    "data_path": "action_result.parameter.username",
+                    "data_type": "string",
+                    "contains": [
+                        "email"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.alert_state",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.start_date",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.end_date",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string"
+                },
+                {
                     "data_path": "action_result.message",
                     "data_type": "string"
                 },
