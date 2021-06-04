@@ -90,6 +90,10 @@ class Code42Connector(BaseConnector):
         self.save_progress("Test Connectivity Passed")
         return action_result.set_status(phantom.APP_SUCCESS)
 
+    @action_handler_for("on_poll")
+    def _handle_on_poll(self, param, action_result):
+        return self._handle_search_alerts(param, action_result)
+
     """ DEPARTING EMPLOYEE ACTIONS """
 
     @action_handler_for("add_departing_employee")

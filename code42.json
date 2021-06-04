@@ -62,6 +62,35 @@
             "versions": "EQ(*)"
         },
         {
+            "action": "on poll",
+            "description": "Poll for new Code42 alerts",
+            "type": "ingest",
+            "identifier": "on_poll",
+            "read_only": true,
+            "parameters": {
+                "start_date": {
+                    "description": "Beginning of date range to search. Time (in UTC) may also be supplied but is not required.",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": false,
+                    "value_list": [],
+                    "default": "",
+                    "order": 0
+                },
+                "end_date": {
+                    "description": "End of date range to search. Time (in UTC) may also be supplied but is not required.",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": false,
+                    "value_list": [],
+                    "default": "",
+                    "order": 1
+                }
+            },
+            "output": [],
+            "versions": "EQ(*)"
+        },
+        {
             "action": "add departing employee",
             "identifier": "add_departing_employee",
             "description": "Add a departing employee to the departing employees detection list",
