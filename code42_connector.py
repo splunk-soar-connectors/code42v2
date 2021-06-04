@@ -5,6 +5,7 @@ import json
 
 import py42.sdk
 from py42.exceptions import Py42NotFoundError
+from py42.exceptions import Py42UpdateClosedCaseError
 from py42.services.detectionlists.departing_employee import DepartingEmployeeFilters
 from py42.services.detectionlists.high_risk_employee import HighRiskEmployeeFilters
 import requests
@@ -365,7 +366,7 @@ class Code42Connector(BaseConnector):
 
     @action_handler_for("update_case")
     def _handle_update_case(self, param, action_result):
-        number = param["case_number"]
+        case_number = param["case_number"]
         name = param.get("case_name")
         subject = param.get("subject")
         if subject is not None:
@@ -376,18 +377,40 @@ class Code42Connector(BaseConnector):
         description = param.get("description")
         findings = param.get("findings")
         response = self._client.cases.update(
-            number,
+            case_number,
             name=name,
             subject=subject,
             assignee=assignee,
             description=description,
             findings=findings,
         )
-        status_message = f"Case number {number} successfully updated"
+        status_message = f"Case number {case_number} successfully updated"
         action_result.add_data(response.data)
         action_result.update_summary(
             {
-                "case_number": number,
+                "case_number": case_number,
+                "name": response["name"],
+                "subject": response["subjectUsername"],
+                "description": response["description"],
+                "assignee": response["assigneeUsername"],
+                "findings": response["findings"],
+            }
+        )
+        return action_result.set_status(phantom.APP_SUCCESS, status_message)
+
+    @action_handler_for("close_case")
+    def _handle_close_case(self, param, action_result):
+        case_number = param["case_number"]
+        try:
+            response = self._client.cases.update(case_number, status="CLOSED")
+            status_message = f"Case number {case_number} successfully closed"
+        except Py42UpdateClosedCaseError:
+            response = self._client.cases.get(case_number)
+            status_message = f"Case number {case_number} already closed!"
+        action_result.add_data(response.data)
+        action_result.update_summary(
+            {
+                "case_number": case_number,
                 "name": response["name"],
                 "subject": response["subjectUsername"],
                 "description": response["description"],

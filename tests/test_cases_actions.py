@@ -1,8 +1,10 @@
 import json
 from requests import Response
+from requests.exceptions import HTTPError
 from pytest import fixture
 
 from py42.exceptions import Py42BadRequestError
+from py42.exceptions import Py42NotFoundError
 from py42.exceptions import Py42CaseNameExistsError
 from py42.exceptions import Py42UpdateClosedCaseError
 
@@ -184,3 +186,60 @@ class TestCode42CasesConnector(object):
             connector,
             "Code42: Failed execution of action update_case: Cannot update a closed case.",
         )
+
+    def test_handle_action_when_closing_case_calls_with_expected_args_and_sets_success_status(
+        self, mock_py42_with_case
+    ):
+        param = {"case_number": 1}
+        connector = create_fake_connector("close_case", mock_py42_with_case)
+        connector.handle_action(param)
+        mock_py42_with_case.cases.update.assert_called_once_with(1, status="CLOSED")
+        assert_success(connector)
+
+    def test_handle_action_when_closing_case_adds_response_to_data(
+        self, mock_py42_with_case
+    ):
+        param = {"case_number": 1}
+        connector = create_fake_connector("close_case", mock_py42_with_case)
+        connector.handle_action(param)
+        assert_successful_single_data(connector, _TEST_CASE_RESPONSE)
+
+    def test_handle_action_when_closing_case_adds_info_to_summary(
+        self, mock_py42_with_case
+    ):
+        param = {"case_number": 1}
+        connector = create_fake_connector("close_case", mock_py42_with_case)
+        connector.handle_action(param)
+        expected_summary = {
+            "case_number": 1,
+            "name": _TEST_NAME,
+            "subject": _TEST_SUBJECT,
+            "description": _TEST_DESCRIPTION,
+            "assignee": _TEST_ASSIGNEE,
+            "findings": _TEST_FINDINGS,
+        }
+        assert_successful_summary(connector, expected_summary)
+
+    def test_handle_action_when_closing_case_when_case_already_closed_calls_get_and_sets_expected_success_message(
+        self, mock_py42_with_case
+    ):
+        mock_py42_with_case.cases.update.side_effect = Py42UpdateClosedCaseError(
+            Py42BadRequestError
+        )
+        param = {"case_number": 1}
+        connector = create_fake_connector("close_case", mock_py42_with_case)
+        connector.handle_action(param)
+        mock_py42_with_case.cases.get.assert_called_once_with(1)
+        assert_successful_message(connector, "Case number 1 already closed!")
+
+    def test_handle_action_when_closing_case_when_case_number_not_found_sets_error_status(
+        self, mocker, mock_py42_with_case
+    ):
+        mock_response = mocker.MagicMock(spec=Response)
+        mock_response.text = ""
+        http_error = HTTPError(response=mock_response)
+        mock_py42_with_case.cases.update.side_effect = Py42NotFoundError(http_error)
+        param = {"case_number": 1}
+        connector = create_fake_connector("close_case", mock_py42_with_case)
+        connector.handle_action(param)
+        assert_fail(connector)

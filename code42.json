@@ -1760,9 +1760,6 @@
                     "data_type": "string",
                     "required": true,
                     "primary": false,
-                    "contains": [
-                        "case id"
-                    ],
                     "order": 0
                 },
                 "subject": {
@@ -1947,6 +1944,87 @@
                     "data_type": "string",
                     "column_name": "Findings",
                     "column_order": 5
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "close case",
+            "identifier": "close_case",
+            "description": "Change the status of a Code42 case to 'CLOSED'",
+            "verbose": "",
+            "type": "contain",
+            "read_only": false,
+            "parameters": {
+                "case_number": {
+                    "description": "Case number",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": true,
+                    "contains": [
+                        "case number"
+                    ],
+                    "order": 0
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.data.*.number",
+                    "data_type": "string",
+                    "contains": [
+                        "case number"
+                    ],
+                    "column_name": "Case number",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.data.*.name",
+                    "data_type": "string",
+                    "column_name": "Case name",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.data.*.description",
+                    "data_type": "string",
+                    "column_name": "Description",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.data.*.subjectUsername",
+                    "data_type": "string",
+                    "column_name": "Subject",
+                    "column_order": 3
+                },
+                {
+                    "data_path": "action_result.data.*.assigneeUsername",
+                    "data_type": "string",
+                    "column_name": "Assignee",
+                    "column_order": 4
+                },
+                {
+                    "data_path": "action_result.data.*.findings",
+                    "data_type": "string",
+                    "column_name": "Findings",
+                    "column_order": 5
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
                 }
             ],
             "render": {
