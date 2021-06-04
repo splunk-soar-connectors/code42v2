@@ -507,7 +507,7 @@ class Code42Connector(BaseConnector):
             add_eq_filter(filters, public_ip, PublicIPAddress)
         if exposure_type:
             if exposure_type == "All":
-                filters.add(ExposureType.exists)
+                filters.add(ExposureType.exists())
             else:
                 add_eq_filter(filters, exposure_type, ExposureType)
         if process_name:
