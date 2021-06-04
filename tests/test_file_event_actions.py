@@ -13,7 +13,7 @@ from tests.conftest import (
     assert_fail_message,
     assert_fail,
     assert_successful_params,
-    assert_successful_summary
+    assert_successful_summary,
 )
 
 TEST_MD5 = "b6312dbe4aa4212da94523ccb28c5c16"
@@ -301,6 +301,7 @@ def _create_run_query_connector(mocker, mock_py42_client):
     connector = create_fake_connector("run_query")
     return attach_client(connector, client)
 
+
 def _create_run_advanced_query_connector(mocker, mock_py42_client):
     client = _create_mock_py42_with_file_events(mocker, mock_py42_client)
     connector = create_fake_connector("run_advanced_query")
@@ -457,7 +458,9 @@ class TestCode42FileEventsConnector(object):
         message = "Code42: Failed execution of action hunt_file: Unsupported hash format. Hash must be either md5 or sha256"
         assert_fail_message(connector, message)
 
-    def test_handle_action_when_run_query_calls_search_file_events_with_expected_query(self, mocker, mock_py42_client):        
+    def test_handle_action_when_run_query_calls_search_file_events_with_expected_query(
+        self, mocker, mock_py42_client
+    ):
         eq_param = {
             "username": "test@example.com",
             "file_hash": "6849f4e9b2ee9d45052145d8e25d7b99",
@@ -470,7 +473,7 @@ class TestCode42FileEventsConnector(object):
             "exposure_type": "ApplicationRead",
             "process_name": "/Device/HarddiskVolume1/Program Files (x86)/Microsoft/Edge/Application/msedge.exe",
             "url": "https://drive.google.com/drive/my-drive",
-            "window_title": "My Drive - Google Drive and 1 more page - Profile 1 - Microsoft​ Edge"
+            "window_title": "My Drive - Google Drive and 1 more page - Profile 1 - Microsoft​ Edge",
         }
 
         date_param = {
@@ -490,9 +493,9 @@ class TestCode42FileEventsConnector(object):
 
         for key in eq_param:
             check_filter(query_json, "IS", eq_param[key])
-        
-        check_filter(query_json, "ON_OR_AFTER", '2031-01-01T00:00:00.000Z')
-        check_filter(query_json, "ON_OR_BEFORE", '2031-06-01T00:00:00.000Z')
+
+        check_filter(query_json, "ON_OR_AFTER", "2031-01-01T00:00:00.000Z")
+        check_filter(query_json, "ON_OR_BEFORE", "2031-06-01T00:00:00.000Z")
 
         assert_success(connector)
 
@@ -548,9 +551,7 @@ class TestCode42FileEventsConnector(object):
 
         assert_success(connector)
 
-    def test_handle_action_when_run_query_adds_summary(
-        self, mocker, mock_py42_client
-    ):
+    def test_handle_action_when_run_query_adds_summary(self, mocker, mock_py42_client):
         param = {"username": "barney.frankenberry@chocula.com"}
         connector = _create_run_query_connector(mocker, mock_py42_client)
         connector.handle_action(param)
@@ -594,9 +595,12 @@ class TestCode42FileEventsConnector(object):
         param = {"json_query": "arbitrary JSON"}
         connector = _create_run_advanced_query_connector(mocker, mock_py42_client)
         connector.handle_action(param)
-        mock_py42_client.securitydata.search_file_events.assert_called_once_with("arbitrary JSON")
+        mock_py42_client.securitydata.search_file_events.assert_called_once_with(
+            "arbitrary JSON"
+        )
 
         assert_success(connector)
+
 
 def check_filter(query_dict, operator, value):
     groups = query_dict["groups"]
