@@ -601,7 +601,9 @@ class TestCode42FileEventsConnector(object):
 
         assert_success(connector)
 
-    def test_handle_action_when_run_advanced_query_adds_summary(self, mocker, mock_py42_client):
+    def test_handle_action_when_run_advanced_query_adds_summary(
+        self, mocker, mock_py42_client
+    ):
         param = {"json_query": "arbitrary JSON"}
         connector = _create_run_advanced_query_connector(mocker, mock_py42_client)
         connector.handle_action(param)
