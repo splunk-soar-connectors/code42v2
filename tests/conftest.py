@@ -10,6 +10,9 @@ from requests import Response
 from code42_connector import Code42Connector
 
 
+TEST_USER_UID = "TEST_USER_UID"
+
+
 @fixture(autouse=True)
 def mock_py42_client(mocker):
     client = mocker.MagicMock(spec=py42.sdk.SDKClient)
@@ -22,6 +25,24 @@ def mock_py42_client(mocker):
 def mock_create_attachment(mocker):
     mock_vault = mocker.patch("phantom.vault.Vault.create_attachment")
     return mock_vault
+
+
+@fixture
+def mock_py42_with_user(mocker, mock_py42_client):
+    response_data = {"users": [{"userUid": TEST_USER_UID}]}
+    return _set_py42_users(mocker, mock_py42_client, response_data)
+
+
+@fixture
+def mock_py42_without_user(mocker, mock_py42_client):
+    return _set_py42_users(mocker, mock_py42_client, {"users": []})
+
+
+def _set_py42_users(mocker, mock_py42_client, response_data):
+    mock_py42_client.users.get_by_username.return_value = create_mock_response(
+        mocker, response_data
+    )
+    return mock_py42_client
 
 
 @fixture

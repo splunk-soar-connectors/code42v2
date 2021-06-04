@@ -396,6 +396,34 @@ class Code42Connector(BaseConnector):
         status_message = f"{username} was removed from legal hold matter {matter_id}."
         return action_result.set_status(phantom.APP_SUCCESS, status_message)
 
+    @action_handler_for("add_legalhold_custodian")
+    def _handle_add_legal_hold_custodian(self, param, action_result):
+        username = param["username"]
+        matter_id = param["matter_id"]
+        user_id = self._get_user_id(username)
+        response = self._client.legalhold.add_to_matter(user_id, matter_id)
+        action_result.add_data(response.data)
+        status_message = f"{username} was added to legal hold matter {matter_id}."
+        return action_result.set_status(phantom.APP_SUCCESS, status_message)
+
+    @action_handler_for("remove_legalhold_custodian")
+    def _handle_remove_legal_hold_custodian(self, param, action_result):
+        username = param["username"]
+        matter_id = param["matter_id"]
+        user_id = self._get_user_id(username)
+        legal_hold_membership_id = self._get_legal_hold_membership_id(
+            user_id, matter_id
+        )
+        if legal_hold_membership_id is None:
+            return action_result.set_status(
+                phantom.APP_ERROR,
+                f"Code42: User is not an active member of legal hold matter {matter_id} for action 'remove_legalhold_custodian'.",
+            )
+        self._client.legalhold.remove_from_matter(legal_hold_membership_id)
+        action_result.add_data({"userId": user_id})
+        status_message = f"{username} was removed from legal hold matter {matter_id}."
+        return action_result.set_status(phantom.APP_SUCCESS, status_message)
+
     """ FILE EVENT ACTIONS """
 
     @action_handler_for("hunt_file")
