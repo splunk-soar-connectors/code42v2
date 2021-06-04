@@ -67,6 +67,11 @@ def _convert_to_obj_list(scalar_list, sub_object_key="item"):
 def add_eq_filter(filters, value, filter_class):
     return filters.append(filter_class.eq(value))
 
+def is_default_dict(_dict):
+    for key in _dict:
+        if _dict.get(key):
+            return False
+    return True
 
 class Code42Connector(BaseConnector):
     def __init__(self):
@@ -331,16 +336,17 @@ class Code42Connector(BaseConnector):
 
     @action_handler_for("search_alerts")
     def _handle_search_alerts(self, param, action_result):
+        if is_default_dict(param):
+            return action_result.set_status(
+                phantom.APP_ERROR,
+                "Code42: Must supply a search term when calling action 'search_alerts`.",
+            )
+        
         username = param.get("username")
         start_date = param.get("start_date")
         end_date = param.get("end_date")
         alert_state = param.get("alert_state")
 
-        if not any([username, start_date, end_date, alert_state]):
-            return action_result.set_status(
-                phantom.APP_ERROR,
-                "Code42: Must supply a search term when calling action 'search_alerts`.",
-            )
         query = self._build_alerts_query(username, start_date, end_date, alert_state)
         response = self._client.alerts.search(query)
         action_result.add_data(response.data)
@@ -377,6 +383,12 @@ class Code42Connector(BaseConnector):
 
     @action_handler_for("run_query")
     def _handle_run_query(self, param, action_result):
+        if is_default_dict(param):
+            return action_result.set_status(
+                phantom.APP_ERROR,
+                "Code42: Must supply a search term when calling action 'run_query'.",
+            )
+
         query = self._build_file_events_query(
             param.get("start_date"),
             param.get("end_date"),
@@ -394,16 +406,14 @@ class Code42Connector(BaseConnector):
             param.get("window_title"),
             param.get("untrusted_only"),
         )
-        results = self._client.securitydata.search_file_events(query)
-        for result in results.data["fileEvents"]:
-            action_result.add_data(result)
-
-        action_result.update_summary({"total_count": results.data["totalCount"]})
+        self._add_file_event_results(query, action_result)
         return action_result.set_status(phantom.APP_SUCCESS)
 
     @action_handler_for("run_advanced_query")
     def _handle_run_json_query(self, param, action_result):
-        pass
+        query = param["json_query"]
+        self._add_file_event_results(query, action_result)
+        return action_result.set_status(phantom.APP_SUCCESS)
 
     def finalize(self):
         # Save the state, this data is saved across actions and app upgrades
@@ -464,7 +474,10 @@ class Code42Connector(BaseConnector):
         if public_ip:
             add_eq_filter(filters, public_ip, PublicIPAddress)
         if exposure_type:
-            add_eq_filter(filters, exposure_type, ExposureType)
+            if exposure_type == "All":
+                filters.add(ExposureType.exists)
+            else:
+                add_eq_filter(filters, exposure_type, ExposureType)
         if process_name:
             add_eq_filter(filters, process_name, ProcessName)
         if url:
@@ -512,6 +525,13 @@ class Code42Connector(BaseConnector):
 
         chunks = [chunk for chunk in response.iter_content(chunk_size=128) if chunk]
         return b"".join(chunks)
+
+    def _add_file_event_results(self, query, action_result):
+        results = self._client.securitydata.search_file_events(query)
+        for result in results.data["fileEvents"]:
+            action_result.add_data(result)
+
+        action_result.update_summary({"total_count": results.data["totalCount"]})
 
 
 def main():
