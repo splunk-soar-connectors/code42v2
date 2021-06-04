@@ -601,6 +601,15 @@ class TestCode42FileEventsConnector(object):
 
         assert_success(connector)
 
+    def test_handle_action_when_run_advanced_query_adds_summary(self, mocker, mock_py42_client):
+        param = {"json_query": "arbitrary JSON"}
+        connector = _create_run_advanced_query_connector(mocker, mock_py42_client)
+        connector.handle_action(param)
+        response_dict = json.loads(MOCK_SECURITY_EVENT_RESPONSE)
+        assert_successful_summary(
+            connector, {"total_count": response_dict["totalCount"]}
+        )
+
 
 def check_filter(query_dict, operator, value):
     groups = query_dict["groups"]
