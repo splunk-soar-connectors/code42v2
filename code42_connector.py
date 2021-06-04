@@ -330,6 +330,73 @@ class Code42Connector(BaseConnector):
         action_result.update_summary({"alert_id": alert_id})
         return action_result.set_status(phantom.APP_SUCCESS, status_message)
 
+    @action_handler_for("create_case")
+    def _handle_create_case(self, param, action_result):
+        name = param["case_name"]
+        description = param.get("description")
+        subject = param.get("subject")
+        if subject is not None:
+            subject = self._get_user_id(subject)
+        assignee = param.get("assignee")
+        if assignee is not None:
+            assignee = self._get_user_id(assignee)
+        findings = param.get("findings")
+        response = self._client.cases.create(
+            name,
+            description=description,
+            subject=subject,
+            assignee=assignee,
+            findings=findings,
+        )
+        case_number = response["number"]
+        action_result.add_data(response.data)
+        status_message = f"Case successfully created with case_id: {case_number}"
+        action_result.update_summary(
+            {
+                "case_number": case_number,
+                "name": response["name"],
+                "subject": response["subjectUsername"],
+                "description": response["description"],
+                "assignee": response["assigneeUsername"],
+                "findings": response["findings"],
+            }
+        )
+        return action_result.set_status(phantom.APP_SUCCESS, status_message)
+
+    @action_handler_for("update_case")
+    def _handle_update_case(self, param, action_result):
+        number = param["case_number"]
+        name = param.get("case_name")
+        subject = param.get("subject")
+        if subject is not None:
+            subject = self._get_user_id(subject)
+        assignee = param.get("assignee")
+        if assignee is not None:
+            assignee = self._get_user_id(assignee)
+        description = param.get("description")
+        findings = param.get("findings")
+        response = self._client.cases.update(
+            number,
+            name=name,
+            subject=subject,
+            assignee=assignee,
+            description=description,
+            findings=findings,
+        )
+        status_message = f"Case number {number} successfully updated"
+        action_result.add_data(response.data)
+        action_result.update_summary(
+            {
+                "case_number": number,
+                "name": response["name"],
+                "subject": response["subjectUsername"],
+                "description": response["description"],
+                "assignee": response["assigneeUsername"],
+                "findings": response["findings"],
+            }
+        )
+        return action_result.set_status(phantom.APP_SUCCESS, status_message)
+
     def finalize(self):
         # Save the state, this data is saved across actions and app upgrades
         self.save_state(self._state)

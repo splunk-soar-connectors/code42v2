@@ -1746,6 +1746,213 @@
                 "type": "table"
             },
             "versions": "EQ(*)"
+        },
+        {
+            "action": "create case",
+            "identifier": "create_case",
+            "description": "Create a Code42 case",
+            "verbose": "",
+            "type": "contain",
+            "read_only": false,
+            "parameters": {
+                "case_name": {
+                    "description": "Case name",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": false,
+                    "contains": [
+                        "case id"
+                    ],
+                    "order": 0
+                },
+                "subject": {
+                    "description": "Subject of case (username)",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": true,
+                    "contains": [
+                        "email"
+                    ],
+                    "default": "",
+                    "order": 1
+
+                },
+                "description": {
+                    "description": "Description",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": false,
+                    "default": "",
+                    "order": 2
+                },
+                "assignee": {
+                    "description": "Assignee (username)",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": false,
+                    "default": "",
+                    "order": 3
+                },
+                "findings": {
+                    "description": "Findings (markdown text)",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": false,
+                    "default": "",
+                    "order": 4
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.data.*.number",
+                    "data_type": "string",
+                    "contains": [
+                        "case number"
+                    ],
+                    "column_name": "Case number",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.parameter.case_name",
+                    "data_type": "string",
+                    "column_name": "Case name",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.parameter.description",
+                    "data_type": "string",
+                    "column_name": "Description",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.parameter.subject",
+                    "data_type": "string",
+                    "column_name": "Subject",
+                    "column_order": 3
+                },
+                {
+                    "data_path": "action_result.parameter.assignee",
+                    "data_type": "string",
+                    "column_name": "Assignee",
+                    "column_order": 4
+                },
+                {
+                    "data_path": "action_result.parameter.findings",
+                    "data_type": "string",
+                    "column_name": "Findings",
+                    "column_order": 5
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "update case",
+            "identifier": "update_case",
+            "description": "Update the details of a case",
+            "type": "contain",
+            "read_only": false,
+            "parameters": {
+                "case_number": {
+                    "description": "Case number",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": true,
+                    "contains": [
+                        "case number"
+                    ],
+                    "order": 0
+                },
+                "case_name": {
+                    "description": "Case name",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": false,
+                    "order": 1
+                },
+                "description": {
+                    "description": "Description",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": false,
+                    "default": "",
+                    "order": 2
+                },
+                "subject": {
+                    "description": "Subject",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": true,
+                    "contains": [
+                        "email"
+                    ],
+                    "order": 3
+                },
+                "assignee": {
+                    "description": "Assignee",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": true,
+                    "contains": [
+                        "email"
+                    ],
+                    "order": 4
+                },
+                "findings": {
+                    "description": "Findings (markdown)",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": false,
+                    "order": 5
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.data.*.number",
+                    "data_type": "string",
+                    "contains": [
+                        "case number"
+                    ],
+                    "column_name": "Case number",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.data.*.name",
+                    "data_type": "string",
+                    "column_name": "Case name",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.data.*.description",
+                    "data_type": "string",
+                    "column_name": "Description",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.data.*.subjectUsername",
+                    "data_type": "string",
+                    "column_name": "Subject",
+                    "column_order": 3
+                },
+                {
+                    "data_path": "action_result.data.*.assigneeUsername",
+                    "data_type": "string",
+                    "column_name": "Assignee",
+                    "column_order": 4
+                },
+                {
+                    "data_path": "action_result.data.*.findings",
+                    "data_type": "string",
+                    "column_name": "Findings",
+                    "column_order": 5
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
         }
     ]
 }
