@@ -88,6 +88,9 @@
                 }
             },
             "output": [],
+            "render": {
+                "type": "table"
+            },
             "versions": "EQ(*)"
         },
         {
