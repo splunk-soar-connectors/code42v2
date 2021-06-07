@@ -577,6 +577,18 @@ class TestCode42FileEventsConnector(object):
         assert abs((actual_date - expected_date)).seconds < 1
         assert_success(connector)
 
+    def test_handle_action_when_run_query_given_unsupported_hash_sets_error_message(
+        self, mocker, mock_py42_client
+    ):
+        param = {"file_hash": "not-a-valid-hash"}
+        connector = _create_run_query_connector(mocker, mock_py42_client)
+        connector.handle_action(param)
+        message = (
+            "Code42: Failed execution of action run_query: "
+            "Unsupported hash format. Hash must be either md5 or sha256"
+        )
+        assert_fail_message(connector, message)
+
     def test_handle_action_when_run_advanced_query_adds_response_items_to_data(
         self, mocker, mock_py42_client
     ):
