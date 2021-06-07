@@ -85,6 +85,22 @@
                     "value_list": [],
                     "default": "",
                     "order": 1
+                },
+                "container_id": {
+                    "description": "Parameter ignored in this app",
+                    "data_type": "string",
+                    "order": 2
+                },
+                "container_count": {
+                    "description": "Maximum number of alerts to be ingested during poll now",
+                    "data_type": "numeric",
+                    "order": 3,
+                    "default": 1
+                },
+                "artifact_count": {
+                    "description": "Parameter ignored in this app",
+                    "data_type": "numeric",
+                    "order": 4
                 }
             },
             "output": [],
