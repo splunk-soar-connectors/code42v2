@@ -579,6 +579,19 @@ class TestCode42FileEventsConnector(object):
         assert abs((actual_date - expected_date)).seconds < 1
         assert_success(connector)
 
+    def test_handle_action_when_run_query_given_all_exposure_uses_expected_query(
+        self, mocker, mock_py42_client
+    ):
+        param = {"exposure_type": "All"}
+        connector = _create_run_query_connector(mocker, mock_py42_client)
+        connector.handle_action(param)
+        actual_query = mock_py42_client.securitydata.search_file_events.call_args[0][0]
+        query_json = json.loads(str(actual_query))
+        assert query_json["groups"][0]["filters"][0]["term"] == "exposure"
+        assert query_json["groups"][0]["filters"][0]["operator"] == "EXISTS"
+        assert query_json["groups"][0]["filters"][0]["value"] is None
+        assert_success(connector)
+
     def test_handle_action_when_run_query_given_unsupported_hash_sets_error_message(
         self, mocker, mock_py42_client
     ):
