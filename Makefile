@@ -1,4 +1,5 @@
 PYTHONPATH=$(pwd)/build-scripts/
+PHANTOM_VM_IP_ADDR=$(shell vmrun list | grep phantom | xargs -I^ vmrun getGuestIPAddress ^)
 
 .PHONY: all clean test validate style tar deploy deploy-bypass ssh open-web
 

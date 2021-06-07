@@ -420,6 +420,26 @@ class Code42Connector(BaseConnector):
         )
         return action_result.set_status(phantom.APP_SUCCESS, status_message)
 
+    @action_handler_for("list_cases")
+    def _handle_list_cases(self, param, action_result):
+        status = param["status"]
+        if status == "ALL":
+            status = None
+        assignee = param.get("assignee")
+        subject = param.get("subject")
+        results_generator = self._client.cases.get_all(
+            status=status, assignee=assignee, subject=subject
+        )
+        page = None
+        for page in results_generator:
+            cases = page.data.get("cases", [])
+            for case in cases:
+                action_result.add_data(case)
+
+        total_count = page.data.get("totalCount", 0) if page else None
+        action_result.update_summary({"total_count": total_count})
+        return action_result.set_status(phantom.APP_SUCCESS)
+
     def finalize(self):
         # Save the state, this data is saved across actions and app upgrades
         self.save_state(self._state)

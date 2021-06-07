@@ -48,11 +48,21 @@ _TEST_CASE_RESPONSE = {
 
 @fixture
 def mock_py42_with_case(mocker, mock_py42_client):
-    mock_cases_response = mocker.MagicMock(spec=Response)
-    mock_cases_response.text = json.dumps(_TEST_CASE_RESPONSE)
+    mock_cases_response = create_mock_response(mocker, _TEST_CASE_RESPONSE)
     mock_py42_client.cases.create.return_value = Py42Response(mock_cases_response)
     mock_py42_client.cases.get.return_value = Py42Response(mock_cases_response)
     mock_py42_client.cases.update.return_value = Py42Response(mock_cases_response)
+    return mock_py42_client
+
+
+@fixture
+def mock_py42_with_cases(mocker, mock_py42_client):
+    response = {"cases": [_TEST_CASE_RESPONSE], "totalCount": 2}
+
+    def gen(*args, **kwargs):
+        yield create_mock_response(mocker, response)
+
+    mock_py42_client.cases.get_all.side_effect = gen
     return mock_py42_client
 
 
@@ -243,3 +253,44 @@ class TestCode42CasesConnector(object):
         connector = create_fake_connector("close_case", mock_py42_with_case)
         connector.handle_action(param)
         assert_fail(connector)
+
+    def test_handle_action_when_list_cases_and_status_all_given_passes_none(
+        self, mock_py42_with_case
+    ):
+        param = {"status": "ALL"}
+        connector = create_fake_connector("list_cases", mock_py42_with_case)
+        connector.handle_action(param)
+        mock_py42_with_case.cases.get_all.assert_called_once_with(
+            status=None, subject=None, assignee=None
+        )
+        assert_success(connector)
+
+    def test_handle_action_when_list_cases_calls_py42_with_correct_filters(
+        self, mock_py42_with_case
+    ):
+        param = {"status": "OPEN", "assignee": _TEST_ASSIGNEE, "subject": _TEST_SUBJECT}
+        connector = create_fake_connector("list_cases", mock_py42_with_case)
+        connector.handle_action(param)
+        mock_py42_with_case.cases.get_all.assert_called_once_with(
+            status="OPEN", assignee=_TEST_ASSIGNEE, subject=_TEST_SUBJECT
+        )
+        assert_success(connector)
+
+    def test_handle_action_when_list_departing_employee_updates_summary(
+        self, mock_py42_with_cases
+    ):
+        param = {"status": "ALL"}
+        connector = create_fake_connector("list_cases", mock_py42_with_cases)
+        connector.handle_action(param)
+        assert_successful_summary(connector, {"total_count": 2})
+
+    def test_handle_action_when_list_cases_adds_response_items_to_data(
+        self, mock_py42_with_cases
+    ):
+        param = {"status": "ALL"}
+        connector = create_fake_connector("list_cases", mock_py42_with_cases)
+        connector.handle_action(param)
+        action_results = connector.get_action_results()
+        assert len(action_results) == 1
+        data = action_results[0].get_data()
+        assert data[0] == _TEST_CASE_RESPONSE
