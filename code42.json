@@ -2036,7 +2036,7 @@
                     "order": 2
                 },
                 "file_name": {
-                    "description": "File name",
+                    "description": "Name of the file observed",
                     "data_type": "string",
                     "required": false,
                     "primary": true,
@@ -2044,7 +2044,7 @@
                     "order": 3
                 },
                 "file_path": {
-                    "description": "File path",
+                    "description": "Path of the file observed",
                     "data_type": "string",
                     "order": 4,
                     "primary": true,
@@ -2053,7 +2053,7 @@
                     ]
                 },
                 "file_category": {
-                    "description": "File category",
+                    "description": "Category of the file observed",
                     "data_type": "string",
                     "order": 5,
                     "primary": true,
@@ -2073,7 +2073,7 @@
                     ]
                 },
                 "username": {
-                    "description": "User name",
+                    "description": "Name of the user associated with the event",
                     "data_type": "string",
                     "order": 6,
                     "primary": true,
@@ -2112,7 +2112,7 @@
                     ]
                 },
                 "exposure_type": {
-                    "description": "Exposure type",
+                    "description": "Type of exposure that occurred",
                     "data_type": "string",
                     "order": 10,
                     "primary": false,
@@ -2128,13 +2128,13 @@
                     ]
                 },
                 "process_name": {
-                    "description": "Process name",
+                    "description": "Process name involved in the exposure",
                     "data_type": "string",
                     "order": 11,
                     "primary": false
                 },
                 "url": {
-                    "description": "Url",
+                    "description": "Urls of all the browser tabs open during exposure",
                     "data_type": "string",
                     "order": 12,
                     "primary": false,
@@ -2143,7 +2143,7 @@
                     ]
                 },
                 "window_title": {
-                    "description": "Window title",
+                    "description": "Names of all the open browser tabs or windows during exposure.",
                     "data_type": "string",
                     "order": 13,
                     "primary": false
