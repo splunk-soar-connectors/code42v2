@@ -1751,8 +1751,7 @@
             "action": "create case",
             "identifier": "create_case",
             "description": "Create a Code42 case",
-            "verbose": "",
-            "type": "contain",
+            "type": "investigate",
             "read_only": false,
             "parameters": {
                 "case_name": {
@@ -1849,7 +1848,7 @@
             "action": "update case",
             "identifier": "update_case",
             "description": "Update the details of a case",
-            "type": "contain",
+            "type": "investigate",
             "read_only": false,
             "parameters": {
                 "case_number": {
@@ -1955,8 +1954,7 @@
             "action": "close case",
             "identifier": "close_case",
             "description": "Change the status of a Code42 case to 'CLOSED'",
-            "verbose": "",
-            "type": "contain",
+            "type": "investigate",
             "read_only": false,
             "parameters": {
                 "case_number": {
@@ -2036,7 +2034,7 @@
             "action": "list cases",
             "identifier": "list_cases",
             "description": "List Code42 Cases",
-            "type": "contain",
+            "type": "investigate",
             "read_only": true,
             "parameters": {
                 "status": {
@@ -2145,6 +2143,35 @@
                 "type": "table"
             },
             "versions": "EQ(*)"
+        },
+        {
+            "action": "add case event",
+            "identifier": "add_case_event",
+            "description": "Associates a file event with a Code42 case.",
+            "type": "investigate",
+            "read_only": false,
+            "parameters": {
+                "case_number": {
+                    "description": "Case number",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": true,
+                    "contains": [
+                        "case number"
+                    ],
+                    "order": 0
+                },
+                "event_id": {
+                    "description": "Event ID",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": true,
+                    "contains": ["file event"],
+                    "order": 1
+                }
+            },
+            "output": []
         }
     ]
+
 }
