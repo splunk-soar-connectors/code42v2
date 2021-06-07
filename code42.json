@@ -2248,7 +2248,10 @@
                 },
                 {
                     "data_path": "action_result.data.*.eventId",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "contains": [
+                        "file event"
+                    ]
                 },
                 {
                     "data_path": "action_result.data.*.trusted",
@@ -2670,7 +2673,10 @@
                 },
                 {
                     "data_path": "action_result.data.*.eventId",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "contains": [
+                        "file event"
+                    ]
                 },
                 {
                     "data_path": "action_result.data.*.trusted",
