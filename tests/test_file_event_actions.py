@@ -455,7 +455,10 @@ class TestCode42FileEventsConnector(object):
         param = {"hash": "not-a-valid-hash"}
         connector = _create_hunt_file_connector(mocker, mock_py42_client)
         connector.handle_action(param)
-        message = "Code42: Failed execution of action hunt_file: Unsupported hash format. Hash must be either md5 or sha256"
+        message = (
+            "Code42: Failed execution of action hunt_file: "
+            "Unsupported hash format. Hash must be either md5 or sha256"
+        )
         assert_fail_message(connector, message)
 
     def test_handle_action_when_run_query_calls_search_file_events_with_expected_query(
