@@ -537,6 +537,8 @@ class TestCode42FileEventsConnector(object):
         }
         connector = _create_run_query_connector(mocker, mock_py42_client)
         connector.handle_action(param)
+
+        # Fails with error message from date util for an improper month.
         assert_fail(connector)
 
     def test_handle_action_when_run_query_adds_response_items_to_data(
