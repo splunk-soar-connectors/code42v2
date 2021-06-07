@@ -501,10 +501,10 @@ class TestCode42FileEventsConnector(object):
 
         assert_success(connector)
 
-    def test_handle_action_when_run_query_and_all_params_missing_sets_error_message(
+    def test_handle_action_when_run_query_and_all_params_missing_or_default_sets_error_message(
         self, mocker, mock_py42_client
     ):
-        param = {}
+        param = {"untrusted_only": False}
         connector = _create_run_query_connector(mocker, mock_py42_client)
         connector.handle_action(param)
         expected_message = (
