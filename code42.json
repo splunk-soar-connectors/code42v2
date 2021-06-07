@@ -1181,7 +1181,7 @@
             "action": "search alerts",
             "identifier": "search_alerts",
             "description": "Search Alerts",
-            "verbose": "All query parameters are optional; at least one search term is required. Defaults to last 30 days if no date range is provided.",
+            "verbose": "All query parameters are optional; at least one search term is required. All query parameters are in logical AND with each other. Defaults to last 30 days if no date range is provided.",
             "type": "investigate",
             "read_only": true,
             "parameters": {
