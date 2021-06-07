@@ -191,7 +191,11 @@ class TestCode42AlertsConnector(object):
         param = {"username": "barney.frankenberry@chocula.com"}
         connector = _create_search_alerts_connector(mock_py42_with_search_alerts)
         connector.handle_action(param)
-        assert_successful_single_data(connector, _MOCK_SEARCH_ALERTS_LIST_RESPONSE)
+        action_results = connector.get_action_results()
+        assert len(action_results) == 1
+        data = action_results[0].get_data()
+        assert data[0] == _MOCK_SEARCH_ALERTS_LIST_RESPONSE["alerts"][0]
+        assert data[1] == _MOCK_SEARCH_ALERTS_LIST_RESPONSE["alerts"][1]
 
     def test_handle_action_when_search_alerts_adds_summary(
         self, mock_py42_with_search_alerts

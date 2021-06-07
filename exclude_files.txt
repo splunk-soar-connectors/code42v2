@@ -3,6 +3,7 @@
 .pytest_cache
 *.egg-info
 .vscode
+.idea
 .DS_Store
 test_connector.py
 stubs
@@ -11,6 +12,7 @@ setup.py
 Makefile
 *.md
 LICENSE
+build
 dist
 tests
 *.tgz
