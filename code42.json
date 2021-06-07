@@ -2272,7 +2272,10 @@
                 },
                 {
                     "data_path": "action_result.data.*.emailFrom",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "contains": [
+                        "email"
+                    ]
                 },
                 {
                     "data_path": "action_result.data.*.fileOwner",
@@ -2298,7 +2301,10 @@
                 },
                 {
                     "data_path": "action_result.data.*.emailSender",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "contains": [
+                        "email"
+                    ]
                 },
                 {
                     "data_path": "action_result.data.*.printerName",
@@ -2688,7 +2694,10 @@
                 },
                 {
                     "data_path": "action_result.data.*.emailFrom",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "contains": [
+                        "email"
+                    ]
                 },
                 {
                     "data_path": "action_result.data.*.fileOwner",
@@ -2714,7 +2723,10 @@
                 },
                 {
                     "data_path": "action_result.data.*.emailSender",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "contains": [
+                        "email"
+                    ]
                 },
                 {
                     "data_path": "action_result.data.*.printerName",
