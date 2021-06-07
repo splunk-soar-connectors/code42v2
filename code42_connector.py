@@ -336,6 +336,7 @@ class Code42Connector(BaseConnector):
         username = param["username"]
         matter_id = param["matter_id"]
         user_id = self._get_user_id(username)
+        self._check_matter_is_accessible(matter_id)
         response = self._client.legalhold.add_to_matter(user_id, matter_id)
         action_result.add_data(response.data)
         status_message = f"{username} was added to legal hold matter {matter_id}."
@@ -346,6 +347,7 @@ class Code42Connector(BaseConnector):
         username = param["username"]
         matter_id = param["matter_id"]
         user_id = self._get_user_id(username)
+        self._check_matter_is_accessible(matter_id)
         legal_hold_membership_id = self._get_legal_hold_membership_id(
             user_id, matter_id
         )
@@ -398,7 +400,7 @@ class Code42Connector(BaseConnector):
     def _get_user_id(self, username):
         return self._get_user(username)["userUid"]
 
-    # Following two helper functions are copy+pasted from cmds/legal_hold.py in `code42cli`
+    # Following three helper functions are copy+pasted from cmds/legal_hold.py in `code42cli`
     def _get_legal_hold_membership_id(self, user_id, matter_id):
         memberships = self._get_legal_hold_memberships_for_matter(matter_id)
         for member in memberships:
@@ -416,6 +418,9 @@ class Code42Connector(BaseConnector):
             for member in page["legalHoldMemberships"]
         ]
         return memberships
+
+    def _check_matter_is_accessible(self, matter_id):
+        return self._client.legalhold.get_matter_by_uid(matter_id)
 
 
 def main():
