@@ -86,6 +86,12 @@ pyenv activate phantom
 pip install --upgrade pip
 ```
 
+Note: if the command `pyenv virtualenv 3.6.13 phantom` fails, try the following command instead:
+
+```bash
+pyenv install --patch 3.6.13 < <(curl -sSL https://github.com/python/cpython/commit/8ea6353.patch)
+```
+
 Use `source deactivate` to exit the virtual environment and `pyenv activate phantom` to reactivate it.
 
 #### Windows/Linux
