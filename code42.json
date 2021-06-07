@@ -2465,6 +2465,10 @@
                     "data_type": "numeric"
                 },
                 {
+                    "data_path": "action_result.summary.results_returned_count",
+                    "data_type": "numeric"
+                },
+                {
                     "data_path": "action_result.parameter.file_name",
                     "data_type": "string"
                 },

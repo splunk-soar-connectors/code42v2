@@ -561,7 +561,11 @@ class TestCode42FileEventsConnector(object):
         connector.handle_action(param)
         response_dict = json.loads(MOCK_SECURITY_EVENT_RESPONSE)
         assert_successful_summary(
-            connector, {"total_count": response_dict["totalCount"]}
+            connector,
+            {
+                "total_count": response_dict["totalCount"],
+                "results_returned_count": len(response_dict["fileEvents"]),
+            },
         )
 
     def test_handle_action_when_run_query_and_no_date_range_provided_defaults_to_last_30_days(
@@ -638,7 +642,11 @@ class TestCode42FileEventsConnector(object):
         connector.handle_action(param)
         response_dict = json.loads(MOCK_SECURITY_EVENT_RESPONSE)
         assert_successful_summary(
-            connector, {"total_count": response_dict["totalCount"]}
+            connector,
+            {
+                "total_count": response_dict["totalCount"],
+                "results_returned_count": len(response_dict["fileEvents"]),
+            },
         )
 
 

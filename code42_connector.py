@@ -565,7 +565,12 @@ class Code42Connector(BaseConnector):
         for result in results.data["fileEvents"]:
             action_result.add_data(result)
 
-        action_result.update_summary({"total_count": results.data["totalCount"]})
+        action_result.update_summary(
+            {
+                "total_count": results.data["totalCount"],
+                "results_returned_count": len(results.data["fileEvents"]),
+            }
+        )
 
     # Following two helper functions are copy+pasted from cmds/legal_hold.py in `code42cli`
     def _get_legal_hold_membership_id(self, user_id, matter_id):
