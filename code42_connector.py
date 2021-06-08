@@ -420,7 +420,7 @@ class Code42Connector(BaseConnector):
     def _handle_run_query(self, param, action_result):
         # Boolean action parameters are passed as lowercase string representations, fix that here.
         if "untrusted_only" in param:
-            param["untrusted_only"] = param["untrusted_only"] == "true"
+            param["untrusted_only"] = str(param["untrusted_only"]).lower() == "true"
 
         if is_default_dict(param):
             return action_result.set_status(
