@@ -419,6 +419,7 @@ class Code42Connector(BaseConnector):
         ]
         return memberships
 
+    # Fails when a legal hold matter is inaccessible from the user's account or the matter ID is not valid
     def _check_matter_is_accessible(self, matter_id):
         return self._client.legalhold.get_matter_by_uid(matter_id)
 
