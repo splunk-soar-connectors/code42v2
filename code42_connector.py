@@ -70,7 +70,8 @@ def add_eq_filter(filters, value, filter_class):
 
 def is_default_dict(_dict):
     for key in _dict:
-        if _dict.get(key):
+        # All action param dictionaries contain the key "context"; we don't care about that key.
+        if key != "context" and _dict.get(key):
             return False
     return True
 
@@ -415,6 +416,10 @@ class Code42Connector(BaseConnector):
 
     @action_handler_for("run_query")
     def _handle_run_query(self, param, action_result):
+        # Boolean action parameters are passed as lowercase string representations, fix that here.
+        if "untrusted_only" in param:
+            param["untrusted_only"] = param["untrusted_only"] == "true"
+
         if is_default_dict(param):
             return action_result.set_status(
                 phantom.APP_ERROR,
