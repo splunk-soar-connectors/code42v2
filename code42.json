@@ -2348,7 +2348,39 @@
                     "order": 1
                 }
             },
-            "output": []
+            "output": [
+                {
+                    "data_path": "action_result.parameter.case_number",
+                    "data_type": "string",
+                    "column_name": "Case Number",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.parameter.event_id",
+                    "data_type": "string",
+                    "column_name": "Event ID",
+                    "column_order": 1
+                },
+
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "Status",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
         }
     ]
 }

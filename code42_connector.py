@@ -469,6 +469,15 @@ class Code42Connector(BaseConnector):
         action_result.update_summary({"total_count": total_count})
         return action_result.set_status(phantom.APP_SUCCESS)
 
+    @action_handler_for("add_case_event")
+    def _handle_add_case_event(self, param, action_result):
+        case_number = param["case_number"]
+        event_id = param["event_id"]
+        self._client.cases.file_events.add(case_number=case_number, event_id=event_id)
+        status_message = f"Event {event_id} added to case number {case_number}"
+        action_result.update_summary({"case_number": case_number, "event_id": event_id})
+        return action_result.set_status(phantom.APP_SUCCESS, status_message)
+
     def finalize(self):
         # Save the state, this data is saved across actions and app upgrades
         self.save_state(self._state)

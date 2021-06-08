@@ -1,4 +1,3 @@
-import json
 from requests import Response
 from requests.exceptions import HTTPError
 from pytest import fixture
@@ -26,6 +25,7 @@ _TEST_SUBJECT = "test@example.com"
 _TEST_ASSIGNEE = "admin@example.com"
 _TEST_FINDINGS = "some findings: ```code here```"
 _TEST_USER_UID = "1234"
+_TEST_EVENT_ID = "0_12345_abcdef"
 
 _TEST_CASE_RESPONSE = {
     "number": 2,
@@ -294,3 +294,35 @@ class TestCode42CasesConnector(object):
         assert len(action_results) == 1
         data = action_results[0].get_data()
         assert data[0] == _TEST_CASE_RESPONSE
+
+    def test_handle_action_when_adding_event_to_case_calls_with_expected_args(
+        self, mock_py42_with_case
+    ):
+        param = {"case_number": "10", "event_id": _TEST_EVENT_ID}
+        connector = create_fake_connector("add_case_event", mock_py42_with_case)
+        connector.handle_action(param)
+        mock_py42_with_case.cases.file_events.add.assert_called_once_with(
+            case_number="10", event_id=_TEST_EVENT_ID
+        )
+        assert_success(connector)
+
+    def test_handle_action_when_adding_event_to_case_and_is_successful_sets_success_message(
+        self, mock_py42_with_case
+    ):
+        param = {"case_number": "10", "event_id": _TEST_EVENT_ID}
+        connector = create_fake_connector("add_case_event", mock_py42_with_case)
+        connector.handle_action(param)
+        expected_message = f"Event {_TEST_EVENT_ID} added to case number 10"
+        assert_successful_message(connector, expected_message)
+
+    def test_handle_action_when_adding_event_to_case_sets_error_status_when_case_or_event_not_found(
+        self, mocker, mock_py42_with_case
+    ):
+        mock_response = create_mock_response(mocker, {"problem": "NO_SUCH_CASE"})
+        mock_py42_with_case.cases.file_events.add.side_effect = Py42BadRequestError(
+            HTTPError(response=mock_response)
+        )
+        param = {"case_number": "10", "event_id": _TEST_EVENT_ID}
+        connector = create_fake_connector("add_case_event", mock_py42_with_case)
+        connector.handle_action(param)
+        assert_fail(connector)
