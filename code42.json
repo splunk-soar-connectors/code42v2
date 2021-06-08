@@ -1181,7 +1181,7 @@
             "action": "search alerts",
             "identifier": "search_alerts",
             "description": "Search Alerts",
-            "verbose": "Defaults to last 30 days if no date range is provided.",
+            "verbose": "All query parameters are optional; at least one search term is required. All query parameters are in logical AND with each other. Defaults to last 30 days if no date range is provided.",
             "type": "investigate",
             "read_only": true,
             "parameters": {
@@ -1918,6 +1918,992 @@
                 {
                     "data_path": "action_result.data",
                     "data_type": "string"
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "hunt file",
+            "identifier": "hunt_file",
+            "description": "Searches Code42 for a backed-up file with a matching hash and downloads it",
+            "verbose": "",
+            "type": "investigate",
+            "read_only": true,
+            "parameters": {
+                "hash": {
+                    "description": "The md5 or sha256 hash of the file to download",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": true,
+                    "contains": [
+                        "md5",
+                        "sha256"
+                    ],
+                    "default": "",
+                    "order": 0
+                },
+                "file_name": {
+                    "description": "The name to give to the file after it is downloaded. If not supplied, the hash will be used.",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": true,
+                    "default": "",
+                    "order": 1
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.parameter.hash",
+                    "data_type": "string",
+                    "contains": [
+                        "md5",
+                        "sha256"
+                    ],
+                    "column_name": "hash",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.parameter.file_name",
+                    "data_type": "string",
+                    "column_name": "status",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "status",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.data",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "run query",
+            "identifier": "run_query",
+            "description": "Search for Code42 file events",
+            "verbose": "You can use wildcards (*,?) with most string-based fields. All query parameters are optional; at least one search term is required. All query parameters are in logical AND with each other.",
+            "type": "investigate",
+            "read_only": true,
+            "parameters": {
+                "start_date": {
+                    "description": "Beginning of date range to search. Time (in UTC) may also be supplied but is not required.",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": false,
+                    "default": "",
+                    "order": 0
+                },
+                "end_date": {
+                    "description": "End of date range to search. Time (in UTC) may also be supplied but is not required.",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": false,
+                    "default": "",
+                    "order": 1
+                },
+                "file_hash": {
+                    "description": "Md5 or sha256 hash of a file",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": true,
+                    "contains": [
+                        "md5",
+                        "sha256"
+                    ],
+                    "default": "",
+                    "order": 2
+                },
+                "file_name": {
+                    "description": "Name of the file observed",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": true,
+                    "default": "",
+                    "order": 3
+                },
+                "file_path": {
+                    "description": "Path of the file observed",
+                    "data_type": "string",
+                    "order": 4,
+                    "primary": true,
+                    "contains": [
+                        "file path"
+                    ]
+                },
+                "file_category": {
+                    "description": "Category of the file observed",
+                    "data_type": "string",
+                    "order": 5,
+                    "primary": true,
+                    "value_list": [
+                        "Audio",
+                        "Document",
+                        "Executable",
+                        "Image",
+                        "Pdf",
+                        "Presentation",
+                        "Script",
+                        "SourceCode",
+                        "Spreadsheet",
+                        "Video",
+                        "VirtualDiskImage",
+                        "Archive"
+                    ]
+                },
+                "username": {
+                    "description": "Name of the user associated with the event",
+                    "data_type": "string",
+                    "order": 6,
+                    "primary": true,
+                    "contains": [
+                        "email",
+                        "user name"
+                    ]
+                },
+                "hostname": {
+                    "description": "Hostname",
+                    "data_type": "string",
+                    "order": 7,
+                    "primary": false,
+                    "contains": [
+                        "host name"
+                    ]
+                },
+                "private_ip": {
+                    "description": "Private IPv4 or IPv6 address",
+                    "data_type": "string",
+                    "order": 8,
+                    "primary": false,
+                    "contains": [
+                        "ip",
+                        "ipv6"
+                    ]
+                },
+                "public_ip": {
+                    "description": "Public IPv4 or IPv6 address",
+                    "data_type": "string",
+                    "order": 9,
+                    "primary": false,
+                    "contains": [
+                        "ip",
+                        "ipv6"
+                    ]
+                },
+                "exposure_type": {
+                    "description": "Type of exposure that occurred",
+                    "data_type": "string",
+                    "order": 10,
+                    "primary": false,
+                    "value_list": [
+                        "All",
+                        "SharedViaLink",
+                        "SharedToDomain",
+                        "ApplicationRead",
+                        "CloudStorage",
+                        "RemovableMedia",
+                        "IsPublic",
+                        "OutsideTrustedDomains"
+                    ]
+                },
+                "process_name": {
+                    "description": "Process name involved in the exposure",
+                    "data_type": "string",
+                    "order": 11,
+                    "primary": false
+                },
+                "url": {
+                    "description": "Urls of all the browser tabs open during exposure",
+                    "data_type": "string",
+                    "order": 12,
+                    "primary": false,
+                    "contains": [
+                        "url"
+                    ]
+                },
+                "window_title": {
+                    "description": "Names of all the open browser tabs or windows during exposure.",
+                    "data_type": "string",
+                    "order": 13,
+                    "primary": false
+                },
+                "untrusted_only": {
+                    "description": "Return only events representing untrusted activity",
+                    "data_type": "boolean",
+                    "order": 14,
+                    "primary": false
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.data.*.eventTimestamp",
+                    "data_type": "string",
+                    "column_name": "Date Observed",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.data.*.eventType",
+                    "data_type": "string",
+                    "column_name": "Event type",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.data.*.fileName",
+                    "data_type": "string",
+                    "column_name": "Filename",
+                    "column_order": 2,
+                    "contains": [
+                        "file name"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.filePath",
+                    "data_type": "string",
+                    "column_name": "File path",
+                    "column_order": 3,
+                    "contains": [
+                        "file path"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.createTimestamp",
+                    "data_type": "string",
+                    "column_name": "File created date",
+                    "column_order": 4
+                },
+                {
+                    "data_path": "action_result.data.*.modifyTimestamp",
+                    "data_type": "string",
+                    "column_name": "File modified date",
+                    "column_order": 5
+                },
+                {
+                    "data_path": "action_result.data.*.md5Checksum",
+                    "data_type": "string",
+                    "column_name": "MD5 hash",
+                    "column_order": 6,
+                    "contains": [
+                        "md5"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.sha256Checksum",
+                    "data_type": "string",
+                    "column_name": "SHA256 hash",
+                    "column_order": 7,
+                    "contains": [
+                        "sha256"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.url",
+                    "data_type": "string",
+                    "contains": [
+                        "url"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.actor",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.fileId",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.shared",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.source",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.tabUrl",
+                    "data_type": "string",
+                    "contains": [
+                        "url"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.eventId",
+                    "data_type": "string",
+                    "contains": [
+                        "file event"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.trusted",
+                    "data_type": "boolean"
+                },
+                {
+                    "data_path": "action_result.data.*.userUid",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.fileSize",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.data.*.fileType",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.deviceUid",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.emailFrom",
+                    "data_type": "string",
+                    "contains": [
+                        "email"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.fileOwner",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.riskScore",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.domainName",
+                    "data_type": "string",
+                    "contains": [
+                        "domain"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.osHostName",
+                    "data_type": "string",
+                    "contains": [
+                        "host name"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.emailSender",
+                    "data_type": "string",
+                    "contains": [
+                        "email"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.printerName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.processName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.cloudDriveId",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.emailSubject",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.fileCategory",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.printJobName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.processOwner",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.riskSeverity",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.deviceUserName",
+                    "data_type": "string",
+                    "contains": [
+                        "email",
+                        "user name"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.remoteActivity",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.destinationName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.emailRecipients",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.mimeTypeByBytes",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.publicIpAddress",
+                    "data_type": "string",
+                    "contains": [
+                        "ip"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.syncDestination",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.mimeTypeMismatch",
+                    "data_type": "boolean"
+                },
+                {
+                    "data_path": "action_result.data.*.insertionTimestamp",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.outsideActiveHours",
+                    "data_type": "boolean"
+                },
+                {
+                    "data_path": "action_result.data.*.privateIpAddresses",
+                    "data_type": "string",
+                    "contains": [
+                        "ip",
+                        "ipv6"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.removableMediaName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.destinationCategory",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.emailDlpPolicyNames",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.fileCategoryByBytes",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.mimeTypeByExtension",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.operatingSystemUser",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.detectionSourceAlias",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.removableMediaVendor",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.removableMediaBusType",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.printedFilesBackupPath",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.removableMediaCapacity",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.fileCategoryByExtension",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.removableMediaMediaName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.removableMediaSerialNumber",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.summary.total_count",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.summary.results_returned_count",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.parameter.file_name",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.untrusted_only",
+                    "data_type": "boolean"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.parameter.start_date",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.end_date",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.file_hash",
+                    "data_type": "string",
+                    "contains": [
+                        "md5",
+                        "sha256"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.file_path",
+                    "data_type": "string",
+                    "contains": [
+                        "file path"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.file_category",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.username",
+                    "data_type": "string",
+                    "contains": [
+                        "email",
+                        "user name"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.hostname",
+                    "data_type": "string",
+                    "contains": [
+                        "host name"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.private_ip",
+                    "data_type": "string",
+                    "contains": [
+                        "ip",
+                        "ipv6"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.public_ip",
+                    "data_type": "string",
+                    "contains": [
+                        "ip",
+                        "ipv6"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.exposure_type",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.process_name",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.url",
+                    "data_type": "string",
+                    "contains": [
+                        "url"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.window_title",
+                    "data_type": "string"
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "run advanced query",
+            "identifier": "run_advanced_query",
+            "description": "Run an advanced query using JSON",
+            "verbose": "",
+            "type": "investigate",
+            "read_only": true,
+            "parameters": {
+                "json_query": {
+                    "description": "The raw JSON of the query to execute",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": true,
+                    "default": "",
+                    "order": 0
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.data.*.eventTimestamp",
+                    "data_type": "string",
+                    "column_name": "Date Observed",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.data.*.eventType",
+                    "data_type": "string",
+                    "column_name": "Event type",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.data.*.fileName",
+                    "data_type": "string",
+                    "column_name": "Filename",
+                    "column_order": 2,
+                    "contains": [
+                        "file name"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.filePath",
+                    "data_type": "string",
+                    "column_name": "File path",
+                    "column_order": 3,
+                    "contains": [
+                        "file path"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.createTimestamp",
+                    "data_type": "string",
+                    "column_name": "File created date",
+                    "column_order": 4
+                },
+                {
+                    "data_path": "action_result.data.*.modifyTimestamp",
+                    "data_type": "string",
+                    "column_name": "File modified date",
+                    "column_order": 5
+                },
+                {
+                    "data_path": "action_result.data.*.md5Checksum",
+                    "data_type": "string",
+                    "column_name": "MD5 hash",
+                    "column_order": 6,
+                    "contains": [
+                        "md5"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.sha256Checksum",
+                    "data_type": "string",
+                    "column_name": "SHA256 hash",
+                    "column_order": 7,
+                    "contains": [
+                        "sha256"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.url",
+                    "data_type": "string",
+                    "contains": [
+                        "url"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.actor",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.fileId",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.shared",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.source",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.tabUrl",
+                    "data_type": "string",
+                    "contains": [
+                        "url"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.eventId",
+                    "data_type": "string",
+                    "contains": [
+                        "file event"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.trusted",
+                    "data_type": "boolean"
+                },
+                {
+                    "data_path": "action_result.data.*.userUid",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.fileSize",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.data.*.fileType",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.deviceUid",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.emailFrom",
+                    "data_type": "string",
+                    "contains": [
+                        "email"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.fileOwner",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.riskScore",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.domainName",
+                    "data_type": "string",
+                    "contains": [
+                        "domain"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.osHostName",
+                    "data_type": "string",
+                    "contains": [
+                        "host name"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.emailSender",
+                    "data_type": "string",
+                    "contains": [
+                        "email"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.printerName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.processName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.cloudDriveId",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.emailSubject",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.fileCategory",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.printJobName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.processOwner",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.riskSeverity",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.deviceUserName",
+                    "data_type": "string",
+                    "contains": [
+                        "email",
+                        "user name"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.remoteActivity",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.destinationName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.emailRecipients",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.mimeTypeByBytes",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.publicIpAddress",
+                    "data_type": "string",
+                    "contains": [
+                        "ip"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.syncDestination",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.mimeTypeMismatch",
+                    "data_type": "boolean"
+                },
+                {
+                    "data_path": "action_result.data.*.insertionTimestamp",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.outsideActiveHours",
+                    "data_type": "boolean"
+                },
+                {
+                    "data_path": "action_result.data.*.privateIpAddresses",
+                    "data_type": "string",
+                    "contains": [
+                        "ip",
+                        "ipv6"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.removableMediaName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.destinationCategory",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.emailDlpPolicyNames",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.fileCategoryByBytes",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.mimeTypeByExtension",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.operatingSystemUser",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.detectionSourceAlias",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.removableMediaVendor",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.removableMediaBusType",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.printedFilesBackupPath",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.removableMediaCapacity",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.fileCategoryByExtension",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.removableMediaMediaName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.removableMediaSerialNumber",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.summary.total_count",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.parameter.json_query",
+                    "data_type": "numeric"
                 }
             ],
             "render": {

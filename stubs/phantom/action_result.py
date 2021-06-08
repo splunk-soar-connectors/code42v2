@@ -22,6 +22,10 @@ class ActionResult:
     def get_param(self):
         return self._param
 
+    def update_param(self, param_dict):
+        self._param.update(param_dict)
+        return self._param
+
     def set_status(self, status_code, status_message="", exception=None):
         if type(status_code) != bool:
             raise TypeError("status_code is not of type bool")
