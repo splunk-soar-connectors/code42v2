@@ -112,6 +112,17 @@ class TestCode42LegalHoldConnector(object):
             f"test@example.com was added to legal hold matter {_TEST_MATTER_ID}.",
         )
 
+    def test_handle_action_when_add_legal_hold_custodian_checks_matter_is_accessible(
+        self, mock_py42_with_user
+    ):
+        param = {"username": "test@example.com", "matter_id": _TEST_MATTER_ID}
+        connector = _create_add_legalhold_custodian_connector(mock_py42_with_user)
+        connector.handle_action(param)
+        mock_py42_with_user.legalhold.get_matter_by_uid.assert_called_once_with(
+            _TEST_MATTER_ID
+        )
+        assert_success(connector)
+
     def test_handle_action_when_remove_legal_hold_custodian_calls_remove_with_expected_args(
         self, mock_py42_with_legal_hold_memberships
     ):
@@ -167,3 +178,16 @@ class TestCode42LegalHoldConnector(object):
             connector,
             f"Code42: User is not an active member of legal hold matter {_TEST_MATTER_ID} for action 'remove_legalhold_custodian'.",
         )
+
+    def test_handle_action_when_remove_legal_hold_custodian_checks_matter_is_accessible(
+        self, mock_py42_with_legal_hold_memberships
+    ):
+        param = {"username": "test@example.com", "matter_id": _TEST_MATTER_ID}
+        connector = _create_remove_legalhold_custodian_connector(
+            mock_py42_with_legal_hold_memberships
+        )
+        connector.handle_action(param)
+        mock_py42_with_legal_hold_memberships.legalhold.get_matter_by_uid.assert_called_once_with(
+            _TEST_MATTER_ID
+        )
+        assert_success(connector)
