@@ -541,6 +541,18 @@ class TestCode42FileEventsConnector(object):
         # Fails with error message from date util for an improper month.
         assert_fail(connector)
 
+    def test_handle_action_when_run_query_and_start_date_after_end_date_sets_error_message(
+        self, mocker, mock_py42_client
+    ):
+        param = {
+            "start_date": "2031-06-01",
+            "end_date": "2031-05-01",
+        }
+        connector = _create_run_query_connector(mocker, mock_py42_client)
+        connector.handle_action(param)
+        expected_message = "Code42: Failed execution of action run_query: Start date cannot be after end date."
+        assert_fail_message(connector, expected_message)
+
     def test_handle_action_when_run_query_adds_response_items_to_data(
         self, mocker, mock_py42_client
     ):
