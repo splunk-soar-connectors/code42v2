@@ -532,15 +532,17 @@ class Code42Connector(BaseConnector):
         query = FileEventQuery.all(*filters)
         return query
 
-    def _build_date_range_filter(self, date_filter_cls, start_date, end_date):
-        if start_date and not end_date:
-            return date_filter_cls.on_or_after(dateutil.parser.parse(start_date))
-        elif end_date and not start_date:
-            return date_filter_cls.on_or_before(dateutil.parser.parse(end_date))
-        elif end_date and start_date:
-            return date_filter_cls.in_range(
-                dateutil.parser.parse(start_date), dateutil.parser.parse(end_date)
-            )
+    def _build_date_range_filter(self, date_filter_cls, start_date_str, end_date_str):
+        if start_date_str and not end_date_str:
+            return date_filter_cls.on_or_after(dateutil.parser.parse(start_date_str))
+        elif end_date_str and not start_date_str:
+            return date_filter_cls.on_or_before(dateutil.parser.parse(end_date_str))
+        elif end_date_str and start_date_str:
+            start_datetime = dateutil.parser.parse(start_date_str)
+            end_datetime = dateutil.parser.parse(end_date_str)
+            if start_datetime >= end_datetime:
+                raise Exception("Start date cannot be after end date.")
+            return date_filter_cls.in_range(start_datetime, end_datetime)
         else:
             thirty_days_ago = datetime.utcnow() - timedelta(days=30)
             return date_filter_cls.on_or_after(thirty_days_ago)
