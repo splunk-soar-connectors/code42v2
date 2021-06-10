@@ -111,6 +111,7 @@ class Code42Connector(BaseConnector):
             container_json = {
                 "name": alert["name"],
                 "data": alert,
+                "severity": alert["severity"],
                 "description": alert["description"],
                 "source_data_identifier": alert["id"],
                 "label": self.get_config().get("ingest", {}).get("container_label"),
