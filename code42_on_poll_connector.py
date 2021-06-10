@@ -36,7 +36,9 @@ class Code42OnPollConnector:
                 "severity": alert["severity"],
                 "description": alert["description"],
                 "source_data_identifier": alert_id,
-                "label": self._connector.get_config().get("ingest", {}).get("container_label"),
+                "label": self._connector.get_config()
+                .get("ingest", {})
+                .get("container_label"),
             }
             ret_val, _, container_id = self._connector.save_container(container_json)
 
