@@ -92,6 +92,19 @@ class Code42Connector(BaseConnector):
 
     @action_handler_for("on_poll")
     def _handle_on_poll(self, param, action_result):
+
+        # Get last timestamp
+        last_time = self._state.get("last_time", 0)
+        if not last_time:
+            last_time = 0
+
+        is_first_run = (
+            last_time == 0 or self._state.get("first_run", True) or self.is_poll_now()
+        )
+
+        if not is_first_run:
+            param["start_date"] = last_time
+
         return self._handle_search_alerts(param, action_result)
 
     """ DEPARTING EMPLOYEE ACTIONS """
