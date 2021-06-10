@@ -96,13 +96,15 @@ class Code42Connector(BaseConnector):
 
         # Only use start_date and end_date if never checkpointed.
         if not last_time:
-            default_start_date = self._get_thirty_days_ago().strftime("%Y-%m-%dT%H:%M:%S.%f")
+            default_start_date = self._get_thirty_days_ago().strftime(
+                "%Y-%m-%dT%H:%M:%S.%f"
+            )
             param["start_date"] = param.get("start_date", default_start_date)
         else:
             param["start_date"] = last_time
             param["end_date"] = None
 
-        query = self._build_alerts_query(username, param["start_date"], param["end_date"])
+        query = self._build_alerts_query(param["start_date"], param["end_date"])
         response = self._client.alerts.search(query)
 
         for alert in response["alerts"]:
@@ -111,7 +113,7 @@ class Code42Connector(BaseConnector):
                 "data": alert,
                 "description": alert["description"],
                 "source_data_identifier": alert["id"],
-                "label": self.get_config().get("ingest", {}).get("container_label")
+                "label": self.get_config().get("ingest", {}).get("container_label"),
             }
             _, _, _ = self.save_container(container_json)
 
@@ -340,7 +342,9 @@ class Code42Connector(BaseConnector):
                 phantom.APP_ERROR,
                 "Code42: Must supply a search term when calling action 'search_alerts`.",
             )
-        query = self._build_alerts_query(username, start_date, end_date, alert_state)
+        query = self._build_alerts_query(
+            start_date, end_date, username=username, alert_state=alert_state
+        )
         response = self._client.alerts.search(query)
         for alert in response["alerts"]:
             action_result.add_data(alert)
@@ -394,7 +398,9 @@ class Code42Connector(BaseConnector):
     def _get_thirty_days_ago(self):
         return datetime.utcnow() - timedelta(days=30)
 
-    def _build_alerts_query(self, username, start_date, end_date, alert_state=None):
+    def _build_alerts_query(
+        self, start_date, end_date, username=None, alert_state=None
+    ):
         filters = []
         if username:
             filters.append(Actor.eq(username))
