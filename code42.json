@@ -67,7 +67,7 @@
             "description": "Add a departing employee to the departing employees detection list",
             "verbose": "There is a short delay before you can query the updated results.",
             "undo": "remove departing employee",
-            "type": "contain",
+            "type": "generic",
             "read_only": false,
             "parameters": {
                 "username": {
@@ -184,7 +184,7 @@
             "description": "Remove a departing employee from the departing employees detection list",
             "verbose": "There is a short delay before you can query the updated results.",
             "undo": "add departing employee",
-            "type": "contain",
+            "type": "generic",
             "read_only": false,
             "parameters": {
                 "username": {
@@ -252,7 +252,7 @@
             "identifier": "list_departing_employees",
             "description": "Returns a list of users who are on the departing employees list",
             "verbose": "",
-            "type": "investigate",
+            "type": "generic",
             "read_only": true,
             "parameters": {
                 "filter_type": {
@@ -358,7 +358,7 @@
             "identifier": "get_departing_employee",
             "description": "Get a departing employee",
             "verbose": "",
-            "type": "investigate",
+            "type": "generic",
             "read_only": true,
             "parameters": {
                 "username": {
@@ -464,7 +464,7 @@
             "description": "Add a high risk employee to the high risk employees detection list",
             "verbose": "",
             "undo": "remove highrisk employee",
-            "type": "contain",
+            "type": "generic",
             "read_only": false,
             "parameters": {
                 "username": {
@@ -567,7 +567,7 @@
             "description": "Remove a high risk employee from the high risk employees detection list",
             "verbose": "",
             "undo": "add highrisk employee",
-            "type": "contain",
+            "type": "generic",
             "read_only": false,
             "parameters": {
                 "username": {
@@ -635,7 +635,7 @@
             "identifier": "list_highrisk_employees",
             "description": "Returns a list of users who are on the high-risk employees list",
             "verbose": "",
-            "type": "investigate",
+            "type": "generic",
             "read_only": true,
             "parameters": {
                 "filter_type": {
@@ -740,7 +740,7 @@
             "identifier": "get_highrisk_employee",
             "description": "Get a high risk employee",
             "verbose": "",
-            "type": "investigate",
+            "type": "generic",
             "read_only": true,
             "parameters": {
                 "username": {
@@ -852,7 +852,7 @@
             "description": "Add a risk tag to a user",
             "verbose": "",
             "undo": "remove highrisk tag",
-            "type": "contain",
+            "type": "generic",
             "read_only": false,
             "parameters": {
                 "username": {
@@ -962,7 +962,7 @@
             "description": "Remove a risk tag from a user",
             "verbose": "",
             "undo": "add highrisk tag",
-            "type": "contain",
+            "type": "generic",
             "read_only": false,
             "parameters": {
                 "username": {
@@ -1320,7 +1320,7 @@
             "identifier": "set_alert_state",
             "description": "Set the state of the alert",
             "verbose": "",
-            "type": "contain",
+            "type": "generic",
             "read_only": false,
             "parameters": {
                 "alert_id": {
@@ -1411,7 +1411,7 @@
             "identifier": "create_user",
             "description": "Create a new Code42 user account",
             "verbose": "There is a short delay before you will be able to add the new user to departing employee or high risk employee list.",
-            "type": "contain",
+            "type": "generic",
             "read_only": false,
             "parameters": {
                 "org_uid": {
@@ -1540,7 +1540,7 @@
             "description": "Blocks a user from accessing their Code42 account",
             "verbose": "Blocks a user from accessing their Code42 account (endpoint backup/security processes continue while blocked).",
             "undo": "unblock user",
-            "type": "generic",
+            "type": "contain",
             "read_only": false,
             "parameters": {
                 "username": {
@@ -1708,7 +1708,7 @@
             "description": "Unblocks a user, allowing access to their Code42 account",
             "verbose": "",
             "undo": "block user",
-            "type": "generic",
+            "type": "contain",
             "read_only": false,
             "parameters": {
                 "username": {
@@ -1945,7 +1945,8 @@
                     "required": false,
                     "primary": true,
                     "contains": [
-                        "email"
+                        "email",
+                        "user name"
                     ],
                     "default": "",
                     "order": 1
@@ -1963,7 +1964,11 @@
                     "description": "Assignee (username)",
                     "data_type": "string",
                     "required": false,
-                    "primary": false,
+                    "primary": true,
+                    "contains": [
+                        "email",
+                        "user name"
+                    ],
                     "default": "",
                     "order": 3
                 },
@@ -2001,12 +2006,20 @@
                 {
                     "data_path": "action_result.parameter.subject",
                     "data_type": "string",
+                    "contains": [
+                        "email",
+                        "user name"
+                    ],
                     "column_name": "Subject",
                     "column_order": 3
                 },
                 {
                     "data_path": "action_result.parameter.assignee",
                     "data_type": "string",
+                    "contains": [
+                        "email",
+                        "user name"
+                    ],
                     "column_name": "Assignee",
                     "column_order": 4
                 },
@@ -2060,7 +2073,8 @@
                     "required": false,
                     "primary": true,
                     "contains": [
-                        "email"
+                        "email",
+                        "user name"
                     ],
                     "order": 3
                 },
@@ -2070,7 +2084,8 @@
                     "required": false,
                     "primary": true,
                     "contains": [
-                        "email"
+                        "email",
+                        "user name"
                     ],
                     "order": 4
                 },
@@ -2107,12 +2122,20 @@
                 {
                     "data_path": "action_result.data.*.subjectUsername",
                     "data_type": "string",
+                    "contains": [
+                        "email",
+                        "user name"
+                    ],
                     "column_name": "Subject",
                     "column_order": 3
                 },
                 {
                     "data_path": "action_result.data.*.assigneeUsername",
                     "data_type": "string",
+                    "contains": [
+                        "email",
+                        "user name"
+                    ],
                     "column_name": "Assignee",
                     "column_order": 4
                 },
@@ -2171,12 +2194,20 @@
                 {
                     "data_path": "action_result.data.*.subjectUsername",
                     "data_type": "string",
+                    "contains": [
+                        "email",
+                        "user name"
+                    ],
                     "column_name": "Subject",
                     "column_order": 3
                 },
                 {
                     "data_path": "action_result.data.*.assigneeUsername",
                     "data_type": "string",
+                    "contains": [
+                        "email",
+                        "user name"
+                    ],
                     "column_name": "Assignee",
                     "column_order": 4
                 },
@@ -2229,7 +2260,10 @@
                     "data_type": "string",
                     "required": false,
                     "primary": false,
-                    "contains": ["email"],
+                    "contains": [
+                        "email",
+                        "user name"
+                    ],
                     "default": null,
                     "order": 1
                 },
@@ -2237,8 +2271,11 @@
                     "description": "Filter cases by subject username",
                     "data_type": "string",
                     "required": false,
-                    "primary": false,
-                    "contains": ["email"],
+                    "primary": true,
+                    "contains": [
+                        "email",
+                        "user name"
+                    ],
                     "default": null,
                     "order": 2
                 }
@@ -2276,7 +2313,10 @@
                     "example_values": [
                         "user1@example.com"
                     ],
-                    "contains": ["email"],
+                    "contains": [
+                        "email",
+                        "user name"
+                    ],
                     "column_order": 3
                 },
                 {
@@ -2286,7 +2326,10 @@
                     "example_values": [
                         "admin@example.com"
                     ],
-                    "contains": ["email"],
+                    "contains": [
+                        "email",
+                        "user name"
+                    ],
                     "column_order": 4
                 },
                 {
@@ -2305,7 +2348,10 @@
                     "example_values": [
                         "admin@example.com"
                     ],
-                    "contains": ["email"],
+                    "contains": [
+                        "email",
+                        "user name"
+                    ],
                     "column_order": 6
                 },
                 {
