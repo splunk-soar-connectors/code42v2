@@ -121,7 +121,7 @@ Make sure you have created a Python virtual environment for the Phantom project 
 Then, activate the virtual environment and install the dependencies before running the build.
 
 ```bash
-pip install -e .[dev]
+pip install -e .'[dev]'
 make
 ```
 
