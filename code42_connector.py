@@ -13,6 +13,8 @@ from py42.services.detectionlists.departing_employee import DepartingEmployeeFil
 from py42.services.detectionlists.high_risk_employee import HighRiskEmployeeFilters
 
 from code42_util import Code42BaseConnector
+from code42_util import build_alerts_query
+from code42_on_poll_connector import Code42OnPollConnector
 
 
 class RetVal(tuple):
@@ -313,7 +315,7 @@ class Code42Connector(Code42BaseConnector):
                 phantom.APP_ERROR,
                 "Code42: Must supply a search term when calling action 'search_alerts`.",
             )
-        query = _build_alerts_query(
+        query = build_alerts_query(
             start_date, end_date, username=username, alert_state=alert_state
         )
         response = self._client.alerts.search(query)
