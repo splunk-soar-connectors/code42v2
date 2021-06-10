@@ -110,7 +110,7 @@ class Code42Connector(BaseConnector):
         for alert in response["alerts"]:
             container_json = {
                 "name": alert["name"],
-                "data": self._client.get_alert_details(alert["id"]),
+                "data": self._client.alerts.get_details(alert["id"]),
                 "severity": alert["severity"],
                 "description": alert["description"],
                 "source_data_identifier": alert["id"],
