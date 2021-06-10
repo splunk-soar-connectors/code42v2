@@ -27,12 +27,12 @@ deploy:: tar
 		"rm -rf phcode42v2 && tar -xvf phcode42v2.tgz && cd phcode42v2 && phenv python /opt/phantom/bin/compile_app.pyc -i"
 
 deploy-bypass:: tar
-	sshpass -p "$(SERVER_PASSWORD)" scp ../phcode42v2.tgz "phantom@$(SERVER_ADDRESS)":/home/phantom
-	sshpass -p "$(SERVER_PASSWORD)" ssh phantom@$(SERVER_ADDRESS) \
+	@sshpass -p "$(SERVER_PASSWORD)" scp ../phcode42v2.tgz "phantom@$(SERVER_ADDRESS)":/home/phantom
+	@sshpass -p "$(SERVER_PASSWORD)" ssh phantom@$(SERVER_ADDRESS) \
 		"rm -rf phcode42v2 && tar -xvf phcode42v2.tgz && cd phcode42v2 && phenv python /opt/phantom/bin/compile_app.pyc -i"
 
 ssh::
-	sshpass -p "$(SERVER_PASSWORD)" ssh phantom@$(SERVER_ADDRESS)
+	@sshpass -p "$(SERVER_PASSWORD)" ssh phantom@$(SERVER_ADDRESS)
 
 open-web::
 	open https://$(SERVER_ADDRESS):9999
