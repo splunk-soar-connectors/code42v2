@@ -9,6 +9,9 @@ class BaseConnector:
     def get_action_results(self):
         return self._action_results
 
+    def get_container_id(self):
+        pass
+
     def save_progress(self, status):
         pass
 

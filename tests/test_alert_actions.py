@@ -222,6 +222,19 @@ class TestCode42AlertsConnector(object):
         assert abs((actual_date - expected_date)).seconds < 1
         assert_success(connector)
 
+    def test_handle_action_when_search_alerts_and_start_date_after_end_date_sets_error_message(
+        self, mock_py42_with_search_alerts
+    ):
+        param = {
+            "username": "gilbert.lequiche@finance.biz",
+            "start_date": "2031-06-01",
+            "end_date": "2031-01-01",
+        }
+        connector = _create_search_alerts_connector(mock_py42_with_search_alerts)
+        connector.handle_action(param)
+        expected_message = "Code42: Failed execution of action search_alerts: Start date cannot be after end date."
+        assert_fail_message(connector, expected_message)
+
     def test_handle_action_when_set_alert_state_calls_update_state(
         self, mock_py42_client
     ):

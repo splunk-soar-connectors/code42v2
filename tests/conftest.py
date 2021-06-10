@@ -20,6 +20,12 @@ def mock_py42_client(mocker):
     return client
 
 
+@fixture(autouse=True)
+def mock_create_attachment(mocker):
+    mock_vault = mocker.patch("phantom.vault.Vault.create_attachment")
+    return mock_vault
+
+
 @fixture
 def mock_py42_with_user(mocker, mock_py42_client):
     response_data = {"users": [{"userUid": TEST_USER_UID}]}
@@ -48,8 +54,12 @@ def create_fake_connector(action_identifier, client=None):
     def fake_get_action_identifier():
         return action_identifier
 
+    def fake_get_container_id():
+        return 42
+
     connector = Code42Connector()
     connector.get_action_identifier = fake_get_action_identifier
+    connector.get_container_id = fake_get_container_id
     connector._client = client
     return connector
 
@@ -112,6 +122,15 @@ def assert_successful_message(connector, expected_message):
     msg = action_results[0].get_message()
     status = action_results[0].get_status()
     assert msg == expected_message
+    assert status == phantom.app.APP_SUCCESS
+
+
+def assert_successful_params(connector, expected_params):
+    action_results = connector.get_action_results()
+    assert len(action_results) == 1
+    params = action_results[0].get_param()
+    status = action_results[0].get_status()
+    assert params == expected_params
     assert status == phantom.app.APP_SUCCESS
 
 
