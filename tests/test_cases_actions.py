@@ -123,11 +123,6 @@ class TestCode42CasesConnector(object):
         connector.handle_action(param)
         expected_summary = {
             "case_number": 2,
-            "name": _TEST_NAME,
-            "subject": _TEST_SUBJECT,
-            "description": _TEST_DESCRIPTION,
-            "assignee": _TEST_ASSIGNEE,
-            "findings": _TEST_FINDINGS,
         }
         assert_successful_summary(connector, expected_summary)
 
@@ -173,14 +168,7 @@ class TestCode42CasesConnector(object):
         param = {"case_number": 1, "case_name": _TEST_NAME}
         connector = create_fake_connector("update_case", mock_py42_with_case)
         connector.handle_action(param)
-        expected_summary = {
-            "case_number": 1,
-            "name": _TEST_NAME,
-            "subject": _TEST_SUBJECT,
-            "description": _TEST_DESCRIPTION,
-            "assignee": _TEST_ASSIGNEE,
-            "findings": _TEST_FINDINGS,
-        }
+        expected_summary = {"case_number": 1}
         assert_successful_summary(connector, expected_summary)
 
     def test_handle_action_when_updating_case_when_case_closed_sets_error_status(
@@ -220,14 +208,7 @@ class TestCode42CasesConnector(object):
         param = {"case_number": 1}
         connector = create_fake_connector("close_case", mock_py42_with_case)
         connector.handle_action(param)
-        expected_summary = {
-            "case_number": 1,
-            "name": _TEST_NAME,
-            "subject": _TEST_SUBJECT,
-            "description": _TEST_DESCRIPTION,
-            "assignee": _TEST_ASSIGNEE,
-            "findings": _TEST_FINDINGS,
-        }
+        expected_summary = {"case_number": 1}
         assert_successful_summary(connector, expected_summary)
 
     def test_handle_action_when_closing_case_when_case_already_closed_calls_get_and_sets_expected_success_message(
