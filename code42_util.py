@@ -28,6 +28,6 @@ def build_alerts_query(start_date, end_date, username=None, alert_state=None):
         filters.append(Actor.eq(username))
     if alert_state:
         filters.append(AlertState.eq(alert_state))
-    filters.append(_build_date_range_filter(start_date, end_date))
+    filters.append(build_date_range_filter(start_date, end_date))
     query = AlertQuery.all(*filters)
     return query
