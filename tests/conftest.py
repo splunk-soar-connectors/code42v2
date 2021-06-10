@@ -9,7 +9,6 @@ from requests import Response
 
 from code42_connector import Code42Connector
 
-
 TEST_USER_UID = "TEST_USER_UID"
 
 

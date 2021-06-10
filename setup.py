@@ -11,7 +11,11 @@ setup(
     name="ph_code42_connector",
     version="1.0.0",
     description="Code42 for Phantom",
-    py_modules=["code42_connector"],
+    py_modules=[
+        "code42_connector",
+        "code42_base_connector",
+        "code42_on_poll_connector",
+    ],
     install_requires=[
         "pytest==4.4.0",
         "pytest-mock==1.10.3",

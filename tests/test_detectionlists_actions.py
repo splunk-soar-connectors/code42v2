@@ -1,6 +1,7 @@
+from unittest import mock
+
 from py42.exceptions import Py42NotFoundError
 from pytest import fixture
-from unittest import mock
 
 from tests.conftest import (
     assert_success,
@@ -13,7 +14,6 @@ from tests.conftest import (
     attach_client,
     TEST_USER_UID,
 )
-
 
 _MOCK_GET_DEPARTING_EMPLOYEE_RESPONSE = {
     "type$": "DEPARTING_EMPLOYEE_V2",

@@ -3,21 +3,16 @@ from __future__ import print_function, unicode_literals
 
 import json
 
+# Phantom App imports
+import phantom.app as phantom
 import py42.sdk
+import requests
+from phantom.action_result import ActionResult
 from py42.exceptions import Py42NotFoundError
 from py42.services.detectionlists.departing_employee import DepartingEmployeeFilters
 from py42.services.detectionlists.high_risk_employee import HighRiskEmployeeFilters
-import requests
-from datetime import datetime, timedelta
-import dateutil.parser
 
-from py42.sdk.queries.alerts.alert_query import AlertQuery
-from py42.sdk.queries.alerts.filters import Actor, AlertState, DateObserved
-
-# Phantom App imports
-import phantom.app as phantom
-from phantom.action_result import ActionResult
-from phantom.base_connector import BaseConnector
+from code42_base_connector import Code42BaseConnector
 
 
 class RetVal(tuple):
@@ -40,7 +35,7 @@ def _convert_to_obj_list(scalar_list, sub_object_key="item"):
     return [{sub_object_key: item} for item in scalar_list]
 
 
-class Code42Connector(BaseConnector):
+class Code42Connector(Code42BaseConnector):
     def __init__(self):
         super(Code42Connector, self).__init__()
 
@@ -92,37 +87,8 @@ class Code42Connector(BaseConnector):
 
     @action_handler_for("on_poll")
     def _handle_on_poll(self, param, action_result):
-        last_time = self._state.get("last_time")
-
-        # Only use start_date and end_date if never checkpointed.
-        if not last_time:
-            default_start_date = self._get_thirty_days_ago().strftime(
-                "%Y-%m-%dT%H:%M:%S.%f"
-            )
-            param["start_date"] = param.get("start_date", default_start_date)
-        else:
-            param["start_date"] = last_time
-            param["end_date"] = None
-
-        query = self._build_alerts_query(param["start_date"], param.get("end_date"))
-        response = self._client.alerts.search(query)
-
-        for alert in response["alerts"]:
-
-            # Include `observations` in the container data.
-            details = self._client.alerts.get_details(alert["id"]).data["alerts"][0]
-
-            container_json = {
-                "name": alert["name"],
-                "data": details,
-                "severity": alert["severity"],
-                "description": alert["description"],
-                "source_data_identifier": alert["id"],
-                "label": self.get_config().get("ingest", {}).get("container_label"),
-            }
-            self.save_container(container_json)
-
-        return action_result.set_status(phantom.APP_SUCCESS)
+        connector = Code42OnPollConnector(self._client, self._state)
+        return connector.handle_on_poll(param, action_result)
 
     """ DEPARTING EMPLOYEE ACTIONS """
 
@@ -400,33 +366,6 @@ class Code42Connector(BaseConnector):
         self.save_state(self._state)
         return phantom.APP_SUCCESS
 
-    def _get_thirty_days_ago(self):
-        return datetime.utcnow() - timedelta(days=30)
-
-    def _build_alerts_query(
-        self, start_date, end_date, username=None, alert_state=None
-    ):
-        filters = []
-        if username:
-            filters.append(Actor.eq(username))
-        if alert_state:
-            filters.append(AlertState.eq(alert_state))
-        filters.append(self._build_date_range_filter(start_date, end_date))
-        query = AlertQuery.all(*filters)
-        return query
-
-    def _build_date_range_filter(self, start_date, end_date):
-        if start_date and not end_date:
-            return DateObserved.on_or_after(dateutil.parser.parse(start_date))
-        elif end_date and not start_date:
-            return DateObserved.on_or_before(dateutil.parser.parse(end_date))
-        elif end_date and start_date:
-            return DateObserved.in_range(
-                dateutil.parser.parse(start_date), dateutil.parser.parse(end_date)
-            )
-        else:
-            return DateObserved.on_or_after(self._get_thirty_days_ago())
-
     def _get_user(self, username):
         users = self._client.users.get_by_username(username)["users"]
         if not users:
@@ -477,7 +416,6 @@ def main():
     password = args.password
 
     if username is not None and password is None:
-
         # User specified a username but not a password, so ask
         import getpass
 
