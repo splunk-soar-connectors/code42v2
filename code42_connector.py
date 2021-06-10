@@ -92,16 +92,30 @@ class Code42Connector(BaseConnector):
 
     @action_handler_for("on_poll")
     def _handle_on_poll(self, param, action_result):
-        last_time = self._state.get("last_time", 0) or 0
-        is_first_run = (
-            last_time == 0 or self._state.get("first_run", True) or self.is_poll_now()
-        )
-        param["start_date"] = (
-            self._get_thirty_days_ago().strftime("%Y-%m-%dT%H:%M:%S.%f")
-            if is_first_run
-            else last_time
-        )
-        return self._handle_search_alerts(param, action_result)
+        last_time = self._state.get("last_time")
+
+        # Only use start_date and end_date if never checkpointed.
+        if not last_time:
+            default_start_date = self._get_thirty_days_ago().strftime("%Y-%m-%dT%H:%M:%S.%f")
+            param["start_date"] = param.get("start_date", default_start_date)
+        else:
+            param["start_date"] = last_time
+            param["end_date"] = None
+
+        query = self._build_alerts_query(username, param["start_date"], param["end_date"])
+        response = self._client.alerts.search(query)
+
+        for alert in response["alerts"]:
+            container_json = {
+                "name": alert["name"],
+                "data": alert,
+                "description": alert["description"],
+                "source_data_identifier": alert["id"],
+                "label": self.get_config().get("ingest", {}).get("container_label")
+            }
+            _, _, _ = self.save_container(container_json)
+
+        return action_result.set_status(phantom.APP_SUCCESS)
 
     """ DEPARTING EMPLOYEE ACTIONS """
 
@@ -307,7 +321,7 @@ class Code42Connector(BaseConnector):
     def _handle_get_alert_details(self, param, action_result):
         alert_id = param["alert_id"]
         response = self._client.alerts.get_details([alert_id])
-        alert = response.data["alerts"][0]
+        alert = response["alerts"][0]
         action_result.add_data(alert)
         action_result.update_summary(
             {"username": alert["actor"], "user_id": alert["actorId"]}
@@ -328,7 +342,7 @@ class Code42Connector(BaseConnector):
             )
         query = self._build_alerts_query(username, start_date, end_date, alert_state)
         response = self._client.alerts.search(query)
-        for alert in response.data["alerts"]:
+        for alert in response["alerts"]:
             action_result.add_data(alert)
         action_result.update_summary({"total_count": response["totalCount"]})
         return action_result.set_status(phantom.APP_SUCCESS)
@@ -380,11 +394,11 @@ class Code42Connector(BaseConnector):
     def _get_thirty_days_ago(self):
         return datetime.utcnow() - timedelta(days=30)
 
-    def _build_alerts_query(self, username, start_date, end_date, alert_state):
+    def _build_alerts_query(self, username, start_date, end_date, alert_state=None):
         filters = []
-        if username is not None:
+        if username:
             filters.append(Actor.eq(username))
-        if alert_state is not None:
+        if alert_state:
             filters.append(AlertState.eq(alert_state))
         filters.append(self._build_date_range_filter(start_date, end_date))
         query = AlertQuery.all(*filters)
