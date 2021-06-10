@@ -104,7 +104,7 @@ class Code42Connector(BaseConnector):
             param["start_date"] = last_time
             param["end_date"] = None
 
-        query = self._build_alerts_query(param["start_date"], param["end_date"])
+        query = self._build_alerts_query(param["start_date"], param.get("end_date"))
         response = self._client.alerts.search(query)
 
         for alert in response["alerts"]:
