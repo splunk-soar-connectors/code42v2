@@ -71,7 +71,7 @@
                 "start_date": {
                     "description": "Beginning of date range to search. Time (in UTC) may also be supplied but is not required.",
                     "data_type": "string",
-                    "required": true,
+                    "required": false,
                     "primary": false,
                     "value_list": [],
                     "default": "",
