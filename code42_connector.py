@@ -12,7 +12,7 @@ from py42.exceptions import Py42NotFoundError
 from py42.services.detectionlists.departing_employee import DepartingEmployeeFilters
 from py42.services.detectionlists.high_risk_employee import HighRiskEmployeeFilters
 
-from code42_base_connector import Code42BaseConnector
+from code42_util import Code42BaseConnector
 
 
 class RetVal(tuple):
@@ -87,7 +87,7 @@ class Code42Connector(Code42BaseConnector):
 
     @action_handler_for("on_poll")
     def _handle_on_poll(self, param, action_result):
-        connector = Code42OnPollConnector(self._client, self._state)
+        connector = Code42OnPollConnector(self, self._client, self._state)
         return connector.handle_on_poll(param, action_result)
 
     """ DEPARTING EMPLOYEE ACTIONS """
@@ -313,7 +313,7 @@ class Code42Connector(Code42BaseConnector):
                 phantom.APP_ERROR,
                 "Code42: Must supply a search term when calling action 'search_alerts`.",
             )
-        query = self._build_alerts_query(
+        query = _build_alerts_query(
             start_date, end_date, username=username, alert_state=alert_state
         )
         response = self._client.alerts.search(query)

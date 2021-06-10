@@ -27,6 +27,9 @@ class BaseConnector:
     def save_state(self, state):
         pass
 
+    def save_container(self):
+        pass
+
     @classmethod
     def _get_phantom_base_url(cls):
         pass
