@@ -108,9 +108,13 @@ class Code42Connector(BaseConnector):
         response = self._client.alerts.search(query)
 
         for alert in response["alerts"]:
+
+            # Include `observations` in the container data.
+            details = self._client.alerts.get_details(alert["id"]).data["alerts"][0]
+
             container_json = {
                 "name": alert["name"],
-                "data": self._client.alerts.get_details(alert["id"]),
+                "data": details,
                 "severity": alert["severity"],
                 "description": alert["description"],
                 "source_data_identifier": alert["id"],
