@@ -92,19 +92,11 @@ class Code42Connector(BaseConnector):
 
     @action_handler_for("on_poll")
     def _handle_on_poll(self, param, action_result):
-
-        # Get last timestamp
-        last_time = self._state.get("last_time", 0)
-        if not last_time:
-            last_time = 0
-
+        last_time = self._state.get("last_time", 0) or 0
         is_first_run = (
             last_time == 0 or self._state.get("first_run", True) or self.is_poll_now()
         )
-
-        if not is_first_run:
-            param["start_date"] = last_time
-
+        param["start_date"] = self._get_thirty_days_ago() if is_first_run else last_time
         return self._handle_search_alerts(param, action_result)
 
     """ DEPARTING EMPLOYEE ACTIONS """
@@ -381,6 +373,9 @@ class Code42Connector(BaseConnector):
         self.save_state(self._state)
         return phantom.APP_SUCCESS
 
+    def _get_thirty_days_ago(self):
+        return datetime.utcnow() - timedelta(days=30)
+
     def _build_alerts_query(self, username, start_date, end_date, alert_state):
         filters = []
         if username is not None:
@@ -401,8 +396,7 @@ class Code42Connector(BaseConnector):
                 dateutil.parser.parse(start_date), dateutil.parser.parse(end_date)
             )
         else:
-            thirty_days_ago = datetime.utcnow() - timedelta(days=30)
-            return DateObserved.on_or_after(thirty_days_ago)
+            return DateObserved.on_or_after(self._get_thirty_days_ago())
 
     def _get_user(self, username):
         users = self._client.users.get_by_username(username)["users"]
