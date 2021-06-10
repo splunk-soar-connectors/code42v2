@@ -96,7 +96,11 @@ class Code42Connector(BaseConnector):
         is_first_run = (
             last_time == 0 or self._state.get("first_run", True) or self.is_poll_now()
         )
-        param["start_date"] = self._get_thirty_days_ago() if is_first_run else last_time
+        param["start_date"] = (
+            self._get_thirty_days_ago().strftime("%Y-%m-%dT%H:%M:%S.%f")
+            if is_first_run
+            else last_time
+        )
         return self._handle_search_alerts(param, action_result)
 
     """ DEPARTING EMPLOYEE ACTIONS """
