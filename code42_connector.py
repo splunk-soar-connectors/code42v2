@@ -6,6 +6,8 @@ import json
 import py42.sdk
 from py42.exceptions import Py42NotFoundError
 from py42.exceptions import Py42UpdateClosedCaseError
+from py42.sdk.queries.fileevents.filters.exposure_filter import ExposureType
+from py42.sdk.queries.fileevents.filters.file_filter import FileName, FilePath
 from py42.services.detectionlists.departing_employee import DepartingEmployeeFilters
 from py42.services.detectionlists.high_risk_employee import HighRiskEmployeeFilters
 import requests
@@ -14,16 +16,38 @@ import dateutil.parser
 
 from py42.sdk.queries.alerts.alert_query import AlertQuery
 from py42.sdk.queries.alerts.filters import Actor, AlertState, DateObserved
+from py42.sdk.queries.fileevents.file_event_query import FileEventQuery
+from py42.sdk.queries.fileevents.filters import (
+    EventTimestamp,
+    MD5,
+    SHA256,
+    FileCategory,
+    DeviceUsername,
+    OSHostname,
+    ProcessName,
+    PublicIPAddress,
+    PrivateIPAddress,
+    TabURL,
+    WindowTitle,
+    TrustedActivity,
+)
 
 # Phantom App imports
 import phantom.app as phantom
 from phantom.action_result import ActionResult
 from phantom.base_connector import BaseConnector
+import phantom.utils as utils
+from phantom.vault import Vault
 
 
 class RetVal(tuple):
     def __new__(cls, val1, val2=None):
         return tuple.__new__(RetVal, (val1, val2))
+
+
+class Code42UnsupportedHashError(Exception):
+    def __init__(self):
+        super().__init__("Unsupported hash format. Hash must be either md5 or sha256")
 
 
 ACTION_MAP = {}
@@ -39,6 +63,18 @@ def action_handler_for(key):
 
 def _convert_to_obj_list(scalar_list, sub_object_key="item"):
     return [{sub_object_key: item} for item in scalar_list]
+
+
+def add_eq_filter(filters, value, filter_class):
+    return filters.append(filter_class.eq(value))
+
+
+def is_default_dict(_dict):
+    for key in _dict:
+        # All action param dictionaries contain the key "context"; we don't care about that key.
+        if key != "context" and _dict.get(key):
+            return False
+    return True
 
 
 class Code42Connector(BaseConnector):
@@ -304,16 +340,18 @@ class Code42Connector(BaseConnector):
 
     @action_handler_for("search_alerts")
     def _handle_search_alerts(self, param, action_result):
+
+        if is_default_dict(param):
+            return action_result.set_status(
+                phantom.APP_ERROR,
+                "Code42: Must supply a search term when calling action 'search_alerts`.",
+            )
+
         username = param.get("username")
         start_date = param.get("start_date")
         end_date = param.get("end_date")
         alert_state = param.get("alert_state")
 
-        if not any([username, start_date, end_date, alert_state]):
-            return action_result.set_status(
-                phantom.APP_ERROR,
-                "Code42: Must supply a search term when calling action 'search_alerts`.",
-            )
         query = self._build_alerts_query(username, start_date, end_date, alert_state)
         response = self._client.alerts.search(query)
         for alert in response.data["alerts"]:
@@ -453,6 +491,61 @@ class Code42Connector(BaseConnector):
         action_result.update_summary({"case_number": case_number, "event_id": event_id})
         return action_result.set_status(phantom.APP_SUCCESS, status_message)
 
+    """ FILE EVENT ACTIONS """
+
+    @action_handler_for("hunt_file")
+    def _handle_hunt_file(self, param, action_result):
+        file_hash = param["hash"]
+        file_name = param.get("file_name")
+        if not file_name:
+            param["file_name"] = file_hash
+            action_result.update_param(param)
+            file_name = file_hash
+
+        file_content = self._get_file_content(file_hash)
+        container_id = self.get_container_id()
+        Vault.create_attachment(file_content, container_id, file_name=file_name)
+        status_message = f"{file_name} was successfully downloaded and attached to container {container_id}"
+        return action_result.set_status(phantom.APP_SUCCESS, status_message)
+
+    @action_handler_for("run_query")
+    def _handle_run_query(self, param, action_result):
+        # Boolean action parameters are passed as lowercase string representations, fix that here.
+        if "untrusted_only" in param:
+            param["untrusted_only"] = str(param["untrusted_only"]).lower() == "true"
+
+        if is_default_dict(param):
+            return action_result.set_status(
+                phantom.APP_ERROR,
+                "Code42: Must supply a search term when calling action 'run_query'.",
+            )
+
+        query = self._build_file_events_query(
+            param.get("start_date"),
+            param.get("end_date"),
+            param.get("file_hash"),
+            param.get("file_name"),
+            param.get("file_path"),
+            param.get("file_category"),
+            param.get("username"),
+            param.get("hostname"),
+            param.get("private_ip"),
+            param.get("public_ip"),
+            param.get("exposure_type"),
+            param.get("process_name"),
+            param.get("url"),
+            param.get("window_title"),
+            param.get("untrusted_only"),
+        )
+        self._add_file_event_results(query, action_result)
+        return action_result.set_status(phantom.APP_SUCCESS)
+
+    @action_handler_for("run_advanced_query")
+    def _handle_run_json_query(self, param, action_result):
+        query = param["json_query"]
+        self._add_file_event_results(query, action_result)
+        return action_result.set_status(phantom.APP_SUCCESS)
+
     def finalize(self):
         # Save the state, this data is saved across actions and app upgrades
         self.save_state(self._state)
@@ -464,22 +557,87 @@ class Code42Connector(BaseConnector):
             filters.append(Actor.eq(username))
         if alert_state is not None:
             filters.append(AlertState.eq(alert_state))
-        filters.append(self._build_date_range_filter(start_date, end_date))
+        filters.append(
+            self._build_date_range_filter(DateObserved, start_date, end_date)
+        )
         query = AlertQuery.all(*filters)
         return query
 
-    def _build_date_range_filter(self, start_date, end_date):
-        if start_date and not end_date:
-            return DateObserved.on_or_after(dateutil.parser.parse(start_date))
-        elif end_date and not start_date:
-            return DateObserved.on_or_before(dateutil.parser.parse(end_date))
-        elif end_date and start_date:
-            return DateObserved.in_range(
-                dateutil.parser.parse(start_date), dateutil.parser.parse(end_date)
-            )
+    def _build_file_events_query(
+        self,
+        start_date,
+        end_date,
+        file_hash,
+        file_name,
+        file_path,
+        file_category,
+        username,
+        hostname,
+        private_ip,
+        public_ip,
+        exposure_type,
+        process_name,
+        url,
+        window_title,
+        untrusted_only,
+    ):
+        filters = []
+        if file_hash:
+            if utils.is_md5(file_hash):
+                filters.append(MD5.eq(file_hash))
+            elif utils.is_sha256(file_hash):
+                filters.append(SHA256.eq(file_hash))
+            else:
+                raise Code42UnsupportedHashError()
+
+        if file_name:
+            add_eq_filter(filters, file_name, FileName)
+        if file_path:
+            add_eq_filter(filters, file_path, FilePath)
+        if file_category:
+            add_eq_filter(filters, file_category, FileCategory)
+        if hostname:
+            add_eq_filter(filters, hostname, OSHostname)
+        if username:
+            add_eq_filter(filters, username, DeviceUsername)
+        if private_ip:
+            add_eq_filter(filters, private_ip, PrivateIPAddress)
+        if public_ip:
+            add_eq_filter(filters, public_ip, PublicIPAddress)
+        if exposure_type:
+            if exposure_type.lower() == "all":
+                filters.append(ExposureType.exists())
+            else:
+                add_eq_filter(filters, exposure_type, ExposureType)
+        if process_name:
+            add_eq_filter(filters, process_name, ProcessName)
+        if url:
+            add_eq_filter(filters, url, TabURL)
+        if window_title:
+            add_eq_filter(filters, window_title, WindowTitle)
+        if untrusted_only:
+            filters.append(TrustedActivity.is_false())
+
+        filters.append(
+            self._build_date_range_filter(EventTimestamp, start_date, end_date)
+        )
+        query = FileEventQuery.all(*filters)
+        return query
+
+    def _build_date_range_filter(self, date_filter_cls, start_date_str, end_date_str):
+        if start_date_str and not end_date_str:
+            return date_filter_cls.on_or_after(dateutil.parser.parse(start_date_str))
+        elif end_date_str and not start_date_str:
+            return date_filter_cls.on_or_before(dateutil.parser.parse(end_date_str))
+        elif end_date_str and start_date_str:
+            start_datetime = dateutil.parser.parse(start_date_str)
+            end_datetime = dateutil.parser.parse(end_date_str)
+            if start_datetime >= end_datetime:
+                raise Exception("Start date cannot be after end date.")
+            return date_filter_cls.in_range(start_datetime, end_datetime)
         else:
             thirty_days_ago = datetime.utcnow() - timedelta(days=30)
-            return DateObserved.on_or_after(thirty_days_ago)
+            return date_filter_cls.on_or_after(thirty_days_ago)
 
     def _get_user(self, username):
         users = self._client.users.get_by_username(username)["users"]
@@ -491,6 +649,29 @@ class Code42Connector(BaseConnector):
 
     def _get_user_id(self, username):
         return self._get_user(username)["userUid"]
+
+    def _get_file_content(self, file_hash):
+        if utils.is_md5(file_hash):
+            response = self._client.securitydata.stream_file_by_md5(file_hash)
+        elif utils.is_sha256(file_hash):
+            response = self._client.securitydata.stream_file_by_sha256(file_hash)
+        else:
+            raise Code42UnsupportedHashError()
+
+        chunks = [chunk for chunk in response.iter_content(chunk_size=128) if chunk]
+        return b"".join(chunks)
+
+    def _add_file_event_results(self, query, action_result):
+        results = self._client.securitydata.search_file_events(query)
+        for result in results.data["fileEvents"]:
+            action_result.add_data(result)
+
+        action_result.update_summary(
+            {
+                "total_count": results.data["totalCount"],
+                "results_returned_count": len(results.data["fileEvents"]),
+            }
+        )
 
     # Following three helper functions are copy+pasted from cmds/legal_hold.py in `code42cli`
     def _get_legal_hold_membership_id(self, user_id, matter_id):
