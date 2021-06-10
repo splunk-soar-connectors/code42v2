@@ -110,13 +110,13 @@ class Code42Connector(BaseConnector):
         for alert in response["alerts"]:
             container_json = {
                 "name": alert["name"],
-                "data": alert,
+                "data": self._client.get_alert_details(alert["id"]),
                 "severity": alert["severity"],
                 "description": alert["description"],
                 "source_data_identifier": alert["id"],
                 "label": self.get_config().get("ingest", {}).get("container_label"),
             }
-            _, _, _ = self.save_container(container_json)
+            self.save_container(container_json)
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
