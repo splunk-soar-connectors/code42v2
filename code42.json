@@ -2417,10 +2417,6 @@
                 {
                     "data_path": "action_result.message",
                     "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.summary",
-                    "data_type": "string"
                 }
             ],
             "render": {

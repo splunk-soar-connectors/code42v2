@@ -383,16 +383,7 @@ class Code42Connector(BaseConnector):
         case_number = response["number"]
         action_result.add_data(response.data)
         status_message = f"Case successfully created with case_id: {case_number}"
-        action_result.update_summary(
-            {
-                "case_number": case_number,
-                "name": response["name"],
-                "subject": response["subjectUsername"],
-                "description": response["description"],
-                "assignee": response["assigneeUsername"],
-                "findings": response["findings"],
-            }
-        )
+        action_result.update_summary({"case_number": case_number})
         return action_result.set_status(phantom.APP_SUCCESS, status_message)
 
     @action_handler_for("update_case")
@@ -417,16 +408,7 @@ class Code42Connector(BaseConnector):
         )
         status_message = f"Case number {case_number} successfully updated"
         action_result.add_data(response.data)
-        action_result.update_summary(
-            {
-                "case_number": case_number,
-                "name": response["name"],
-                "subject": response["subjectUsername"],
-                "description": response["description"],
-                "assignee": response["assigneeUsername"],
-                "findings": response["findings"],
-            }
-        )
+        action_result.update_summary({"case_number": case_number})
         return action_result.set_status(phantom.APP_SUCCESS, status_message)
 
     @action_handler_for("close_case")
@@ -439,16 +421,7 @@ class Code42Connector(BaseConnector):
             response = self._client.cases.get(case_number)
             status_message = f"Case number {case_number} already closed!"
         action_result.add_data(response.data)
-        action_result.update_summary(
-            {
-                "case_number": case_number,
-                "name": response["name"],
-                "subject": response["subjectUsername"],
-                "description": response["description"],
-                "assignee": response["assigneeUsername"],
-                "findings": response["findings"],
-            }
-        )
+        action_result.update_summary({"case_number": case_number})
         return action_result.set_status(phantom.APP_SUCCESS, status_message)
 
     @action_handler_for("list_cases")
