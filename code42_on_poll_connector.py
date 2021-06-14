@@ -307,8 +307,6 @@ def _create_artifact_json(container_id, alert_details, file_event):
         for json_key, cef_key in JSON_TO_CEF_MAP.items()
         if json_key in normalized_event
     }
-    file_name = normalized_event.get("fileName", "Unknown file")
-    event_type = normalized_event.get("eventType", "Code42 file event")
     return {
         "name": "Code42 File Event Artifact",
         "container_id": container_id,
