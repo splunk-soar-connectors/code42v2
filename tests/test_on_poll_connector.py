@@ -633,3 +633,23 @@ class TestCode42OnPollConnector(object):
         connector.handle_action(param)
         expected_state = {"last_time": test_last_timestamp}
         assert_state_saved(connector, expected_state)
+
+    def test_on_poll_when_is_poll_now_does_not_save_state(
+        self, mocker, mock_py42_for_alert_polling
+    ):
+        test_last_timestamp = "TEST TIMESTAMP"
+
+        def get_alert_details(alert_id, *args, **kwargs):
+            if alert_id != MOCK_SEARCH_ALERTS_LIST_RESPONSE["alerts"][-1]["id"]:
+                return create_mock_response(mocker, MOCK_ALERT_DETAIL_RESPONSE)
+
+            response_dict = {"alerts": [{"id": 0, "createdAt": test_last_timestamp}]}
+            return create_mock_response(mocker, response_dict)
+
+        mock_py42_for_alert_polling.alerts.get_details.side_effect = get_alert_details
+        connector = _create_on_poll_connector(mock_py42_for_alert_polling)
+        connector._is_poll_now = True
+        param = {"container_count": 1, "artifact_count": 1}
+        connector.handle_action(param)
+        assert not connector._state
+        assert_success(connector)
