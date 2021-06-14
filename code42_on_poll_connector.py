@@ -1,4 +1,3 @@
-from datetime import datetime
 import dateutil.parser
 
 import phantom.app as phantom
@@ -282,5 +281,5 @@ def _create_artifact_json(container_id, alert_details, file_event):
         "container_id": container_id,
         "source_data_identifier": alert_details["id"],
         "label": alert_details.get("ruleSource"),
-        "cef": file_event
+        "cef": {key: val for key, val in file_event if val is not None}
     }
