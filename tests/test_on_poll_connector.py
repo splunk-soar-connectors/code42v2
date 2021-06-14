@@ -101,7 +101,7 @@ class TestCode42OnPollConnector(object):
                 },
                 "container_id": "CONTAINER_ID",
                 "label": "Alerting",
-                "source_data_identifier": "11111111-9724-4005-b848-76af488cf5e2",
+                "source_data_identifier": "0_1d71796f-af5b-4231-9d8e-df6434da4663_935873453596901068_956171635867906205_5",
             },
             {
                 "cef": {
@@ -152,7 +152,7 @@ class TestCode42OnPollConnector(object):
                 },
                 "container_id": "CONTAINER_ID",
                 "label": "Alerting",
-                "source_data_identifier": "11111111-9724-4005-b848-76af488cf5e2",
+                "source_data_identifier": "0_1d71796f-af5b-4231-9d8e-df6434da4663_935873453596901068_956171635867906205_5",
             },
             {
                 "cef": {
@@ -203,7 +203,7 @@ class TestCode42OnPollConnector(object):
                 },
                 "container_id": "CONTAINER_ID",
                 "label": "Alerting",
-                "source_data_identifier": "11111111-9724-4005-b848-76af488cf5e2",
+                "source_data_identifier": "0_1d71796f-af5b-4231-9d8e-df6434da4663_935873453596901068_956171635867906205_5",
             },
             {
                 "cef": {
@@ -254,7 +254,7 @@ class TestCode42OnPollConnector(object):
                 },
                 "container_id": "CONTAINER_ID",
                 "label": "Alerting",
-                "source_data_identifier": "11111111-9724-4005-b848-76af488cf5e2",
+                "source_data_identifier": "0_1d71796f-af5b-4231-9d8e-df6434da4663_935873453596901068_956171635867906205_5",
             },
             {
                 "cef": {
@@ -305,7 +305,7 @@ class TestCode42OnPollConnector(object):
                 },
                 "container_id": "CONTAINER_ID",
                 "label": "Alerting",
-                "source_data_identifier": "11111111-9724-4005-b848-76af488cf5e2",
+                "source_data_identifier": "0_1d71796f-af5b-4231-9d8e-df6434da4663_935873453596901068_956171635867906205_5",
             },
             {
                 "cef": {
@@ -356,7 +356,7 @@ class TestCode42OnPollConnector(object):
                 },
                 "container_id": "CONTAINER_ID",
                 "label": "Alerting",
-                "source_data_identifier": "11111111-9724-4005-b848-76af488cf5e2",
+                "source_data_identifier": "0_1d71796f-af5b-4231-9d8e-df6434da4663_935873453596901068_956171635867906205_5",
             },
             {
                 "cef": {
@@ -407,7 +407,7 @@ class TestCode42OnPollConnector(object):
                 },
                 "container_id": "CONTAINER_ID",
                 "label": "Alerting",
-                "source_data_identifier": "11111111-9724-4005-b848-76af488cf5e2",
+                "source_data_identifier": "0_1d71796f-af5b-4231-9d8e-df6434da4663_935873453596901068_956171635867906205_5",
             },
             {
                 "cef": {
@@ -458,7 +458,7 @@ class TestCode42OnPollConnector(object):
                 },
                 "container_id": "CONTAINER_ID",
                 "label": "Alerting",
-                "source_data_identifier": "11111111-9724-4005-b848-76af488cf5e2",
+                "source_data_identifier": "0_1d71796f-af5b-4231-9d8e-df6434da4663_935873453596901068_956171635867906205_5",
             },
             {
                 "cef": {
@@ -509,7 +509,7 @@ class TestCode42OnPollConnector(object):
                 },
                 "container_id": "CONTAINER_ID",
                 "label": "Alerting",
-                "source_data_identifier": "11111111-9724-4005-b848-76af488cf5e2",
+                "source_data_identifier": "0_1d71796f-af5b-4231-9d8e-df6434da4663_935873453596901068_956171635867906205_5",
             },
             {
                 "cef": {
@@ -560,7 +560,7 @@ class TestCode42OnPollConnector(object):
                 },
                 "container_id": "CONTAINER_ID",
                 "label": "Alerting",
-                "source_data_identifier": "11111111-9724-4005-b848-76af488cf5e2",
+                "source_data_identifier": "0_1d71796f-af5b-4231-9d8e-df6434da4663_935873453596901068_956171635867906205_5",
             },
             {
                 "cef": {
@@ -611,7 +611,7 @@ class TestCode42OnPollConnector(object):
                 },
                 "container_id": "CONTAINER_ID",
                 "label": "Alerting",
-                "source_data_identifier": "11111111-9724-4005-b848-76af488cf5e2",
+                "source_data_identifier": "0_1d71796f-af5b-4231-9d8e-df6434da4663_935873453596901068_956171635867906205_5",
             },
             {
                 "cef": {
@@ -662,7 +662,7 @@ class TestCode42OnPollConnector(object):
                 },
                 "container_id": "CONTAINER_ID",
                 "label": "Alerting",
-                "source_data_identifier": "11111111-9724-4005-b848-76af488cf5e2",
+                "source_data_identifier": "0_1d71796f-af5b-4231-9d8e-df6434da4663_935873453596901068_956171635867906205_5",
             },
             {
                 "cef": {
@@ -713,7 +713,7 @@ class TestCode42OnPollConnector(object):
                 },
                 "container_id": "CONTAINER_ID",
                 "label": "Alerting",
-                "source_data_identifier": "11111111-9724-4005-b848-76af488cf5e2",
+                "source_data_identifier": "0_1d71796f-af5b-4231-9d8e-df6434da4663_935873453596901068_956171635867906205_5",
             },
             {
                 "cef": {
@@ -764,7 +764,7 @@ class TestCode42OnPollConnector(object):
                 },
                 "container_id": "CONTAINER_ID",
                 "label": "Alerting",
-                "source_data_identifier": "11111111-9724-4005-b848-76af488cf5e2",
+                "source_data_identifier": "0_1d71796f-af5b-4231-9d8e-df6434da4663_935873453596901068_956171635867906205_5",
             },
             {
                 "cef": {
@@ -815,7 +815,7 @@ class TestCode42OnPollConnector(object):
                 },
                 "container_id": "CONTAINER_ID",
                 "label": "Alerting",
-                "source_data_identifier": "11111111-9724-4005-b848-76af488cf5e2",
+                "source_data_identifier": "0_1d71796f-af5b-4231-9d8e-df6434da4663_935873453596901068_956171635867906205_5",
             },
             {
                 "cef": {
@@ -866,7 +866,7 @@ class TestCode42OnPollConnector(object):
                 },
                 "container_id": "CONTAINER_ID",
                 "label": "Alerting",
-                "source_data_identifier": "11111111-9724-4005-b848-76af488cf5e2",
+                "source_data_identifier": "0_1d71796f-af5b-4231-9d8e-df6434da4663_935873453596901068_956171635867906205_5",
             },
             {
                 "cef": {
@@ -917,7 +917,7 @@ class TestCode42OnPollConnector(object):
                 },
                 "container_id": "CONTAINER_ID",
                 "label": "Alerting",
-                "source_data_identifier": "11111111-9724-4005-b848-76af488cf5e2",
+                "source_data_identifier": "0_1d71796f-af5b-4231-9d8e-df6434da4663_935873453596901068_956171635867906205_5",
             },
             {
                 "cef": {
@@ -968,8 +968,7 @@ class TestCode42OnPollConnector(object):
                 },
                 "container_id": "CONTAINER_ID",
                 "label": "Alerting",
-                "source_data_identifier": "11111111-9724-4005-b848-76af488cf5e2",
+                "source_data_identifier": "0_1d71796f-af5b-4231-9d8e-df6434da4663_935873453596901068_956171635867906205_5",
             },
         ]
-
         assert_artifacts_added(connector, expected)

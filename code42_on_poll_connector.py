@@ -281,7 +281,7 @@ def _create_artifact_json(container_id, alert_details, file_event):
     }
     return {
         "container_id": container_id,
-        "source_data_identifier": alert_details["id"],
+        "source_data_identifier": event_data["eventId"],
         "label": alert_details.get("ruleSource"),
         "cef": event_data,
     }
