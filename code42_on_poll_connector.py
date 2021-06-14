@@ -277,7 +277,9 @@ def _stringify_lists_if_needed(event):
 
 
 def _create_artifact_json(container_id, alert_details, file_event):
-    event_data = {key: val for key, val in file_event.items() if val is not None}
+    event_data = {
+        key: val for key, val in file_event.items() if val not in [[], None, ""]
+    }
     return {
         "container_id": container_id,
         "source_data_identifier": alert_details["id"],
