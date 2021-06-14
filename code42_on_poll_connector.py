@@ -2,6 +2,7 @@ from datetime import datetime
 
 import dateutil.parser
 import phantom.app as phantom
+from code42_util import get_thirty_days_ago, build_alerts_query
 from py42.sdk.queries.fileevents.file_event_query import FileEventQuery
 from py42.sdk.queries.fileevents.filters import (
     ExposureType,
@@ -11,8 +12,6 @@ from py42.sdk.queries.fileevents.filters import (
     EventType,
     FileCategory,
 )
-
-from code42_util import get_thirty_days_ago, build_alerts_query
 
 """The contents of this module that related to mapping alert observations to file events borrows heavily from the
 Code42 Cortex XSOAR integration as well as the code42cli python package.
@@ -101,8 +100,7 @@ class Code42OnPollConnector:
         self._state = state or {}
 
     def handle_on_poll(self, param, action_result):
-        last_time = self._state.get("last_time")
-        param = _adjust_date_parameters(last_time, param)
+        param = self._adjust_date_parameters(param)
         query = build_alerts_query(param["start_date"], param.get("end_date"))
         alerts = self._get_alerts(param, query)
         for alert in alerts:
@@ -167,17 +165,22 @@ class Code42OnPollConnector:
         ]
         self._connector.save_artifacts(artifacts)
 
+    def _adjust_date_parameters(self, param):
+        param["end_date"] = None  # Not used
 
-def _adjust_date_parameters(last_time, param):
-    """Only use start_date and end_date if never check-pointed."""
-    if not last_time:
-        default_start_date = get_thirty_days_ago().strftime("%Y-%m-%dT%H:%M:%S.%f")
-        param["start_date"] = param.get("start_date", default_start_date)
-    else:
-        param["start_date"] = last_time
-        param["end_date"] = None
+        last_time = (
+            None if self._connector.is_poll_now() else self._state.get("last_time", 0)
+        )
+        if not last_time:
+            # If there was never a stored last_time or is_poll_now().
+            param["start_date"] = get_thirty_days_ago().strftime("%Y-%m-%dT%H:%M:%S.%f")
+        else:
+            last_time_as_date_str = datetime.utcfromtimestamp(last_time).strftime(
+                "%Y-%m-%dT%H:%M:%S.%f"
+            )
+            param["start_date"] = last_time_as_date_str
 
-    return param
+        return param
 
 
 def _create_container(alert, container_label):

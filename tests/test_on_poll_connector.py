@@ -1,8 +1,12 @@
-from pytest import fixture
+import json
+from datetime import datetime, timedelta, timezone
+import dateutil.parser
 
+from pytest import fixture
 from tests.conftest import (
     assert_artifacts_added,
     assert_container_added,
+    assert_success,
     attach_client,
     create_fake_connector,
     create_mock_response,
@@ -10,7 +14,6 @@ from tests.conftest import (
     MOCK_SEARCH_ALERTS_LIST_RESPONSE,
     MOCK_SECURITY_EVENT_RESPONSE,
 )
-
 
 EXPECTED_ARTIFACTS = expected = [
     {
@@ -559,3 +562,52 @@ class TestCode42OnPollConnector(object):
         param = {"container_count": 1, "artifact_count": 1}
         connector.handle_action(param)
         assert_artifacts_added(connector, [EXPECTED_ARTIFACTS[0]])
+
+    def test_on_poll_when_is_poll_now_uses_start_date_of_30_days_back(
+        self, mock_py42_for_alert_polling
+    ):
+        connector = _create_on_poll_connector(mock_py42_for_alert_polling)
+        connector._is_poll_now = True
+        param = {"container_count": 1, "artifact_count": 1}
+        connector.handle_action(param)
+        actual_date_str = json.loads(
+            str(mock_py42_for_alert_polling.alerts.search.call_args[0][0])
+        )["groups"][0]["filters"][0]["value"]
+        actual_date = dateutil.parser.parse(actual_date_str)
+        expected_date = datetime.now(timezone.utc) - timedelta(days=30)
+        assert abs((actual_date - expected_date)).seconds < 1
+        assert_success(connector)
+
+    def test_on_poll_when_is_not_poll_now_uses_previously_stored_timestamp(
+        self, mock_py42_for_alert_polling
+    ):
+        connector = _create_on_poll_connector(mock_py42_for_alert_polling)
+        connector._is_poll_now = False
+        test_timestamp = 1623293946
+        connector._state = {"last_time": test_timestamp}
+        param = {"container_count": 1, "artifact_count": 1}
+        connector.handle_action(param)
+        actual_date_str = json.loads(
+            str(mock_py42_for_alert_polling.alerts.search.call_args[0][0])
+        )["groups"][0]["filters"][0]["value"]
+        actual_date = dateutil.parser.parse(actual_date_str)
+        expected_date = datetime.utcfromtimestamp(0) + timedelta(seconds=test_timestamp)
+        expected_date = expected_date.replace(tzinfo=actual_date.tzinfo)
+        assert abs((actual_date - expected_date)).seconds < 1
+        assert_success(connector)
+
+    def test_on_poll_when_is_not_poll_now_uses_and_no_previously_stored_timestamp_uses_30_days_back(
+        self, mock_py42_for_alert_polling
+    ):
+        connector = _create_on_poll_connector(mock_py42_for_alert_polling)
+        connector._is_poll_now = False
+        connector._state = {"last_time": None}
+        param = {"container_count": 1, "artifact_count": 1}
+        connector.handle_action(param)
+        actual_date_str = json.loads(
+            str(mock_py42_for_alert_polling.alerts.search.call_args[0][0])
+        )["groups"][0]["filters"][0]["value"]
+        actual_date = dateutil.parser.parse(actual_date_str)
+        expected_date = datetime.now(timezone.utc) - timedelta(days=30)
+        assert abs((actual_date - expected_date)).seconds < 1
+        assert_success(connector)

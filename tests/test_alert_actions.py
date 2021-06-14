@@ -5,7 +5,6 @@ from unittest import mock
 import dateutil
 from py42.exceptions import Py42NotFoundError
 from pytest import fixture
-
 from tests.conftest import (
     create_fake_connector,
     create_mock_response,

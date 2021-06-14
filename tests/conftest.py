@@ -2,12 +2,11 @@ import json
 
 import phantom.app
 import py42.sdk
+from code42_connector import Code42Connector
 from py42.response import Py42Response
 from py42.services.users import UserService
 from pytest import fixture
 from requests import Response
-
-from code42_connector import Code42Connector
 
 TEST_USER_UID = "TEST_USER_UID"
 MOCK_ALERT_DETAIL_RESPONSE = {
