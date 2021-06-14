@@ -15,7 +15,7 @@ from py42.sdk.queries.fileevents.filters import (
 from code42_util import get_thirty_days_ago, build_alerts_query
 
 """The contents of the module related to mapping Code42 file events to CEF borrow heavily from the code42cli.
-The contents of this module that related to mapping alert observations to file events borrows heavily from the 
+The contents of this module that related to mapping alert observations to file events borrows heavily from the
 Code42 Cortex XSOAR integration.
 """
 
