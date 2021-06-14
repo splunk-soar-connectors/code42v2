@@ -1,6 +1,9 @@
 class BaseConnector:
     def __init__(self):
         self._action_results = []
+        self._containers = []
+        self._artifacts = []
+        self._config = {}
 
     def add_action_result(self, action_result):
         self._action_results.append(action_result)
@@ -25,13 +28,17 @@ class BaseConnector:
         pass
 
     def get_config(self):
-        pass
+        return self._config
 
     def save_state(self, state):
         pass
 
-    def save_container(self):
-        pass
+    def save_container(self, container):
+        self._containers.append(container)
+        return True, None, "CONTAINER_ID"
+
+    def save_artifacts(self, artifacts_list):
+        self._artifacts.extend(artifacts_list)
 
     @classmethod
     def _get_phantom_base_url(cls):

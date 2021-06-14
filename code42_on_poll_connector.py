@@ -167,7 +167,7 @@ class Code42OnPollConnector:
         super(Code42OnPollConnector, self).__init__()
         self._connector = connector
         self._client = client
-        self._state = state
+        self._state = state or {}
 
     def handle_on_poll(self, param, action_result):
         last_time = self._state.get("last_time")
@@ -336,9 +336,9 @@ class ObservationToSecurityQueryMapper(object):
         observed_file_categories = self._observation_data.get("fileCategories")
         if observed_file_categories:
             categories = [
-                get_file_category_value(c.get("category"))
-                for c in observed_file_categories
-                if c.get("isSignificant") and c.get("category")
+                get_file_category_value(cat.get("category"))
+                for cat in observed_file_categories
+                if cat.get("isSignificant") and cat.get("category")
             ]
             if categories:
                 return FileCategory.is_in(categories)

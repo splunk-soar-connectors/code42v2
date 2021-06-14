@@ -1487,7 +1487,7 @@
                     "data_type": "string",
                     "required": false,
                     "primary": false,
-                    "default": null,
+                    "default": None,
                     "order": 2
                 },
                 "first_name": {

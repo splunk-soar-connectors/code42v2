@@ -16,6 +16,8 @@ from tests.conftest import (
     assert_successful_message,
     assert_success,
     assert_fail_message,
+    MOCK_SEARCH_ALERTS_LIST_RESPONSE,
+    MOCK_ALERT_DETAIL_RESPONSE,
 )
 
 
@@ -37,7 +39,7 @@ def _create_set_alert_state_connector(client):
 @fixture
 def mock_py42_with_search_alerts(mocker, mock_py42_client):
     mock_py42_client.alerts.search.return_value = create_mock_response(
-        mocker, _MOCK_SEARCH_ALERTS_LIST_RESPONSE
+        mocker, MOCK_SEARCH_ALERTS_LIST_RESPONSE
     )
     return mock_py42_client
 
@@ -45,70 +47,8 @@ def mock_py42_with_search_alerts(mocker, mock_py42_client):
 @fixture
 def mock_py42_with_alert_details(mocker, mock_py42_client):
     mock_py42_client.alerts.get_details.return_value = create_mock_response(
-        mocker, _MOCK_ALERT_DETAIL_RESPONSE
+        mocker, MOCK_ALERT_DETAIL_RESPONSE
     )
-
-
-_MOCK_ALERT_DETAIL_RESPONSE = {
-    "alerts": [
-        {
-            "type$": "ALERT_SUMMARY",
-            "tenantId": "11111111-abcd-4231-99ab-df6434da4663",
-            "type": "FED_COMPOSITE",
-            "name": "Test Alert",
-            "description": "it's a test",
-            "actor": "cool.guy@code42.com",
-            "actorId": "987210998131391466",
-            "target": "N/A",
-            "severity": "LOW",
-            "ruleId": "cab2d5ee-a512-45b1-8848-809327033048",
-            "ruleSource": "Alerting",
-            "id": "11111111-9724-4005-b848-76af488cf5e2",
-            "createdAt": "2021-05-13T16:51:35.4259080Z",
-            "state": "OPEN",
-        }
-    ]
-}
-
-_MOCK_SEARCH_ALERTS_LIST_RESPONSE = {
-    "type$": "ALERT_QUERY_RESPONSE",
-    "alerts": [
-        {
-            "type$": "ALERT_SUMMARY",
-            "tenantId": "11111111-af5b-4231-9d8e-df6434da4663",
-            "type": "FED_COMPOSITE",
-            "name": "Alert 1",
-            "description": "Its a test :)",
-            "actor": "barney.frankenberry@chocula.com",
-            "actorId": "987210998131391466",
-            "target": "N/A",
-            "severity": "LOW",
-            "ruleId": "cab2d5ee-a512-45b1-8848-809327033048",
-            "ruleSource": "Alerting",
-            "id": "11111111-9724-4005-b848-76af488cf5e2",
-            "createdAt": "2021-05-13T16:51:35.4259080Z",
-            "state": "OPEN",
-        },
-        {
-            "type$": "ALERT_SUMMARY",
-            "tenantId": "11111111-af5b-4231-9d8e-df6434da4663",
-            "type": "FED_COMPOSITE",
-            "name": "File Upload Alert",
-            "description": "Alert on any file upload events",
-            "actor": "barney.frankenberry@chocula.com",
-            "actorId": "987210998131391466",
-            "target": "N/A",
-            "severity": "MEDIUM",
-            "ruleId": "962a6a1c-54f6-4477-90bd-a08cc74cbf71",
-            "ruleSource": "Alerting",
-            "id": "1111111-555f-4880-8909-f5679448e67c",
-            "createdAt": "2021-05-13T16:51:35.3465540Z",
-            "state": "OPEN",
-        },
-    ],
-    "totalCount": 2,
-    "problems": [],
-}
 
 
 class TestCode42AlertsConnector(object):
@@ -128,7 +68,7 @@ class TestCode42AlertsConnector(object):
         connector = _create_get_alert_details_connector(mock_py42_with_alert_details)
         connector.handle_action(param)
         assert_successful_single_data(
-            connector, _MOCK_ALERT_DETAIL_RESPONSE["alerts"][0]
+            connector, MOCK_ALERT_DETAIL_RESPONSE["alerts"][0]
         )
 
     def test_handle_action_when_alert_detail_adds_info_to_summary(
@@ -138,8 +78,8 @@ class TestCode42AlertsConnector(object):
         connector = _create_get_alert_details_connector(mock_py42_with_alert_details)
         connector.handle_action(param)
         expected_summary = {
-            "username": _MOCK_ALERT_DETAIL_RESPONSE["alerts"][0]["actor"],
-            "user_id": _MOCK_ALERT_DETAIL_RESPONSE["alerts"][0]["actorId"],
+            "username": MOCK_ALERT_DETAIL_RESPONSE["alerts"][0]["actor"],
+            "user_id": MOCK_ALERT_DETAIL_RESPONSE["alerts"][0]["actorId"],
         }
         assert_successful_summary(connector, expected_summary)
 
@@ -194,8 +134,8 @@ class TestCode42AlertsConnector(object):
         action_results = connector.get_action_results()
         assert len(action_results) == 1
         data = action_results[0].get_data()
-        assert data[0] == _MOCK_SEARCH_ALERTS_LIST_RESPONSE["alerts"][0]
-        assert data[1] == _MOCK_SEARCH_ALERTS_LIST_RESPONSE["alerts"][1]
+        assert data[0] == MOCK_SEARCH_ALERTS_LIST_RESPONSE["alerts"][0]
+        assert data[1] == MOCK_SEARCH_ALERTS_LIST_RESPONSE["alerts"][1]
 
     def test_handle_action_when_search_alerts_adds_summary(
         self, mock_py42_with_search_alerts
@@ -204,7 +144,7 @@ class TestCode42AlertsConnector(object):
         connector = _create_search_alerts_connector(mock_py42_with_search_alerts)
         connector.handle_action(param)
         assert_successful_summary(
-            connector, {"total_count": _MOCK_SEARCH_ALERTS_LIST_RESPONSE["totalCount"]}
+            connector, {"total_count": MOCK_SEARCH_ALERTS_LIST_RESPONSE["totalCount"]}
         )
 
     def test_handle_action_when_search_alerts_and_no_date_range_provided_defaults_to_last_30_days(
