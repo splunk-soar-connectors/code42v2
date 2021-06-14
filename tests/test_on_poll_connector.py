@@ -1,7 +1,7 @@
 import json
 from datetime import datetime, timedelta, timezone
-import dateutil.parser
 
+import dateutil.parser
 from pytest import fixture
 from tests.conftest import (
     assert_artifacts_added,
