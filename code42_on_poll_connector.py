@@ -262,13 +262,13 @@ class FileEventQueryFilters(Code42SearchFilters):
 
 
 def _create_artifact_json(container_id, alert_details, file_event):
-    event_data = {
+    normalized_event = {
         key: val for key, val in file_event.items() if val not in [[], None, ""]
     }
     return {
         "container_id": container_id,
-        "source_data_identifier": event_data["eventId"],
+        "source_data_identifier": normalized_event["eventId"],
         "label": alert_details.get("ruleSource"),
-        "cef": event_data,
-        "start_time": event_data["eventTimestamp"],
+        "cef": normalized_event,
+        "start_time": normalized_event["eventTimestamp"],
     }
