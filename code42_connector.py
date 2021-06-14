@@ -11,6 +11,7 @@ import phantom.utils as utils
 import py42.sdk
 import requests
 from phantom.action_result import ActionResult
+from phantom.base_connector import BaseConnector
 from phantom.vault import Vault
 from py42.exceptions import Py42NotFoundError
 from py42.sdk.queries.fileevents.file_event_query import FileEventQuery
@@ -34,7 +35,7 @@ from py42.services.detectionlists.departing_employee import DepartingEmployeeFil
 from py42.services.detectionlists.high_risk_employee import HighRiskEmployeeFilters
 
 from code42_on_poll_connector import Code42OnPollConnector
-from code42_util import build_alerts_query, build_date_range_filter, Code42BaseConnector
+from code42_util import build_alerts_query, build_date_range_filter
 
 
 class RetVal(tuple):
@@ -74,7 +75,7 @@ def is_default_dict(_dict):
     return True
 
 
-class Code42Connector(Code42BaseConnector):
+class Code42Connector(BaseConnector):
     def __init__(self):
         super(Code42Connector, self).__init__()
 

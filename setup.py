@@ -13,7 +13,7 @@ setup(
     description="Code42 for Phantom",
     py_modules=[
         "code42_connector",
-        "code42_base_connector",
+        "code42_util",
         "code42_on_poll_connector",
     ],
     install_requires=[
