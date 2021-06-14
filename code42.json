@@ -2044,7 +2044,7 @@
             "parameters": {
                 "case_number": {
                     "description": "Case number",
-                    "data_type": "string",
+                    "data_type": "numeric",
                     "required": true,
                     "primary": true,
                     "contains": [
@@ -2144,6 +2144,10 @@
                     "data_type": "string",
                     "column_name": "Findings",
                     "column_order": 5
+                },
+                {
+                    "data_path": "action_result.summary.case_number",
+                    "data_type": "numeric"
                 }
             ],
             "render": {
@@ -2160,7 +2164,7 @@
             "parameters": {
                 "case_number": {
                     "description": "Case number",
-                    "data_type": "string",
+                    "data_type": "numeric",
                     "required": true,
                     "primary": true,
                     "contains": [
@@ -2230,9 +2234,10 @@
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.summary",
-                    "data_type": "string"
+                    "data_path": "action_result.summary.case_number",
+                    "data_type": "numeric"
                 }
+
             ],
             "render": {
                 "type": "table"
@@ -2377,7 +2382,7 @@
             "parameters": {
                 "case_number": {
                     "description": "Case number",
-                    "data_type": "string",
+                    "data_type": "numeric",
                     "required": true,
                     "primary": true,
                     "contains": [
@@ -2416,6 +2421,14 @@
                 },
                 {
                     "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.summary.case_number",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.summary.event_id",
                     "data_type": "string"
                 }
             ],
