@@ -78,7 +78,7 @@ class Code42OnPollConnector:
         query = _get_file_event_query(observation, alert_details)
         response = self._client.securitydata.search_file_events(query)
         file_events = response.data.get("fileEvents", [])
-        return [_stringify_lists_if_needed(evt) for evt in file_events]
+        return file_events
 
     def _save_artifacts_from_file_events(self, container_id, details, file_events):
         artifacts = [
@@ -261,20 +261,6 @@ class FileEventQueryFilters(Code42SearchFilters):
         return query
 
 
-def _stringify_lists_if_needed(event):
-    # We need to convert certain fields to a stringified list else React.JS will throw an error
-    shared_with = event.get("sharedWith")
-    private_ip_addresses = event.get("privateIpAddresses")
-    if shared_with:
-        shared_list = [
-            u.get("cloudUsername") for u in shared_with if u.get("cloudUsername")
-        ]
-        event["sharedWith"] = str(shared_list)
-    if private_ip_addresses:
-        event["privateIpAddresses"] = str(private_ip_addresses)
-    return event
-
-
 def _create_artifact_json(container_id, alert_details, file_event):
     event_data = {
         key: val for key, val in file_event.items() if val not in [[], None, ""]
@@ -284,4 +270,5 @@ def _create_artifact_json(container_id, alert_details, file_event):
         "source_data_identifier": event_data["eventId"],
         "label": alert_details.get("ruleSource"),
         "cef": event_data,
+        "start_time": event_data["eventTimestamp"],
     }

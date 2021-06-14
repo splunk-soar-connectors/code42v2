@@ -81,7 +81,7 @@ class TestCode42OnPollConnector(object):
                     "operatingSystemUser": "IEUser",
                     "osHostName": "HOSTNAME",
                     "outsideActiveHours": False,
-                    "privateIpAddresses": "['255.255.255.255', '127.0.0.1']",
+                    "privateIpAddresses": ["255.255.255.255", "127.0.0.1"],
                     "processName": "chrome.exe",
                     "processOwner": "QA",
                     "publicIpAddress": "255.255.255.255",
@@ -102,6 +102,7 @@ class TestCode42OnPollConnector(object):
                 "container_id": "CONTAINER_ID",
                 "label": "Alerting",
                 "source_data_identifier": "0_1d71796f-af5b-4231-9d8e-df6434da4663_935873453596901068_956171635867906205_5",
+                "start_time": "2020-05-28T12:46:39.838Z",
             },
             {
                 "cef": {
@@ -132,7 +133,7 @@ class TestCode42OnPollConnector(object):
                     "operatingSystemUser": "IEUser",
                     "osHostName": "TEST'S MAC",
                     "outsideActiveHours": False,
-                    "privateIpAddresses": "['127.0.0.1']",
+                    "privateIpAddresses": ["127.0.0.1"],
                     "processName": "chrome.exe",
                     "processOwner": "QA",
                     "publicIpAddress": "255.255.255.255",
@@ -153,6 +154,7 @@ class TestCode42OnPollConnector(object):
                 "container_id": "CONTAINER_ID",
                 "label": "Alerting",
                 "source_data_identifier": "0_1d71796f-af5b-4231-9d8e-df6434da4663_935873453596901068_956171635867906205_5",
+                "start_time": "2020-05-28T12:46:39.838Z",
             },
             {
                 "cef": {
@@ -183,7 +185,7 @@ class TestCode42OnPollConnector(object):
                     "operatingSystemUser": "IEUser",
                     "osHostName": "Test's Windows",
                     "outsideActiveHours": False,
-                    "privateIpAddresses": "['0:0:0:0:0:0:0:1', '127.0.0.1']",
+                    "privateIpAddresses": ["0:0:0:0:0:0:0:1", "127.0.0.1"],
                     "processName": "chrome.exe",
                     "processOwner": "QA",
                     "publicIpAddress": "255.255.255.255",
@@ -204,6 +206,7 @@ class TestCode42OnPollConnector(object):
                 "container_id": "CONTAINER_ID",
                 "label": "Alerting",
                 "source_data_identifier": "0_1d71796f-af5b-4231-9d8e-df6434da4663_935873453596901068_956171635867906205_5",
+                "start_time": "2020-05-28T12:46:39.838Z",
             },
             {
                 "cef": {
@@ -234,7 +237,7 @@ class TestCode42OnPollConnector(object):
                     "operatingSystemUser": "IEUser",
                     "osHostName": "HOSTNAME",
                     "outsideActiveHours": False,
-                    "privateIpAddresses": "['255.255.255.255', '127.0.0.1']",
+                    "privateIpAddresses": ["255.255.255.255", "127.0.0.1"],
                     "processName": "chrome.exe",
                     "processOwner": "QA",
                     "publicIpAddress": "255.255.255.255",
@@ -255,6 +258,7 @@ class TestCode42OnPollConnector(object):
                 "container_id": "CONTAINER_ID",
                 "label": "Alerting",
                 "source_data_identifier": "0_1d71796f-af5b-4231-9d8e-df6434da4663_935873453596901068_956171635867906205_5",
+                "start_time": "2020-05-28T12:46:39.838Z",
             },
             {
                 "cef": {
@@ -285,7 +289,7 @@ class TestCode42OnPollConnector(object):
                     "operatingSystemUser": "IEUser",
                     "osHostName": "TEST'S MAC",
                     "outsideActiveHours": False,
-                    "privateIpAddresses": "['127.0.0.1']",
+                    "privateIpAddresses": ["127.0.0.1"],
                     "processName": "chrome.exe",
                     "processOwner": "QA",
                     "publicIpAddress": "255.255.255.255",
@@ -306,6 +310,7 @@ class TestCode42OnPollConnector(object):
                 "container_id": "CONTAINER_ID",
                 "label": "Alerting",
                 "source_data_identifier": "0_1d71796f-af5b-4231-9d8e-df6434da4663_935873453596901068_956171635867906205_5",
+                "start_time": "2020-05-28T12:46:39.838Z",
             },
             {
                 "cef": {
@@ -336,7 +341,7 @@ class TestCode42OnPollConnector(object):
                     "operatingSystemUser": "IEUser",
                     "osHostName": "Test's Windows",
                     "outsideActiveHours": False,
-                    "privateIpAddresses": "['0:0:0:0:0:0:0:1', '127.0.0.1']",
+                    "privateIpAddresses": ["0:0:0:0:0:0:0:1", "127.0.0.1"],
                     "processName": "chrome.exe",
                     "processOwner": "QA",
                     "publicIpAddress": "255.255.255.255",
@@ -357,6 +362,7 @@ class TestCode42OnPollConnector(object):
                 "container_id": "CONTAINER_ID",
                 "label": "Alerting",
                 "source_data_identifier": "0_1d71796f-af5b-4231-9d8e-df6434da4663_935873453596901068_956171635867906205_5",
+                "start_time": "2020-05-28T12:46:39.838Z",
             },
             {
                 "cef": {
@@ -387,7 +393,7 @@ class TestCode42OnPollConnector(object):
                     "operatingSystemUser": "IEUser",
                     "osHostName": "HOSTNAME",
                     "outsideActiveHours": False,
-                    "privateIpAddresses": "['255.255.255.255', '127.0.0.1']",
+                    "privateIpAddresses": ["255.255.255.255", "127.0.0.1"],
                     "processName": "chrome.exe",
                     "processOwner": "QA",
                     "publicIpAddress": "255.255.255.255",
@@ -408,6 +414,7 @@ class TestCode42OnPollConnector(object):
                 "container_id": "CONTAINER_ID",
                 "label": "Alerting",
                 "source_data_identifier": "0_1d71796f-af5b-4231-9d8e-df6434da4663_935873453596901068_956171635867906205_5",
+                "start_time": "2020-05-28T12:46:39.838Z",
             },
             {
                 "cef": {
@@ -438,7 +445,7 @@ class TestCode42OnPollConnector(object):
                     "operatingSystemUser": "IEUser",
                     "osHostName": "TEST'S MAC",
                     "outsideActiveHours": False,
-                    "privateIpAddresses": "['127.0.0.1']",
+                    "privateIpAddresses": ["127.0.0.1"],
                     "processName": "chrome.exe",
                     "processOwner": "QA",
                     "publicIpAddress": "255.255.255.255",
@@ -459,6 +466,7 @@ class TestCode42OnPollConnector(object):
                 "container_id": "CONTAINER_ID",
                 "label": "Alerting",
                 "source_data_identifier": "0_1d71796f-af5b-4231-9d8e-df6434da4663_935873453596901068_956171635867906205_5",
+                "start_time": "2020-05-28T12:46:39.838Z",
             },
             {
                 "cef": {
@@ -489,7 +497,7 @@ class TestCode42OnPollConnector(object):
                     "operatingSystemUser": "IEUser",
                     "osHostName": "Test's Windows",
                     "outsideActiveHours": False,
-                    "privateIpAddresses": "['0:0:0:0:0:0:0:1', '127.0.0.1']",
+                    "privateIpAddresses": ["0:0:0:0:0:0:0:1", "127.0.0.1"],
                     "processName": "chrome.exe",
                     "processOwner": "QA",
                     "publicIpAddress": "255.255.255.255",
@@ -510,6 +518,7 @@ class TestCode42OnPollConnector(object):
                 "container_id": "CONTAINER_ID",
                 "label": "Alerting",
                 "source_data_identifier": "0_1d71796f-af5b-4231-9d8e-df6434da4663_935873453596901068_956171635867906205_5",
+                "start_time": "2020-05-28T12:46:39.838Z",
             },
             {
                 "cef": {
@@ -540,7 +549,7 @@ class TestCode42OnPollConnector(object):
                     "operatingSystemUser": "IEUser",
                     "osHostName": "HOSTNAME",
                     "outsideActiveHours": False,
-                    "privateIpAddresses": "['255.255.255.255', '127.0.0.1']",
+                    "privateIpAddresses": ["255.255.255.255", "127.0.0.1"],
                     "processName": "chrome.exe",
                     "processOwner": "QA",
                     "publicIpAddress": "255.255.255.255",
@@ -561,6 +570,7 @@ class TestCode42OnPollConnector(object):
                 "container_id": "CONTAINER_ID",
                 "label": "Alerting",
                 "source_data_identifier": "0_1d71796f-af5b-4231-9d8e-df6434da4663_935873453596901068_956171635867906205_5",
+                "start_time": "2020-05-28T12:46:39.838Z",
             },
             {
                 "cef": {
@@ -591,7 +601,7 @@ class TestCode42OnPollConnector(object):
                     "operatingSystemUser": "IEUser",
                     "osHostName": "TEST'S MAC",
                     "outsideActiveHours": False,
-                    "privateIpAddresses": "['127.0.0.1']",
+                    "privateIpAddresses": ["127.0.0.1"],
                     "processName": "chrome.exe",
                     "processOwner": "QA",
                     "publicIpAddress": "255.255.255.255",
@@ -612,6 +622,7 @@ class TestCode42OnPollConnector(object):
                 "container_id": "CONTAINER_ID",
                 "label": "Alerting",
                 "source_data_identifier": "0_1d71796f-af5b-4231-9d8e-df6434da4663_935873453596901068_956171635867906205_5",
+                "start_time": "2020-05-28T12:46:39.838Z",
             },
             {
                 "cef": {
@@ -642,7 +653,7 @@ class TestCode42OnPollConnector(object):
                     "operatingSystemUser": "IEUser",
                     "osHostName": "Test's Windows",
                     "outsideActiveHours": False,
-                    "privateIpAddresses": "['0:0:0:0:0:0:0:1', '127.0.0.1']",
+                    "privateIpAddresses": ["0:0:0:0:0:0:0:1", "127.0.0.1"],
                     "processName": "chrome.exe",
                     "processOwner": "QA",
                     "publicIpAddress": "255.255.255.255",
@@ -663,6 +674,7 @@ class TestCode42OnPollConnector(object):
                 "container_id": "CONTAINER_ID",
                 "label": "Alerting",
                 "source_data_identifier": "0_1d71796f-af5b-4231-9d8e-df6434da4663_935873453596901068_956171635867906205_5",
+                "start_time": "2020-05-28T12:46:39.838Z",
             },
             {
                 "cef": {
@@ -693,7 +705,7 @@ class TestCode42OnPollConnector(object):
                     "operatingSystemUser": "IEUser",
                     "osHostName": "HOSTNAME",
                     "outsideActiveHours": False,
-                    "privateIpAddresses": "['255.255.255.255', '127.0.0.1']",
+                    "privateIpAddresses": ["255.255.255.255", "127.0.0.1"],
                     "processName": "chrome.exe",
                     "processOwner": "QA",
                     "publicIpAddress": "255.255.255.255",
@@ -714,6 +726,7 @@ class TestCode42OnPollConnector(object):
                 "container_id": "CONTAINER_ID",
                 "label": "Alerting",
                 "source_data_identifier": "0_1d71796f-af5b-4231-9d8e-df6434da4663_935873453596901068_956171635867906205_5",
+                "start_time": "2020-05-28T12:46:39.838Z",
             },
             {
                 "cef": {
@@ -744,7 +757,7 @@ class TestCode42OnPollConnector(object):
                     "operatingSystemUser": "IEUser",
                     "osHostName": "TEST'S MAC",
                     "outsideActiveHours": False,
-                    "privateIpAddresses": "['127.0.0.1']",
+                    "privateIpAddresses": ["127.0.0.1"],
                     "processName": "chrome.exe",
                     "processOwner": "QA",
                     "publicIpAddress": "255.255.255.255",
@@ -765,6 +778,7 @@ class TestCode42OnPollConnector(object):
                 "container_id": "CONTAINER_ID",
                 "label": "Alerting",
                 "source_data_identifier": "0_1d71796f-af5b-4231-9d8e-df6434da4663_935873453596901068_956171635867906205_5",
+                "start_time": "2020-05-28T12:46:39.838Z",
             },
             {
                 "cef": {
@@ -795,7 +809,7 @@ class TestCode42OnPollConnector(object):
                     "operatingSystemUser": "IEUser",
                     "osHostName": "Test's Windows",
                     "outsideActiveHours": False,
-                    "privateIpAddresses": "['0:0:0:0:0:0:0:1', '127.0.0.1']",
+                    "privateIpAddresses": ["0:0:0:0:0:0:0:1", "127.0.0.1"],
                     "processName": "chrome.exe",
                     "processOwner": "QA",
                     "publicIpAddress": "255.255.255.255",
@@ -816,6 +830,7 @@ class TestCode42OnPollConnector(object):
                 "container_id": "CONTAINER_ID",
                 "label": "Alerting",
                 "source_data_identifier": "0_1d71796f-af5b-4231-9d8e-df6434da4663_935873453596901068_956171635867906205_5",
+                "start_time": "2020-05-28T12:46:39.838Z",
             },
             {
                 "cef": {
@@ -846,7 +861,7 @@ class TestCode42OnPollConnector(object):
                     "operatingSystemUser": "IEUser",
                     "osHostName": "HOSTNAME",
                     "outsideActiveHours": False,
-                    "privateIpAddresses": "['255.255.255.255', '127.0.0.1']",
+                    "privateIpAddresses": ["255.255.255.255", "127.0.0.1"],
                     "processName": "chrome.exe",
                     "processOwner": "QA",
                     "publicIpAddress": "255.255.255.255",
@@ -867,6 +882,7 @@ class TestCode42OnPollConnector(object):
                 "container_id": "CONTAINER_ID",
                 "label": "Alerting",
                 "source_data_identifier": "0_1d71796f-af5b-4231-9d8e-df6434da4663_935873453596901068_956171635867906205_5",
+                "start_time": "2020-05-28T12:46:39.838Z",
             },
             {
                 "cef": {
@@ -897,7 +913,7 @@ class TestCode42OnPollConnector(object):
                     "operatingSystemUser": "IEUser",
                     "osHostName": "TEST'S MAC",
                     "outsideActiveHours": False,
-                    "privateIpAddresses": "['127.0.0.1']",
+                    "privateIpAddresses": ["127.0.0.1"],
                     "processName": "chrome.exe",
                     "processOwner": "QA",
                     "publicIpAddress": "255.255.255.255",
@@ -918,6 +934,7 @@ class TestCode42OnPollConnector(object):
                 "container_id": "CONTAINER_ID",
                 "label": "Alerting",
                 "source_data_identifier": "0_1d71796f-af5b-4231-9d8e-df6434da4663_935873453596901068_956171635867906205_5",
+                "start_time": "2020-05-28T12:46:39.838Z",
             },
             {
                 "cef": {
@@ -948,7 +965,7 @@ class TestCode42OnPollConnector(object):
                     "operatingSystemUser": "IEUser",
                     "osHostName": "Test's Windows",
                     "outsideActiveHours": False,
-                    "privateIpAddresses": "['0:0:0:0:0:0:0:1', '127.0.0.1']",
+                    "privateIpAddresses": ["0:0:0:0:0:0:0:1", "127.0.0.1"],
                     "processName": "chrome.exe",
                     "processOwner": "QA",
                     "publicIpAddress": "255.255.255.255",
@@ -969,6 +986,7 @@ class TestCode42OnPollConnector(object):
                 "container_id": "CONTAINER_ID",
                 "label": "Alerting",
                 "source_data_identifier": "0_1d71796f-af5b-4231-9d8e-df6434da4663_935873453596901068_956171635867906205_5",
+                "start_time": "2020-05-28T12:46:39.838Z",
             },
         ]
         assert_artifacts_added(connector, expected)
