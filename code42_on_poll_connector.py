@@ -209,7 +209,7 @@ class Code42OnPollConnector:
         artifacts = [
             _create_artifact_json(container_id, details, evt) for evt in file_events
         ]
-        self.save_artifacts(artifacts)
+        self._connector.save_artifacts(artifacts)
 
 
 def _adjust_date_parameters(last_time, param):
