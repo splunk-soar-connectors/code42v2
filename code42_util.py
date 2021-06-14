@@ -9,25 +9,28 @@ def get_thirty_days_ago():
     return datetime.utcnow() - timedelta(days=30)
 
 
-def build_date_range_filter(start_date, end_date):
-    if start_date and not end_date:
-        return DateObserved.on_or_after(dateutil.parser.parse(start_date))
-    elif end_date and not start_date:
-        return DateObserved.on_or_before(dateutil.parser.parse(end_date))
-    elif end_date and start_date:
-        return DateObserved.in_range(
-            dateutil.parser.parse(start_date), dateutil.parser.parse(end_date)
-        )
+def build_date_range_filter(date_filter_cls, start_date_str, end_date_str):
+    if start_date_str and not end_date_str:
+        return date_filter_cls.on_or_after(dateutil.parser.parse(start_date_str))
+    elif end_date_str and not start_date_str:
+        return date_filter_cls.on_or_before(dateutil.parser.parse(end_date_str))
+    elif end_date_str and start_date_str:
+        start_datetime = dateutil.parser.parse(start_date_str)
+        end_datetime = dateutil.parser.parse(end_date_str)
+        if start_datetime >= end_datetime:
+            raise Exception("Start date cannot be after end date.")
+        return date_filter_cls.in_range(start_datetime, end_datetime)
     else:
-        return DateObserved.on_or_after(get_thirty_days_ago())
+        thirty_days_ago = datetime.utcnow() - timedelta(days=30)
+        return date_filter_cls.on_or_after(thirty_days_ago)
 
 
 def build_alerts_query(start_date, end_date, username=None, alert_state=None):
     filters = []
-    if username:
+    if username is not None:
         filters.append(Actor.eq(username))
-    if alert_state:
+    if alert_state is not None:
         filters.append(AlertState.eq(alert_state))
-    filters.append(build_date_range_filter(start_date, end_date))
+    filters.append(build_date_range_filter(DateObserved, start_date, end_date))
     query = AlertQuery.all(*filters)
     return query

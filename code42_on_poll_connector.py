@@ -1,12 +1,18 @@
 from datetime import datetime
+import dateutil.parser
 
 import phantom.app as phantom
 from py42.sdk.queries.fileevents.file_event_query import FileEventQuery
-from py42.sdk.queries.fileevents.filters import ExposureType, DeviceUsername, Actor, EventTimestamp, EventType, \
-    FileCategory
+from py42.sdk.queries.fileevents.filters import (
+    ExposureType,
+    DeviceUsername,
+    Actor,
+    EventTimestamp,
+    EventType,
+    FileCategory,
+)
 
 from code42_util import get_thirty_days_ago, build_alerts_query
-
 
 """The contents of the module related to mapping Code42 file events to CEF borrow heavily from the code42cli.
 The contents of this module that related to mapping alert observations to file events borrows heavily from the 
@@ -90,7 +96,9 @@ def _format_cef_kvp(cef_field_key, cef_field_value):
     if isinstance(cef_field_value, list):
         cef_field_value = _convert_list_to_csv(cef_field_value)
     elif cef_field_key in CEF_TIMESTAMP_FIELDS:
-        cef_field_value = _convert_file_event_timestamp_to_cef_timestamp(cef_field_value)
+        cef_field_value = _convert_file_event_timestamp_to_cef_timestamp(
+            cef_field_value
+        )
     return f"{cef_field_key}={cef_field_value}"
 
 
@@ -163,56 +171,72 @@ class Code42OnPollConnector:
 
     def handle_on_poll(self, param, action_result):
         last_time = self._state.get("last_time")
-
-        # Only use start_date and end_date if never check-pointed.
-        if not last_time:
-            default_start_date = get_thirty_days_ago().strftime("%Y-%m-%dT%H:%M:%S.%f")
-            param["start_date"] = param.get("start_date", default_start_date)
-        else:
-            param["start_date"] = last_time
-            param["end_date"] = None
-
+        param = _adjust_date_parameters(last_time, param)
         query = build_alerts_query(param["start_date"], param.get("end_date"))
         response = self._client.alerts.search(query)
 
         for alert in response["alerts"]:
-            alert_id = alert["id"]
-
-            # Include `observations` in the container data.
-            details = self._client.alerts.get_details(alert_id).data["alerts"][0]
-
-            container_json = {
-                "name": alert["name"],
-                "data": details,
-                "severity": alert["severity"],
-                "description": alert["description"],
-                "source_data_identifier": alert_id,
-                "label": self._connector.get_config()
-                .get("ingest", {})
-                .get("container_label"),
-            }
-            ret_val, _, container_id = self._connector.save_container(container_json)
-
-            observations = details.get("observations")
-            if observations:
-                artifact_json = {
-                    "container_id": container_id,
-                    "source_data_identifier": alert_id,
-                    "label": alert["ruleSource"],
-                }
-
-                ext, evt, sig_id = _map_event_to_cef(file_event_dict)
-                cef_log = CEF_TEMPLATE.format(
-                    productName=self._default_product_name,
-                    signatureID=sig_id,
-                    eventName=evt,
-                    severity=self._default_severity_level,
-                    extension=ext,
+            details = self._get_alert_details(alert["id"])
+            container_id = self._init_container(details)
+            observations = details.get("observations", [])
+            for observation in observations:
+                file_events = self._get_file_events(observation, details)
+                self._save_artifacts_from_file_events(
+                    container_id, details, file_events
                 )
 
-                artifact_json["cef"] = cef_log
-
         return action_result.set_status(phantom.APP_SUCCESS)
+
+    def _get_alert_details(self, alert_id):
+        return self._client.alerts.get_details(alert_id).data["alerts"][0]
+
+    def _init_container(self, alert_details):
+        container_label = self._get_container_label()
+        container_json = _create_container(alert_details, container_label)
+        _, _, container_id = self._connector.save_container(container_json)
+        return container_id
+
+    def _get_container_label(self):
+        return self._connector.get_config().get("ingest", {}).get("container_label")
+
+    def _get_file_events(self, observation, alert_details):
+        query = _get_file_event_query(observation, alert_details)
+        response = self._client.search_file_events(query)
+        return [_stringify_lists_if_needed(evt) for evt in response]
+
+    def _save_artifacts_from_file_events(self, container_id, details, file_events):
+        artifacts = [
+            _create_artifact_json(container_id, details, evt) for evt in file_events
+        ]
+        self.save_artifacts(artifacts)
+
+
+def _adjust_date_parameters(last_time, param):
+    """Only use start_date and end_date if never check-pointed."""
+    if not last_time:
+        default_start_date = get_thirty_days_ago().strftime("%Y-%m-%dT%H:%M:%S.%f")
+        param["start_date"] = param.get("start_date", default_start_date)
+    else:
+        param["start_date"] = last_time
+        param["end_date"] = None
+
+    return param
+
+
+def _create_container(alert, container_label):
+    return {
+        "name": alert["name"],
+        "data": alert,
+        "severity": alert["severity"],
+        "description": alert["description"],
+        "source_data_identifier": alert["id"],
+        "label": container_label,
+    }
+
+
+def _get_file_event_query(observation, alert):
+    mapper = ObservationToSecurityQueryMapper(observation, alert.get("actor"))
+    return mapper.map()
 
 
 class ObservationToSecurityQueryMapper(object):
@@ -272,11 +296,11 @@ class ObservationToSecurityQueryMapper(object):
         last_activity = self._observation_data.get("lastActivityAt")
         filters.append(self._create_user_filter())
         if first_activity:
-            begin_time = _convert_date_arg_to_epoch(first_activity)
+            begin_time = dateutil.parser.parse(first_activity)
             if begin_time:
                 filters.append(EventTimestamp.on_or_after(begin_time))
         if last_activity:
-            end_time = _convert_date_arg_to_epoch(last_activity)
+            end_time = dateutil.parser.parse(last_activity)
             if end_time:
                 filters.append(EventTimestamp.on_or_before(end_time))
         filters.extend(self._create_exposure_filters(exposure_types))
@@ -299,7 +323,9 @@ class ObservationToSecurityQueryMapper(object):
                 return [ExposureType.not_in(supported_exp_types)]
         elif self._is_endpoint_exfiltration:
             return [
-                EventType.is_in([EventType.CREATED, EventType.MODIFIED, EventType.READ_BY_APP]),
+                EventType.is_in(
+                    [EventType.CREATED, EventType.MODIFIED, EventType.READ_BY_APP]
+                ),
                 ExposureType.is_in(exposure_types),
             ]
         return []
@@ -357,3 +383,35 @@ class FileEventQueryFilters(Code42SearchFilters):
         if self._pg_size:
             query.page_size = self._pg_size
         return query
+
+
+def _stringify_lists_if_needed(event):
+    # We need to convert certain fields to a stringified list else React.JS will throw an error
+    shared_with = event.get("sharedWith")
+    private_ip_addresses = event.get("privateIpAddresses")
+    if shared_with:
+        shared_list = [
+            u.get("cloudUsername") for u in shared_with if u.get("cloudUsername")
+        ]
+        event["sharedWith"] = str(shared_list)
+    if private_ip_addresses:
+        event["privateIpAddresses"] = str(private_ip_addresses)
+    return event
+
+
+def _create_artifact_json(container_id, alert_details, file_event):
+    artifact_json = {
+        "container_id": container_id,
+        "source_data_identifier": alert_details["id"],
+        "label": alert_details.get("ruleSource"),
+    }
+    ext, evt, sig_id = _map_event_to_cef(file_event)
+    cef_log = CEF_TEMPLATE.format(
+        productName="Advanced Exfiltration Detection",
+        signatureID=sig_id,
+        eventName=evt,
+        severity="5",
+        extension=ext,
+    )
+    artifact_json["cef"] = cef_log
+    return artifact_json

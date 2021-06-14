@@ -1,7 +1,7 @@
 import json
 from datetime import datetime, timedelta, timezone
-import dateutil
 
+import dateutil
 from py42.response import Py42Response
 
 from tests.conftest import (

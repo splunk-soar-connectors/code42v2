@@ -5,25 +5,14 @@ import json
 
 # Phantom App imports
 import phantom.app as phantom
+import phantom.utils as utils
+
+# Phantom App imports
 import py42.sdk
 import requests
 from phantom.action_result import ActionResult
+from phantom.vault import Vault
 from py42.exceptions import Py42NotFoundError
-from py42.sdk.queries.fileevents.filters.exposure_filter import ExposureType
-from py42.sdk.queries.fileevents.filters.file_filter import FileName, FilePath
-from py42.services.detectionlists.departing_employee import DepartingEmployeeFilters
-from py42.services.detectionlists.high_risk_employee import HighRiskEmployeeFilters
-
-from code42_util import Code42BaseConnector
-from code42_util import build_alerts_query
-from code42_on_poll_connector import Code42OnPollConnector
-
-import requests
-from datetime import datetime, timedelta
-import dateutil.parser
-
-from py42.sdk.queries.alerts.alert_query import AlertQuery
-from py42.sdk.queries.alerts.filters import Actor, AlertState, DateObserved
 from py42.sdk.queries.fileevents.file_event_query import FileEventQuery
 from py42.sdk.queries.fileevents.filters import (
     EventTimestamp,
@@ -39,13 +28,13 @@ from py42.sdk.queries.fileevents.filters import (
     WindowTitle,
     TrustedActivity,
 )
+from py42.sdk.queries.fileevents.filters.exposure_filter import ExposureType
+from py42.sdk.queries.fileevents.filters.file_filter import FileName, FilePath
+from py42.services.detectionlists.departing_employee import DepartingEmployeeFilters
+from py42.services.detectionlists.high_risk_employee import HighRiskEmployeeFilters
 
-# Phantom App imports
-import phantom.app as phantom
-from phantom.action_result import ActionResult
-from phantom.base_connector import BaseConnector
-import phantom.utils as utils
-from phantom.vault import Vault
+from code42_on_poll_connector import Code42OnPollConnector
+from code42_util import build_alerts_query, build_date_range_filter, Code42BaseConnector
 
 
 class RetVal(tuple):
@@ -531,26 +520,9 @@ class Code42Connector(Code42BaseConnector):
         if untrusted_only:
             filters.append(TrustedActivity.is_false())
 
-        filters.append(
-            self._build_date_range_filter(EventTimestamp, start_date, end_date)
-        )
+        filters.append(build_date_range_filter(EventTimestamp, start_date, end_date))
         query = FileEventQuery.all(*filters)
         return query
-
-    def _build_date_range_filter(self, date_filter_cls, start_date_str, end_date_str):
-        if start_date_str and not end_date_str:
-            return date_filter_cls.on_or_after(dateutil.parser.parse(start_date_str))
-        elif end_date_str and not start_date_str:
-            return date_filter_cls.on_or_before(dateutil.parser.parse(end_date_str))
-        elif end_date_str and start_date_str:
-            start_datetime = dateutil.parser.parse(start_date_str)
-            end_datetime = dateutil.parser.parse(end_date_str)
-            if start_datetime >= end_datetime:
-                raise Exception("Start date cannot be after end date.")
-            return date_filter_cls.in_range(start_datetime, end_datetime)
-        else:
-            thirty_days_ago = datetime.utcnow() - timedelta(days=30)
-            return date_filter_cls.on_or_after(thirty_days_ago)
 
     def _get_user(self, username):
         users = self._client.users.get_by_username(username)["users"]

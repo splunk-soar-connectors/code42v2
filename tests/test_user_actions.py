@@ -93,14 +93,15 @@ class TestCode42UsersConnector(object):
         connector = create_fake_connector("create_user", mock_py42_with_create_user)
         connector.handle_action(param)
         assert_successful_single_data(
-            connector, {"userUid": _TEST_USER_UID, "userId": _TEST_USER_LEGACY_ID},
+            connector,
+            {"userUid": _TEST_USER_UID, "userId": _TEST_USER_LEGACY_ID},
         )
 
     def test_handle_action_when_creating_user_sets_error_status_when_duplicate_user(
         self, mock_py42_with_create_user
     ):
-        mock_py42_with_create_user.users.create_user.side_effect = Py42UserAlreadyExistsError(
-            mock.Mock(status=500)
+        mock_py42_with_create_user.users.create_user.side_effect = (
+            Py42UserAlreadyExistsError(mock.Mock(status=500))
         )
         param = {"org_uid": _TEST_ORG_UID, "username": _TEST_USERNAME}
         connector = create_fake_connector("create_user", mock_py42_with_create_user)

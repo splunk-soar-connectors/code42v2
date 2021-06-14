@@ -25,8 +25,8 @@ class TestCode42Connector(object):
     def test_handle_connectivity_sets_error_status_if_sdk_throws_exception(
         self, test_connectivity_connector
     ):
-        test_connectivity_connector._client.users.get_current.side_effect = Py42UnauthorizedError(
-            mock.Mock(status=401)
+        test_connectivity_connector._client.users.get_current.side_effect = (
+            Py42UnauthorizedError(mock.Mock(status=401))
         )
         test_connectivity_connector.handle_action({})
         assert_fail(test_connectivity_connector)
