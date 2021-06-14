@@ -110,9 +110,7 @@ class Code42OnPollConnector:
             container_id = self._init_container(details)
             observations = details.get("observations", [])
             file_events = self._get_file_events(param, observations, details)
-            self._save_artifacts_from_file_events(
-                container_id, details, file_events
-            )
+            self._save_artifacts_from_file_events(container_id, details, file_events)
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
@@ -145,7 +143,9 @@ class Code42OnPollConnector:
         )
         file_events = []
         for observation in observations:
-            events = self._get_file_events_for_observation(param, observation, alert_details)
+            events = self._get_file_events_for_observation(
+                param, observation, alert_details
+            )
             for event in events:
                 file_events.append(event)
                 if self._connector.is_poll_now() and len(file_events) >= artifact_count:

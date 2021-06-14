@@ -556,9 +556,6 @@ class TestCode42OnPollConnector(object):
     ):
         connector = _create_on_poll_connector(mock_py42_for_alert_polling)
         connector._is_poll_now = True
-        param = {
-            "container_count": 1,
-            "artifact_count": 1
-        }
+        param = {"container_count": 1, "artifact_count": 1}
         connector.handle_action(param)
         assert_artifacts_added(connector, [EXPECTED_ARTIFACTS[0]])
