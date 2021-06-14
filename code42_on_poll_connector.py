@@ -82,7 +82,7 @@ class Code42OnPollConnector:
 
     def _save_artifacts_from_file_events(self, container_id, details, file_events):
         artifacts = [
-            _create_artifact_json(container_id, details, evt) for evt in file_events
+            _create_artifact_json(container_id, details, event) for event in file_events
         ]
         self._connector.save_artifacts(artifacts)
 
