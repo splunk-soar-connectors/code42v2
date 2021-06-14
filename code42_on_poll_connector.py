@@ -201,8 +201,9 @@ class Code42OnPollConnector:
 
     def _get_file_events(self, observation, alert_details):
         query = _get_file_event_query(observation, alert_details)
-        response = self._client.search_file_events(query)
-        return [_stringify_lists_if_needed(evt) for evt in response]
+        response = self._client.securitydata.search_file_events(query)
+        file_events = response.data.get("fileEvents", [])
+        return [_stringify_lists_if_needed(evt) for evt in file_events]
 
     def _save_artifacts_from_file_events(self, container_id, details, file_events):
         artifacts = [
