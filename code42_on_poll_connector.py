@@ -309,9 +309,8 @@ def _create_artifact_json(container_id, alert_details, file_event):
     }
     file_name = normalized_event.get("fileName", "Unknown file")
     event_type = normalized_event.get("eventType", "Code42 file event")
-    artifact_name = f"{file_name} - {event_type}"
     return {
-        "name": artifact_name,
+        "name": "Code42 File Event Artifact",
         "container_id": container_id,
         "source_data_identifier": normalized_event["eventId"],
         "label": alert_details.get("ruleSource"),
