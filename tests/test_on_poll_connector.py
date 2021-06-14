@@ -25,8 +25,8 @@ def mock_py42_for_alert_polling(mocker, mock_py42_client):
     mock_py42_client.alerts.get_details.return_value = create_mock_response(
         mocker, MOCK_ALERT_DETAIL_RESPONSE
     )
-    mock_py42_client.securitydata.search_file_events.return_value = (
-        create_mock_response(mocker, MOCK_SECURITY_EVENT_RESPONSE)
+    mock_py42_client.securitydata.search_file_events.return_value = create_mock_response(
+        mocker, MOCK_SECURITY_EVENT_RESPONSE
     )
     return mock_py42_client
 

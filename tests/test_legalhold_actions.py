@@ -167,10 +167,8 @@ class TestCode42LegalHoldConnector(object):
         self, mocker, mock_py42_with_legal_hold_memberships
     ):
         param = {"username": "nonmember@example.com", "matter_id": _TEST_MATTER_ID}
-        mock_py42_with_legal_hold_memberships.users.get_by_username.return_value = (
-            create_mock_response(
-                mocker, {"users": [{"userUid": "bogus-user-id-not-a-member"}]}
-            )
+        mock_py42_with_legal_hold_memberships.users.get_by_username.return_value = create_mock_response(
+            mocker, {"users": [{"userUid": "bogus-user-id-not-a-member"}]}
         )
         connector = _create_remove_legalhold_custodian_connector(
             mock_py42_with_legal_hold_memberships
