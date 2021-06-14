@@ -70,57 +70,42 @@
             "versions":"EQ(*)"
         },
         {
-            "action":"on poll",
-            "description":"Poll for new Code42 alerts",
-            "type":"ingest",
-            "identifier":"on_poll",
-            "read_only":true,
-            "parameters":{
-                "start_date":{
-                    "description":"Beginning of date range to search. Time (in UTC) may also be supplied but is not required.",
-                    "data_type":"string",
-                    "required":false,
-                    "primary":false,
-                    "value_list":[
-
-                    ],
-                    "default":"",
-                    "order":0
+            "action": "on poll",
+            "description": "Callback action for the on_poll ingest functionality.",
+            "type": "ingest",
+            "identifier": "on_poll",
+            "read_only": true,
+            "parameters": {
+                "container_id": {
+                    "data_type": "string",
+                    "order": 0,
+                    "description": "Container IDs to limit the ingestion to.",
+                    "allow_list": true
                 },
-                "end_date":{
-                    "description":"End of date range to search. Time (in UTC) may also be supplied but is not required.",
-                    "data_type":"string",
-                    "required":false,
-                    "primary":false,
-                    "value_list":[
-
-                    ],
-                    "default":"",
-                    "order":1
+                "start_time": {
+                    "data_type": "numeric",
+                    "order": 1,
+                    "description": "Start of time range, in epoch time (milliseconds)",
+                    "verbose": "If not specified, the default is past 10 days"
                 },
-                "container_id":{
-                    "description":"Parameter ignored in this app",
-                    "data_type":"string",
-                    "order":2
+                "end_time": {
+                    "data_type": "numeric",
+                    "order": 2,
+                    "description": "End of time range, in epoch time (milliseconds)",
+                    "verbose": "If not specified, the default is now"
                 },
-                "container_count":{
-                    "description":"Maximum number of alerts to be ingested during poll now",
-                    "data_type":"numeric",
-                    "order":3,
-                    "default":1
+                "container_count": {
+                    "data_type": "numeric",
+                    "order": 3,
+                    "description": "Maximum number of container records to query for."
                 },
-                "artifact_count":{
-                    "description":"Parameter ignored in this app",
-                    "data_type":"numeric",
-                    "order":4
+                "artifact_count": {
+                    "data_type": "numeric",
+                    "order": 4,
+                    "description": "Maximum number of artifact records to query for."
                 }
             },
-            "output":[
-
-            ],
-            "render":{
-                "type":"table"
-            },
+            "output": [],
             "versions":"EQ(*)"
         },
         {
