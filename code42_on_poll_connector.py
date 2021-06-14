@@ -314,5 +314,5 @@ def _create_artifact_json(container_id, alert_details, file_event):
         "label": alert_details.get("ruleSource"),
         "cef": cef,
         "data": normalized_event,
-        "start_time": normalized_event["eventTimestamp"],
+        "start_time": normalized_event.get("eventTimestamp"),
     }
