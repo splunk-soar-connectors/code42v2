@@ -70,6 +70,8 @@ FILE_EVENT_TO_SIGNATURE_ID_MAP = {
     "EMAILED": "C42204",
 }
 CEF_TIMESTAMP_FIELDS = ["end", "fileCreateTime", "fileModificationTime", "rt"]
+DEFAULT_CONTAINER_COUNT_FOR_POLL_NOW = 1
+DEFAULT_ARTIFACT_COUNT_FOR_POLL_NOW = 10
 
 
 def get_file_category_value(key):
@@ -102,25 +104,26 @@ class Code42OnPollConnector:
         last_time = self._state.get("last_time")
         param = _adjust_date_parameters(last_time, param)
         query = build_alerts_query(param["start_date"], param.get("end_date"))
-        alerts = self._get_alerts(query)
+        alerts = self._get_alerts(param, query)
         for alert in alerts:
             details = self._get_alert_details(alert["id"])
             container_id = self._init_container(details)
             observations = details.get("observations", [])
-            for observation in observations:
-                file_events = self._get_file_events(param, observation, details)
-                self._save_artifacts_from_file_events(
-                    container_id, details, file_events
-                )
+            file_events = self._get_file_events(param, observations, details)
+            self._save_artifacts_from_file_events(
+                container_id, details, file_events
+            )
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
-    def _get_alerts(self, query):
+    def _get_alerts(self, param, query):
         response = self._client.alerts.search(query)
         alerts = response.data.get("alerts", [])
         if self._connector.is_poll_now():
-            container_count = param.get("container_count", 1)
-            return alerts[container_count][:container_count]
+            container_count = param.get(
+                "container_count", DEFAULT_CONTAINER_COUNT_FOR_POLL_NOW
+            )
+            return alerts[:container_count]
 
         return alerts
 
@@ -136,15 +139,26 @@ class Code42OnPollConnector:
     def _get_container_label(self):
         return self._connector.get_config().get("ingest", {}).get("container_label")
 
-    def _get_file_events(self, param, observation, alert_details):
+    def _get_file_events(self, param, observations, alert_details):
+        artifact_count = param.get(
+            "artifact_count", DEFAULT_ARTIFACT_COUNT_FOR_POLL_NOW
+        )
+        file_events = []
+        for observation in observations:
+            events = self._get_file_events_for_observation(param, observation, alert_details)
+            for event in events:
+                file_events.append(event)
+                if self._connector.is_poll_now() and len(file_events) >= artifact_count:
+                    break
+            if self._connector.is_poll_now() and len(file_events) >= artifact_count:
+                break
+
+        return file_events
+
+    def _get_file_events_for_observation(self, param, observation, alert_details):
         query = _get_file_event_query(observation, alert_details)
         response = self._client.securitydata.search_file_events(query)
         file_events = response.data.get("fileEvents", [])
-
-        if self._connector.is_poll_now():
-            artifact_count = param.get("container_count", 10)
-            file_events = file_events[:artifact_count]
-
         return file_events
 
     def _save_artifacts_from_file_events(self, container_id, details, file_events):
