@@ -14,132 +14,9 @@ from py42.sdk.queries.fileevents.filters import (
 
 from code42_util import get_thirty_days_ago, build_alerts_query
 
-"""The contents of the module related to mapping Code42 file events to CEF borrow heavily from the code42cli.
-The contents of this module that related to mapping alert observations to file events borrows heavily from the
+"""The contents of this module that related to mapping alert observations to file events borrows heavily from the
 Code42 Cortex XSOAR integration.
 """
-
-
-JSON_TO_CEF_MAP = {
-    "actor": "suser",
-    "cloudDriveId": "aid",
-    "createTimestamp": "fileCreateTime",
-    "deviceUid": "deviceExternalId",
-    "deviceUserName": "suser",
-    "domainName": "dvchost",
-    "emailRecipients": "duser",
-    "emailSender": "suser",
-    "eventId": "externalId",
-    "eventTimestamp": "end",
-    "exposure": "reason",
-    "fileCategory": "fileType",
-    "fileName": "fname",
-    "filePath": "filePath",
-    "fileSize": "fsize",
-    "insertionTimestamp": "rt",
-    "md5Checksum": "fileHash",
-    "modifyTimestamp": "fileModificationTime",
-    "osHostName": "shost",
-    "processName": "sproc",
-    "processOwner": "spriv",
-    "publicIpAddress": "src",
-    "removableMediaBusType": "cs1",
-    "removableMediaCapacity": "cn1",
-    "removableMediaName": "cs3",
-    "removableMediaSerialNumber": "cs4",
-    "removableMediaVendor": "cs2",
-    "sharedWith": "duser",
-    "source": "sourceServiceName",
-    "syncDestination": "destinationServiceName",
-    "tabUrl": "request",
-    "url": "filePath",
-    "userUid": "suid",
-    "windowTitle": "requestClientApplication",
-}
-CEF_CUSTOM_FIELD_NAME_MAP = {
-    "cn1Label": "Code42AEDRemovableMediaCapacity",
-    "cs1Label": "Code42AEDRemovableMediaBusType",
-    "cs2Label": "Code42AEDRemovableMediaVendor",
-    "cs3Label": "Code42AEDRemovableMediaName",
-    "cs4Label": "Code42AEDRemovableMediaSerialNumber",
-}
-FILE_EVENT_TO_SIGNATURE_ID_MAP = {
-    "CREATED": "C42200",
-    "MODIFIED": "C42201",
-    "DELETED": "C42202",
-    "READ_BY_APP": "C42203",
-    "EMAILED": "C42204",
-}
-CEF_TEMPLATE = (
-    "CEF:0|Code42|{productName}|1|{signatureID}|{eventName}|{severity}|{extension}"
-)
-CEF_TIMESTAMP_FIELDS = ["end", "fileCreateTime", "fileModificationTime", "rt"]
-
-
-def _map_event_to_cef(event):
-    kvp_list = {
-        JSON_TO_CEF_MAP[key]: event[key]
-        for key in event
-        if key in JSON_TO_CEF_MAP and (event[key] is not None and event[key] != [])
-    }
-    extension = " ".join(_format_cef_kvp(key, kvp_list[key]) for key in kvp_list)
-    event_name = event.get("eventType", "UNKNOWN")
-    signature_id = FILE_EVENT_TO_SIGNATURE_ID_MAP.get(event_name, "C42000")
-    return extension, event_name, signature_id
-
-
-def _format_cef_kvp(cef_field_key, cef_field_value):
-    if cef_field_key + "Label" in CEF_CUSTOM_FIELD_NAME_MAP:
-        return _format_custom_cef_kvp(cef_field_key, cef_field_value)
-
-    cef_field_value = _handle_nested_json_fields(cef_field_key, cef_field_value)
-    if isinstance(cef_field_value, list):
-        cef_field_value = _convert_list_to_csv(cef_field_value)
-    elif cef_field_key in CEF_TIMESTAMP_FIELDS:
-        cef_field_value = _convert_file_event_timestamp_to_cef_timestamp(
-            cef_field_value
-        )
-    return f"{cef_field_key}={cef_field_value}"
-
-
-def _format_custom_cef_kvp(custom_cef_field_key, custom_cef_field_value):
-    custom_cef_label_key = f"{custom_cef_field_key}Label"
-    custom_cef_label_value = CEF_CUSTOM_FIELD_NAME_MAP[custom_cef_label_key]
-    return (
-        f"{custom_cef_field_key}={custom_cef_field_value} "
-        f"{custom_cef_label_key}={custom_cef_label_value}"
-    )
-
-
-def _handle_nested_json_fields(cef_field_key, cef_field_value):
-    result = []
-    if cef_field_key == "duser":
-        result = [
-            item["cloudUsername"] for item in cef_field_value if type(item) is dict
-        ]
-
-    return result or cef_field_value
-
-
-def _convert_list_to_csv(_list):
-    value = ",".join([val for val in _list])
-    return value
-
-
-def _convert_file_event_timestamp_to_cef_timestamp(timestamp_value):
-    try:
-        _datetime = datetime.strptime(timestamp_value, "%Y-%m-%dT%H:%M:%S.%fZ")
-    except ValueError:
-        _datetime = datetime.strptime(timestamp_value, "%Y-%m-%dT%H:%M:%SZ")
-    value = f"{_datetime_to_ms_since_epoch(_datetime):.0f}"
-    return value
-
-
-def _datetime_to_ms_since_epoch(_datetime):
-    epoch = datetime.utcfromtimestamp(0)
-    total_seconds = (_datetime - epoch).total_seconds()
-    # total_seconds will be in decimals (millisecond precision)
-    return total_seconds * 1000
 
 
 def get_file_category_value(key):
@@ -401,18 +278,9 @@ def _stringify_lists_if_needed(event):
 
 
 def _create_artifact_json(container_id, alert_details, file_event):
-    artifact_json = {
+    return {
         "container_id": container_id,
         "source_data_identifier": alert_details["id"],
         "label": alert_details.get("ruleSource"),
+        "cef": file_event
     }
-    ext, evt, sig_id = _map_event_to_cef(file_event)
-    cef_log = CEF_TEMPLATE.format(
-        productName="Advanced Exfiltration Detection",
-        signatureID=sig_id,
-        eventName=evt,
-        severity="5",
-        extension=ext,
-    )
-    artifact_json["cef"] = cef_log
-    return artifact_json
