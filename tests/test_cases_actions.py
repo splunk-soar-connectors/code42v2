@@ -9,6 +9,7 @@ from py42.exceptions import Py42UpdateClosedCaseError
 
 from py42.response import Py42Response
 from .conftest import (
+    TEST_USER_UID as _TEST_USER_UID,
     assert_success,
     assert_fail,
     assert_fail_message,
@@ -24,7 +25,6 @@ _TEST_DESCRIPTION = "test_description"
 _TEST_SUBJECT = "test@example.com"
 _TEST_ASSIGNEE = "admin@example.com"
 _TEST_FINDINGS = "some findings: ```code here```"
-_TEST_USER_UID = "1234"
 _TEST_EVENT_ID = "0_12345_abcdef"
 
 _TEST_CASE_RESPONSE = {
@@ -47,12 +47,12 @@ _TEST_CASE_RESPONSE = {
 
 
 @fixture
-def mock_py42_with_case(mocker, mock_py42_client):
+def mock_py42_with_case(mocker, mock_py42_with_user):
     mock_cases_response = create_mock_response(mocker, _TEST_CASE_RESPONSE)
-    mock_py42_client.cases.create.return_value = Py42Response(mock_cases_response)
-    mock_py42_client.cases.get.return_value = Py42Response(mock_cases_response)
-    mock_py42_client.cases.update.return_value = Py42Response(mock_cases_response)
-    return mock_py42_client
+    mock_py42_with_user.cases.create.return_value = Py42Response(mock_cases_response)
+    mock_py42_with_user.cases.get.return_value = Py42Response(mock_cases_response)
+    mock_py42_with_user.cases.update.return_value = Py42Response(mock_cases_response)
+    return mock_py42_with_user
 
 
 @fixture
@@ -68,13 +68,8 @@ def mock_py42_with_cases(mocker, mock_py42_client):
 
 class TestCode42CasesConnector(object):
     def test_handle_action_when_creating_case_calls_with_expected_args_and_sets_success_status(
-        self, mocker, mock_py42_with_case
+        self, mock_py42_with_case
     ):
-        mock_user_response = mocker.MagicMock(spec=Response)
-        mock_user_response.text = f'{{"users": [{{"userUid": "{_TEST_USER_UID}"}}]}}'
-        mock_py42_with_case.users.get_by_username.return_value = Py42Response(
-            mock_user_response
-        )
         param = {
             "case_name": _TEST_NAME,
             "description": _TEST_DESCRIPTION,
