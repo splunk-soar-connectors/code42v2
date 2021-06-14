@@ -4,6 +4,10 @@ class BaseConnector:
         self._containers = []
         self._artifacts = []
         self._config = {}
+        self._is_poll_now = False
+
+    def is_poll_now(self):
+        return self._is_poll_now
 
     def add_action_result(self, action_result):
         self._action_results.append(action_result)
