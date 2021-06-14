@@ -17,6 +17,44 @@ Code42 Cortex XSOAR integration.
 """
 
 
+JSON_TO_CEF_MAP = {
+    "actor": "suser",
+    "cloudDriveId": "aid",
+    "createTimestamp": "fileCreateTime",
+    "deviceUid": "deviceExternalId",
+    "deviceUserName": "suser",
+    "domainName": "dvchost",
+    "emailRecipients": "duser",
+    "emailSender": "suser",
+    "eventId": "externalId",
+    "eventTimestamp": "end",
+    "exposure": "reason",
+    "fileCategory": "fileType",
+    "fileName": "fname",
+    "filePath": "filePath",
+    "fileSize": "fsize",
+    "insertionTimestamp": "rt",
+    "md5Checksum": "fileHash",
+    "modifyTimestamp": "fileModificationTime",
+    "osHostName": "shost",
+    "processName": "sproc",
+    "processOwner": "spriv",
+    "publicIpAddress": "src",
+    "removableMediaBusType": "cs1",
+    "removableMediaCapacity": "cn1",
+    "removableMediaName": "cs3",
+    "removableMediaSerialNumber": "cs4",
+    "removableMediaVendor": "cs2",
+    "sharedWith": "duser",
+    "source": "sourceServiceName",
+    "syncDestination": "destinationServiceName",
+    "tabUrl": "request",
+    "url": "filePath",
+    "userUid": "suid",
+    "windowTitle": "requestClientApplication",
+}
+
+
 def get_file_category_value(key):
     # Meant to handle all possible cases
     key = key.lower().replace("-", "").replace("_", "")
@@ -264,6 +302,11 @@ def _create_artifact_json(container_id, alert_details, file_event):
     normalized_event = {
         key: val for key, val in file_event.items() if val not in [[], None, ""]
     }
+    cef = {
+        cef_key: normalized_event[json_key]
+        for json_key, cef_key in JSON_TO_CEF_MAP.items()
+        if json_key in normalized_event
+    }
     file_name = normalized_event.get("fileName", "Unknown file")
     event_type = normalized_event.get("eventType", "Code42 file event")
     artifact_name = f"{file_name} - {event_type}"
@@ -272,6 +315,7 @@ def _create_artifact_json(container_id, alert_details, file_event):
         "container_id": container_id,
         "source_data_identifier": normalized_event["eventId"],
         "label": alert_details.get("ruleSource"),
-        "cef": normalized_event,
+        "cef": cef,
+        "data": normalized_event,
         "start_time": normalized_event["eventTimestamp"],
     }
