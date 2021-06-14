@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import dateutil.parser
 import phantom.app as phantom
 from py42.sdk.queries.fileevents.file_event_query import FileEventQuery
@@ -13,7 +15,7 @@ from py42.sdk.queries.fileevents.filters import (
 from code42_util import get_thirty_days_ago, build_alerts_query
 
 """The contents of this module that related to mapping alert observations to file events borrows heavily from the
-Code42 Cortex XSOAR integration.
+Code42 Cortex XSOAR integration as well as the code42cli python package.
 """
 
 
@@ -53,6 +55,21 @@ JSON_TO_CEF_MAP = {
     "userUid": "suid",
     "windowTitle": "requestClientApplication",
 }
+CEF_CUSTOM_FIELD_NAME_MAP = {
+    "cn1Label": "Code42AEDRemovableMediaCapacity",
+    "cs1Label": "Code42AEDRemovableMediaBusType",
+    "cs2Label": "Code42AEDRemovableMediaVendor",
+    "cs3Label": "Code42AEDRemovableMediaName",
+    "cs4Label": "Code42AEDRemovableMediaSerialNumber",
+}
+FILE_EVENT_TO_SIGNATURE_ID_MAP = {
+    "CREATED": "C42200",
+    "MODIFIED": "C42201",
+    "DELETED": "C42202",
+    "READ_BY_APP": "C42203",
+    "EMAILED": "C42204",
+}
+CEF_TIMESTAMP_FIELDS = ["end", "fileCreateTime", "fileModificationTime", "rt"]
 
 
 def get_file_category_value(key):
@@ -302,12 +319,8 @@ def _create_artifact_json(container_id, alert_details, file_event):
     normalized_event = {
         key: val for key, val in file_event.items() if val not in [[], None, ""]
     }
-    cef = {
-        cef_key: normalized_event[json_key]
-        for json_key, cef_key in JSON_TO_CEF_MAP.items()
-        if json_key in normalized_event
-    }
-    return {
+    cef = _map_event_to_cef(normalized_event)
+    artifact_dict = {
         "name": "Code42 File Event Artifact",
         "container_id": container_id,
         "source_data_identifier": normalized_event["eventId"],
@@ -316,3 +329,80 @@ def _create_artifact_json(container_id, alert_details, file_event):
         "data": normalized_event,
         "start_time": normalized_event.get("eventTimestamp"),
     }
+    return artifact_dict
+
+
+def _map_event_to_cef(normalized_event):
+    cef_dict = {}
+    init_cef_dict = _init_cef_dict(normalized_event)
+    sub_cef_dict_list = [
+        _format_cef_kvp(key, value) for key, value in init_cef_dict.items()
+    ]
+    for sub_dict in sub_cef_dict_list:
+        cef_dict = {**cef_dict, **sub_dict}
+
+    event_name = normalized_event.get("eventType", "UNKNOWN")
+    cef_dict["signatureId"] = FILE_EVENT_TO_SIGNATURE_ID_MAP.get(event_name, "C42000")
+    cef_dict["eventName"] = event_name
+    return cef_dict
+
+
+def _init_cef_dict(normalized_event):
+    return {
+        cef_key: normalized_event[json_key]
+        for json_key, cef_key in JSON_TO_CEF_MAP.items()
+        if json_key in normalized_event
+    }
+
+
+def _format_cef_kvp(cef_field_key, cef_field_value):
+    if cef_field_key + "Label" in CEF_CUSTOM_FIELD_NAME_MAP:
+        return _format_custom_cef_kvp(cef_field_key, cef_field_value)
+
+    cef_field_value = _handle_nested_json_fields(cef_field_key, cef_field_value)
+    if isinstance(cef_field_value, list):
+        cef_field_value = _convert_list_to_csv(cef_field_value)
+    elif cef_field_key in CEF_TIMESTAMP_FIELDS:
+        cef_field_value = convert_file_event_timestamp_to_cef_timestamp(cef_field_value)
+
+    return {cef_field_key: cef_field_value}
+
+
+def _format_custom_cef_kvp(custom_cef_field_key, custom_cef_field_value):
+    custom_cef_label_key = f"{custom_cef_field_key}Label"
+    custom_cef_label_value = CEF_CUSTOM_FIELD_NAME_MAP[custom_cef_label_key]
+    return {
+        custom_cef_field_key: custom_cef_field_value,
+        custom_cef_label_key: custom_cef_label_value,
+    }
+
+
+def _handle_nested_json_fields(cef_field_key, cef_field_value):
+    result = []
+    if cef_field_key == "duser":
+        result = [
+            item["cloudUsername"] for item in cef_field_value if type(item) is dict
+        ]
+
+    return result or cef_field_value
+
+
+def _convert_list_to_csv(_list):
+    value = ",".join([val for val in _list])
+    return value
+
+
+def convert_file_event_timestamp_to_cef_timestamp(timestamp_value):
+    try:
+        _datetime = datetime.strptime(timestamp_value, "%Y-%m-%dT%H:%M:%S.%fZ")
+    except ValueError:
+        _datetime = datetime.strptime(timestamp_value, "%Y-%m-%dT%H:%M:%SZ")
+    value = f"{_datetime_to_ms_since_epoch(_datetime):.0f}"
+    return value
+
+
+def _datetime_to_ms_since_epoch(_datetime):
+    epoch = datetime.utcfromtimestamp(0)
+    total_seconds = (_datetime - epoch).total_seconds()
+    # total_seconds will be in decimals (millisecond precision)
+    return total_seconds * 1000
