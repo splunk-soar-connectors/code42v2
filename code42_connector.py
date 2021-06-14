@@ -6,14 +6,13 @@ import json
 # Phantom App imports
 import phantom.app as phantom
 import phantom.utils as utils
-
-# Phantom App imports
 import py42.sdk
 import requests
 from phantom.action_result import ActionResult
 from phantom.base_connector import BaseConnector
 from phantom.vault import Vault
 from py42.exceptions import Py42NotFoundError
+from py42.exceptions import Py42UpdateClosedCaseError
 from py42.sdk.queries.fileevents.file_event_query import FileEventQuery
 from py42.sdk.queries.fileevents.filters import (
     EventTimestamp,
@@ -404,6 +403,97 @@ class Code42Connector(BaseConnector):
         self._client.legalhold.remove_from_matter(legal_hold_membership_id)
         action_result.add_data({"userId": user_id})
         status_message = f"{username} was removed from legal hold matter {matter_id}."
+        return action_result.set_status(phantom.APP_SUCCESS, status_message)
+
+    @action_handler_for("create_case")
+    def _handle_create_case(self, param, action_result):
+        name = param["case_name"]
+        description = param.get("description")
+        subject = param.get("subject")
+        if subject is not None:
+            subject = self._get_user_id(subject)
+        assignee = param.get("assignee")
+        if assignee is not None:
+            assignee = self._get_user_id(assignee)
+        findings = param.get("findings")
+        response = self._client.cases.create(
+            name,
+            description=description,
+            subject=subject,
+            assignee=assignee,
+            findings=findings,
+        )
+        case_number = response["number"]
+        action_result.add_data(response.data)
+        status_message = f"Case successfully created with case_id: {case_number}"
+        action_result.update_summary({"case_number": case_number})
+        return action_result.set_status(phantom.APP_SUCCESS, status_message)
+
+    @action_handler_for("update_case")
+    def _handle_update_case(self, param, action_result):
+        case_number = param["case_number"]
+        name = param.get("case_name")
+        subject = param.get("subject")
+        if subject is not None:
+            subject = self._get_user_id(subject)
+        assignee = param.get("assignee")
+        if assignee is not None:
+            assignee = self._get_user_id(assignee)
+        description = param.get("description")
+        findings = param.get("findings")
+        response = self._client.cases.update(
+            case_number,
+            name=name,
+            subject=subject,
+            assignee=assignee,
+            description=description,
+            findings=findings,
+        )
+        status_message = f"Case number {case_number} successfully updated"
+        action_result.add_data(response.data)
+        action_result.update_summary({"case_number": case_number})
+        return action_result.set_status(phantom.APP_SUCCESS, status_message)
+
+    @action_handler_for("close_case")
+    def _handle_close_case(self, param, action_result):
+        case_number = param["case_number"]
+        try:
+            response = self._client.cases.update(case_number, status="CLOSED")
+            status_message = f"Case number {case_number} successfully closed"
+        except Py42UpdateClosedCaseError:
+            response = self._client.cases.get(case_number)
+            status_message = f"Case number {case_number} already closed!"
+        action_result.add_data(response.data)
+        action_result.update_summary({"case_number": case_number})
+        return action_result.set_status(phantom.APP_SUCCESS, status_message)
+
+    @action_handler_for("list_cases")
+    def _handle_list_cases(self, param, action_result):
+        status = param["status"]
+        if status == "ALL":
+            status = None
+        assignee = param.get("assignee")
+        subject = param.get("subject")
+        results_generator = self._client.cases.get_all(
+            status=status, assignee=assignee, subject=subject
+        )
+        page = None
+        for page in results_generator:
+            cases = page.data.get("cases", [])
+            for case in cases:
+                action_result.add_data(case)
+
+        total_count = page.data.get("totalCount", 0) if page else None
+        action_result.update_summary({"total_count": total_count})
+        return action_result.set_status(phantom.APP_SUCCESS)
+
+    @action_handler_for("add_case_event")
+    def _handle_add_case_event(self, param, action_result):
+        case_number = param["case_number"]
+        event_id = param["event_id"]
+        self._client.cases.file_events.add(case_number=case_number, event_id=event_id)
+        status_message = f"Event {event_id} added to case number {case_number}"
+        action_result.update_summary({"case_number": case_number, "event_id": event_id})
         return action_result.set_status(phantom.APP_SUCCESS, status_message)
 
     """ FILE EVENT ACTIONS """
