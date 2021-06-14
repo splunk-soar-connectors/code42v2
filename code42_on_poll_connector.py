@@ -39,7 +39,6 @@ def get_file_category_value(key):
 
 class Code42OnPollConnector:
     def __init__(self, connector, client, state):
-        super(Code42OnPollConnector, self).__init__()
         self._connector = connector
         self._client = client
         self._state = state or {}
