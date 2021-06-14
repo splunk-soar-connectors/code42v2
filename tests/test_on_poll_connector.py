@@ -6,6 +6,7 @@ from pytest import fixture
 from tests.conftest import (
     assert_artifacts_added,
     assert_container_added,
+    assert_state_saved,
     assert_success,
     attach_client,
     create_fake_connector,
@@ -611,3 +612,24 @@ class TestCode42OnPollConnector(object):
         expected_date = datetime.now(timezone.utc) - timedelta(days=30)
         assert abs((actual_date - expected_date)).seconds < 1
         assert_success(connector)
+
+    def test_on_poll_saves_state_with_last_alert_created_at(
+        self, mocker, mock_py42_for_alert_polling
+    ):
+        test_last_timestamp = "TEST TIMESTAMP"
+
+        def get_alert_details(alert_id, *args, **kwargs):
+            if alert_id != MOCK_SEARCH_ALERTS_LIST_RESPONSE["alerts"][-1]["id"]:
+                return create_mock_response(mocker, MOCK_ALERT_DETAIL_RESPONSE)
+
+            response_dict = {"alerts": [{"id": 0, "createdAt": test_last_timestamp}]}
+            return create_mock_response(mocker, response_dict)
+
+        mock_py42_for_alert_polling.alerts.get_details.side_effect = get_alert_details
+        connector = _create_on_poll_connector(mock_py42_for_alert_polling)
+        connector._is_poll_now = False
+        connector._state = {"last_time": None}
+        param = {"container_count": 1, "artifact_count": 1}
+        connector.handle_action(param)
+        expected_state = {"last_time": test_last_timestamp}
+        assert_state_saved(connector, expected_state)

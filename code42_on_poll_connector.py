@@ -103,12 +103,18 @@ class Code42OnPollConnector:
         param = self._adjust_date_parameters(param)
         query = build_alerts_query(param["start_date"], param.get("end_date"))
         alerts = self._get_alerts(param, query)
+        details = {}
         for alert in alerts:
             details = self._get_alert_details(alert["id"])
             container_id = self._init_container(details)
             observations = details.get("observations", [])
             file_events = self._get_file_events(param, observations, details)
             self._save_artifacts_from_file_events(container_id, details, file_events)
+
+        # Save last time of last alert for future polling
+        if not self._connector.is_poll_now() and details.get("createdAt"):
+            self._state["last_time"] = details["createdAt"]
+            self._connector.save_state(self._state)
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
@@ -185,10 +191,10 @@ class Code42OnPollConnector:
 
 def _create_container(alert, container_label):
     return {
-        "name": alert["name"],
+        "name": alert.get("name"),
         "data": alert,
-        "severity": alert["severity"],
-        "description": alert["description"],
+        "severity": alert.get("severity"),
+        "description": alert.get("description"),
         "source_data_identifier": alert["id"],
         "label": container_label,
     }

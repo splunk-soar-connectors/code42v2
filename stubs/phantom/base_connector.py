@@ -5,6 +5,7 @@ class BaseConnector:
         self._artifacts = []
         self._config = {}
         self._is_poll_now = False
+        self._state = {}
 
     def is_poll_now(self):
         return self._is_poll_now
@@ -35,7 +36,12 @@ class BaseConnector:
         return self._config
 
     def save_state(self, state):
-        pass
+        if not state:
+            return
+        if not self._state:
+            self._state = {**state}
+        else:
+            self._state = {**state, **self._state}
 
     def save_container(self, container):
         self._containers.append(container)

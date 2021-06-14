@@ -579,7 +579,14 @@ def assert_container_added(connector, expected_containers):
 def assert_artifacts_added(connector, expected_artifacts):
     action_results = connector.get_action_results()
     assert len(action_results) == 1
-    assert len(expected_artifacts) == len(connector._artifacts)
     assert connector._artifacts == expected_artifacts
+    status = action_results[0].get_status()
+    assert status == phantom.app.APP_SUCCESS
+
+
+def assert_state_saved(connector, expected_state):
+    action_results = connector.get_action_results()
+    assert len(action_results) == 1
+    assert connector._state == expected_state
     status = action_results[0].get_status()
     assert status == phantom.app.APP_SUCCESS
