@@ -513,9 +513,12 @@ def _create_expected_container(expected_alert):
 
 
 @fixture
-def mock_py42_for_searching(mocker, mock_py42_client):
+def mock_py42_for_alert_polling(mocker, mock_py42_client):
     mock_py42_client.alerts.search.return_value = create_mock_response(
         mocker, MOCK_SEARCH_ALERTS_LIST_RESPONSE
+    )
+    mock_py42_client.alerts.get_details.return_value = create_mock_response(
+        mocker, MOCK_ALERT_DETAIL_RESPONSE
     )
     smaller_file_event_response = dict(MOCK_SECURITY_EVENT_RESPONSE)
     smaller_file_event_response["totalCount"] = 1
@@ -526,15 +529,6 @@ def mock_py42_for_searching(mocker, mock_py42_client):
         mocker, smaller_file_event_response
     )
     return mock_py42_client
-
-
-@fixture
-def mock_py42_for_alert_polling(mocker, mock_py42_for_searching):
-    mock_py42_for_searching.alerts.get_details.return_value = create_mock_response(
-        mocker, MOCK_ALERT_DETAIL_RESPONSE
-    )
-    return mock_py42_for_searching
-
 
 
 class TestCode42OnPollConnector(object):
@@ -698,55 +692,39 @@ class TestCode42OnPollConnector(object):
         assert actual["groups"][3]["filters"][2]["value"] == "SharedViaLink"
         assert_success(connector)
 
-    def test_on_poll_when_observation_has_is_public_makes_expected_query(
-        self, mock_py42_for_alert_polling
-    ):
-        alert_details_response = dict(MOCK_ALERT_DETAIL_RESPONSE)
-        alert_details_response["alerts"][0]["observations"][0]["type"] = 0
-
-
     def test_on_poll_makes_expected_file_event_actor_query(
-        self, mocker, mock_py42_for_searching
+        self, mocker, mock_py42_for_alert_polling
     ):
-        alert_details_response = dict(MOCK_ALERT_DETAIL_RESPONSE)
-        cloud_observation = alert_details_response["alerts"][0]["observations"][1]
-        alert_details_response["alerts"][0]["observations"] = [cloud_observation]
-        mock_py42_for_searching.alerts.get_details.return_value = create_mock_response(
-            mocker, alert_details_response
-        )
-        connector = _create_on_poll_connector(mock_py42_for_searching)
+        connector = _create_on_poll_connector(mock_py42_for_alert_polling)
         param = {"container_count": 1, "artifact_count": 1}
         connector.handle_action(param)
         call_args = (
-            mock_py42_for_searching.securitydata.search_file_events.call_args
+            mock_py42_for_alert_polling.securitydata.search_file_events.call_args_list
         )
 
-        actual = json.loads(str(call_args[0][0]))
-        assert len(actual["groups"][0]["filters"]) == 1
+        # Corresponds to FedCloudSharePermissions observation type
+        actual = json.loads(str(call_args[1][0][0]))
+
         assert actual["groups"][0]["filters"][0]["operator"] == "IS"
         assert actual["groups"][0]["filters"][0]["term"] == "actor"
         assert actual["groups"][0]["filters"][0]["value"] == "cool.guy@code42.com"
         assert_success(connector)
 
-    def test_on_poll_when_endpoint_observation_makes_expected_file_event_device_username_query(
-        self, mocker, mock_py42_for_searching
+    def test_on_poll_makes_expected_file_event_device_user_name_query(
+        self, mocker, mock_py42_for_alert_polling
     ):
-        alert_details_response = dict(MOCK_ALERT_DETAIL_RESPONSE)
-        endpoint_observation = alert_details_response["alerts"][0]["observations"][1]
-        alert_details_response["alerts"][0]["observations"] = [endpoint_observation]
-        mock_py42_for_searching.alerts.get_details.return_value = create_mock_response(
-            mocker, alert_details_response
-        )
-        connector = _create_on_poll_connector(mock_py42_for_searching)
+        connector = _create_on_poll_connector(mock_py42_for_alert_polling)
         param = {"container_count": 1, "artifact_count": 1}
         connector.handle_action(param)
         call_args = (
-            mock_py42_for_searching.securitydata.search_file_events.call_args
+            mock_py42_for_alert_polling.securitydata.search_file_events.call_args_list
         )
 
-        actual = json.loads(str(call_args[0][0]))
+        # Corresponds to FedEndpointExfiltration observation type
+        actual = json.loads(str(call_args[0][0][0]))
+
         assert len(actual["groups"][0]["filters"]) == 1
         assert actual["groups"][0]["filters"][0]["operator"] == "IS"
-        assert actual["groups"][0]["filters"][0]["term"] == "actor"
+        assert actual["groups"][0]["filters"][0]["term"] == "deviceUserName"
         assert actual["groups"][0]["filters"][0]["value"] == "cool.guy@code42.com"
         assert_success(connector)
