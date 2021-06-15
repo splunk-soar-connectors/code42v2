@@ -2,6 +2,7 @@ from unittest import mock
 
 from py42.exceptions import Py42NotFoundError
 from pytest import fixture
+
 from tests.conftest import (
     assert_success,
     create_fake_connector,

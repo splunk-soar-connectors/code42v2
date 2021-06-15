@@ -2,7 +2,6 @@ from datetime import datetime
 
 import dateutil.parser
 import phantom.app as phantom
-from code42_util import get_thirty_days_ago, build_alerts_query
 from py42.sdk.queries.fileevents.file_event_query import FileEventQuery
 from py42.sdk.queries.fileevents.filters import (
     ExposureType,
@@ -12,6 +11,8 @@ from py42.sdk.queries.fileevents.filters import (
     EventType,
     FileCategory,
 )
+
+from code42_util import get_thirty_days_ago, build_alerts_query
 
 """The contents of this module that related to mapping alert observations to file events borrows heavily from the
 Code42 Cortex XSOAR integration as well as the code42cli python package.
@@ -35,7 +36,7 @@ JSON_TO_CEF_MAP = {
     "filePath": "filePath",
     "fileSize": "fsize",
     "insertionTimestamp": "rt",
-    "md5Checksum": "fileHash",
+    "md5Checksum": "fileHashMd5",
     "modifyTimestamp": "fileModificationTime",
     "osHostName": "shost",
     "processName": "sproc",

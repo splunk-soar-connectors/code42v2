@@ -1,8 +1,9 @@
 from unittest import mock
 
-from code42_connector import Code42Connector
 from py42.exceptions import Py42UnauthorizedError
 from pytest import fixture
+
+from code42_connector import Code42Connector
 from tests.conftest import assert_fail, create_fake_connector, assert_success
 
 

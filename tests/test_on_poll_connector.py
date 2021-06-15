@@ -1,9 +1,9 @@
 import json
 from datetime import datetime, timedelta, timezone
 
-import py42.sdk
 import dateutil.parser
 from pytest import fixture
+
 from tests.conftest import (
     assert_artifacts_added,
     assert_container_added,
@@ -26,7 +26,7 @@ EXPECTED_ARTIFACTS = expected = [
             "eventName": "READ_BY_APP",
             "externalId": "0_1d71796f-af5b-4231-9d8e-df6434da4663_935873453596901068_956171635867906205_5",
             "fileCreateTime": "1590669814902",
-            "fileHash": "9cea266b4e07974df1982ae3b9de92ce",
+            "fileHashMd5": "9cea266b4e07974df1982ae3b9de92ce",
             "fileModificationTime": "1590669815105",
             "filePath": "C:/Users/QA/Downloads/",
             "fileType": "IMAGE",
@@ -105,7 +105,7 @@ EXPECTED_ARTIFACTS = expected = [
             "eventName": "READ_BY_APP",
             "externalId": "0_1d71796f-af5b-4231-9d8e-df6434da4663_935873453596901068_956171635867906205_5",
             "fileCreateTime": "1590669814902",
-            "fileHash": "9cea266b4e07974df1982ae3b9de92ce",
+            "fileHashMd5": "9cea266b4e07974df1982ae3b9de92ce",
             "fileModificationTime": "1590669815105",
             "filePath": "C:/Users/QA/Downloads/",
             "fileType": "IMAGE",
@@ -184,7 +184,7 @@ EXPECTED_ARTIFACTS = expected = [
             "eventName": "READ_BY_APP",
             "externalId": "0_1d71796f-af5b-4231-9d8e-df6434da4663_935873453596901068_956171635867906205_5",
             "fileCreateTime": "1590669814902",
-            "fileHash": "9cea266b4e07974df1982ae3b9de92ce",
+            "fileHashMd5": "9cea266b4e07974df1982ae3b9de92ce",
             "fileModificationTime": "1590669815105",
             "filePath": "C:/Users/QA/Downloads/",
             "fileType": "IMAGE",
@@ -263,7 +263,7 @@ EXPECTED_ARTIFACTS = expected = [
             "eventName": "READ_BY_APP",
             "externalId": "0_1d71796f-af5b-4231-9d8e-df6434da4663_935873453596901068_956171635867906205_5",
             "fileCreateTime": "1590669814902",
-            "fileHash": "9cea266b4e07974df1982ae3b9de92ce",
+            "fileHashMd5": "9cea266b4e07974df1982ae3b9de92ce",
             "fileModificationTime": "1590669815105",
             "filePath": "C:/Users/QA/Downloads/",
             "fileType": "IMAGE",
@@ -342,7 +342,7 @@ EXPECTED_ARTIFACTS = expected = [
             "eventName": "READ_BY_APP",
             "externalId": "0_1d71796f-af5b-4231-9d8e-df6434da4663_935873453596901068_956171635867906205_5",
             "fileCreateTime": "1590669814902",
-            "fileHash": "9cea266b4e07974df1982ae3b9de92ce",
+            "fileHashMd5": "9cea266b4e07974df1982ae3b9de92ce",
             "fileModificationTime": "1590669815105",
             "filePath": "C:/Users/QA/Downloads/",
             "fileType": "IMAGE",
@@ -421,7 +421,7 @@ EXPECTED_ARTIFACTS = expected = [
             "eventName": "READ_BY_APP",
             "externalId": "0_1d71796f-af5b-4231-9d8e-df6434da4663_935873453596901068_956171635867906205_5",
             "fileCreateTime": "1590669814902",
-            "fileHash": "9cea266b4e07974df1982ae3b9de92ce",
+            "fileHashMd5": "9cea266b4e07974df1982ae3b9de92ce",
             "fileModificationTime": "1590669815105",
             "filePath": "C:/Users/QA/Downloads/",
             "fileType": "IMAGE",

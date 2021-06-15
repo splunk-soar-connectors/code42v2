@@ -8,8 +8,6 @@ import phantom.app as phantom
 import phantom.utils as utils
 import py42.sdk
 import requests
-from code42_on_poll_connector import Code42OnPollConnector
-from code42_util import build_alerts_query, build_date_range_filter
 from phantom.action_result import ActionResult
 from phantom.base_connector import BaseConnector
 from phantom.vault import Vault
@@ -34,6 +32,9 @@ from py42.sdk.queries.fileevents.filters.exposure_filter import ExposureType
 from py42.sdk.queries.fileevents.filters.file_filter import FileName, FilePath
 from py42.services.detectionlists.departing_employee import DepartingEmployeeFilters
 from py42.services.detectionlists.high_risk_employee import HighRiskEmployeeFilters
+
+from code42_on_poll_connector import Code42OnPollConnector
+from code42_util import build_alerts_query, build_date_range_filter
 
 
 class RetVal(tuple):
