@@ -38,10 +38,10 @@ class BaseConnector:
     def save_state(self, state):
         if not state:
             return
-        if not self._state:
-            self._state = {**state}
-        else:
-            self._state = {**state, **self._state}
+        if self._state is None:
+            self._state = {}
+        self._state.update(state)
+        return self._state
 
     def save_container(self, container):
         self._containers.append(container)
