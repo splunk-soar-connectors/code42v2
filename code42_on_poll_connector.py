@@ -368,7 +368,7 @@ def _map_event_to_cef(normalized_event):
         _format_cef_kvp(key, value) for key, value in init_cef_dict.items()
     ]
     for sub_dict in sub_cef_dict_list:
-        cef_dict = {**cef_dict, **sub_dict}
+        cef_dict.update(sub_dict)
 
     event_name = normalized_event.get("eventType", "UNKNOWN")
     cef_dict["signatureId"] = FILE_EVENT_TO_SIGNATURE_ID_MAP.get(event_name, "C42000")
