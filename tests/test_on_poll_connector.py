@@ -653,3 +653,47 @@ class TestCode42OnPollConnector(object):
         connector.handle_action(param)
         assert not connector._state
         assert_success(connector)
+
+    def test_on_poll_makes_expected_file_event_query(self, mock_py42_for_alert_polling):
+        connector = _create_on_poll_connector(mock_py42_for_alert_polling)
+        param = {"container_count": 1, "artifact_count": 1}
+        connector.handle_action(param)
+        call_args = (
+            mock_py42_for_alert_polling.securitydata.search_file_events.call_args
+        )
+        actual = json.loads(str(call_args[0][0]))
+        assert actual["groupClause"] == "AND"
+        assert len(actual["groups"]) == 4
+        assert actual["groups"][0]["filterClause"] == "AND"
+        assert len(actual["groups"][0]["filters"]) == 1
+
+        # Verify Actor filter
+        assert actual["groups"][0]["filters"][0]["operator"] == "IS"
+        assert actual["groups"][0]["filters"][0]["term"] == "actor"
+        assert actual["groups"][0]["filters"][0]["value"] == "cool.guy@code42.com"
+
+        # Verify start timestamp (tested more thoroughly elsewhere)
+        assert len(actual["groups"][1]["filters"]) == 1
+        assert actual["groups"][1]["filters"][0]["operator"] == "ON_OR_AFTER"
+        assert actual["groups"][1]["filters"][0]["term"] == "eventTimestamp"
+
+        # Verify end timestamp (tested more thoroughly elsewhere)
+        assert len(actual["groups"][2]["filters"]) == 1
+        assert actual["groups"][2]["filters"][0]["operator"] == "ON_OR_BEFORE"
+        assert actual["groups"][2]["filters"][0]["term"] == "eventTimestamp"
+
+        # Verify exposure filters
+        # If there was no exposure-related observation, it will search for all
+        # unsupport exposures by excluding these.
+        assert len(actual["groups"][3]["filters"]) == 3
+        assert actual["groups"][3]["filters"][0]["operator"] == "IS_NOT"
+        assert actual["groups"][3]["filters"][0]["term"] == "exposure"
+        assert actual["groups"][3]["filters"][0]["value"] == "IsPublic"
+        assert actual["groups"][3]["filters"][1]["operator"] == "IS_NOT"
+        assert actual["groups"][3]["filters"][1]["term"] == "exposure"
+        assert actual["groups"][3]["filters"][1]["value"] == "OutsideTrustedDomains"
+        assert actual["groups"][3]["filters"][2]["operator"] == "IS_NOT"
+        assert actual["groups"][3]["filters"][2]["term"] == "exposure"
+        assert actual["groups"][3]["filters"][2]["value"] == "SharedViaLink"
+
+        assert_success(connector)

@@ -309,8 +309,11 @@ class ObservationToSecurityQueryMapper(object):
                 return FileCategory.is_in(categories)
 
 
-class Code42SearchFilters(object):
-    def __init__(self):
+class FileEventQueryFilters:
+    """Class for simplifying building up a file event search query"""
+
+    def __init__(self, pg_size=None):
+        self._pg_size = pg_size
         self._filters = []
 
     @property
@@ -318,7 +321,11 @@ class Code42SearchFilters(object):
         return self._filters
 
     def to_all_query(self):
-        """Override"""
+        """Convert list of search criteria to *args"""
+        query = FileEventQuery.all(*self._filters)
+        if self._pg_size:
+            query.page_size = self._pg_size
+        return query
 
     def append(self, _filter):
         if _filter:
@@ -334,21 +341,6 @@ class Code42SearchFilters(object):
             return
         _filter = create_filter(value)
         self.append(_filter)
-
-
-class FileEventQueryFilters(Code42SearchFilters):
-    """Class for simplifying building up a file event search query"""
-
-    def __init__(self, pg_size=None):
-        self._pg_size = pg_size
-        super(FileEventQueryFilters, self).__init__()
-
-    def to_all_query(self):
-        """Convert list of search criteria to *args"""
-        query = FileEventQuery.all(*self._filters)
-        if self._pg_size:
-            query.page_size = self._pg_size
-        return query
 
 
 def _create_artifact_json(container_id, alert_details, file_event):
