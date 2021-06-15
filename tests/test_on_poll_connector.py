@@ -677,9 +677,12 @@ class TestCode42OnPollConnector(object):
         param = {"container_count": 1, "artifact_count": 1}
         connector.handle_action(param)
         call_args = (
-            mock_py42_for_alert_polling.securitydata.search_file_events.call_args
+            mock_py42_for_alert_polling.securitydata.search_file_events.call_args_list
         )
-        actual = json.loads(str(call_args[0][0]))
+
+        # Corresponds to unsupported exposure type observation
+        actual = json.loads(str(call_args[5][0][0]))
+
         assert len(actual["groups"][3]["filters"]) == 3
         assert actual["groups"][3]["filters"][0]["operator"] == "IS_NOT"
         assert actual["groups"][3]["filters"][0]["term"] == "exposure"
@@ -690,6 +693,44 @@ class TestCode42OnPollConnector(object):
         assert actual["groups"][3]["filters"][2]["operator"] == "IS_NOT"
         assert actual["groups"][3]["filters"][2]["term"] == "exposure"
         assert actual["groups"][3]["filters"][2]["value"] == "SharedViaLink"
+        assert_success(connector)
+
+    def test_on_poll_when_is_exfiltration_searches_for_event_type(
+        self, mock_py42_for_alert_polling
+    ):
+        connector = _create_on_poll_connector(mock_py42_for_alert_polling)
+        param = {"container_count": 1, "artifact_count": 1}
+        connector.handle_action(param)
+        call_args = (
+            mock_py42_for_alert_polling.securitydata.search_file_events.call_args_list
+        )
+
+        # Corresponds to unsupported exposure type observation
+        actual = json.loads(str(call_args[0][0][0]))
+
+        assert len(actual["groups"][3]["filters"]) == 3
+        assert actual["groups"][3]["filters"][0]["operator"] == "IS"
+        assert actual["groups"][3]["filters"][0]["term"] == "eventType"
+        assert actual["groups"][3]["filters"][0]["value"] == "CREATED"
+        assert_success(connector)
+
+    def test_on_poll_when_is_outside_trusted_domains_searches_for_outside_trusted_domains_exposure(
+        self, mock_py42_for_alert_polling
+    ):
+        connector = _create_on_poll_connector(mock_py42_for_alert_polling)
+        param = {"container_count": 1, "artifact_count": 1}
+        connector.handle_action(param)
+        call_args = (
+            mock_py42_for_alert_polling.securitydata.search_file_events.call_args_list
+        )
+
+        # Corresponds to outside-trusted-domains type observation
+        actual = json.loads(str(call_args[4][0][0]))
+
+        assert len(actual["groups"][3]["filters"]) == 1
+        assert actual["groups"][3]["filters"][0]["operator"] == "IS"
+        assert actual["groups"][3]["filters"][0]["term"] == "exposure"
+        assert actual["groups"][3]["filters"][0]["value"] == "OutsideTrustedDomains"
         assert_success(connector)
 
     def test_on_poll_makes_expected_file_event_actor_query(
