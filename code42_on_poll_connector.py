@@ -260,7 +260,8 @@ class ObservationToSecurityQueryMapper(object):
         exposure_types = self._observation_data.get("exposureTypes")
         first_activity = self._observation_data.get("firstActivityAt")
         last_activity = self._observation_data.get("lastActivityAt")
-        filters.append(self._create_user_filter())
+        user_filter = self._create_user_filter()
+        filters.append(user_filter)
         if first_activity:
             begin_time = dateutil.parser.parse(first_activity)
             if begin_time:

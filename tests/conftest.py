@@ -446,7 +446,7 @@ MOCK_SECURITY_EVENT_RESPONSE = {
 }
 
 
-@fixture(autouse=True)
+@fixture
 def mock_py42_client(mocker):
     client = mocker.MagicMock(spec=py42.sdk.SDKClient)
     client.users = mocker.MagicMock(spec=UserService)
