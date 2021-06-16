@@ -5,7 +5,6 @@
 .vscode
 .idea
 .DS_Store
-test_connector.py
 stubs
 __pycache__
 setup.py
@@ -20,3 +19,4 @@ venv
 build-scripts
 .compile_app.ignore
 .pre-commit-config.yaml
+playbooks
