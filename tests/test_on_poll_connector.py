@@ -705,7 +705,7 @@ class TestCode42OnPollConnector(object):
             mock_py42_for_alert_polling.securitydata.search_file_events.call_args_list
         )
 
-        # Corresponds to unsupported exposure type observation
+        # Corresponds to exfiltration based observation
         actual = json.loads(str(call_args[0][0][0]))
 
         assert len(actual["groups"][3]["filters"]) == 3
