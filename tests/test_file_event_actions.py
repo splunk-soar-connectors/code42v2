@@ -1,7 +1,7 @@
 import json
 from datetime import datetime, timedelta, timezone
-import dateutil
 
+import dateutil
 from py42.response import Py42Response
 
 from tests.conftest import (
@@ -13,256 +13,12 @@ from tests.conftest import (
     assert_fail,
     assert_successful_params,
     assert_successful_summary,
+    MOCK_SECURITY_EVENT_RESPONSE,
 )
 
 TEST_MD5 = "b6312dbe4aa4212da94523ccb28c5c16"
 TEST_SHA256 = "41966f10cc59ab466444add08974fde4cd37f88d79321d42da8e4c79b51c2149"
 TEST_FILENAME = "test-filename"
-
-MOCK_SECURITY_EVENT_RESPONSE = """
-{
-    "totalCount":3,
-    "fileEvents":[
-        {
-            "eventId":"0_1d71796f-af5b-4231-9d8e-df6434da4663_935873453596901068_956171635867906205_5",
-            "eventType":"READ_BY_APP",
-            "eventTimestamp":"2020-05-28T12:46:39.838Z",
-            "insertionTimestamp":"2020-05-28T12:51:50.040Z",
-            "fieldErrors":[],
-            "filePath":"C:/Users/QA/Downloads/",
-            "fileName":"company_secrets.txt",
-            "fileType":"FILE",
-            "fileCategory":"IMAGE",
-            "fileCategoryByBytes":"Image",
-            "fileCategoryByExtension":"Image",
-            "fileSize":265122,
-            "fileOwner":"Test",
-            "md5Checksum":"9cea266b4e07974df1982ae3b9de92ce",
-            "sha256Checksum":"34d0c9fc9c907ec374cf7e8ca1ff8a172e36eccee687f0a9b69dd169debb81e1",
-            "createTimestamp":"2020-05-28T12:43:34.902Z",
-            "modifyTimestamp":"2020-05-28T12:43:35.105Z",
-            "deviceUserName":"test@example.com",
-            "osHostName":"HOSTNAME",
-            "domainName":"host.docker.internal",
-            "publicIpAddress":"255.255.255.255",
-            "privateIpAddresses":["255.255.255.255","127.0.0.1"],
-            "deviceUid":"935873453596901068",
-            "userUid":"912098363086307495",
-            "actor":null,
-            "directoryId":[],
-            "source":"Endpoint",
-            "url":null,
-            "shared":null,
-            "sharedWith":[],
-            "sharingTypeAdded":[],
-            "cloudDriveId":null,
-            "detectionSourceAlias":null,
-            "fileId":null,
-            "exposure":["ApplicationRead"],
-            "processOwner":"QA",
-            "processName":"chrome.exe",
-            "windowTitle":["Jira"],
-            "tabUrl":"example.com",
-            "removableMediaVendor":null,
-            "removableMediaName":null,
-            "removableMediaSerialNumber":null,
-            "removableMediaCapacity":null,
-            "removableMediaBusType":null,
-            "removableMediaMediaName":null,
-            "removableMediaVolumeName":[],
-            "removableMediaPartitionId":[],
-            "syncDestination":null,
-            "emailDlpPolicyNames":null,
-            "emailSubject":null,
-            "emailSender":null,
-            "emailFrom":null,
-            "emailRecipients":null,
-            "outsideActiveHours":false,
-            "mimeTypeByBytes":"image/png",
-            "mimeTypeByExtension":"image/png",
-            "mimeTypeMismatch":false,
-            "printJobName":null,
-            "printerName":null,
-            "printedFilesBackupPath":null,
-            "remoteActivity":"UNKNOWN",
-            "trusted":false,
-            "operatingSystemUser": "IEUser",
-            "destinationCategory": "Cloud Storage",
-            "destinationName": "Google Drive",
-            "riskScore": 5,
-            "riskSeverity": "HIGH",
-            "riskIndicators": [
-                {
-                "name": "Google Drive upload",
-                "weight": 5
-                },
-                {
-                "name": "Spreadsheet",
-                "weight": 0
-                }
-            ]
-        },
-        {
-            "eventId":"0_1d71796f-af5b-4231-9d8e-df6434da4663_935873453596901068_956171635867906205_5",
-            "eventType":"READ_BY_APP",
-            "eventTimestamp":"2020-05-28T12:46:39.838Z",
-            "insertionTimestamp":"2020-05-28T12:51:50.040Z",
-            "fieldErrors":[],
-            "filePath":"C:/Users/QA/Downloads/",
-            "fileName":"data.jpg",
-            "fileType":"FILE",
-            "fileCategory":"IMAGE",
-            "fileCategoryByBytes":"Image",
-            "fileCategoryByExtension":"Image",
-            "fileSize":265122,
-            "fileOwner":"QA",
-            "md5Checksum":"9cea266b4e07974df1982ae3b9de92ce",
-            "sha256Checksum":"34d0c9fc9c907ec374cf7e8ca1ff8a172e36eccee687f0a9b69dd169debb81e1",
-            "createTimestamp":"2020-05-28T12:43:34.902Z",
-            "modifyTimestamp":"2020-05-28T12:43:35.105Z",
-            "deviceUserName":"test@example.com",
-            "osHostName":"TEST'S MAC",
-            "domainName":"host.docker.internal",
-            "publicIpAddress":"255.255.255.255",
-            "privateIpAddresses":["127.0.0.1"],
-            "deviceUid":"935873453596901068",
-            "userUid":"912098363086307495",
-            "actor":null,
-            "directoryId":[],
-            "source":"Endpoint",
-            "url":null,
-            "shared":null,
-            "sharedWith":[],
-            "sharingTypeAdded":[],
-            "cloudDriveId":null,
-            "detectionSourceAlias":null,
-            "fileId":null,
-            "exposure":["ApplicationRead"],
-            "processOwner":"QA",
-            "processName":"chrome.exe",
-            "windowTitle":["Jira"],
-            "tabUrl":"example.com/test",
-            "removableMediaVendor":null,
-            "removableMediaName":null,
-            "removableMediaSerialNumber":null,
-            "removableMediaCapacity":null,
-            "removableMediaBusType":null,
-            "removableMediaMediaName":null,
-            "removableMediaVolumeName":[],
-            "removableMediaPartitionId":[],
-            "syncDestination":null,
-            "emailDlpPolicyNames":null,
-            "emailSubject":null,
-            "emailSender":null,
-            "emailFrom":null,
-            "emailRecipients":null,
-            "outsideActiveHours":false,
-            "mimeTypeByBytes":"image/png",
-            "mimeTypeByExtension":"image/png",
-            "mimeTypeMismatch":false,
-            "printJobName":null,
-            "printerName":null,
-            "printedFilesBackupPath":null,
-            "remoteActivity":"UNKNOWN",
-            "trusted":false,
-            "operatingSystemUser": "IEUser",
-            "destinationCategory": "Cloud Storage",
-            "destinationName": "Google Drive",
-            "riskScore": 5,
-            "riskSeverity": "HIGH",
-            "riskIndicators": [
-                {
-                "name": "Google Drive upload",
-                "weight": 5
-                },
-                {
-                "name": "Spreadsheet",
-                "weight": 0
-                }
-            ]
-        },
-        {
-            "eventId":"0_1d71796f-af5b-4231-9d8e-df6434da4663_935873453596901068_956171635867906205_5",
-            "eventType":"READ_BY_APP",
-            "eventTimestamp":"2020-05-28T12:46:39.838Z",
-            "insertionTimestamp":"2020-05-28T12:51:50.040Z",
-            "fieldErrors":[],
-            "filePath":"C:/Users/QA/Downloads/",
-            "fileName":"confidential.pdf",
-            "fileType":"FILE",
-            "fileCategory":"IMAGE",
-            "fileCategoryByBytes":"Image",
-            "fileCategoryByExtension":"Image",
-            "fileSize":265122,
-            "fileOwner":"Mock",
-            "md5Checksum":"9cea266b4e07974df1982ae3b9de92ce",
-            "sha256Checksum":"34d0c9fc9c907ec374cf7e8ca1ff8a172e36eccee687f0a9b69dd169debb81e1",
-            "createTimestamp":"2020-05-28T12:43:34.902Z",
-            "modifyTimestamp":"2020-05-28T12:43:35.105Z",
-            "deviceUserName":"test@example.com",
-            "osHostName":"Test's Windows",
-            "domainName":"host.docker.internal",
-            "publicIpAddress":"255.255.255.255",
-            "privateIpAddresses":["0:0:0:0:0:0:0:1","127.0.0.1"],
-            "deviceUid":"935873453596901068",
-            "userUid":"912098363086307495",
-            "actor":null,
-            "directoryId":[],
-            "source":"Endpoint",
-            "url":null,
-            "shared":null,
-            "sharedWith":[],
-            "sharingTypeAdded":[],
-            "cloudDriveId":null,
-            "detectionSourceAlias":null,
-            "fileId":null,
-            "exposure":["ApplicationRead"],
-            "processOwner":"QA",
-            "processName":"chrome.exe",
-            "windowTitle":["Jira"],
-            "tabUrl":"example.com/foo",
-            "removableMediaVendor":null,
-            "removableMediaName":null,
-            "removableMediaSerialNumber":null,
-            "removableMediaCapacity":null,
-            "removableMediaBusType":null,
-            "removableMediaMediaName":null,
-            "removableMediaVolumeName":[],
-            "removableMediaPartitionId":[],
-            "syncDestination":null,
-            "emailDlpPolicyNames":null,
-            "emailSubject":null,
-            "emailSender":null,
-            "emailFrom":null,
-            "emailRecipients":null,
-            "outsideActiveHours":false,
-            "mimeTypeByBytes":"image/png",
-            "mimeTypeByExtension":"image/png",
-            "mimeTypeMismatch":false,
-            "printJobName":null,
-            "printerName":null,
-            "printedFilesBackupPath":null,
-            "remoteActivity":"UNKNOWN",
-            "trusted":false,
-            "operatingSystemUser": "IEUser",
-            "destinationCategory": "Cloud Storage",
-            "destinationName": "Google Drive",
-            "riskScore": 5,
-            "riskSeverity": "HIGH",
-            "riskIndicators": [
-                {
-                "name": "Google Drive upload",
-                "weight": 5
-                },
-                {
-                "name": "Spreadsheet",
-                "weight": 0
-                }
-            ]
-        }
-    ]
-}
-"""
 
 
 def _create_mock_py42_with_file_events(mocker, mock_py42_client):
@@ -281,7 +37,7 @@ def _create_mock_py42_with_file_events(mocker, mock_py42_client):
         b"t",
     ]
     mock_search_response = mocker.MagicMock(spec=Py42Response)
-    mock_search_response.data = json.loads(MOCK_SECURITY_EVENT_RESPONSE)
+    mock_search_response.data = MOCK_SECURITY_EVENT_RESPONSE
     mock_py42_client.securitydata.stream_file_by_md5.return_value = mock_stream_response
     mock_py42_client.securitydata.stream_file_by_sha256.return_value = (
         mock_stream_response
@@ -559,11 +315,10 @@ class TestCode42FileEventsConnector(object):
         param = {"username": "barney.frankenberry@chocula.com"}
         connector = _create_run_query_connector(mocker, mock_py42_client)
         connector.handle_action(param)
-        response_dict = json.loads(MOCK_SECURITY_EVENT_RESPONSE)
         action_result_data = connector.get_action_results()[0].get_data()
-        assert action_result_data[0] == response_dict["fileEvents"][0]
-        assert action_result_data[1] == response_dict["fileEvents"][1]
-        assert action_result_data[2] == response_dict["fileEvents"][2]
+        assert action_result_data[0] == MOCK_SECURITY_EVENT_RESPONSE["fileEvents"][0]
+        assert action_result_data[1] == MOCK_SECURITY_EVENT_RESPONSE["fileEvents"][1]
+        assert action_result_data[2] == MOCK_SECURITY_EVENT_RESPONSE["fileEvents"][2]
 
         assert_success(connector)
 
@@ -571,12 +326,13 @@ class TestCode42FileEventsConnector(object):
         param = {"username": "barney.frankenberry@chocula.com"}
         connector = _create_run_query_connector(mocker, mock_py42_client)
         connector.handle_action(param)
-        response_dict = json.loads(MOCK_SECURITY_EVENT_RESPONSE)
         assert_successful_summary(
             connector,
             {
-                "total_count": response_dict["totalCount"],
-                "results_returned_count": len(response_dict["fileEvents"]),
+                "total_count": MOCK_SECURITY_EVENT_RESPONSE["totalCount"],
+                "results_returned_count": len(
+                    MOCK_SECURITY_EVENT_RESPONSE["fileEvents"]
+                ),
             },
         )
 
@@ -639,11 +395,10 @@ class TestCode42FileEventsConnector(object):
         param = {"json_query": "arbitrary JSON"}
         connector = _create_run_advanced_query_connector(mocker, mock_py42_client)
         connector.handle_action(param)
-        response_dict = json.loads(MOCK_SECURITY_EVENT_RESPONSE)
         action_result_data = connector.get_action_results()[0].get_data()
-        assert action_result_data[0] == response_dict["fileEvents"][0]
-        assert action_result_data[1] == response_dict["fileEvents"][1]
-        assert action_result_data[2] == response_dict["fileEvents"][2]
+        assert action_result_data[0] == MOCK_SECURITY_EVENT_RESPONSE["fileEvents"][0]
+        assert action_result_data[1] == MOCK_SECURITY_EVENT_RESPONSE["fileEvents"][1]
+        assert action_result_data[2] == MOCK_SECURITY_EVENT_RESPONSE["fileEvents"][2]
 
         assert_success(connector)
 
@@ -665,12 +420,13 @@ class TestCode42FileEventsConnector(object):
         param = {"json_query": "arbitrary JSON"}
         connector = _create_run_advanced_query_connector(mocker, mock_py42_client)
         connector.handle_action(param)
-        response_dict = json.loads(MOCK_SECURITY_EVENT_RESPONSE)
         assert_successful_summary(
             connector,
             {
-                "total_count": response_dict["totalCount"],
-                "results_returned_count": len(response_dict["fileEvents"]),
+                "total_count": MOCK_SECURITY_EVENT_RESPONSE["totalCount"],
+                "results_returned_count": len(
+                    MOCK_SECURITY_EVENT_RESPONSE["fileEvents"]
+                ),
             },
         )
 

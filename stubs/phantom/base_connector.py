@@ -1,6 +1,14 @@
 class BaseConnector:
     def __init__(self):
         self._action_results = []
+        self._containers = []
+        self._artifacts = []
+        self._config = {}
+        self._is_poll_now = False
+        self._state = {}
+
+    def is_poll_now(self):
+        return self._is_poll_now
 
     def add_action_result(self, action_result):
         self._action_results.append(action_result)
@@ -25,10 +33,22 @@ class BaseConnector:
         pass
 
     def get_config(self):
-        pass
+        return self._config
 
     def save_state(self, state):
-        pass
+        if not state:
+            return
+        if self._state is None:
+            self._state = {}
+        self._state.update(state)
+        return self._state
+
+    def save_container(self, container):
+        self._containers.append(container)
+        return True, None, "CONTAINER_ID"
+
+    def save_artifacts(self, artifacts_list):
+        self._artifacts.extend(artifacts_list)
 
     @classmethod
     def _get_phantom_base_url(cls):

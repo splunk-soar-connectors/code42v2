@@ -1,7 +1,8 @@
-from pytest import fixture
 from unittest import mock
 
 from py42.exceptions import Py42UserAlreadyExistsError
+from pytest import fixture
+
 from .conftest import (
     assert_success,
     assert_fail,

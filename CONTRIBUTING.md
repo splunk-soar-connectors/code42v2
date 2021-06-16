@@ -1,30 +1,38 @@
 ## Set up your development environment
 
-You'll need a Phantom OVA VM image to run this application. To download the image, first register [here](https://my.phantom.us/signup/)
+You'll need a Phantom OVA VM image to run this application. To download the image, first
+register [here](https://my.phantom.us/signup/)
 to create a Phantom account. Phantom will approve your registration and send you credentials for https://my.phantom.us.
 
 Next, log in and go [here](https://my.phantom.us/downloads/) to download the Phantom VM image.
 
-Follow these [instructions](https://docs.splunk.com/Documentation/Phantom/4.10.3/Install/InstallOVA) to install Splunk Phantom
-as a VM image. You do NOT need to complete the section labeled "Configure the network settings for the virtual machine".
+Follow these [instructions](https://docs.splunk.com/Documentation/Phantom/4.10.3/Install/InstallOVA) to install Splunk
+Phantom as a VM image. You do NOT need to complete the section labeled "Configure the network settings for the virtual
+machine".
 
 Use these [default credentials](https://docs.splunk.com/Documentation/Phantom/4.10.3/Install/Reference) to log in.
-Confirm that you can connect to the VM via SSH on your host machine. You can use `hostname -I` on the remote machine to look up your IP address.
-Also confirm that you can access the Phantom web app at `https://{phantom_VM_IP_address}`.
+Confirm that you can connect to the VM via SSH on your host machine. You can use `hostname -I` on the remote machine to
+look up your IP address. Also confirm that you can access the Phantom web app at `https://{phantom_VM_IP_address}`.
 
-NOTE: If you are consistently getting timeouts connecting to the Phantom VM, try disconnecting from the VPN and re-attempting.
+NOTE: If you are consistently getting timeouts connecting to the Phantom VM, try disconnecting from the VPN and
+re-attempting.
 
 ### Style linter
 
-When you open a PR, a series of style checks will run. See the [pre-commit-config.yaml](.pre-commit-config.yaml) file to see a list of the projects involved in this automation. If your code does not pass the style checks, the PR will not be allowed to merge. Many of the style rules can be corrected automatically by running a simple command once you are satisfied with your change:
+When you open a PR, a series of style checks will run. See the [pre-commit-config.yaml](.pre-commit-config.yaml) file to
+see a list of the projects involved in this automation. If your code does not pass the style checks, the PR will not be
+allowed to merge. Many of the style rules can be corrected automatically by running a simple command once you are
+satisfied with your change:
 
 ```bash
 make style
 ```
 
-This will output a diff of the files that were changed. Once these have been corrected and re-pushed, the PR checks should pass.
+This will output a diff of the files that were changed. Once these have been corrected and re-pushed, the PR checks
+should pass.
 
-You can also choose to have these checks / automatic adjustments occur automatically on each git commit that you make (instead of only when running `make style`.) To do so, install the pre-commit hooks:
+You can also choose to have these checks / automatic adjustments occur automatically on each git commit that you make (
+instead of only when running `make style`.) To do so, install the pre-commit hooks:
 
 ```bash
 pre-commit install
@@ -42,7 +50,8 @@ export PHANTOM_VM_PASSWORD=phantom  # Use the password for your phantom admin us
 make deploy
 ```
 
-If you are working on macOS you can install `sshpass` [here](https://stackoverflow.com/questions/32255660/how-to-install-sshpass-on-mac/62623099#62623099)
+If you are working on macOS you can
+install `sshpass` [here](https://stackoverflow.com/questions/32255660/how-to-install-sshpass-on-mac/62623099#62623099)
 and bypass the VM SSH password prompts.
 
 ```bash
@@ -52,15 +61,16 @@ make deploy-bypass
 ```
 
 Open the Phantom web app and login as the `admin` user. Navigate to `Apps > Unconfigured Apps` and find the Code42 App.
-Click Configure New Asset to supply the Console URL, username, and password to connect with. Fill out the fields in Asset Info
-and Asset Settings. Save the Asset Configuration and then click Test Connectivity to test your connection.
+Click Configure New Asset to supply the Console URL, username, and password to connect with. Fill out the fields in
+Asset Info and Asset Settings. Save the Asset Configuration and then click Test Connectivity to test your connection.
 
 ## Unit Testing
 
 ### Creating a virtual environment
 
 To run the unit tests you will need to create a Python virtual environment for the Phantom app and its dependencies.
-Creating a virtual environment is *not* necessary to run or deploy the app to a Phantom VM. It's only necessary if you want to run unit tests.
+Creating a virtual environment is *not* necessary to run or deploy the app to a Phantom VM. It's only necessary if you
+want to run unit tests.
 
 #### macOS
 
@@ -70,7 +80,8 @@ Install `pyenv` and `pyenv-virtualenv` via [homebrew](https://brew.sh/):
 brew install pyenv pyenv-virtualenv
 ```
 
-After installing `pyenv` and `pyenv-virtualenv`, be sure to add the following entries to your `.zshrc` (or `.bashrc` if you are using bash) and restart your shell:
+After installing `pyenv` and `pyenv-virtualenv`, be sure to add the following entries to your `.zshrc` (or `.bashrc` if
+you are using bash) and restart your shell:
 
 ```bash
 eval "$(pyenv init -)"
@@ -84,6 +95,12 @@ pyenv install 3.6.13
 pyenv virtualenv 3.6.13 phantom
 pyenv activate phantom
 pip install --upgrade pip
+```
+
+Note: if the command `pyenv virtualenv 3.6.13 phantom` fails, try the following command instead:
+
+```bash
+pyenv install --patch 3.6.13 < <(curl -sSL https://github.com/python/cpython/commit/8ea6353.patch)
 ```
 
 Use `source deactivate` to exit the virtual environment and `pyenv activate phantom` to reactivate it.
@@ -104,6 +121,7 @@ pip install --upgrade pip
 ```
 
 To leave the virtual environment, simply use:
+
 ```bash
 deactivate
 ```
@@ -115,11 +133,12 @@ Make sure you have created a Python virtual environment for the Phantom project 
 Then, activate the virtual environment and install the dependencies before running the build.
 
 ```bash
-pip install -e .[dev]
+pip install -e .'[dev]'
 make
 ```
 
-By default, `make` will run all unit tests, Phantom configuration / lint validators, style checks, and create a local tarball of the app.
+By default, `make` will run all unit tests, Phantom configuration / lint validators, style checks, and create a local
+tarball of the app.
 
 Each of these commands can also be run individually if desired:
 
@@ -134,7 +153,8 @@ make deploy-bypass
 
 #### Running tests within a Phantom deployment
 
-You can clone this repository directly onto a Phantom server and run the tests on it. When you do this, the tests will use the Phantom SDK instead of the stubs this project has defined in the `stubs` folder:
+You can clone this repository directly onto a Phantom server and run the tests on it. When you do this, the tests will
+use the Phantom SDK instead of the stubs this project has defined in the `stubs` folder:
 
 ```bash
 phenv pip install -e . # note: exclude [dev] to skip installing the stubs
@@ -149,8 +169,8 @@ phenv pip uninstall stubs
 
 ### Stubs
 
-This app is built on top of several modules developed by Phantom. Since we don't have access to the source for these modules,
-we've stubbed them out in the `phantom` directory so that they can be imported by the test code.
+This app is built on top of several modules developed by Phantom. Since we don't have access to the source for these
+modules, we've stubbed them out in the `phantom` directory so that they can be imported by the test code.
 
 # TODO
 

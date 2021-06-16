@@ -3,19 +3,16 @@ from __future__ import print_function, unicode_literals
 
 import json
 
+# Phantom App imports
+import phantom.app as phantom
+import phantom.utils as utils
 import py42.sdk
+import requests
+from phantom.action_result import ActionResult
+from phantom.base_connector import BaseConnector
+from phantom.vault import Vault
 from py42.exceptions import Py42NotFoundError
 from py42.exceptions import Py42UpdateClosedCaseError
-from py42.sdk.queries.fileevents.filters.exposure_filter import ExposureType
-from py42.sdk.queries.fileevents.filters.file_filter import FileName, FilePath
-from py42.services.detectionlists.departing_employee import DepartingEmployeeFilters
-from py42.services.detectionlists.high_risk_employee import HighRiskEmployeeFilters
-import requests
-from datetime import datetime, timedelta
-import dateutil.parser
-
-from py42.sdk.queries.alerts.alert_query import AlertQuery
-from py42.sdk.queries.alerts.filters import Actor, AlertState, DateObserved
 from py42.sdk.queries.fileevents.file_event_query import FileEventQuery
 from py42.sdk.queries.fileevents.filters import (
     EventTimestamp,
@@ -31,13 +28,13 @@ from py42.sdk.queries.fileevents.filters import (
     WindowTitle,
     TrustedActivity,
 )
+from py42.sdk.queries.fileevents.filters.exposure_filter import ExposureType
+from py42.sdk.queries.fileevents.filters.file_filter import FileName, FilePath
+from py42.services.detectionlists.departing_employee import DepartingEmployeeFilters
+from py42.services.detectionlists.high_risk_employee import HighRiskEmployeeFilters
 
-# Phantom App imports
-import phantom.app as phantom
-from phantom.action_result import ActionResult
-from phantom.base_connector import BaseConnector
-import phantom.utils as utils
-from phantom.vault import Vault
+from code42_on_poll_connector import Code42OnPollConnector
+from code42_util import build_alerts_query, build_date_range_filter
 
 
 class RetVal(tuple):
@@ -126,6 +123,11 @@ class Code42Connector(BaseConnector):
         self._client.users.get_current()
         self.save_progress("Test Connectivity Passed")
         return action_result.set_status(phantom.APP_SUCCESS)
+
+    @action_handler_for("on_poll")
+    def _handle_on_poll(self, param, action_result):
+        connector = Code42OnPollConnector(self, self._client, self._state)
+        return connector.handle_on_poll(param, action_result)
 
     """ DEPARTING EMPLOYEE ACTIONS """
 
@@ -331,7 +333,7 @@ class Code42Connector(BaseConnector):
     def _handle_get_alert_details(self, param, action_result):
         alert_id = param["alert_id"]
         response = self._client.alerts.get_details([alert_id])
-        alert = response.data["alerts"][0]
+        alert = response["alerts"][0]
         action_result.add_data(alert)
         action_result.update_summary(
             {"username": alert["actor"], "user_id": alert["actorId"]}
@@ -352,9 +354,12 @@ class Code42Connector(BaseConnector):
         end_date = param.get("end_date")
         alert_state = param.get("alert_state")
 
-        query = self._build_alerts_query(username, start_date, end_date, alert_state)
+        query = build_alerts_query(
+            start_date, end_date, username=username, alert_state=alert_state
+        )
+
         response = self._client.alerts.search(query)
-        for alert in response.data["alerts"]:
+        for alert in response["alerts"]:
             action_result.add_data(alert)
         action_result.update_summary({"total_count": response["totalCount"]})
         return action_result.set_status(phantom.APP_SUCCESS)
@@ -551,18 +556,6 @@ class Code42Connector(BaseConnector):
         self.save_state(self._state)
         return phantom.APP_SUCCESS
 
-    def _build_alerts_query(self, username, start_date, end_date, alert_state):
-        filters = []
-        if username is not None:
-            filters.append(Actor.eq(username))
-        if alert_state is not None:
-            filters.append(AlertState.eq(alert_state))
-        filters.append(
-            self._build_date_range_filter(DateObserved, start_date, end_date)
-        )
-        query = AlertQuery.all(*filters)
-        return query
-
     def _build_file_events_query(
         self,
         start_date,
@@ -618,26 +611,9 @@ class Code42Connector(BaseConnector):
         if untrusted_only:
             filters.append(TrustedActivity.is_false())
 
-        filters.append(
-            self._build_date_range_filter(EventTimestamp, start_date, end_date)
-        )
+        filters.append(build_date_range_filter(EventTimestamp, start_date, end_date))
         query = FileEventQuery.all(*filters)
         return query
-
-    def _build_date_range_filter(self, date_filter_cls, start_date_str, end_date_str):
-        if start_date_str and not end_date_str:
-            return date_filter_cls.on_or_after(dateutil.parser.parse(start_date_str))
-        elif end_date_str and not start_date_str:
-            return date_filter_cls.on_or_before(dateutil.parser.parse(end_date_str))
-        elif end_date_str and start_date_str:
-            start_datetime = dateutil.parser.parse(start_date_str)
-            end_datetime = dateutil.parser.parse(end_date_str)
-            if start_datetime >= end_datetime:
-                raise Exception("Start date cannot be after end date.")
-            return date_filter_cls.in_range(start_datetime, end_datetime)
-        else:
-            thirty_days_ago = datetime.utcnow() - timedelta(days=30)
-            return date_filter_cls.on_or_after(thirty_days_ago)
 
     def _get_user(self, username):
         users = self._client.users.get_by_username(username)["users"]
@@ -716,7 +692,6 @@ def main():
     password = args.password
 
     if username is not None and password is None:
-
         # User specified a username but not a password, so ask
         import getpass
 

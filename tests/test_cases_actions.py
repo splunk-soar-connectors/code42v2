@@ -1,13 +1,12 @@
+from py42.exceptions import Py42BadRequestError
+from py42.exceptions import Py42CaseNameExistsError
+from py42.exceptions import Py42NotFoundError
+from py42.exceptions import Py42UpdateClosedCaseError
+from py42.response import Py42Response
+from pytest import fixture
 from requests import Response
 from requests.exceptions import HTTPError
-from pytest import fixture
 
-from py42.exceptions import Py42BadRequestError
-from py42.exceptions import Py42NotFoundError
-from py42.exceptions import Py42CaseNameExistsError
-from py42.exceptions import Py42UpdateClosedCaseError
-
-from py42.response import Py42Response
 from .conftest import (
     TEST_USER_UID as _TEST_USER_UID,
     assert_success,

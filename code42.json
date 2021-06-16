@@ -62,6 +62,45 @@
             "versions": "EQ(*)"
         },
         {
+            "action": "on poll",
+            "description": "Callback action for the on_poll ingest functionality.",
+            "type": "ingest",
+            "identifier": "on_poll",
+            "read_only": true,
+            "parameters": {
+                "container_id": {
+                    "data_type": "string",
+                    "order": 0,
+                    "description": "Container IDs to limit the ingestion to.",
+                    "allow_list": true
+                },
+                "start_time": {
+                    "data_type": "numeric",
+                    "order": 1,
+                    "description": "Start of time range, in epoch time (milliseconds)",
+                    "verbose": "If not specified, the default is past 10 days"
+                },
+                "end_time": {
+                    "data_type": "numeric",
+                    "order": 2,
+                    "description": "End of time range, in epoch time (milliseconds)",
+                    "verbose": "If not specified, the default is now"
+                },
+                "container_count": {
+                    "data_type": "numeric",
+                    "order": 3,
+                    "description": "Maximum number of container records to query for."
+                },
+                "artifact_count": {
+                    "data_type": "numeric",
+                    "order": 4,
+                    "description": "Maximum number of artifact records to query for."
+                }
+            },
+            "output": [],
+            "versions": "EQ(*)"
+        },
+        {
             "action": "add departing employee",
             "identifier": "add_departing_employee",
             "description": "Add a departing employee to the departing employees detection list",
@@ -1415,7 +1454,7 @@
             "read_only": false,
             "parameters": {
                 "org_uid": {
-                    "description":  "Org UID to create user in",
+                    "description": "Org UID to create user in",
                     "data_type": "string",
                     "required": true,
                     "primary": true,
@@ -1423,7 +1462,7 @@
                     "order": 0
                 },
                 "username": {
-                    "description":  "Username to create",
+                    "description": "Username to create",
                     "data_type": "string",
                     "required": true,
                     "primary": true,
@@ -1434,7 +1473,7 @@
                     "order": 1
                 },
                 "password": {
-                    "description":  "Password for newly created user",
+                    "description": "Password for newly created user",
                     "verbose": "Defaults to no password set, which leaves user in 'invited' state. They will need to reset password via email prior to first login.",
                     "data_type": "string",
                     "required": false,
@@ -1443,7 +1482,7 @@
                     "order": 2
                 },
                 "first_name": {
-                    "description":  "User's first name",
+                    "description": "User's first name",
                     "data_type": "string",
                     "required": false,
                     "primary": false,
@@ -1451,7 +1490,7 @@
                     "order": 3
                 },
                 "last_name": {
-                    "description":  "User's last name",
+                    "description": "User's last name",
                     "data_type": "string",
                     "required": false,
                     "primary": false,
@@ -1459,14 +1498,13 @@
                     "order": 4
                 },
                 "notes": {
-                    "description":  "Notes about user",
+                    "description": "Notes about user",
                     "data_type": "string",
                     "required": false,
                     "primary": false,
                     "default": "",
                     "order": 5
                 }
-
             },
             "output": [
                 {
@@ -1950,7 +1988,6 @@
                     ],
                     "default": "",
                     "order": 1
-
                 },
                 "description": {
                     "description": "Description",
@@ -1982,6 +2019,14 @@
                 }
             },
             "output": [
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
                 {
                     "data_path": "action_result.data.*.number",
                     "data_type": "string",
@@ -2028,6 +2073,10 @@
                     "data_type": "string",
                     "column_name": "Findings",
                     "column_order": 5
+                },
+                {
+                    "data_path": "action_result.summary.case_number",
+                    "data_type": "numeric"
                 }
             ],
             "render": {
@@ -2098,6 +2147,49 @@
                 }
             },
             "output": [
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.case_number",
+                    "data_type": "numeric",
+                    "contains": [
+                        "case number"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.case_name",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.description",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.subject",
+                    "data_type": "string",
+                    "contains": [
+                        "email",
+                        "user name"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.assignee",
+                    "data_type": "string",
+                    "contains": [
+                        "email",
+                        "user name"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.findings",
+                    "data_type": "string"
+                },
                 {
                     "data_path": "action_result.data.*.number",
                     "data_type": "string",
@@ -2175,6 +2267,13 @@
             },
             "output": [
                 {
+                    "data_path": "action_result.parameter.case_number",
+                    "data_type": "numeric",
+                    "contains": [
+                        "case number"
+                    ]
+                },
+                {
                     "data_path": "action_result.data.*.number",
                     "data_type": "string",
                     "contains": [
@@ -2237,7 +2336,6 @@
                     "data_path": "action_result.summary.case_number",
                     "data_type": "numeric"
                 }
-
             ],
             "render": {
                 "type": "table"
@@ -2256,7 +2354,11 @@
                     "data_type": "string",
                     "required": true,
                     "primary": false,
-                    "value_list": ["ALL", "OPEN", "CLOSED"],
+                    "value_list": [
+                        "ALL",
+                        "OPEN",
+                        "CLOSED"
+                    ],
                     "default": "ALL",
                     "order": 0
                 },
@@ -2287,6 +2389,31 @@
             },
             "output": [
                 {
+                    "data_path": "action_result.parameter.status",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.assignee",
+                    "data_type": "string",
+                    "contains": [
+                        "email",
+                        "user name"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.subject",
+                    "data_type": "string",
+                    "contains": [
+                        "email",
+                        "user name"
+                    ]
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "Status"
+                },
+                {
                     "column_name": "Case Status",
                     "data_path": "action_result.data.*.status",
                     "data_type": "string",
@@ -2296,7 +2423,9 @@
                     "column_name": "Case Number",
                     "data_path": "action_result.data.*.number",
                     "data_type": "string",
-                    "contains": ["case number"],
+                    "contains": [
+                        "case number"
+                    ],
                     "example_values": [
                         "1"
                     ],
@@ -2395,7 +2524,9 @@
                     "data_type": "string",
                     "required": true,
                     "primary": true,
-                    "contains": ["file event"],
+                    "contains": [
+                        "file event"
+                    ],
                     "order": 1
                 }
             },
@@ -2404,15 +2535,20 @@
                     "data_path": "action_result.parameter.case_number",
                     "data_type": "string",
                     "column_name": "Case Number",
-                    "column_order": 0
+                    "column_order": 0,
+                    "contains": [
+                        "case number"
+                    ]
                 },
                 {
                     "data_path": "action_result.parameter.event_id",
                     "data_type": "string",
                     "column_name": "Event ID",
-                    "column_order": 1
+                    "column_order": 1,
+                    "contains": [
+                        "file event"
+                    ]
                 },
-
                 {
                     "data_path": "action_result.status",
                     "data_type": "string",
@@ -2429,6 +2565,10 @@
                 },
                 {
                     "data_path": "action_result.summary.event_id",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data",
                     "data_type": "string"
                 }
             ],
