@@ -1132,23 +1132,34 @@
                 },
                 {
                     "data_path": "action_result.status",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.name",
                     "data_type": "string",
-                    "column_name": "Status",
+                    "column_name": "Name",
                     "column_order": 1
                 },
                 {
-                    "data_path": "action_result.data.*.username",
+                    "data_path": "action_result.data.*.actor",
                     "data_type": "string",
-                    "column_name": "username",
+                    "column_name": "Actor",
                     "contains": [
                         "email"
                     ],
                     "column_order": 2
                 },
                 {
-                    "data_path": "action_result.data.*.occurred",
+                    "data_path": "action_result.data.*.actorId",
                     "data_type": "string",
-                    "column_name": "Occurred",
+                    "contains": [
+                        "email"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.createdAt",
+                    "data_type": "string",
+                    "column_name": "Created At",
                     "column_order": 3
                 },
                 {
@@ -1174,12 +1185,6 @@
                     "data_type": "string",
                     "column_name": "Severity",
                     "column_order": 7
-                },
-                {
-                    "data_path": "action_result.data.*.name",
-                    "data_type": "string",
-                    "column_name": "Name",
-                    "column_order": 8
                 },
                 {
                     "data_path": "action_result.summary.username",

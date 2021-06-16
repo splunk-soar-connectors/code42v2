@@ -89,7 +89,7 @@ def create_case_1(action=None, success=None, container=None, results=None, handl
     #phantom.debug('Action: {0} {1}'.format(action['name'], ('SUCCEEDED' if success else 'FAILED')))
     
     # collect data for 'create_case_1' call
-    results_data_1 = phantom.collect2(container=container, datapath=['get_alert_details_1:action_result.data.*.username', 'get_alert_details_1:action_result.parameter.context.artifact_id'], action_results=results)
+    results_data_1 = phantom.collect2(container=container, datapath=['get_alert_details_1:action_result.data.*.actor', 'get_alert_details_1:action_result.parameter.context.artifact_id'], action_results=results)
     results_data_2 = phantom.collect2(container=container, datapath=['prompt_further_investigation:action_result.summary.responses.1', 'prompt_further_investigation:action_result.parameter.context.artifact_id'], action_results=results)
 
     parameters = []
@@ -168,6 +168,20 @@ def prompt_response_type(action=None, success=None, container=None, results=None
 
     phantom.prompt2(container=container, user=user, message=message, respond_in_mins=30, name="prompt_response_type", parameters=parameters, response_types=response_types, callback=decision_2)
 
+    return
+
+def join_prompt_response_type(action=None, success=None, container=None, results=None, handle=None, filtered_artifacts=None, filtered_results=None, custom_function=None):
+    phantom.debug('join_prompt_response_type() called')
+    
+    # if the joined function has already been called, do nothing
+    if phantom.get_run_data(key='join_prompt_response_type_called'):
+        return
+
+    # no callbacks to check, call connected block "prompt_response_type"
+    phantom.save_run_data(key='join_prompt_response_type_called', value='prompt_response_type', auto=True)
+
+    prompt_response_type(container=container, handle=handle)
+    
     return
 
 def decision_2(action=None, success=None, container=None, results=None, handle=None, filtered_artifacts=None, filtered_results=None, custom_function=None, **kwargs):
@@ -347,7 +361,7 @@ def update_case_2(action=None, success=None, container=None, results=None, handl
                     'context': {'artifact_id': results_item_1[1]},
                 })
 
-    phantom.act(action="update case", parameters=parameters, assets=['partner'], callback=close_case_2, name="update_case_2", parent_action=action)
+    phantom.act(action="update case", parameters=parameters, assets=['partner'], callback=close_case_2, name="update_case_2")
 
     return
 
@@ -408,7 +422,7 @@ def hunt_file_1(action=None, success=None, container=None, results=None, handle=
                 'context': {'artifact_id': inputs_item_1[2]},
             })
 
-    phantom.act(action="hunt file", parameters=parameters, assets=['partner'], callback=format_1, name="hunt_file_1", parent_action=action)
+    phantom.act(action="hunt file", parameters=parameters, assets=['partner'], callback=get_user_profile_1, name="hunt_file_1", parent_action=action)
 
     return
 
@@ -418,27 +432,30 @@ def send_email_1(action=None, success=None, container=None, results=None, handle
     #phantom.debug('Action: {0} {1}'.format(action['name'], ('SUCCEEDED' if success else 'FAILED')))
     
     # collect data for 'send_email_1' call
-    results_data_1 = phantom.collect2(container=container, datapath=['get_alert_details_1:action_result.data.*.name', 'get_alert_details_1:action_result.parameter.context.artifact_id'], action_results=results)
+    results_data_1 = phantom.collect2(container=container, datapath=['get_user_profile_1:action_result.data.*.managerUsername', 'get_user_profile_1:action_result.parameter.context.artifact_id'], action_results=results)
+    results_data_2 = phantom.collect2(container=container, datapath=['get_alert_details_1:action_result.data.*.name', 'get_alert_details_1:action_result.parameter.context.artifact_id'], action_results=results)
     formatted_data_1 = phantom.get_format_data(name='format_1')
 
     parameters = []
     
     # build parameters list for 'send_email_1' call
     for results_item_1 in results_data_1:
-        parameters.append({
-            'from': "Code42 Alert Response",
-            'to': "peter.briggs@code42.com",
-            'cc': "",
-            'bcc': "",
-            'subject': results_item_1[0],
-            'body': formatted_data_1,
-            'attachments': "",
-            'headers': "",
-            # context (artifact id) is added to associate results with the artifact
-            'context': {'artifact_id': results_item_1[1]},
-        })
+        for results_item_2 in results_data_2:
+            if results_item_1[0]:
+                parameters.append({
+                    'cc': "",
+                    'to': results_item_1[0],
+                    'bcc': "",
+                    'body': formatted_data_1,
+                    'from': "",
+                    'headers': "",
+                    'subject': results_item_2[0],
+                    'attachments': "",
+                    # context (artifact id) is added to associate results with the artifact
+                    'context': {'artifact_id': results_item_1[1]},
+                })
 
-    phantom.act(action="send email", parameters=parameters, assets=['gmail dev'], callback=prompt_response_type, name="send_email_1", parent_action=action)
+    phantom.act(action="send email", parameters=parameters, assets=['gmail dev'], callback=join_prompt_response_type, name="send_email_1")
 
     return
 
@@ -458,7 +475,7 @@ Exposures:
 
     # parameter list for template variable replacement
     parameters = [
-        "get_alert_details_1:action_result.data.*.username",
+        "get_alert_details_1:action_result.data.*.actor",
         "artifact:*.cef.fname",
         "artifact:*.cef.filePath",
         "artifact:*.cef.message",
@@ -466,7 +483,112 @@ Exposures:
 
     phantom.format(container=container, template=template, parameters=parameters, name="format_1")
 
-    send_email_1(container=container)
+    decision_3(container=container)
+
+    return
+
+def get_user_profile_1(action=None, success=None, container=None, results=None, handle=None, filtered_artifacts=None, filtered_results=None, custom_function=None, **kwargs):
+    phantom.debug('get_user_profile_1() called')
+        
+    #phantom.debug('Action: {0} {1}'.format(action['name'], ('SUCCEEDED' if success else 'FAILED')))
+    
+    # collect data for 'get_user_profile_1' call
+    results_data_1 = phantom.collect2(container=container, datapath=['get_alert_details_1:action_result.data.*.actor', 'get_alert_details_1:action_result.parameter.context.artifact_id'], action_results=results)
+
+    parameters = []
+    
+    # build parameters list for 'get_user_profile_1' call
+    for results_item_1 in results_data_1:
+        if results_item_1[0]:
+            parameters.append({
+                'username': results_item_1[0],
+                # context (artifact id) is added to associate results with the artifact
+                'context': {'artifact_id': results_item_1[1]},
+            })
+
+    phantom.act(action="get user profile", parameters=parameters, assets=['partner'], callback=format_1, name="get_user_profile_1", parent_action=action)
+
+    return
+
+def decision_3(action=None, success=None, container=None, results=None, handle=None, filtered_artifacts=None, filtered_results=None, custom_function=None, **kwargs):
+    phantom.debug('decision_3() called')
+
+    # check for 'if' condition 1
+    matched = phantom.decision(
+        container=container,
+        action_results=results,
+        conditions=[
+            ["get_user_profile_1:action_result.data.*.managerUsername", "!=", ""],
+        ])
+
+    # call connected blocks if condition 1 matched
+    if matched:
+        send_email_1(action=action, success=success, container=container, results=results, handle=handle, custom_function=custom_function)
+        return
+
+    # call connected blocks for 'else' condition 2
+    prompt_manager_email(action=action, success=success, container=container, results=results, handle=handle, custom_function=custom_function)
+
+    return
+
+def prompt_manager_email(action=None, success=None, container=None, results=None, handle=None, filtered_artifacts=None, filtered_results=None, custom_function=None, **kwargs):
+    phantom.debug('prompt_manager_email() called')
+    
+    # set user and message variables for phantom.prompt call
+    user = "admin"
+    message = """Unable to find email address for manager of user {0}. 
+
+Please enter manager's email address to send alert notification."""
+
+    # parameter list for template variable replacement
+    parameters = [
+        "get_alert_details_1:action_result.data.*.actor",
+    ]
+
+    #responses:
+    response_types = [
+        {
+            "prompt": "",
+            "options": {
+                "type": "message",
+            },
+        },
+    ]
+
+    phantom.prompt2(container=container, user=user, message=message, respond_in_mins=30, name="prompt_manager_email", parameters=parameters, response_types=response_types, callback=send_email_2)
+
+    return
+
+def send_email_2(action=None, success=None, container=None, results=None, handle=None, filtered_artifacts=None, filtered_results=None, custom_function=None, **kwargs):
+    phantom.debug('send_email_2() called')
+        
+    #phantom.debug('Action: {0} {1}'.format(action['name'], ('SUCCEEDED' if success else 'FAILED')))
+    
+    # collect data for 'send_email_2' call
+    results_data_1 = phantom.collect2(container=container, datapath=['prompt_manager_email:action_result.summary.responses.0', 'prompt_manager_email:action_result.parameter.context.artifact_id'], action_results=results)
+    results_data_2 = phantom.collect2(container=container, datapath=['get_alert_details_1:action_result.data.*.name', 'get_alert_details_1:action_result.parameter.context.artifact_id'], action_results=results)
+    formatted_data_1 = phantom.get_format_data(name='format_1')
+
+    parameters = []
+    
+    # build parameters list for 'send_email_2' call
+    for results_item_1 in results_data_1:
+        for results_item_2 in results_data_2:
+            if results_item_1[0]:
+                parameters.append({
+                    'from': "",
+                    'to': results_item_1[0],
+                    'cc': "",
+                    'bcc': "",
+                    'subject': results_item_2[0],
+                    'body': formatted_data_1,
+                    'attachments': "",
+                    'headers': "",
+                    # context (artifact id) is added to associate results with the artifact
+                    'context': {'artifact_id': results_item_1[1]},
+                })
+
+    phantom.act(action="send email", parameters=parameters, assets=['gmail dev'], callback=join_prompt_response_type, name="send_email_2")
 
     return
 
