@@ -33,12 +33,7 @@ def get_ctx_result(provides, result):
 
 
 def display_view(provides, all_app_runs, context):
-    """Function that displays view.
-    :param provides: action name
-    :param context: context
-    :param all_app_runs: all app runs
-    :return: html page
-    """
+    """Function that displays view."""
 
     context["results"] = results = []
     for summary, action_results in all_app_runs:
