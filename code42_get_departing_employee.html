@@ -9,7 +9,7 @@
 
 {% block widget_content %} <!-- Main Start Block -->
 
-<!-- File: code42_search_alerts.html
+<!-- File: code42_get_departing_employees.html
   Copyright (c) 2018-2021 Splunk Inc.
   Licensed under Apache 2.0 (https://www.apache.org/licenses/LICENSE-2.0.txt)
 -->
@@ -70,38 +70,36 @@
 
     {% for result in results %} <!-- loop for each result -->
         {% if not result.data %}
-            <h4 class="wf-h4-style">No alerts found</h4>
+            <h4 class="wf-h4-style">No employees found</h4>
         {% else %}
 
-            <div class="alert">
+            <div class="employee">
                 &nbsp;
-                <h4 class="wf-h4-style">Alerts</h4>
+                <h4 class="wf-h4-style">result.data[0].userName</h4>
                     <table class="phantom-table dataTable">
                         <thead>
-                            <th class="widget-th">Actor</th>
-                            <th class="widget-th">Severity</th>
-                            <th class="widget-th">Name</th>
-                            <th class="widget-th">Created At</th>
-                            <th class="widget-th">State</th>
-                            <th class="widget-th">Description</th>
+                            <th class="widget-th">Username</th>
+                            <th class="widget-th">User ID</th>
+                            <th class="widget-th">Notes</th>
+                            <th class="widget-th">Creation Date</th>
+                            <th class="widget-th">Number of Events</th>
                         </thead>
                         <tbody>
-                            {% for alert in result.data %}
+                            {% for employee in result.data %}
                                 <tr>
                                     <td class="widget-td">
                                         <a href="javascript:;" onclick="context_menu(this, [{'contains': ['email', 'user name'],
-                                            'value':'{{ alert.actor }}' }], 0,
+                                            'value':'{{ employee.userName }}' }], 0,
                                             {{ container.id }}, null, false);">
-                                                {{ alert.actor }}
+                                                {{ employee.userName }}
                                                 &nbsp;
                                             <span class="fa fa-caret-down" style="font-size: smaller;"></span>
                                         </a>
                                     </td>
-                                    <td class="widget-td">{{ alert.severity }}</td>
-                                    <td class="widget-td">{{ alert.name }}</td>
-                                    <td class="widget-td">{{ alert.createdAt }}</td>
-                                    <td class="widget-td">{{ alert.state }}</td>
-                                    <td class="widget-td">{{ alert.description }}</td>
+                                    <td class="widget-td">{{ employee.userId }}</td>
+                                    <td class="widget-td">{{ employee.notes }}</td>
+                                    <td class="widget-td">{{ employee.createdAt }}</td>
+                                    <td class="widget-td">{{ employee.numEvents }}</td>
                                 </tr>
                             {% endfor %}
                         </tbody>
