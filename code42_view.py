@@ -40,6 +40,4 @@ def display_view(provides, all_app_runs, context):
                 continue
             results.append(ctx_result)
 
-    return_page = "code42_run_query.html"
-
-    return return_page
+    return f"code42_{provides.replace(' ', '_')}.html"

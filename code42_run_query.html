@@ -72,296 +72,169 @@
         {% if not result.data %}
             <h4 class="wf-h4-style">No events found</h4>
         {% else %}
-            <div class="info">
-            <h4 class="wf-h4-style">Info</h4>
-            <table class="wf-table-vertical">
-                {% if result.param.start_time %}
-                    <tr>
-                        <td>Start Time</td>
-                        <td>{{ result.param.start_time }}</td>
-                    </tr>
-                {% endif %}
-                {% if result.param.end_time %}
-                    <tr>
-                        <td>End Time</td>
-                        <td>{{ result.param.end_time }}</td>
-                    </tr>
-                {% endif %}
-                {% if result.param.file_hash %}
-                    <tr>
-                        <td>File Hash</td>
-                        <td>
-                            <a href="javascript:;" onclick="context_menu(this, [{'contains': ['md5', 'sha256'],
-                                'value':'{{ result.param.file_hash }}' }], 0,
-                                {{ conta, null, false);">
-                                    {{ result.param.file_hash }}
-                                    &nbsp;
-                                <span class="fa fa-caret-down" style="font-size: smaller;"></span>
-                            </a>
-                        </td>
-                    </tr>
-                {% endif %}
-                {% if result.param.file_name %}
-                    <tr>
-                        <td>File Name</td>
-                        <td>
-                            <a href="javascript:;" onclick="context_menu(this, [{'contains': ['file name'],
-                                'value':'{{ result.param.file_name }}' }], 0,
-                                {{ container.id }}, null, false);">
-                                    {{ result.param.file_name }}
-                                    &nbsp;
-                                <span class="fa fa-caret-down" style="font-size: smaller;"></span>
-                            </a>
-                        </td>
-                    </tr>
-                {% endif %}
-                {% if result.param.file_path %}
-                    <tr>
-                        <td>File Path</td>
-                        <td>
-                            <a href="javascript:;" onclick="context_menu(this, [{'contains': ['file path'],
-                                'value':'{{ result.param.file_path }}' }], 0,
-                                {{ container.id }}, null, false);">
-                                    {{ result.param.file_path }}
-                                    &nbsp;
-                                <span class="fa fa-caret-down" style="font-size: smaller;"></span>
-                            </a>
-                        </td>
-                    </tr>
-                {% endif %}
-                {% if result.param.file_category %}
-                    <tr>
-                        <td>File Category</td>
-                        <td>{{ result.param.file_category }}</td>
-                    </tr>
-                {% endif %}
-                {% if result.param.untrusted_only %}
-                    <tr>
-                        <td>Untrusted Only</td>
-                        <td>{{ result.param.untrusted_only }}</td>
-                    </tr>
-                {% endif %}
-                {% if result.param.hostname %}
-                    <tr>
-                        <td>Hostname</td>
-                        <td>
-                            <a href="javascript:;" onclick="context_menu(this, [{'contains': ['host name'],
-                                'value':'{{ result.param.hostname }}' }], 0,
-                                {{ container.id }}, null, false);">
-                                    {{ result.param.hostname }}
-                                    &nbsp;
-                                <span class="fa fa-caret-down" style="font-size: smaller;"></span>
-                            </a>
-                        </td>
-                    </tr>
-                {% endif %}
-                {% if result.param.username %}
-                    <tr>
-                        <td>Username</td>
-                        <td>
-                            <a href="javascript:;" onclick="context_menu(this, [{'contains': ['email', 'user name'],
-                                'value':'{{ result.param.username }}' }], 0,
-                                {{ container.id }}, null, false);">
-                                    {{ result.param.username }}
-                                    &nbsp;
-                                <span class="fa fa-caret-down" style="font-size: smaller;"></span>
-                            </a>
-                        </td>
-                    </tr>
-                {% endif %}
-                {% if result.param.private_ip %}
-                    <tr>
-                        <td>Private IP</td>
-                        <td>
-                            <a href="javascript:;" onclick="context_menu(this, [{'contains': ['ip', 'ipv6'],
-                                'value':'{{ result.param.private_ip }}' }], 0,
-                                {{ container.id }}, null, false);">
-                                    {{ result.param.private_ip }}
-                                    &nbsp;
-                                <span class="fa fa-caret-down" style="font-size: smaller;"></span>
-                            </a>
-                        </td>
-                    </tr>
-                {% endif %}
-                {% if result.param.public_ip %}
-                    <tr>
-                        <td>Public IP</td>
-                        <td>
-                            <a href="javascript:;" onclick="context_menu(this, [{'contains': ['ip', 'ipv6'],
-                                'value':'{{ result.param.public_ip }}' }], 0,
-                                {{ container.id }}, null, false);">
-                                    {{ result.param.public_ip }}
-                                    &nbsp;
-                                <span class="fa fa-caret-down" style="font-size: smaller;"></span>
-                            </a>
-                        </td>
-                    </tr>
-                {% endif %}
-            </table>
-            </div>
 
             <div class="event">
                 &nbsp;
-            <h4 class="wf-h4-style">Events</h4>
-                <table class="phantom-table dataTable">
-                    <thead>
-                        <th class="widget-th">Risk Severity</th>
-                        <th class="widget-th">File Name</th>
-                        <th class="widget-th">File Path</th>
-                        <th class="widget-th">File Size</th>
-                        <th class="widget-th">File Owner</th>
-                        <th class="widget-th">MD5</th>
-                        <th class="widget-th">SHA256</th>
-                        <th class="widget-th">Event Type</th>
-                        <th class="widget-th">Event Time</th>
-                        <th class="widget-th">Event ID</th>
-                        <th class="widget-th">Domain</th>
-                        <th class="widget-th">Hostname</th>
-                        <th class="widget-th">Username</th>
-                        <th class="widget-th">Actor</th>
-                        <th class="widget-th">Email Sender</th>
-                        <th class="widget-th">Public IP</th>
-                        <th class="widget-th">Private IP</th>
-                        <th class="widget-th">Url</th>
-                    </thead>
-                    <tbody>
-                        {% for event in result.data %}
-                            <tr>
-                                <td class="widget-td">{{ event.riskSeverity }}</td>
-                                <td class="widget-td">
-                                    <a href="javascript:;" onclick="context_menu(this, [{'contains': ['file name'],
-                                        'value':'{{ event.fileName }}' }], 0,
-                                        {{ container.id }}, null, false);">
-                                            {{ event.fileName }}
-                                            &nbsp;
-                                        <span class="fa fa-caret-down" style="font-size: smaller;"></span>
-                                    </a>
-                                </td>
-                                <td class="widget-td">
-                                    <a href="javascript:;" onclick="context_menu(this, [{'contains': ['file path'],
-                                        'value':'{{ event.filePath }}' }], 0,
-                                        {{ container.id }}, null, false);">
-                                            {{ event.filePath }}
-                                            &nbsp;
-                                        <span class="fa fa-caret-down" style="font-size: smaller;"></span>
-                                    </a>
-                                </td>
-                                <td class="widget-td">
-                                    <a href="javascript:;" onclick="context_menu(this, [{'contains': ['file size'],
-                                        'value':'{{ event.fileSize }}' }], 0,
-                                        {{ container.id }}, null, false);">
-                                            {{ event.fileSize }}
-                                            &nbsp;
-                                        <span class="fa fa-caret-down" style="font-size: smaller;"></span>
-                                    </a>
-                                </td>
-                                <td class="widget-td">
-                                    <a href="javascript:;" onclick="context_menu(this, [{'contains': ['user name'],
-                                        'value':'{{ event.fileOwner }}' }], 0,
-                                        {{ container.id }}, null, false);">
-                                            {{ event.fileOwner }}
-                                            &nbsp;
-                                        <span class="fa fa-caret-down" style="font-size: smaller;"></span>
-                                    </a>
-                                </td>
-                                <td class="widget-td">
-                                    <a href="javascript:;" onclick="context_menu(this, [{'contains': ['md5'],
-                                        'value':'{{ event.md5Checksum }}' }], 0,
-                                        {{ container.id }}, null, false);">
-                                            {{ event.md5Checksum }}
-                                            &nbsp;
-                                        <span class="fa fa-caret-down" style="font-size: smaller;"></span>
-                                    </a>
-                                </td>
-                                <td class="widget-td">
-                                    <a href="javascript:;" onclick="context_menu(this, [{'contains': ['sha256'],
-                                        'value':'{{ event.sha256Checksum }}' }], 0,
-                                        {{ container.id }}, null, false);">
-                                            {{ event.sha256Checksum }}
-                                            &nbsp;
-                                        <span class="fa fa-caret-down" style="font-size: smaller;"></span>
-                                    </a>
-                                </td>
-                                <td class="widget-td">{{ event.eventType }}</td>
-                                <td class="widget-td">{{ event.eventTimestamp }}</td>
-                                <td class="widget-td">{{ event.eventId }}</td>
-                                <td class="widget-td">
-                                    <a href="javascript:;" onclick="context_menu(this, [{'contains': ['domain'],
-                                        'value':'{{ event.domainName }}' }], 0,
-                                        {{ container.id }}, null, false);">
-                                            {{ event.domainName }}
-                                            &nbsp;
+                <h4 class="wf-h4-style">Events</h4>
+                    <table class="phantom-table dataTable">
+                        <thead>
+                            <th class="widget-th">Risk Severity</th>
+                            <th class="widget-th">File Name</th>
+                            <th class="widget-th">File Path</th>
+                            <th class="widget-th">File Size</th>
+                            <th class="widget-th">File Owner</th>
+                            <th class="widget-th">MD5</th>
+                            <th class="widget-th">SHA256</th>
+                            <th class="widget-th">Event Type</th>
+                            <th class="widget-th">Event Time</th>
+                            <th class="widget-th">Event ID</th>
+                            <th class="widget-th">Domain</th>
+                            <th class="widget-th">Hostname</th>
+                            <th class="widget-th">Username</th>
+                            <th class="widget-th">Actor</th>
+                            <th class="widget-th">Email Sender</th>
+                            <th class="widget-th">Public IP</th>
+                            <th class="widget-th">Private IP</th>
+                            <th class="widget-th">Url</th>
+                        </thead>
+                        <tbody>
+                            {% for event in result.data %}
+                                <tr>
+                                    <td class="widget-td">{{ event.riskSeverity }}</td>
+                                    <td class="widget-td">
+                                        <a href="javascript:;" onclick="context_menu(this, [{'contains': ['file name'],
+                                            'value':'{{ event.fileName }}' }], 0,
+                                            {{ container.id }}, null, false);">
+                                                {{ event.fileName }}
+                                                &nbsp;
                                             <span class="fa fa-caret-down" style="font-size: smaller;"></span>
-                                    </a>
-                                </td>
-                                <td class="widget-td">
-                                    <a href="javascript:;"
-                                       onclick="context_menu(this, [{'contains': ['host name'], 'value': '{{ event.osHostName }}' }], 0, {{ container.id }}, null, false);">
-                                        {{ event.osHostName }}
-                                        &nbsp;
-                                        <span class="fa fa-caret-down" style="font-size: smaller;"></span>
-                                    </a>
-                                </td>
-                                <td class="widget-td">
-                                    <a href="javascript:;" onclick="context_menu(this, [{'contains': ['email', 'user name'],
-                                    'value':'{{ event.deviceUserName }}' }], 0,
-                                    {{ container.id }}, null, false);">
-                                        {{ event.deviceUserName }}
-                                        &nbsp;
-                                        <span class="fa fa-caret-down" style="font-size: smaller;"></span>
-                                    </a>
-                                </td>
-                                <td class="widget-td">
-                                    <a href="javascript:;" onclick="context_menu(this, [{'contains': ['email', 'user name'],
-                                    'value':'{{ event.actor }}' }], 0,
-                                    {{ container.id }}, null, false);">
-                                        {{ event.actor }}
-                                        &nbsp;
-                                        <span class="fa fa-caret-down" style="font-size: smaller;"></span>
-                                    </a>
-                                </td>
-                                <td class="widget-td">
-                                    <a href="javascript:;" onclick="context_menu(this, [{'contains': ['email', 'user name'],
-                                    'value':'{{ event.emailSender }}' }], 0,
-                                    {{ container.id }}, null, false);">
-                                        {{ event.emailSender }}
-                                        &nbsp;
-                                        <span class="fa fa-caret-down" style="font-size: smaller;"></span>
-                                    </a>
-                                </td>
-                                <td class="widget-td">
-                                    <a href="javascript:;" onclick="context_menu(this, [{'contains': ['ip', 'ipv6'],
-                                    'value':'{{ event.publicIpAddress }}' }], 0,
-                                    {{ container.id }}, null, false);">
-                                        {{ event.publicIpAddress }}
-                                        &nbsp;
-                                        <span class="fa fa-caret-down" style="font-size: smaller;"></span>
-                                    </a>
-                                </td>
-                                <td class="widget-td">
-                                    {% for item in event.privateIpAddresses %}
-                                        <span class="glyphicon glyphicon-dot"></span>&nbsp;
+                                        </a>
+                                    </td>
+                                    <td class="widget-td">
+                                        <a href="javascript:;" onclick="context_menu(this, [{'contains': ['file path'],
+                                            'value':'{{ event.filePath }}' }], 0,
+                                            {{ container.id }}, null, false);">
+                                                {{ event.filePath }}
+                                                &nbsp;
+                                            <span class="fa fa-caret-down" style="font-size: smaller;"></span>
+                                        </a>
+                                    </td>
+                                    <td class="widget-td">
+                                        <a href="javascript:;" onclick="context_menu(this, [{'contains': ['file size'],
+                                            'value':'{{ event.fileSize }}' }], 0,
+                                            {{ container.id }}, null, false);">
+                                                {{ event.fileSize }}
+                                                &nbsp;
+                                            <span class="fa fa-caret-down" style="font-size: smaller;"></span>
+                                        </a>
+                                    </td>
+                                    <td class="widget-td">
+                                        <a href="javascript:;" onclick="context_menu(this, [{'contains': ['email', 'user name'],
+                                            'value':'{{ event.fileOwner }}' }], 0,
+                                            {{ container.id }}, null, false);">
+                                                {{ event.fileOwner }}
+                                                &nbsp;
+                                            <span class="fa fa-caret-down" style="font-size: smaller;"></span>
+                                        </a>
+                                    </td>
+                                    <td class="widget-td">
+                                        <a href="javascript:;" onclick="context_menu(this, [{'contains': ['md5'],
+                                            'value':'{{ event.md5Checksum }}' }], 0,
+                                            {{ container.id }}, null, false);">
+                                                {{ event.md5Checksum }}
+                                                &nbsp;
+                                            <span class="fa fa-caret-down" style="font-size: smaller;"></span>
+                                        </a>
+                                    </td>
+                                    <td class="widget-td">
+                                        <a href="javascript:;" onclick="context_menu(this, [{'contains': ['sha256'],
+                                            'value':'{{ event.sha256Checksum }}' }], 0,
+                                            {{ container.id }}, null, false);">
+                                                {{ event.sha256Checksum }}
+                                                &nbsp;
+                                            <span class="fa fa-caret-down" style="font-size: smaller;"></span>
+                                        </a>
+                                    </td>
+                                    <td class="widget-td">{{ event.eventType }}</td>
+                                    <td class="widget-td">{{ event.eventTimestamp }}</td>
+                                    <td class="widget-td">{{ event.eventId }}</td>
+                                    <td class="widget-td">
+                                        <a href="javascript:;" onclick="context_menu(this, [{'contains': ['domain'],
+                                            'value':'{{ event.domainName }}' }], 0,
+                                            {{ container.id }}, null, false);">
+                                                {{ event.domainName }}
+                                                &nbsp;
+                                                <span class="fa fa-caret-down" style="font-size: smaller;"></span>
+                                        </a>
+                                    </td>
+                                    <td class="widget-td">
                                         <a href="javascript:;"
-                                           onclick="context_menu(this, [{'contains': ['ip', 'ipv6'], 'value': '{{ item }}' }], 0, {{ container.id }}, null, false);">
-                                            {{ item }}
+                                           onclick="context_menu(this, [{'contains': ['host name'], 'value': '{{ event.osHostName }}' }], 0, {{ container.id }}, null, false);">
+                                            {{ event.osHostName }}
                                             &nbsp;
                                             <span class="fa fa-caret-down" style="font-size: smaller;"></span>
                                         </a>
-                                        {% if not forloop.last %}<br/> {% endif %}
-                                    {% endfor %}
-                                </td>
-                                <td class="widget-td">
-                                    <a href="javascript:;" onclick="context_menu(this, [{'contains': ['url'],
-                                    'value':'{{ event.tabUrl }}' }], 0,
-                                    {{ container.id }}, null, false);">
-                                        {{ event.tabUrl }}
-                                        &nbsp;
-                                        <span class="fa fa-caret-down" style="font-size: smaller;"></span>
-                                    </a>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
+                                    </td>
+                                    <td class="widget-td">
+                                        <a href="javascript:;" onclick="context_menu(this, [{'contains': ['email', 'user name'],
+                                        'value':'{{ event.deviceUserName }}' }], 0,
+                                        {{ container.id }}, null, false);">
+                                            {{ event.deviceUserName }}
+                                            &nbsp;
+                                            <span class="fa fa-caret-down" style="font-size: smaller;"></span>
+                                        </a>
+                                    </td>
+                                    <td class="widget-td">
+                                        <a href="javascript:;" onclick="context_menu(this, [{'contains': ['email', 'user name'],
+                                        'value':'{{ event.actor }}' }], 0,
+                                        {{ container.id }}, null, false);">
+                                            {{ event.actor }}
+                                            &nbsp;
+                                            <span class="fa fa-caret-down" style="font-size: smaller;"></span>
+                                        </a>
+                                    </td>
+                                    <td class="widget-td">
+                                        <a href="javascript:;" onclick="context_menu(this, [{'contains': ['email', 'user name'],
+                                        'value':'{{ event.emailSender }}' }], 0,
+                                        {{ container.id }}, null, false);">
+                                            {{ event.emailSender }}
+                                            &nbsp;
+                                            <span class="fa fa-caret-down" style="font-size: smaller;"></span>
+                                        </a>
+                                    </td>
+                                    <td class="widget-td">
+                                        <a href="javascript:;" onclick="context_menu(this, [{'contains': ['ip', 'ipv6'],
+                                        'value':'{{ event.publicIpAddress }}' }], 0,
+                                        {{ container.id }}, null, false);">
+                                            {{ event.publicIpAddress }}
+                                            &nbsp;
+                                            <span class="fa fa-caret-down" style="font-size: smaller;"></span>
+                                        </a>
+                                    </td>
+                                    <td class="widget-td">
+                                        {% for item in event.privateIpAddresses %}
+                                            <span class="glyphicon glyphicon-dot"></span>&nbsp;
+                                            <a href="javascript:;"
+                                               onclick="context_menu(this, [{'contains': ['ip', 'ipv6'], 'value': '{{ item }}' }], 0, {{ container.id }}, null, false);">
+                                                {{ item }}
+                                                &nbsp;
+                                                <span class="fa fa-caret-down" style="font-size: smaller;"></span>
+                                            </a>
+                                            {% if not forloop.last %}<br/> {% endif %}
+                                        {% endfor %}
+                                    </td>
+                                    <td class="widget-td">
+                                        <a href="javascript:;" onclick="context_menu(this, [{'contains': ['url'],
+                                        'value':'{{ event.tabUrl }}' }], 0,
+                                        {{ container.id }}, null, false);">
+                                            {{ event.tabUrl }}
+                                            &nbsp;
+                                            <span class="fa fa-caret-down" style="font-size: smaller;"></span>
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
                 </table>
             </div>
         {% endif %}
