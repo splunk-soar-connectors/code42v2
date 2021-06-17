@@ -351,16 +351,13 @@
                                     {% endfor %}
                                 </td>
                                 <td class="widget-td">
-                                    {% for item in event.tabUrl %}
-                                        <span class="glyphicon glyphicon-dot"></span>&nbsp;
-                                        <a href="javascript:;"
-                                           onclick="context_menu(this, [{'contains': ['url'], 'value': '{{ item }}' }], 0, {{ container.id }}, null, false);">
-                                            {{ item }}
-                                            &nbsp;
-                                            <span class="fa fa-caret-down" style="font-size: smaller;"></span>
-                                        </a>
-                                        {% if not forloop.last %}<br/> {% endif %}
-                                    {% endfor %}
+                                    <a href="javascript:;" onclick="context_menu(this, [{'contains': ['url'],
+                                    'value':'{{ event.tabUrl }}' }], 0,
+                                    {{ container.id }}, null, false);">
+                                        {{ event.tabUrl }}
+                                        &nbsp;
+                                        <span class="fa fa-caret-down" style="font-size: smaller;"></span>
+                                    </a>
                                 </td>
                             </tr>
                         {% endfor %}
