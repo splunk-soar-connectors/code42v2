@@ -143,7 +143,8 @@
                     "data_path": "action_result.parameter.username",
                     "data_type": "string",
                     "contains": [
-                        "email"
+                        "email",
+                        "user name"
                     ],
                     "column_name": "Username",
                     "column_order": 0
@@ -195,7 +196,8 @@
                         "1"
                     ],
                     "contains": [
-                        "email"
+                        "email",
+                        "user name"
                     ],
                     "column_order": 5
                 },
@@ -232,7 +234,8 @@
                     "required": true,
                     "primary": true,
                     "contains": [
-                        "email"
+                        "email",
+                        "user name"
                     ],
                     "value_list": [],
                     "default": "",
@@ -244,7 +247,8 @@
                     "data_path": "action_result.parameter.username",
                     "data_type": "string",
                     "contains": [
-                        "email"
+                        "email",
+                        "user name"
                     ],
                     "column_name": "Username",
                     "column_order": 0
@@ -351,7 +355,8 @@
                         "test@example.com"
                     ],
                     "contains": [
-                        "email"
+                        "email",
+                        "user name"
                     ],
                     "column_order": 3
                 },
@@ -404,7 +409,8 @@
                     "description": "The username of the departing employee to get",
                     "data_type": "string",
                     "contains": [
-                        "email"
+                        "email",
+                        "user name"
                     ],
                     "required": true,
                     "primary": true,
@@ -417,7 +423,8 @@
                     "data_type": "string",
                     "column_name": "Filter Type",
                     "contains": [
-                        "email"
+                        "email",
+                        "user name"
                     ],
                     "column_order": 0
                 },
@@ -456,7 +463,8 @@
                         "test@example.com"
                     ],
                     "contains": [
-                        "email"
+                        "email",
+                        "user name"
                     ],
                     "column_order": 3
                 },
@@ -512,7 +520,8 @@
                     "required": true,
                     "primary": true,
                     "contains": [
-                        "email"
+                        "email",
+                        "user name"
                     ],
                     "value_list": [],
                     "default": "",
@@ -532,7 +541,8 @@
                     "data_path": "action_result.parameter.username",
                     "data_type": "string",
                     "contains": [
-                        "email"
+                        "email",
+                        "user name"
                     ],
                     "column_name": "Username",
                     "column_order": 0
@@ -578,7 +588,8 @@
                         "1"
                     ],
                     "contains": [
-                        "email"
+                        "email",
+                        "user name"
                     ],
                     "column_order": 4
                 },
@@ -615,7 +626,8 @@
                     "required": true,
                     "primary": true,
                     "contains": [
-                        "email"
+                        "email",
+                        "user name"
                     ],
                     "value_list": [],
                     "default": "",
@@ -627,7 +639,8 @@
                     "data_path": "action_result.parameter.username",
                     "data_type": "string",
                     "contains": [
-                        "email"
+                        "email",
+                        "user name"
                     ],
                     "column_name": "Username",
                     "column_order": 0
@@ -733,7 +746,8 @@
                         "test@example.com"
                     ],
                     "contains": [
-                        "email"
+                        "email",
+                        "user name"
                     ],
                     "column_order": 3
                 },
@@ -1837,7 +1851,8 @@
                     "description": "The username associated with the user profile to get",
                     "data_type": "string",
                     "contains": [
-                        "email"
+                        "email",
+                        "user name"
                     ],
                     "required": true,
                     "primary": true,
@@ -1850,7 +1865,8 @@
                     "data_type": "string",
                     "column_name": "Username",
                     "contains": [
-                        "email"
+                        "email",
+                        "user name"
                     ],
                     "column_order": 0
                 },
@@ -1889,7 +1905,8 @@
                         "test@example.com"
                     ],
                     "contains": [
-                        "email"
+                        "email",
+                        "user name"
                     ],
                     "column_order": 3
                 },
@@ -1937,7 +1954,8 @@
                         "test@example.com"
                     ],
                     "contains": [
-                        "email"
+                        "email",
+                        "user name"
                     ],
                     "column_order": 8
                 },
@@ -1985,7 +2003,8 @@
                         "test@example.com"
                     ],
                     "contains": [
-                        "email"
+                        "email",
+                        "user name"
                     ],
                     "column_order": 13
                 }
@@ -3592,7 +3611,8 @@
                     "data_path": "action_result.data.*.emailSender",
                     "data_type": "string",
                     "contains": [
-                        "email"
+                        "email",
+                        "user name"
                     ]
                 },
                 {

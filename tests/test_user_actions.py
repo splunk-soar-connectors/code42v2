@@ -9,7 +9,7 @@ from .conftest import (
     create_fake_connector,
     create_mock_response,
     assert_successful_single_data,
-    assert_successful_message,
+    assert_successful_message, TEST_USER_UID,
 )
 
 _TEST_ORG_UID = "TEST_ORG_UID"
@@ -30,13 +30,7 @@ _MOCK_USER_PROFILE_RESPONSE = {
     "managerDisplayName": "Jordan Anderson",
     "managerUid": "886765398677810428",
     "managerUsername": "test2@example.com",
-    "riskFactors": [
-        "HIGH_IMPACT_EMPLOYEE",
-        "ELEVATED_ACCESS_PRIVILEGES",
-        "PERFORMANCE_CONCERNS",
-        "FLIGHT_RISK",
-        "SUSPICIOUS_SYSTEM_ACTIVITY",
-    ],
+    "riskFactors": ["HIGH_IMPACT_EMPLOYEE", "ELEVATED_ACCESS_PRIVILEGES"],
     "state": "MN",
     "tenantId": "111111-824a-40a3-a6d9-345664cfbb33",
     "title": "Regional Vice President",
@@ -67,11 +61,11 @@ def mock_py42_with_legacy_id_user(mocker, mock_py42_client):
 
 
 @fixture
-def mock_py42_with_user_profile(mocker, mock_py42_client):
-    mock_py42_client.detectionlists.get_user.return_value = create_mock_response(
+def mock_py42_with_user_profile(mocker, mock_py42_with_user):
+    mock_py42_with_user.detectionlists.get_user_by_id.return_value = create_mock_response(
         mocker, _MOCK_USER_PROFILE_RESPONSE
     )
-    return mock_py42_client
+    return mock_py42_with_user
 
 
 @fixture
@@ -271,15 +265,21 @@ class TestCode42UsersConnector(object):
             "get_user_profile", mock_py42_with_user_profile
         )
         connector.handle_action(param)
-        mock_py42_with_user_profile.detectionlists.get_user.assert_called_once_with(
-            _TEST_USERNAME
+        mock_py42_with_user_profile.detectionlists.get_user_by_id.assert_called_once_with(
+            TEST_USER_UID
         )
 
-    def test_handle_action_when_get_user_profile_adds_response_to_data(self, mock_py42_with_user_profile):
+    def test_handle_action_when_get_user_profile_adds_response_to_data(
+        self, mock_py42_with_user_profile
+    ):
         param = {"username": _TEST_USERNAME}
-        connector = create_fake_connector("get_user_profile", mock_py42_with_user_profile)
-        connector.handle_action(param)
-        assert_successful_single_data(
-            connector,
-            _MOCK_USER_PROFILE_RESPONSE,
+        connector = create_fake_connector(
+            "get_user_profile", mock_py42_with_user_profile
         )
+        connector.handle_action(param)
+        expected_response = dict(_MOCK_USER_PROFILE_RESPONSE)
+        expected_response["riskFactors"] = [
+            {"tag": "HIGH_IMPACT_EMPLOYEE"},
+            {"tag": "ELEVATED_ACCESS_PRIVILEGES"},
+        ]
+        assert_successful_single_data(connector, expected_response)
