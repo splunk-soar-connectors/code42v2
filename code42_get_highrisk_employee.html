@@ -73,7 +73,6 @@
                             <th class="widget-th">Risk Tags</th>
                             <th class="widget-th">Notes</th>
                             <th class="widget-th">Creation Date</th>
-                            <th class="widget-th">Number of Events</th>
                         </thead>
                         <tbody>
                             {% for employee in result.data %}
@@ -102,7 +101,6 @@
                                     </td>
                                     <td class="widget-td">{{ employee.notes }}</td>
                                     <td class="widget-td">{{ employee.createdAt }}</td>
-                                    <td class="widget-td">{{ employee.numEvents }}</td>
                                 </tr>
                             {% endfor %}
                         </tbody>
