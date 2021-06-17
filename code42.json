@@ -929,6 +929,9 @@
                         "ELEVATED_ACCESS_PRIVILEGES",
                         "SUSPICIOUS_SYSTEM_ACTIVITY"
                     ],
+                    "contains": [
+                        "code42 risk tag"
+                    ],
                     "order": 1
                 }
             },
@@ -1042,6 +1045,9 @@
                         "SUSPICIOUS_SYSTEM_ACTIVITY"
                     ],
                     "default": "",
+                    "contains": [
+                        "code42 risk tag"
+                    ],
                     "order": 1
                 }
             },
