@@ -3245,7 +3245,8 @@
                 }
             ],
             "render": {
-                "type": "table"
+                "type": "custom",
+                "view": "code42_view.display_view"
             },
             "versions": "EQ(*)"
         },
