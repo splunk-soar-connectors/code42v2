@@ -6,11 +6,7 @@
 
 
 def get_ctx_result(provides, result):
-    """Function that parses data.
-    :param result: result
-    :param provides: action name
-    :return: response data
-    """
+    """Function that parses data."""
 
     ctx_result = {}
 
