@@ -786,7 +786,8 @@
                     "description": "The username of the high risk employee to get",
                     "data_type": "string",
                     "contains": [
-                        "email"
+                        "email",
+                        "user name"
                     ],
                     "required": true,
                     "primary": true,
@@ -799,7 +800,8 @@
                     "data_type": "string",
                     "column_name": "Filter Type",
                     "contains": [
-                        "email"
+                        "email",
+                        "user name"
                     ],
                     "column_order": 0
                 },
@@ -838,7 +840,8 @@
                         "test@example.com"
                     ],
                     "contains": [
-                        "email"
+                        "email",
+                        "user name"
                     ],
                     "column_order": 3
                 },
@@ -900,7 +903,8 @@
                     "required": true,
                     "primary": true,
                     "contains": [
-                        "email"
+                        "email",
+                        "user name"
                     ],
                     "value_list": [],
                     "default": "",
@@ -929,7 +933,8 @@
                     "data_path": "action_result.parameter.username",
                     "data_type": "string",
                     "contains": [
-                        "email"
+                        "email",
+                        "user name"
                     ],
                     "column_name": "Username",
                     "column_order": 0
@@ -975,7 +980,8 @@
                         "1"
                     ],
                     "contains": [
-                        "email"
+                        "email",
+                        "user name"
                     ],
                     "column_order": 4
                 },
@@ -1010,7 +1016,8 @@
                     "required": true,
                     "primary": true,
                     "contains": [
-                        "email"
+                        "email",
+                        "user name"
                     ],
                     "value_list": [],
                     "default": "",
@@ -1039,7 +1046,8 @@
                     "data_path": "action_result.parameter.username",
                     "data_type": "string",
                     "contains": [
-                        "email"
+                        "email",
+                        "user name"
                     ],
                     "column_name": "Username",
                     "column_order": 0
@@ -1085,7 +1093,8 @@
                         "test@example.com"
                     ],
                     "contains": [
-                        "email"
+                        "email",
+                        "user name"
                     ],
                     "column_order": 4
                 },
@@ -1145,7 +1154,8 @@
                     "data_type": "string",
                     "column_name": "Actor",
                     "contains": [
-                        "email"
+                        "email",
+                        "user name"
                     ],
                     "column_order": 2
                 },
@@ -1191,7 +1201,8 @@
                     "data_type": "string",
                     "column_name": "Username",
                     "contains": [
-                        "email"
+                        "email",
+                        "user name"
                     ]
                 },
                 {
@@ -1235,7 +1246,8 @@
                     "required": false,
                     "primary": false,
                     "contains": [
-                        "email"
+                        "email",
+                        "user name"
                     ],
                     "value_list": [],
                     "default": "",
@@ -1279,7 +1291,8 @@
                     "data_path": "action_result.data.*.actor",
                     "data_type": "string",
                     "contains": [
-                        "email"
+                        "email",
+                        "user name"
                     ],
                     "column_name": "Username",
                     "column_order": 0
@@ -1318,7 +1331,8 @@
                     "data_path": "action_result.parameter.username",
                     "data_type": "string",
                     "contains": [
-                        "email"
+                        "email",
+                        "user name"
                     ]
                 },
                 {
@@ -1472,7 +1486,8 @@
                     "required": true,
                     "primary": true,
                     "contains": [
-                        "email"
+                        "email",
+                        "user name"
                     ],
                     "default": "",
                     "order": 1
@@ -1516,7 +1531,8 @@
                     "data_path": "action_result.parameter.username",
                     "data_type": "string",
                     "contains": [
-                        "email"
+                        "email",
+                        "user name"
                     ],
                     "column_name": "Username",
                     "column_order": 0
@@ -1592,7 +1608,8 @@
                     "required": true,
                     "primary": true,
                     "contains": [
-                        "email"
+                        "email",
+                        "user name"
                     ],
                     "value_list": [],
                     "default": "",
@@ -1604,7 +1621,8 @@
                     "data_path": "action_result.parameter.username",
                     "data_type": "string",
                     "contains": [
-                        "email"
+                        "email",
+                        "user name"
                     ],
                     "column_name": "Username",
                     "column_order": 0
@@ -1648,7 +1666,8 @@
                     "required": true,
                     "primary": true,
                     "contains": [
-                        "email"
+                        "email",
+                        "user name"
                     ],
                     "value_list": [],
                     "default": "",
@@ -1660,7 +1679,8 @@
                     "data_path": "action_result.parameter.username",
                     "data_type": "string",
                     "contains": [
-                        "email"
+                        "email",
+                        "user name"
                     ],
                     "column_name": "Username",
                     "column_order": 0
@@ -1704,7 +1724,8 @@
                     "required": true,
                     "primary": true,
                     "contains": [
-                        "email"
+                        "email",
+                        "user name"
                     ],
                     "value_list": [],
                     "default": "",
@@ -1716,7 +1737,8 @@
                     "data_path": "action_result.parameter.username",
                     "data_type": "string",
                     "contains": [
-                        "email"
+                        "email",
+                        "user name"
                     ],
                     "column_name": "Username",
                     "column_order": 0
@@ -1760,7 +1782,8 @@
                     "required": true,
                     "primary": true,
                     "contains": [
-                        "email"
+                        "email",
+                        "user name"
                     ],
                     "value_list": [],
                     "default": "",
@@ -1772,7 +1795,8 @@
                     "data_path": "action_result.parameter.username",
                     "data_type": "string",
                     "contains": [
-                        "email"
+                        "email",
+                        "user name"
                     ],
                     "column_name": "Username",
                     "column_order": 0
@@ -1986,7 +2010,8 @@
                     "required": true,
                     "primary": true,
                     "contains": [
-                        "email"
+                        "email",
+                        "user name"
                     ],
                     "value_list": [],
                     "default": "",
@@ -2007,7 +2032,8 @@
                     "data_path": "action_result.parameter.username",
                     "data_type": "string",
                     "contains": [
-                        "email"
+                        "email",
+                        "user name"
                     ],
                     "column_name": "username",
                     "column_order": 0
@@ -2065,7 +2091,8 @@
                     "required": true,
                     "primary": true,
                     "contains": [
-                        "email"
+                        "email",
+                        "user name"
                     ],
                     "value_list": [],
                     "default": "",
@@ -2086,7 +2113,8 @@
                     "data_path": "action_result.parameter.username",
                     "data_type": "string",
                     "contains": [
-                        "email"
+                        "email",
+                        "user name"
                     ],
                     "column_name": "Username",
                     "column_order": 0
@@ -3104,7 +3132,8 @@
                     "data_path": "action_result.data.*.emailFrom",
                     "data_type": "string",
                     "contains": [
-                        "email"
+                        "email",
+                        "user name"
                     ]
                 },
                 {
@@ -3133,7 +3162,8 @@
                     "data_path": "action_result.data.*.emailSender",
                     "data_type": "string",
                     "contains": [
-                        "email"
+                        "email",
+                        "user name"
                     ]
                 },
                 {

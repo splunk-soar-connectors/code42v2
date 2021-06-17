@@ -21,8 +21,7 @@ def build_date_range_filter(date_filter_cls, start_date_str, end_date_str):
             raise Exception("Start date cannot be after end date.")
         return date_filter_cls.in_range(start_datetime, end_datetime)
     else:
-        thirty_days_ago = datetime.utcnow() - timedelta(days=30)
-        return date_filter_cls.on_or_after(thirty_days_ago)
+        return date_filter_cls.on_or_after(get_thirty_days_ago())
 
 
 def build_alerts_query(start_date, end_date, username=None, alert_state=None):
