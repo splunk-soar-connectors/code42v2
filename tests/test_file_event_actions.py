@@ -1,4 +1,3 @@
-import json
 from datetime import datetime, timedelta, timezone
 
 import dateutil
@@ -247,7 +246,7 @@ class TestCode42FileEventsConnector(object):
         connector.handle_action(param)
 
         actual_query = mock_py42_client.securitydata.search_file_events.call_args[0][0]
-        query_json = json.loads(str(actual_query))
+        query_json = dict(actual_query)
 
         for key in eq_param:
             check_filter(query_json, "IS", eq_param[key])
@@ -343,7 +342,7 @@ class TestCode42FileEventsConnector(object):
         connector = _create_run_query_connector(mocker, mock_py42_client)
         connector.handle_action(param)
         actual_query = mock_py42_client.securitydata.search_file_events.call_args[0][0]
-        query_json = json.loads(str(actual_query))
+        query_json = dict(actual_query)
         actual_date = dateutil.parser.parse(
             query_json["groups"][1]["filters"][0]["value"]
         )
@@ -358,7 +357,7 @@ class TestCode42FileEventsConnector(object):
         connector = _create_run_query_connector(mocker, mock_py42_client)
         connector.handle_action(param)
         actual_query = mock_py42_client.securitydata.search_file_events.call_args[0][0]
-        query_json = json.loads(str(actual_query))
+        query_json = dict(actual_query)
         assert query_json["groups"][0]["filters"][0]["term"] == "exposure"
         assert query_json["groups"][0]["filters"][0]["operator"] == "EXISTS"
         assert query_json["groups"][0]["filters"][0]["value"] is None
@@ -371,7 +370,7 @@ class TestCode42FileEventsConnector(object):
         connector = _create_run_query_connector(mocker, mock_py42_client)
         connector.handle_action(param)
         actual_query = mock_py42_client.securitydata.search_file_events.call_args[0][0]
-        query_json = json.loads(str(actual_query))
+        query_json = dict(actual_query)
         assert query_json["groups"][0]["filters"][0]["term"] == "trusted"
         assert query_json["groups"][0]["filters"][0]["operator"] == "IS"
         assert query_json["groups"][0]["filters"][0]["value"] == "FALSE"

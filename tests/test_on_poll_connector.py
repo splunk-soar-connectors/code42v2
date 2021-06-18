@@ -1,4 +1,3 @@
-import json
 from datetime import datetime, timedelta, timezone
 
 import dateutil.parser
@@ -572,8 +571,8 @@ class TestCode42OnPollConnector(object):
         connector._is_poll_now = True
         param = {"container_count": 1, "artifact_count": 1}
         connector.handle_action(param)
-        actual_date_str = json.loads(
-            str(mock_py42_for_alert_polling.alerts.search.call_args[0][0])
+        actual_date_str = dict(
+            mock_py42_for_alert_polling.alerts.search.call_args[0][0]
         )["groups"][0]["filters"][0]["value"]
         actual_date = dateutil.parser.parse(actual_date_str)
         expected_date = datetime.now(timezone.utc) - timedelta(days=30)
@@ -589,8 +588,8 @@ class TestCode42OnPollConnector(object):
         connector._state = {"last_time": test_timestamp}
         param = {"container_count": 1, "artifact_count": 1}
         connector.handle_action(param)
-        actual_date_str = json.loads(
-            str(mock_py42_for_alert_polling.alerts.search.call_args[0][0])
+        actual_date_str = dict(
+            mock_py42_for_alert_polling.alerts.search.call_args[0][0]
         )["groups"][0]["filters"][0]["value"]
         actual_date = dateutil.parser.parse(actual_date_str)
         expected_date = datetime.utcfromtimestamp(0) + timedelta(seconds=test_timestamp)
@@ -606,8 +605,8 @@ class TestCode42OnPollConnector(object):
         connector._state = {"last_time": None}
         param = {"container_count": 1, "artifact_count": 1}
         connector.handle_action(param)
-        actual_date_str = json.loads(
-            str(mock_py42_for_alert_polling.alerts.search.call_args[0][0])
+        actual_date_str = dict(
+            mock_py42_for_alert_polling.alerts.search.call_args[0][0]
         )["groups"][0]["filters"][0]["value"]
         actual_date = dateutil.parser.parse(actual_date_str)
         expected_date = datetime.now(timezone.utc) - timedelta(days=30)
@@ -664,7 +663,7 @@ class TestCode42OnPollConnector(object):
         call_args = (
             mock_py42_for_alert_polling.securitydata.search_file_events.call_args
         )
-        actual = json.loads(str(call_args[0][0]))
+        actual = dict(call_args[0][0])
         assert actual["groupClause"] == "AND"
         assert len(actual["groups"]) == 4
         assert actual["groups"][0]["filterClause"] == "AND"
@@ -681,7 +680,7 @@ class TestCode42OnPollConnector(object):
         )
 
         # Corresponds to unsupported exposure type observation
-        actual = json.loads(str(call_args[5][0][0]))
+        actual = dict(call_args[5][0][0])
 
         assert len(actual["groups"][3]["filters"]) == 3
         assert actual["groups"][3]["filters"][0]["operator"] == "IS_NOT"
@@ -706,7 +705,7 @@ class TestCode42OnPollConnector(object):
         )
 
         # Corresponds to exfiltration based observation
-        actual = json.loads(str(call_args[0][0][0]))
+        actual = dict(call_args[0][0][0])
 
         assert len(actual["groups"][3]["filters"]) == 3
         assert actual["groups"][3]["filters"][0]["operator"] == "IS"
@@ -725,7 +724,7 @@ class TestCode42OnPollConnector(object):
         )
 
         # Corresponds to outside-trusted-domains type observation
-        actual = json.loads(str(call_args[4][0][0]))
+        actual = dict(call_args[4][0][0])
 
         assert len(actual["groups"][3]["filters"]) == 1
         assert actual["groups"][3]["filters"][0]["operator"] == "IS"
@@ -744,7 +743,7 @@ class TestCode42OnPollConnector(object):
         )
 
         # Corresponds to FedCloudSharePermissions observation type
-        actual = json.loads(str(call_args[1][0][0]))
+        actual = dict(call_args[1][0][0])
 
         assert actual["groups"][0]["filters"][0]["operator"] == "IS"
         assert actual["groups"][0]["filters"][0]["term"] == "actor"
@@ -762,7 +761,7 @@ class TestCode42OnPollConnector(object):
         )
 
         # Corresponds to FedEndpointExfiltration observation type
-        actual = json.loads(str(call_args[0][0][0]))
+        actual = dict(call_args[0][0][0])
 
         assert len(actual["groups"][0]["filters"]) == 1
         assert actual["groups"][0]["filters"][0]["operator"] == "IS"

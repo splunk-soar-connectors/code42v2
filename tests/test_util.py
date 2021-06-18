@@ -1,5 +1,3 @@
-import json
-
 from code42_util import build_alerts_query
 
 
