@@ -340,7 +340,7 @@ class Code42Connector(BaseConnector):
         )
         return action_result.set_status(phantom.APP_SUCCESS)
 
-    @action_handler_for("searchsearch_alerts")
+    @action_handler_for("search_alerts")
     def _handle_search_alerts(self, param, action_result):
 
         if is_default_dict(param):
