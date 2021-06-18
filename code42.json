@@ -2073,7 +2073,7 @@
                     "data_path": "action_result.data.*.number",
                     "data_type": "string",
                     "contains": [
-                        "case number"
+                        "code42 case number"
                     ],
                     "column_name": "Case number",
                     "column_order": 0
@@ -2139,7 +2139,7 @@
                     "required": true,
                     "primary": true,
                     "contains": [
-                        "case number"
+                        "code42 case number"
                     ],
                     "order": 0
                 },
@@ -2201,7 +2201,7 @@
                     "data_path": "action_result.parameter.case_number",
                     "data_type": "numeric",
                     "contains": [
-                        "case number"
+                        "code42 case number"
                     ]
                 },
                 {
@@ -2236,7 +2236,7 @@
                     "data_path": "action_result.data.*.number",
                     "data_type": "string",
                     "contains": [
-                        "case number"
+                        "code42 case number"
                     ],
                     "column_name": "Case number",
                     "column_order": 0
@@ -2302,7 +2302,7 @@
                     "required": true,
                     "primary": true,
                     "contains": [
-                        "case number"
+                        "code42 case number"
                     ],
                     "order": 0
                 }
@@ -2312,14 +2312,14 @@
                     "data_path": "action_result.parameter.case_number",
                     "data_type": "numeric",
                     "contains": [
-                        "case number"
+                        "code42 case number"
                     ]
                 },
                 {
                     "data_path": "action_result.data.*.number",
                     "data_type": "string",
                     "contains": [
-                        "case number"
+                        "code42 case number"
                     ],
                     "column_name": "Case number",
                     "column_order": 0
@@ -2466,7 +2466,7 @@
                     "data_path": "action_result.data.*.number",
                     "data_type": "string",
                     "contains": [
-                        "case number"
+                        "code42 case number"
                     ],
                     "example_values": [
                         "1"
@@ -2557,7 +2557,7 @@
                     "required": true,
                     "primary": true,
                     "contains": [
-                        "case number"
+                        "code42 case number"
                     ],
                     "order": 0
                 },
@@ -2567,7 +2567,7 @@
                     "required": true,
                     "primary": true,
                     "contains": [
-                        "file event"
+                        "code42 file event"
                     ],
                     "order": 1
                 }
@@ -2579,7 +2579,7 @@
                     "column_name": "Case Number",
                     "column_order": 0,
                     "contains": [
-                        "case number"
+                        "code42 case number"
                     ]
                 },
                 {
@@ -2588,7 +2588,7 @@
                     "column_name": "Event ID",
                     "column_order": 1,
                     "contains": [
-                        "file event"
+                        "code42 file event"
                     ]
                 },
                 {
@@ -3035,7 +3035,7 @@
                     "data_path": "action_result.data.*.eventId",
                     "data_type": "string",
                     "contains": [
-                        "file event"
+                        "code42 file event"
                     ]
                 },
                 {
@@ -3382,7 +3382,7 @@
                     "data_path": "action_result.data.*.eventId",
                     "data_type": "string",
                     "contains": [
-                        "file event"
+                        "code42 file event"
                     ]
                 },
                 {
