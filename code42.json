@@ -2767,6 +2767,9 @@
                         "Video",
                         "VirtualDiskImage",
                         "Archive"
+                    ],
+                    "contains": [
+                        "code42 file category"
                     ]
                 },
                 "username": {
@@ -2822,13 +2825,19 @@
                         "RemovableMedia",
                         "IsPublic",
                         "OutsideTrustedDomains"
+                    ],
+                    "contains": [
+                        "code42 exposure type"
                     ]
                 },
                 "process_name": {
                     "description": "Process name involved in the exposure",
                     "data_type": "string",
                     "order": 11,
-                    "primary": false
+                    "primary": false,
+                    "contains": [
+                        "code42 process name"
+                    ]
                 },
                 "url": {
                     "description": "Urls of all the browser tabs open during exposure",
@@ -2843,13 +2852,19 @@
                     "description": "Names of all the open browser tabs or windows during exposure.",
                     "data_type": "string",
                     "order": 13,
-                    "primary": false
+                    "primary": false,
+                    "contains": [
+                        "code42 window title"
+                    ]
                 },
                 "untrusted_only": {
                     "description": "Return only events representing untrusted activity",
                     "data_type": "boolean",
                     "order": 14,
-                    "primary": false
+                    "primary": false,
+                    "contains": [
+                        "code42 untrusted only"
+                    ]
                 }
             },
             "output": [
@@ -2885,11 +2900,17 @@
                 },
                 {
                     "data_path": "action_result.parameter.untrusted_only",
-                    "data_type": "boolean"
+                    "data_type": "boolean",
+                    "contains": [
+                        "code42 untrusted only"
+                    ]
                 },
                 {
                     "data_path": "action_result.parameter.file_category",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "contains": [
+                        "code42 file category"
+                    ]
                 },
                 {
                     "data_path": "action_result.parameter.username",
@@ -2924,11 +2945,17 @@
                 },
                 {
                     "data_path": "action_result.parameter.exposure_type",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "contains": [
+                        "code42 exposure type"
+                    ]
                 },
                 {
                     "data_path": "action_result.parameter.process_name",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "contains": [
+                        "code42 process name"
+                    ]
                 },
                 {
                     "data_path": "action_result.parameter.url",
@@ -2939,7 +2966,10 @@
                 },
                 {
                     "data_path": "action_result.parameter.window_title",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "contains": [
+                        "code42 window title"
+                    ]
                 },
                 {
                     "data_path": "action_result.data.*.eventTimestamp",
@@ -3010,7 +3040,11 @@
                 },
                 {
                     "data_path": "action_result.data.*.actor",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "contains": [
+                        "email",
+                        "user name"
+                    ]
                 },
                 {
                     "data_path": "action_result.data.*.fileId",
