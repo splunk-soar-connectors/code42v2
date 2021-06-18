@@ -768,3 +768,29 @@ class TestCode42OnPollConnector(object):
         assert actual["groups"][0]["filters"][0]["term"] == "deviceUserName"
         assert actual["groups"][0]["filters"][0]["value"] == "cool.guy@code42.com"
         assert_success(connector)
+
+    def test_on_poll_when_given_container_id_param_creates_container_for_only_given_id(
+        self, mock_py42_for_alert_polling
+    ):
+        connector = _create_on_poll_connector(mock_py42_for_alert_polling)
+        test_alert_id = "11111111-9724-4005-b848-76af488cf5e2"
+        param = {"container_id": test_alert_id}
+        connector.handle_action(param)
+        mock_py42_for_alert_polling.alerts.get_details.assert_called_once_with(
+            test_alert_id
+        )
+        assert_success(connector)
+
+    def test_on_poll_when_given_multiple_container_ids_creates_containers_for_all_ids(
+        self, mock_py42_for_alert_polling
+    ):
+        connector = _create_on_poll_connector(mock_py42_for_alert_polling)
+        test_alert_id_1 = "11111111-9724-4005-b848-76af488cf5e2"
+        test_alert_id_2 = "1111111-555f-4880-8909-f5679448e67c"
+        param = {"container_id": f"{test_alert_id_1},{test_alert_id_2}"}
+        connector.handle_action(param)
+        call_args = mock_py42_for_alert_polling.alerts.get_details.call_args_list
+        assert len(call_args) == 2
+        assert call_args[0][0][0] == test_alert_id_1
+        assert call_args[1][0][0] == test_alert_id_2
+        assert_success(connector)

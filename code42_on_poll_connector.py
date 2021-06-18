@@ -104,6 +104,11 @@ class Code42OnPollConnector:
         param = self._adjust_date_parameters(param)
         query = build_alerts_query(param["start_date"], param.get("end_date"))
         alerts = self._get_alerts(param, query)
+        source_id = param.get("container_id")
+        if source_id:
+            alert_ids = source_id.split(",")
+            alerts = [alert for alert in alerts if alert["id"] in alert_ids]
+
         details = {}
         for alert in alerts:
             details = self._get_alert_details(alert["id"])
