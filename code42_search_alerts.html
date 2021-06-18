@@ -65,10 +65,10 @@
                     <table class="phantom-table dataTable">
                         <thead>
                             <th class="widget-th">Actor</th>
+                            <th class="widget-th">State</th>
                             <th class="widget-th">Severity</th>
                             <th class="widget-th">Name</th>
                             <th class="widget-th">Created At</th>
-                            <th class="widget-th">State</th>
                             <th class="widget-th">Description</th>
                         </thead>
                         <tbody>
@@ -83,10 +83,18 @@
                                             <span class="fa fa-caret-down" style="font-size: smaller;"></span>
                                         </a>
                                     </td>
+                                    <td class="widget-td">
+                                        <a href="javascript:;" onclick="context_menu(this, [{'contains': ['code42 alert state'],
+                                            'value':'{{ alert.state }}' }], 0,
+                                            {{ container.id }}, null, false);">
+                                                {{ alert.state }}
+                                                &nbsp;
+                                            <span class="fa fa-caret-down" style="font-size: smaller;"></span>
+                                        </a>
+                                    </td>
                                     <td class="widget-td">{{ alert.severity }}</td>
                                     <td class="widget-td">{{ alert.name }}</td>
                                     <td class="widget-td">{{ alert.createdAt }}</td>
-                                    <td class="widget-td">{{ alert.state }}</td>
                                     <td class="widget-td">{{ alert.description }}</td>
                                 </tr>
                             {% endfor %}

@@ -1273,7 +1273,10 @@
                         "IN_PROGRESS"
                     ],
                     "default": "",
-                    "order": 1
+                    "order": 1,
+                    "contains": [
+                        "code42 alert state"
+                    ]
                 },
                 "start_date": {
                     "description": "Beginning of date range to search. Time (in UTC) may also be supplied but is not required.",
@@ -1305,7 +1308,10 @@
                 },
                 {
                     "data_path": "action_result.parameter.alert_state",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "contains": [
+                        "code42 alert state"
+                    ]
                 },
                 {
                     "data_path": "action_result.parameter.start_date",
