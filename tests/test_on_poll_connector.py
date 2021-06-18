@@ -734,7 +734,7 @@ class TestCode42OnPollConnector(object):
         assert_success(connector)
 
     def test_on_poll_makes_expected_file_event_actor_query(
-        self, mocker, mock_py42_for_alert_polling
+        self, mock_py42_for_alert_polling
     ):
         connector = _create_on_poll_connector(mock_py42_for_alert_polling)
         param = {"container_count": 1, "artifact_count": 1}
@@ -752,7 +752,7 @@ class TestCode42OnPollConnector(object):
         assert_success(connector)
 
     def test_on_poll_makes_expected_file_event_device_user_name_query(
-        self, mocker, mock_py42_for_alert_polling
+        self, mock_py42_for_alert_polling
     ):
         connector = _create_on_poll_connector(mock_py42_for_alert_polling)
         param = {"container_count": 1, "artifact_count": 1}
