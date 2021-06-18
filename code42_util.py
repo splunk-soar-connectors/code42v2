@@ -9,14 +9,18 @@ def get_thirty_days_ago():
     return datetime.utcnow() - timedelta(days=30)
 
 
+def parse_datetime(date_str):
+    return dateutil.parser.parse(date_str)
+
+
 def build_date_range_filter(date_filter_cls, start_date_str, end_date_str):
     if start_date_str and not end_date_str:
-        return date_filter_cls.on_or_after(dateutil.parser.parse(start_date_str))
+        return date_filter_cls.on_or_after(parse_datetime(start_date_str))
     elif end_date_str and not start_date_str:
-        return date_filter_cls.on_or_before(dateutil.parser.parse(end_date_str))
+        return date_filter_cls.on_or_before(parse_datetime(end_date_str))
     elif end_date_str and start_date_str:
-        start_datetime = dateutil.parser.parse(start_date_str)
-        end_datetime = dateutil.parser.parse(end_date_str)
+        start_datetime = parse_datetime(start_date_str)
+        end_datetime = parse_datetime(end_date_str)
         if start_datetime >= end_datetime:
             raise Exception("Start date cannot be after end date.")
         return date_filter_cls.in_range(start_datetime, end_datetime)

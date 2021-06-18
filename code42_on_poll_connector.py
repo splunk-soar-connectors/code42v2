@@ -12,7 +12,7 @@ from py42.sdk.queries.fileevents.filters import (
     FileCategory,
 )
 
-from code42_util import get_thirty_days_ago, build_alerts_query
+from code42_util import get_thirty_days_ago, build_alerts_query, parse_datetime
 
 """The contents of this module that related to mapping alert observations to file events borrows heavily from the
 Code42 Cortex XSOAR integration as well as the code42cli python package.
@@ -114,7 +114,8 @@ class Code42OnPollConnector:
 
         # Save last time of last alert for future polling
         if not self._connector.is_poll_now() and details.get("createdAt"):
-            self._state["last_time"] = details["createdAt"]
+            checkpoint = parse_datetime(details["createdAt"]).timestamp()
+            self._state["last_time"] = checkpoint
             self._connector.save_state(self._state)
 
         return action_result.set_status(phantom.APP_SUCCESS)
