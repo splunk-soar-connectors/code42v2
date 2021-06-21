@@ -180,3 +180,14 @@ properties to ingest more alerts.
 
 Go to the Sources tab and look at the newly ingested alerts. Use the "Action" button and select from the action you
 wish to run. Additionally, use the "Playbook" button to run a playbook.
+
+## Reset Polling Checkpoint
+
+To clear your last poll timestamp, `ssh` into the server and go to the directory 
+`/opt/phantom/local_data/app_states/4d8f53a7-7b12-4d7d-8b01-6575680acf6f` (the last part is the Code42 app ID).
+
+Then, find your state file. It is in the format `<asset-id>_state.json`. You can find your assert ID via URL strings
+on Phantom on the Asset Configuration page.
+
+To reset your timestamp, edit your state file (such as with `vi`) and set the property `last_time` to have a value 
+of `0`.
