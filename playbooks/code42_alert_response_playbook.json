@@ -924,7 +924,7 @@
                                 "app_name": "Code42",
                                 "app_version": "1.0.0",
                                 "appid": "4d8f53a7-7b12-4d7d-8b01-6575680acf6f",
-                                "asset_name": "partner",
+                                "asset_name": "code42",
                                 "config_type": "asset",
                                 "count": 0,
                                 "fields": {
@@ -1715,7 +1715,7 @@
                                 "app_name": "Code42",
                                 "app_version": "1.0.0",
                                 "appid": "4d8f53a7-7b12-4d7d-8b01-6575680acf6f",
-                                "asset_name": "partner",
+                                "asset_name": "code42",
                                 "config_type": "asset",
                                 "count": 0,
                                 "fields": {
@@ -3090,7 +3090,7 @@
                                 "app_name": "SMTP",
                                 "app_version": "2.0.38",
                                 "appid": "45bb6f37-4478-499b-b4a3-51ecfa62b78c",
-                                "asset_name": "gmail dev",
+                                "asset_name": "smtp",
                                 "config_type": "asset",
                                 "count": 0,
                                 "fields": {
@@ -3930,7 +3930,7 @@
                                 "app_name": "Code42",
                                 "app_version": "1.0.0",
                                 "appid": "4d8f53a7-7b12-4d7d-8b01-6575680acf6f",
-                                "asset_name": "partner",
+                                "asset_name": "code42",
                                 "config_type": "asset",
                                 "count": 0,
                                 "fields": {
@@ -4297,7 +4297,7 @@
                                 "app_name": "Code42",
                                 "app_version": "1.0.0",
                                 "appid": "4d8f53a7-7b12-4d7d-8b01-6575680acf6f",
-                                "asset_name": "partner",
+                                "asset_name": "code42",
                                 "config_type": "asset",
                                 "count": 0,
                                 "fields": {
@@ -4614,7 +4614,7 @@
                                 "app_name": "Code42",
                                 "app_version": "1.0.0",
                                 "appid": "4d8f53a7-7b12-4d7d-8b01-6575680acf6f",
-                                "asset_name": "partner",
+                                "asset_name": "code42",
                                 "config_type": "asset",
                                 "count": 0,
                                 "fields": {
@@ -4926,7 +4926,7 @@
                                 "app_name": "Code42",
                                 "app_version": "1.0.0",
                                 "appid": "4d8f53a7-7b12-4d7d-8b01-6575680acf6f",
-                                "asset_name": "partner",
+                                "asset_name": "code42",
                                 "config_type": "asset",
                                 "count": 0,
                                 "fields": {
@@ -5320,7 +5320,7 @@
                                 "app_name": "SMTP",
                                 "app_version": "2.0.38",
                                 "appid": "45bb6f37-4478-499b-b4a3-51ecfa62b78c",
-                                "asset_name": "gmail dev",
+                                "asset_name": "smtp",
                                 "config_type": "asset",
                                 "count": 0,
                                 "fields": {
@@ -5778,7 +5778,7 @@
                                 "app_name": "Code42",
                                 "app_version": "1.0.0",
                                 "appid": "4d8f53a7-7b12-4d7d-8b01-6575680acf6f",
-                                "asset_name": "partner",
+                                "asset_name": "code42",
                                 "config_type": "asset",
                                 "count": 0,
                                 "fields": {
@@ -6131,7 +6131,7 @@
                                 "app_name": "Code42",
                                 "app_version": "1.0.0",
                                 "appid": "4d8f53a7-7b12-4d7d-8b01-6575680acf6f",
-                                "asset_name": "partner",
+                                "asset_name": "code42",
                                 "config_type": "asset",
                                 "count": 0,
                                 "fields": {
@@ -6427,7 +6427,7 @@
                                 "app_name": "Code42",
                                 "app_version": "1.0.0",
                                 "appid": "4d8f53a7-7b12-4d7d-8b01-6575680acf6f",
-                                "asset_name": "partner",
+                                "asset_name": "code42",
                                 "config_type": "asset",
                                 "count": 0,
                                 "fields": {
@@ -6847,7 +6847,7 @@
                                 "app_name": "Code42",
                                 "app_version": "1.0.0",
                                 "appid": "4d8f53a7-7b12-4d7d-8b01-6575680acf6f",
-                                "asset_name": "partner",
+                                "asset_name": "code42",
                                 "config_type": "asset",
                                 "count": 0,
                                 "fields": {
