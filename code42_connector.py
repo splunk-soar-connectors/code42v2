@@ -473,7 +473,11 @@ class Code42Connector(BaseConnector):
         if status == "ALL":
             status = None
         assignee = param.get("assignee")
+        if assignee is not None:
+            assignee = self._get_user_id(assignee)
         subject = param.get("subject")
+        if subject is not None:
+            subject = self._get_user_id(subject)
         results_generator = self._client.cases.get_all(
             status=status, assignee=assignee, subject=subject
         )
