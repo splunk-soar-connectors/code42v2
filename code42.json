@@ -49,19 +49,19 @@
             "order": 2
         },
         "start_time": {
-            "description": "The start time to use in the initial poll",
+            "description": "The start time to use in the initial poll in %Y-%m-%d %H:%M:%S format (defaults to 30 days back)",
             "data_type": "string",
             "required": false,
             "order": 3
         },
         "end_type": {
-            "description": "The end time to use in the initial poll",
+            "description": "The end time to use in the initial poll in %Y-%m-%d %H:%M:%S format (defaults to the current time)",
             "data_type": "string",
             "required": false,
             "order": 4
         },
         "severity": {
-            "description": "A comma separated list of alert severities to poll for",
+            "description": "A comma separated list of alert severities to poll for (defaults to getting all alerts)",
             "data_type": "string",
             "required": false,
             "order": 5
