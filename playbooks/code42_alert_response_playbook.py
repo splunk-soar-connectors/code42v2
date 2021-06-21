@@ -6,7 +6,7 @@ import json
 from datetime import datetime, timedelta
 def on_start(container):
     phantom.debug('on_start() called')
-
+    
     # call 'filter_1' block
     filter_1(container=container)
 
@@ -20,7 +20,7 @@ def get_alert_details_1(action=None, success=None, container=None, results=None,
     # collect data for 'get_alert_details_1' call
 
     parameters = []
-
+    
     # build parameters list for 'get_alert_details_1' call
     parameters.append({
         'alert_id': source_data_identifier_value,
@@ -32,7 +32,7 @@ def get_alert_details_1(action=None, success=None, container=None, results=None,
 
 def prompt_further_investigation(action=None, success=None, container=None, results=None, handle=None, filtered_artifacts=None, filtered_results=None, custom_function=None, **kwargs):
     phantom.debug('prompt_further_investigation() called')
-
+    
     # set user and message variables for phantom.prompt call
     user = "admin"
     message = """Further Investigation Needed for alert {0}?"""
@@ -85,15 +85,15 @@ def filter_1(action=None, success=None, container=None, results=None, handle=Non
 
 def create_case_1(action=None, success=None, container=None, results=None, handle=None, filtered_artifacts=None, filtered_results=None, custom_function=None, **kwargs):
     phantom.debug('create_case_1() called')
-
+        
     #phantom.debug('Action: {0} {1}'.format(action['name'], ('SUCCEEDED' if success else 'FAILED')))
-
+    
     # collect data for 'create_case_1' call
     results_data_1 = phantom.collect2(container=container, datapath=['get_alert_details_1:action_result.data.*.actor', 'get_alert_details_1:action_result.parameter.context.artifact_id'], action_results=results)
     results_data_2 = phantom.collect2(container=container, datapath=['prompt_further_investigation:action_result.summary.responses.1', 'prompt_further_investigation:action_result.parameter.context.artifact_id'], action_results=results)
 
     parameters = []
-
+    
     # build parameters list for 'create_case_1' call
     for results_item_1 in results_data_1:
         for results_item_2 in results_data_2:
@@ -114,15 +114,15 @@ def create_case_1(action=None, success=None, container=None, results=None, handl
 
 def add_case_event_1(action=None, success=None, container=None, results=None, handle=None, filtered_artifacts=None, filtered_results=None, custom_function=None, **kwargs):
     phantom.debug('add_case_event_1() called')
-
+        
     #phantom.debug('Action: {0} {1}'.format(action['name'], ('SUCCEEDED' if success else 'FAILED')))
-
+    
     # collect data for 'add_case_event_1' call
     container_data = phantom.collect2(container=container, datapath=['artifact:*.source_data_identifier', 'artifact:*.id'])
     results_data_1 = phantom.collect2(container=container, datapath=['create_case_1:action_result.data.*.number', 'create_case_1:action_result.parameter.context.artifact_id'], action_results=results)
 
     parameters = []
-
+    
     # build parameters list for 'add_case_event_1' call
     for container_item in container_data:
         for results_item_1 in results_data_1:
@@ -140,7 +140,7 @@ def add_case_event_1(action=None, success=None, container=None, results=None, ha
 
 def prompt_response_type(action=None, success=None, container=None, results=None, handle=None, filtered_artifacts=None, filtered_results=None, custom_function=None, **kwargs):
     phantom.debug('prompt_response_type() called')
-
+    
     # set user and message variables for phantom.prompt call
     user = "admin"
     message = """What response should be taken for user {0}?"""
@@ -172,7 +172,7 @@ def prompt_response_type(action=None, success=None, container=None, results=None
 
 def join_prompt_response_type(action=None, success=None, container=None, results=None, handle=None, filtered_artifacts=None, filtered_results=None, custom_function=None):
     phantom.debug('join_prompt_response_type() called')
-
+    
     # if the joined function has already been called, do nothing
     if phantom.get_run_data(key='join_prompt_response_type_called'):
         return
@@ -181,7 +181,7 @@ def join_prompt_response_type(action=None, success=None, container=None, results
     phantom.save_run_data(key='join_prompt_response_type_called', value='prompt_response_type', auto=True)
 
     prompt_response_type(container=container, handle=handle)
-
+    
     return
 
 def decision_2(action=None, success=None, container=None, results=None, handle=None, filtered_artifacts=None, filtered_results=None, custom_function=None, **kwargs):
@@ -243,7 +243,7 @@ def decision_2(action=None, success=None, container=None, results=None, handle=N
 
 def prompt_matter_id(action=None, success=None, container=None, results=None, handle=None, filtered_artifacts=None, filtered_results=None, custom_function=None, **kwargs):
     phantom.debug('prompt_matter_id() called')
-
+    
     # set user and message variables for phantom.prompt call
     user = "admin"
     message = """Legal hold matter ID?"""
@@ -264,14 +264,14 @@ def prompt_matter_id(action=None, success=None, container=None, results=None, ha
 
 def add_highrisk_employee_1(action=None, success=None, container=None, results=None, handle=None, filtered_artifacts=None, filtered_results=None, custom_function=None, **kwargs):
     phantom.debug('add_highrisk_employee_1() called')
-
+        
     #phantom.debug('Action: {0} {1}'.format(action['name'], ('SUCCEEDED' if success else 'FAILED')))
-
+    
     # collect data for 'add_highrisk_employee_1' call
     results_data_1 = phantom.collect2(container=container, datapath=['get_alert_details_1:action_result.summary.username', 'get_alert_details_1:action_result.parameter.context.artifact_id'], action_results=results)
 
     parameters = []
-
+    
     # build parameters list for 'add_highrisk_employee_1' call
     for results_item_1 in results_data_1:
         if results_item_1[0]:
@@ -288,14 +288,14 @@ def add_highrisk_employee_1(action=None, success=None, container=None, results=N
 
 def block_user_1(action=None, success=None, container=None, results=None, handle=None, filtered_artifacts=None, filtered_results=None, custom_function=None, **kwargs):
     phantom.debug('block_user_1() called')
-
+        
     #phantom.debug('Action: {0} {1}'.format(action['name'], ('SUCCEEDED' if success else 'FAILED')))
-
+    
     # collect data for 'block_user_1' call
     results_data_1 = phantom.collect2(container=container, datapath=['get_alert_details_1:action_result.data.*.username', 'get_alert_details_1:action_result.parameter.context.artifact_id'], action_results=results)
 
     parameters = []
-
+    
     # build parameters list for 'block_user_1' call
     for results_item_1 in results_data_1:
         if results_item_1[0]:
@@ -311,15 +311,15 @@ def block_user_1(action=None, success=None, container=None, results=None, handle
 
 def add_legalhold_custodian_1(action=None, success=None, container=None, results=None, handle=None, filtered_artifacts=None, filtered_results=None, custom_function=None, **kwargs):
     phantom.debug('add_legalhold_custodian_1() called')
-
+        
     #phantom.debug('Action: {0} {1}'.format(action['name'], ('SUCCEEDED' if success else 'FAILED')))
-
+    
     # collect data for 'add_legalhold_custodian_1' call
     results_data_1 = phantom.collect2(container=container, datapath=['get_alert_details_1:action_result.data.*.username', 'get_alert_details_1:action_result.parameter.context.artifact_id'], action_results=results)
     results_data_2 = phantom.collect2(container=container, datapath=['prompt_matter_id:action_result.summary.responses.0', 'prompt_matter_id:action_result.parameter.context.artifact_id'], action_results=results)
 
     parameters = []
-
+    
     # build parameters list for 'add_legalhold_custodian_1' call
     for results_item_1 in results_data_1:
         for results_item_2 in results_data_2:
@@ -337,15 +337,15 @@ def add_legalhold_custodian_1(action=None, success=None, container=None, results
 
 def update_case_2(action=None, success=None, container=None, results=None, handle=None, filtered_artifacts=None, filtered_results=None, custom_function=None, **kwargs):
     phantom.debug('update_case_2() called')
-
+        
     #phantom.debug('Action: {0} {1}'.format(action['name'], ('SUCCEEDED' if success else 'FAILED')))
-
+    
     # collect data for 'update_case_2' call
     results_data_1 = phantom.collect2(container=container, datapath=['prompt_response_type:action_result.summary.responses.0', 'prompt_response_type:action_result.parameter.context.artifact_id'], action_results=results)
     results_data_2 = phantom.collect2(container=container, datapath=['create_case_1:action_result.data.*.number', 'create_case_1:action_result.parameter.context.artifact_id'], action_results=results)
 
     parameters = []
-
+    
     # build parameters list for 'update_case_2' call
     for results_item_1 in results_data_1:
         for results_item_2 in results_data_2:
@@ -367,7 +367,7 @@ def update_case_2(action=None, success=None, container=None, results=None, handl
 
 def join_update_case_2(action=None, success=None, container=None, results=None, handle=None, filtered_artifacts=None, filtered_results=None, custom_function=None):
     phantom.debug('join_update_case_2() called')
-
+    
     # if the joined function has already been called, do nothing
     if phantom.get_run_data(key='join_update_case_2_called'):
         return
@@ -376,19 +376,19 @@ def join_update_case_2(action=None, success=None, container=None, results=None, 
     phantom.save_run_data(key='join_update_case_2_called', value='update_case_2', auto=True)
 
     update_case_2(container=container, handle=handle)
-
+    
     return
 
 def close_case_2(action=None, success=None, container=None, results=None, handle=None, filtered_artifacts=None, filtered_results=None, custom_function=None, **kwargs):
     phantom.debug('close_case_2() called')
-
+        
     #phantom.debug('Action: {0} {1}'.format(action['name'], ('SUCCEEDED' if success else 'FAILED')))
-
+    
     # collect data for 'close_case_2' call
     results_data_1 = phantom.collect2(container=container, datapath=['create_case_1:action_result.data.*.number', 'create_case_1:action_result.parameter.context.artifact_id'], action_results=results)
 
     parameters = []
-
+    
     # build parameters list for 'close_case_2' call
     for results_item_1 in results_data_1:
         if results_item_1[0]:
@@ -404,14 +404,14 @@ def close_case_2(action=None, success=None, container=None, results=None, handle
 
 def hunt_file_1(action=None, success=None, container=None, results=None, handle=None, filtered_artifacts=None, filtered_results=None, custom_function=None, **kwargs):
     phantom.debug('hunt_file_1() called')
-
+        
     #phantom.debug('Action: {0} {1}'.format(action['name'], ('SUCCEEDED' if success else 'FAILED')))
-
+    
     # collect data for 'hunt_file_1' call
     inputs_data_1 = phantom.collect2(container=container, datapath=['add_case_event_1:artifact:*.cef.fileHashMd5', 'add_case_event_1:artifact:*.cef.fname', 'add_case_event_1:artifact:*.id'], action_results=results)
 
     parameters = []
-
+    
     # build parameters list for 'hunt_file_1' call
     for inputs_item_1 in inputs_data_1:
         if inputs_item_1[0]:
@@ -428,16 +428,16 @@ def hunt_file_1(action=None, success=None, container=None, results=None, handle=
 
 def send_email_1(action=None, success=None, container=None, results=None, handle=None, filtered_artifacts=None, filtered_results=None, custom_function=None, **kwargs):
     phantom.debug('send_email_1() called')
-
+        
     #phantom.debug('Action: {0} {1}'.format(action['name'], ('SUCCEEDED' if success else 'FAILED')))
-
+    
     # collect data for 'send_email_1' call
     results_data_1 = phantom.collect2(container=container, datapath=['get_user_profile_1:action_result.data.*.managerUsername', 'get_user_profile_1:action_result.parameter.context.artifact_id'], action_results=results)
     results_data_2 = phantom.collect2(container=container, datapath=['get_alert_details_1:action_result.data.*.name', 'get_alert_details_1:action_result.parameter.context.artifact_id'], action_results=results)
     formatted_data_1 = phantom.get_format_data(name='format_1')
 
     parameters = []
-
+    
     # build parameters list for 'send_email_1' call
     for results_item_1 in results_data_1:
         for results_item_2 in results_data_2:
@@ -461,7 +461,7 @@ def send_email_1(action=None, success=None, container=None, results=None, handle
 
 def format_1(action=None, success=None, container=None, results=None, handle=None, filtered_artifacts=None, filtered_results=None, custom_function=None, **kwargs):
     phantom.debug('format_1() called')
-
+    
     template = """Data exfiltration activity has been detected by Code42 for user {0}. File exfiltration details:
 
 Files:
@@ -489,14 +489,14 @@ Exposures:
 
 def get_user_profile_1(action=None, success=None, container=None, results=None, handle=None, filtered_artifacts=None, filtered_results=None, custom_function=None, **kwargs):
     phantom.debug('get_user_profile_1() called')
-
+        
     #phantom.debug('Action: {0} {1}'.format(action['name'], ('SUCCEEDED' if success else 'FAILED')))
-
+    
     # collect data for 'get_user_profile_1' call
     results_data_1 = phantom.collect2(container=container, datapath=['get_alert_details_1:action_result.data.*.actor', 'get_alert_details_1:action_result.parameter.context.artifact_id'], action_results=results)
 
     parameters = []
-
+    
     # build parameters list for 'get_user_profile_1' call
     for results_item_1 in results_data_1:
         if results_item_1[0]:
@@ -533,10 +533,10 @@ def decision_3(action=None, success=None, container=None, results=None, handle=N
 
 def prompt_manager_email(action=None, success=None, container=None, results=None, handle=None, filtered_artifacts=None, filtered_results=None, custom_function=None, **kwargs):
     phantom.debug('prompt_manager_email() called')
-
+    
     # set user and message variables for phantom.prompt call
     user = "admin"
-    message = """Unable to find email address for manager of user {0}.
+    message = """Unable to find email address for manager of user {0}. 
 
 Please enter manager's email address to send alert notification."""
 
@@ -561,16 +561,16 @@ Please enter manager's email address to send alert notification."""
 
 def send_email_2(action=None, success=None, container=None, results=None, handle=None, filtered_artifacts=None, filtered_results=None, custom_function=None, **kwargs):
     phantom.debug('send_email_2() called')
-
+        
     #phantom.debug('Action: {0} {1}'.format(action['name'], ('SUCCEEDED' if success else 'FAILED')))
-
+    
     # collect data for 'send_email_2' call
     results_data_1 = phantom.collect2(container=container, datapath=['prompt_manager_email:action_result.summary.responses.0', 'prompt_manager_email:action_result.parameter.context.artifact_id'], action_results=results)
     results_data_2 = phantom.collect2(container=container, datapath=['get_alert_details_1:action_result.data.*.name', 'get_alert_details_1:action_result.parameter.context.artifact_id'], action_results=results)
     formatted_data_1 = phantom.get_format_data(name='format_1')
 
     parameters = []
-
+    
     # build parameters list for 'send_email_2' call
     for results_item_1 in results_data_1:
         for results_item_2 in results_data_2:
