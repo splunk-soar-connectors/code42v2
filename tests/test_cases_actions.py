@@ -247,7 +247,7 @@ class TestCode42CasesConnector(object):
         connector = create_fake_connector("list_cases", mock_py42_with_case)
         connector.handle_action(param)
         mock_py42_with_case.cases.get_all.assert_called_once_with(
-            status="OPEN", assignee=_TEST_ASSIGNEE, subject=_TEST_SUBJECT
+            status="OPEN", assignee=_TEST_USER_UID, subject=_TEST_USER_UID
         )
         assert_success(connector)
 
