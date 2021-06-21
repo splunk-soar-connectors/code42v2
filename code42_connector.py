@@ -220,6 +220,9 @@ class Code42Connector(BaseConnector):
         for page in results_generator:
             employees = page.data.get("items", [])
             for employee in employees:
+                all_tags = employee.get("riskFactors", [])
+                if all_tags:
+                    employee["riskFactors"] = _convert_to_obj_list(all_tags, "tag")
                 action_result.add_data(employee)
 
         total_count = page.data.get("totalCount", 0) if page else None

@@ -382,6 +382,15 @@
                     "column_order": 3
                 },
                 {
+                    "column_name": "Risk Tag",
+                    "data_path": "action_result.data.*.riskFactors.*.tag",
+                    "column_order": 4,
+                    "data_type": "string",
+                    "contains": [
+                        "code42 risk tag"
+                    ]
+                },
+                {
                     "column_name": "Notes",
                     "data_path": "action_result.data.*.notes",
                     "data_type": "string",

@@ -80,6 +80,7 @@
                         <thead>
                             <th class="widget-th">Username</th>
                             <th class="widget-th">User ID</th>
+                            <th class="widget-th">Risk Tags</th>
                             <th class="widget-th">Notes</th>
                             <th class="widget-th">Creation Date</th>
                             <th class="widget-th">Number of Events</th>
@@ -97,6 +98,18 @@
                                         </a>
                                     </td>
                                     <td class="widget-td">{{ employee.userId }}</td>
+                                    <td class="widget-td">
+                                        {% for tag in employee.riskFactors %}
+                                            <span class="glyphicon glyphicon-dot"></span>&nbsp;
+                                            <a href="javascript:;"
+                                               onclick="context_menu(this, [{'contains': ['code42 risk tag'], 'value': '{{ tag.tag }}' }], 0, {{ container.id }}, null, false);">
+                                                {{ tag.tag }}
+                                                &nbsp;
+                                                <span class="fa fa-caret-down" style="font-size: smaller;"></span>
+                                            </a>
+                                            {% if not forloop.last %}<br/> {% endif %}
+                                        {% endfor %}
+                                    </td>
                                     <td class="widget-td">{{ employee.notes }}</td>
                                     <td class="widget-td">{{ employee.createdAt }}</td>
                                     <td class="widget-td">{{ employee.numEvents }}</td>
