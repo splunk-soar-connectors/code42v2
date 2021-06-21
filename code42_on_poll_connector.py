@@ -364,7 +364,7 @@ def _create_artifact_json(container_id, alert_details, file_event):
         "cef": cef,
         "data": normalized_event,
         "start_time": normalized_event.get("eventTimestamp"),
-        "severity": alert_details.get("severity")
+        "severity": alert_details.get("severity"),
     }
     return artifact_dict
 
