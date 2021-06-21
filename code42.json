@@ -98,7 +98,7 @@
                     "required": false,
                     "order": 1
                 },
-                "end_type": {
+                "end_time": {
                     "description": "The end time to use in the initial poll in %Y-%m-%d %H:%M:%S format (defaults to the current time)",
                     "data_type": "string",
                     "required": false,
