@@ -592,7 +592,11 @@ class TestCode42OnPollConnector(object):
         connector._is_poll_now = False
         test_timestamp = 1623293946
         connector._state = {"last_time": test_timestamp}
-        param = {"container_count": 1, "artifact_count": 1}
+        param = {
+            "container_count": 1,
+            "artifact_count": 1,
+            "start_date": "2020-05-04 12:23:32",  # For prooving that it does not use the stored start_date
+        }
         connector.handle_action(param)
         actual_date_str = dict(
             mock_py42_for_alert_polling.alerts.search.call_args[0][0]
