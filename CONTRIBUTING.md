@@ -178,7 +178,7 @@ First, get alerts into Phantom by going to your configured asset's Ingest Settin
 polling. Then, hit `Poll Now`. You likely will want to increase the `Maximum Containers` and `Maximum Artifacts`
 properties to ingest more alerts.
 
-Go to the Sources tab and look at the newly ingested alerts. Use the "Action" button and select from the action you
+Go to the Sources tab and look at the newly ingested alerts. Use the "Action" button and select the action you
 wish to run. Additionally, use the "Playbook" button to run a playbook.
 
 ## Reset Polling Checkpoint
