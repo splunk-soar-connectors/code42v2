@@ -46,12 +46,17 @@ _TEST_CASE_RESPONSE = {
 
 
 @fixture
-def mock_py42_with_case(mocker, mock_py42_with_user):
+def mock_py42_with_case(mocker, mock_py42_client):
+    def mock_get_by_username(username):
+        response_data = {"users": [{"userUid": username + "_UID"}]}
+        return create_mock_response(mocker, response_data)
+
+    mock_py42_client.users.get_by_username = mock_get_by_username
     mock_cases_response = create_mock_response(mocker, _TEST_CASE_RESPONSE)
-    mock_py42_with_user.cases.create.return_value = Py42Response(mock_cases_response)
-    mock_py42_with_user.cases.get.return_value = Py42Response(mock_cases_response)
-    mock_py42_with_user.cases.update.return_value = Py42Response(mock_cases_response)
-    return mock_py42_with_user
+    mock_py42_client.cases.create.return_value = Py42Response(mock_cases_response)
+    mock_py42_client.cases.get.return_value = Py42Response(mock_cases_response)
+    mock_py42_client.cases.update.return_value = Py42Response(mock_cases_response)
+    return mock_py42_client
 
 
 @fixture
@@ -82,8 +87,8 @@ class TestCode42CasesConnector(object):
             _TEST_NAME,
             description=_TEST_DESCRIPTION,
             findings=_TEST_FINDINGS,
-            assignee=_TEST_USER_UID,
-            subject=_TEST_USER_UID,
+            assignee=_TEST_ASSIGNEE + "_UID",
+            subject=_TEST_SUBJECT + "_UID",
         )
         assert_success(connector)
 
@@ -121,13 +126,8 @@ class TestCode42CasesConnector(object):
         assert_successful_summary(connector, expected_summary)
 
     def test_handle_action_when_updating_case_calls_with_expected_args_and_sets_success_status(
-        self, mocker, mock_py42_with_case
+        self, mock_py42_with_case
     ):
-        mock_user_response = mocker.MagicMock(spec=Response)
-        mock_user_response.text = f'{{"users": [{{"userUid": "{_TEST_USER_UID}"}}]}}'
-        mock_py42_with_case.users.get_by_username.return_value = Py42Response(
-            mock_user_response
-        )
         param = {
             "case_number": 1,
             "case_name": _TEST_NAME,
@@ -143,8 +143,8 @@ class TestCode42CasesConnector(object):
             name=_TEST_NAME,
             description=_TEST_DESCRIPTION,
             findings=_TEST_FINDINGS,
-            assignee=_TEST_USER_UID,
-            subject=_TEST_USER_UID,
+            assignee=_TEST_ASSIGNEE + "_UID",
+            subject=_TEST_SUBJECT + "_UID",
         )
         assert_success(connector)
 
@@ -247,9 +247,10 @@ class TestCode42CasesConnector(object):
         connector = create_fake_connector("list_cases", mock_py42_with_case)
         connector.handle_action(param)
         mock_py42_with_case.cases.get_all.assert_called_once_with(
-            status="OPEN", assignee=_TEST_USER_UID, subject=_TEST_USER_UID
+            status="OPEN",
+            assignee=_TEST_ASSIGNEE + "_UID",
+            subject=_TEST_SUBJECT + "_UID",
         )
-        assert mock_py42_with_case.users.get_by_username.call_count == 2
         assert_success(connector)
 
     def test_handle_action_when_list_departing_employee_updates_summary(
