@@ -175,8 +175,8 @@ modules, we've stubbed them out in the `phantom` directory so that they can be i
 # Testing the App
 
 First, get alerts into Phantom by going to your configured asset's Ingest Settings and enabling
-polling. Then, hit `Poll Now`. You likely will want to increase the `Maximum Containers` and `Maximum Artifacts` 
-properties to ingest more alerts.  
+polling. Then, hit `Poll Now`. You likely will want to increase the `Maximum Containers` and `Maximum Artifacts`
+properties to ingest more alerts.
 
-Go to the Sources tab and look at the newly ingested alerts. Use the "Action" button and select from the action you 
+Go to the Sources tab and look at the newly ingested alerts. Use the "Action" button and select from the action you
 wish to run. Additionally, use the "Playbook" button to run a playbook.
