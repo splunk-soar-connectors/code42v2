@@ -20,7 +20,11 @@ def get_ctx_result(provides, result):
         ctx_result["summary"] = summary
     ctx_result["action"] = provides
     if not data:
-        single_result_actions = ["get departing employee", "get highrisk employee"]
+        single_result_actions = [
+            "get departing employee",
+            "get highrisk employee",
+            "get user profile",
+        ]
         ctx_result["data"] = {} if provides in single_result_actions else []
         return ctx_result
 
