@@ -413,10 +413,10 @@ class Code42Connector(BaseConnector):
         name = param["case_name"]
         description = param.get("description")
         subject = param.get("subject")
-        if subject is not None:
+        if subject:
             subject = self._get_user_id(subject)
         assignee = param.get("assignee")
-        if assignee is not None:
+        if assignee:
             assignee = self._get_user_id(assignee)
         findings = param.get("findings")
         response = self._client.cases.create(
@@ -437,10 +437,10 @@ class Code42Connector(BaseConnector):
         case_number = param["case_number"]
         name = param.get("case_name")
         subject = param.get("subject")
-        if subject is not None:
+        if subject:
             subject = self._get_user_id(subject)
         assignee = param.get("assignee")
-        if assignee is not None:
+        if assignee:
             assignee = self._get_user_id(assignee)
         description = param.get("description")
         findings = param.get("findings")
@@ -481,10 +481,10 @@ class Code42Connector(BaseConnector):
         if status == "ALL":
             status = None
         assignee = param.get("assignee")
-        if assignee is not None:
+        if assignee:
             assignee = self._get_user_id(assignee)
         subject = param.get("subject")
-        if subject is not None:
+        if subject:
             subject = self._get_user_id(subject)
         results_generator = self._client.cases.get_all(
             status=status, assignee=assignee, subject=subject
@@ -515,7 +515,7 @@ class Code42Connector(BaseConnector):
                 err.args = (message,)
                 raise err
             else:
-                raise err
+                raise
         status_message = f"Event {event_id} added to case number {case_number}"
         action_result.update_summary({"case_number": case_number, "event_id": event_id})
         return action_result.set_status(phantom.APP_SUCCESS, status_message)
