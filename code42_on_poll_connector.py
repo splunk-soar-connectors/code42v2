@@ -123,8 +123,9 @@ class Code42OnPollConnector:
             self._save_artifacts_from_file_events(container_id, details, file_events)
 
         # Save last time of last alert for future polling
-        if details.get("createdAt"):
-            checkpoint = parse_datetime(details["createdAt"]).timestamp()
+        last_created_at = details.get("createdAt")
+        if last_created_at:
+            checkpoint = parse_datetime(last_created_at).timestamp()
             self._state["last_time"] = checkpoint
             self._connector.save_state(self._state)
 
