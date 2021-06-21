@@ -178,15 +178,16 @@ First, get alerts into Phantom by going to your configured asset's Ingest Settin
 polling. Then, hit `Poll Now`. You likely will want to increase the `Maximum Containers` and `Maximum Artifacts`
 properties to ingest more alerts.
 
-Go to the Sources tab and look at the newly ingested alerts. Use the "Action" button and select the action you
-wish to run. Additionally, use the "Playbook" button to run a playbook.
+After the ingestion completes, go to the Sources tab and look at the newly ingested alerts.
+Click on alert and go to the "Analyst" view. Finally, use the "Action" and "Playbook" buttons
+to run actions or playbooks.
 
 ## Reset Polling Checkpoint
 
 To clear a last poll timestamp for a given asset, `ssh` into the server and go to the directory
 `/opt/phantom/local_data/app_states/4d8f53a7-7b12-4d7d-8b01-6575680acf6f` (the last part is the Code42 app ID).
 
-Then, find your state file. It is in the format `<asset-id>_state.json`. (Note: Find your asset ID by looking 
+Then, find your state file. It is in the format `<asset-id>_state.json`. (Note: Find your asset ID by looking
 at the URL string when selecting assets on the "Asset Configuration" page).
 
 To reset your timestamp, edit your state file (such as with `vi`) and set the property `last_time` to have a value
