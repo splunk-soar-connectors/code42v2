@@ -95,6 +95,7 @@ EXPECTED_ARTIFACTS = expected = [
         "name": "Code42 File Event Artifact",
         "source_data_identifier": "0_1d71796f-af5b-4231-9d8e-df6434da4663_935873453596901068_956171635867906205_5",
         "start_time": "2020-05-28T12:46:39.838Z",
+        "severity": "LOW"
     },
     {
         "cef": {
@@ -174,6 +175,7 @@ EXPECTED_ARTIFACTS = expected = [
         "name": "Code42 File Event Artifact",
         "source_data_identifier": "0_1d71796f-af5b-4231-9d8e-df6434da4663_935873453596901068_956171635867906205_5",
         "start_time": "2020-05-28T12:46:39.838Z",
+        "severity": "LOW"
     },
     {
         "cef": {
@@ -253,6 +255,7 @@ EXPECTED_ARTIFACTS = expected = [
         "name": "Code42 File Event Artifact",
         "source_data_identifier": "0_1d71796f-af5b-4231-9d8e-df6434da4663_935873453596901068_956171635867906205_5",
         "start_time": "2020-05-28T12:46:39.838Z",
+        "severity": "LOW"
     },
     {
         "cef": {
@@ -332,6 +335,7 @@ EXPECTED_ARTIFACTS = expected = [
         "name": "Code42 File Event Artifact",
         "source_data_identifier": "0_1d71796f-af5b-4231-9d8e-df6434da4663_935873453596901068_956171635867906205_5",
         "start_time": "2020-05-28T12:46:39.838Z",
+        "severity": "LOW"
     },
     {
         "cef": {
@@ -411,6 +415,7 @@ EXPECTED_ARTIFACTS = expected = [
         "name": "Code42 File Event Artifact",
         "source_data_identifier": "0_1d71796f-af5b-4231-9d8e-df6434da4663_935873453596901068_956171635867906205_5",
         "start_time": "2020-05-28T12:46:39.838Z",
+        "severity": "LOW"
     },
     {
         "cef": {
@@ -490,6 +495,7 @@ EXPECTED_ARTIFACTS = expected = [
         "name": "Code42 File Event Artifact",
         "source_data_identifier": "0_1d71796f-af5b-4231-9d8e-df6434da4663_935873453596901068_956171635867906205_5",
         "start_time": "2020-05-28T12:46:39.838Z",
+        "severity": "LOW"
     },
 ]
 
