@@ -187,8 +187,8 @@ to run actions or playbooks.
 To clear a last poll timestamp for a given asset, `ssh` into the server and go to the directory
 `/opt/phantom/local_data/app_states/4d8f53a7-7b12-4d7d-8b01-6575680acf6f` (the last part is the Code42 app ID).
 
-Then, find your state file. It is in the format `<asset-id>_state.json`. (Note: Find your asset ID by looking
-at the URL string when selecting assets on the "Asset Configuration" page).
+Then, find your state file. It is in the format `<asset-id>_state.json`. (Note: to find your asset ID, look
+at the URL path's parameters when selecting assets on the "Asset Configuration" page).
 
 To reset your timestamp, edit your state file (such as with `vi`) and set the property `last_time` to have a value
 of `0`.
