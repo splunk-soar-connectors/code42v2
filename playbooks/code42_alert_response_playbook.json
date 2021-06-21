@@ -889,6 +889,7 @@
                             {
                                 "action": "close case",
                                 "actions": [
+                                    "get user profile",
                                     "run advanced query",
                                     "run query",
                                     "hunt file",
@@ -1561,6 +1562,7 @@
                             {
                                 "action": "hunt file",
                                 "actions": [
+                                    "get user profile",
                                     "run advanced query",
                                     "run query",
                                     "hunt file",
@@ -2148,6 +2150,7 @@
                             {
                                 "action": "add case event",
                                 "actions": [
+                                    "get user profile",
                                     "run advanced query",
                                     "run query",
                                     "hunt file",
@@ -2463,6 +2466,7 @@
                             {
                                 "action": "block user",
                                 "actions": [
+                                    "get user profile",
                                     "run advanced query",
                                     "run query",
                                     "hunt file",
@@ -2753,6 +2757,7 @@
                             {
                                 "action": "add legalhold custodian",
                                 "actions": [
+                                    "get user profile",
                                     "run advanced query",
                                     "run query",
                                     "hunt file",
@@ -3073,6 +3078,7 @@
                             {
                                 "action": "update case",
                                 "actions": [
+                                    "get user profile",
                                     "run advanced query",
                                     "run query",
                                     "hunt file",
@@ -3492,6 +3498,7 @@
                             {
                                 "action": "add highrisk employee",
                                 "actions": [
+                                    "get user profile",
                                     "run advanced query",
                                     "run query",
                                     "hunt file",
@@ -3830,6 +3837,7 @@
                             {
                                 "action": "get alert details",
                                 "actions": [
+                                    "get user profile",
                                     "run advanced query",
                                     "run query",
                                     "hunt file",
@@ -4363,6 +4371,7 @@
                             {
                                 "action": "create case",
                                 "actions": [
+                                    "get user profile",
                                     "run advanced query",
                                     "run query",
                                     "hunt file",
@@ -4728,6 +4737,7 @@
                             {
                                 "action": "get user profile",
                                 "actions": [
+                                    "get user profile",
                                     "run advanced query",
                                     "run query",
                                     "hunt file",
