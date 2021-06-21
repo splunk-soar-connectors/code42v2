@@ -61,7 +61,7 @@
             "order": 4
         },
         "severity": {
-            "description": "A comma separated list of alert severities to poll for (defaults to getting all alerts)",
+            "description": "A comma separated list of alert severities to poll for, such as HIGH, LOW, or MEDIUM (defaults to getting all alerts)",
             "data_type": "string",
             "required": false,
             "order": 5
