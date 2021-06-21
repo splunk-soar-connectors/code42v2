@@ -14,16 +14,18 @@
         to use to connect to Code42.
       </p>
     <p>
-      If using the polling feature, access the Ingest Settings tab from the Asset Configuration page and input the
-      polling interval.
+      If using the polling feature, you may set the Start Date and End Date for the initial ingest. Otherwise,
+      it ingests up to 30 days back. Ongoing queries will only get new alerts. Configure the polling interval in the
+      Ingest Settings tab. Additionally, you can configure which alert severities to poll for, such as HIGH, MEDIUM,
+      or LOW.
     </p>
 
     <h2>On Poll</h2>
       <p>
-        The 'on poll' functionality first ingests the past 30 days of Code42 alerts. Note that if you use the "poll now"
-        feature, you are limited to the number of containers and artifacts listed in the parameter fields. Adjust the
-        polling interval in the ingest settings to determine how frequent polling occurs. The app ingests individual
-        alerts only once unless deleted and re-polled.
+        The 'on poll' functionality first ingests the past 30 days of Code42 alerts (or uses the configured state and
+        end dates). Note that if you use the "poll now" feature, you are limited to the number of containers and
+        artifacts listed in the parameter fields. Adjust the polling interval in the ingest settings to determine how
+        frequent polling occurs. The app ingests individual alerts only once unless deleted and re-polled.
       </p>
 
   </body>

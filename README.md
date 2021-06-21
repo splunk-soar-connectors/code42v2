@@ -1,3 +1,3 @@
 # phcode42v2
 
-This app integrates with Code42 to execute various investigate, correct, and containment actions
+Code42 provides simple, fast detection and response to everyday data loss from insider threats by focusing on customer data on endpoints and the cloud.
