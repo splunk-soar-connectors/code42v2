@@ -11,6 +11,7 @@ import requests
 from phantom.action_result import ActionResult
 from phantom.base_connector import BaseConnector
 from phantom.vault import Vault
+from py42.exceptions import Py42BadRequestError
 from py42.exceptions import Py42NotFoundError
 from py42.exceptions import Py42UpdateClosedCaseError
 from py42.sdk.queries.fileevents.file_event_query import FileEventQuery
@@ -405,6 +406,8 @@ class Code42Connector(BaseConnector):
         status_message = f"{username} was removed from legal hold matter {matter_id}."
         return action_result.set_status(phantom.APP_SUCCESS, status_message)
 
+    """ CASES ACTIONS """
+
     @action_handler_for("create_case")
     def _handle_create_case(self, param, action_result):
         name = param["case_name"]
@@ -441,14 +444,17 @@ class Code42Connector(BaseConnector):
             assignee = self._get_user_id(assignee)
         description = param.get("description")
         findings = param.get("findings")
-        response = self._client.cases.update(
-            case_number,
-            name=name,
-            subject=subject,
-            assignee=assignee,
-            description=description,
-            findings=findings,
-        )
+        try:
+            response = self._client.cases.update(
+                case_number,
+                name=name,
+                subject=subject,
+                assignee=assignee,
+                description=description,
+                findings=findings,
+            )
+        except Py42NotFoundError as err:
+            self._handle_case_not_found(err, case_number)
         status_message = f"Case number {case_number} successfully updated"
         action_result.add_data(response.data)
         action_result.update_summary({"case_number": case_number})
@@ -460,6 +466,8 @@ class Code42Connector(BaseConnector):
         try:
             response = self._client.cases.update(case_number, status="CLOSED")
             status_message = f"Case number {case_number} successfully closed"
+        except Py42NotFoundError as err:
+            self._handle_case_not_found(err, case_number)
         except Py42UpdateClosedCaseError:
             response = self._client.cases.get(case_number)
             status_message = f"Case number {case_number} already closed!"
@@ -495,10 +503,29 @@ class Code42Connector(BaseConnector):
     def _handle_add_case_event(self, param, action_result):
         case_number = param["case_number"]
         event_id = param["event_id"]
-        self._client.cases.file_events.add(case_number=case_number, event_id=event_id)
+        try:
+            self._client.cases.file_events.add(
+                case_number=case_number, event_id=event_id
+            )
+        except Py42BadRequestError as err:
+            if "NO_SUCH_CASE" in err.response.text:
+                self._handle_case_not_found(err, case_number)
+            elif "NO_SUCH_EVENT" in err.response.text:
+                message = f"Event ID {event_id} not found."
+                err.args = (message,)
+                raise err
+            else:
+                raise err
         status_message = f"Event {event_id} added to case number {case_number}"
         action_result.update_summary({"case_number": case_number, "event_id": event_id})
         return action_result.set_status(phantom.APP_SUCCESS, status_message)
+
+    @staticmethod
+    def _handle_case_not_found(exception, case_number):
+        """Returns a better error message when cases service returns 404."""
+        message = f"Case number {case_number} not found."
+        exception.args = (message,)
+        raise exception
 
     """ FILE EVENT ACTIONS """
 
