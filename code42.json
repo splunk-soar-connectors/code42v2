@@ -938,7 +938,7 @@
                     "description": "A risk tag to add to the user",
                     "data_type": "string",
                     "required": true,
-                    "primary": false,
+                    "primary": true,
                     "default": "",
                     "value_list": [
                         "HIGH_IMPACT_EMPLOYEE",
@@ -1057,7 +1057,7 @@
                     "description": "A risk tag to remove from the user",
                     "data_type": "string",
                     "required": true,
-                    "primary": false,
+                    "primary": true,
                     "value_list": [
                         "HIGH_IMPACT_EMPLOYEE",
                         "CONTRACT_EMPLOYEE",
