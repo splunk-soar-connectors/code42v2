@@ -2033,6 +2033,10 @@
                         "user name"
                     ],
                     "column_order": 13
+                },
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
                 }
             ],
             "render": {
