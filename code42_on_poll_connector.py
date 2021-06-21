@@ -106,7 +106,7 @@ class Code42OnPollConnector:
         if severities:
             severities = severities.replace(" ", "").split(",")
         query = build_alerts_query(
-            param["start_date"], param.get("end_date"), severities=severities
+            param["start_time"], param.get("end_time"), severities=severities
         )
         alerts = self._get_alerts(param, query)
         source_id = param.get("container_id")
@@ -192,16 +192,16 @@ class Code42OnPollConnector:
             # If there was never a stored last_time.
             config = self._connector.get_config()
             given_start_date = config.get("start_date")
-            param["start_date"] = given_start_date or get_thirty_days_ago().strftime(
+            param["start_time"] = given_start_date or get_thirty_days_ago().strftime(
                 "%Y-%m-%dT%H:%M:%S.%f"
             )
-            param["end_date"] = config.get("end_date")
+            param["end_time"] = config.get("end_date")
         else:
             # Last time is stored as a float timestamp
             last_time_as_date_str = datetime.utcfromtimestamp(last_time).strftime(
                 "%Y-%m-%dT%H:%M:%S.%f"
             )
-            param["start_date"] = last_time_as_date_str
+            param["start_time"] = last_time_as_date_str
 
         return param
 
