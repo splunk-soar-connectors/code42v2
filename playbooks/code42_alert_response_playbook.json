@@ -4748,7 +4748,6 @@
                                     "create case",
                                     "remove legalhold custodian",
                                     "add legalhold custodian",
-                                    "get user profile",
                                     "unblock user",
                                     "reactivate user",
                                     "deactivate user",
