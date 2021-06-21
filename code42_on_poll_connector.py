@@ -102,7 +102,12 @@ class Code42OnPollConnector:
 
     def handle_on_poll(self, param, action_result):
         param = self._adjust_date_parameters(param)
-        query = build_alerts_query(param["start_date"], param.get("end_date"))
+        severities = self._connector.get_config().get("severity")
+        if severities:
+            severities = severities.replace(" ", "").split(",")
+        query = build_alerts_query(
+            param["start_date"], param.get("end_date"), severities=severities
+        )
         alerts = self._get_alerts(param, query)
         source_id = param.get("container_id")
         if source_id:
@@ -179,14 +184,17 @@ class Code42OnPollConnector:
         self._connector.save_artifacts(artifacts)
 
     def _adjust_date_parameters(self, param):
-        param["end_date"] = None  # Not used
-
         last_time = (
             None if self._connector.is_poll_now() else self._state.get("last_time", 0)
         )
         if not last_time:
-            # If there was never a stored last_time or is_poll_now().
-            param["start_date"] = get_thirty_days_ago().strftime("%Y-%m-%dT%H:%M:%S.%f")
+            # If there was never a stored last_time.
+            config = self._connector.get_config()
+            given_start_date = config.get("start_date")
+            param["start_date"] = given_start_date or get_thirty_days_ago().strftime(
+                "%Y-%m-%dT%H:%M:%S.%f"
+            )
+            param["end_date"] = config.get("end_date")
         else:
             last_time_as_date_str = datetime.utcfromtimestamp(last_time).strftime(
                 "%Y-%m-%dT%H:%M:%S.%f"

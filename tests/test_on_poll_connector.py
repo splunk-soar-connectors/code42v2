@@ -780,3 +780,43 @@ class TestCode42OnPollConnector(object):
         assert call_args[0][0][0] == test_alert_id_1
         assert call_args[1][0][0] == test_alert_id_2
         assert_success(connector)
+
+    def test_on_poll_when_configured_with_start_and_end_dates_and_no_stored_timestamp_uses_configured_dates(
+        self, mock_py42_for_alert_polling
+    ):
+        connector = _create_on_poll_connector(mock_py42_for_alert_polling)
+        test_start_date_str = "2020-05-04 12:23:32"
+        test_end_date_str = "2020-06-04 12:23:32"
+        connector._config["start_date"] = test_start_date_str
+        connector._config["end_date"] = test_end_date_str
+        connector.handle_action({})
+        call_args = dict(mock_py42_for_alert_polling.alerts.search.call_args[0][0])
+        actual_start_date_str = call_args["groups"][0]["filters"][0]["value"]
+        actual_end_date_str = call_args["groups"][0]["filters"][1]["value"]
+        actual_start_date = dateutil.parser.parse(actual_start_date_str)
+        actual_end_date = dateutil.parser.parse(actual_end_date_str)
+        expected_start_date = dateutil.parser.parse(test_start_date_str).replace(
+            tzinfo=actual_start_date.tzinfo
+        )
+        expected_end_date = dateutil.parser.parse(test_end_date_str).replace(
+            tzinfo=actual_end_date.tzinfo
+        )
+        assert abs((actual_start_date - expected_start_date)).seconds < 1
+        assert abs((actual_end_date - expected_end_date)).seconds < 1
+        assert_success(connector)
+
+    def test_on_poll_when_configured_with_severities_uses_severities(
+        self, mock_py42_for_alert_polling
+    ):
+        connector = _create_on_poll_connector(mock_py42_for_alert_polling)
+        connector._config["severity"] = "LOW, HIGH"
+        connector.handle_action({})
+        call_args = dict(mock_py42_for_alert_polling.alerts.search.call_args[0][0])
+        severity_filters = call_args["groups"][0]["filters"]
+        assert len(severity_filters) == 2
+        assert severity_filters[0]["operator"] == "IS"
+        assert severity_filters[0]["term"] == "severity"
+        assert severity_filters[0]["value"] == "HIGH"
+        assert severity_filters[1]["operator"] == "IS"
+        assert severity_filters[1]["term"] == "severity"
+        assert severity_filters[1]["value"] == "LOW"

@@ -47,6 +47,24 @@
             "data_type": "password",
             "required": true,
             "order": 2
+        },
+        "start_time": {
+            "description": "The start time to use in the initial poll",
+            "data_type": "string",
+            "required": false,
+            "order": 3
+        },
+        "end_type": {
+            "description": "The end time to use in the initial poll",
+            "data_type": "string",
+            "required": false,
+            "order": 4
+        },
+        "severity": {
+            "description": "A comma separated list of alert severities to poll for",
+            "data_type": "string",
+            "required": false,
+            "order": 5
         }
     },
     "actions": [

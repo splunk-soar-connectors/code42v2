@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 
 import dateutil.parser
 from py42.sdk.queries.alerts.alert_query import AlertQuery
-from py42.sdk.queries.alerts.filters import Actor, AlertState, DateObserved
+from py42.sdk.queries.alerts.filters import Actor, AlertState, DateObserved, Severity
 
 
 def get_thirty_days_ago():
@@ -28,12 +28,16 @@ def build_date_range_filter(date_filter_cls, start_date_str, end_date_str):
         return date_filter_cls.on_or_after(get_thirty_days_ago())
 
 
-def build_alerts_query(start_date, end_date, username=None, alert_state=None):
+def build_alerts_query(
+    start_date, end_date, username=None, alert_state=None, severities=None
+):
     filters = []
     if username is not None:
         filters.append(Actor.eq(username))
     if alert_state is not None:
         filters.append(AlertState.eq(alert_state))
+    if severities:
+        filters.append(Severity.is_in(severities))
     filters.append(build_date_range_filter(DateObserved, start_date, end_date))
     query = AlertQuery.all(*filters)
     return query
