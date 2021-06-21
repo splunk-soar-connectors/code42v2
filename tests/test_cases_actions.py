@@ -249,6 +249,7 @@ class TestCode42CasesConnector(object):
         mock_py42_with_case.cases.get_all.assert_called_once_with(
             status="OPEN", assignee=_TEST_USER_UID, subject=_TEST_USER_UID
         )
+        assert mock_py42_with_case.users.get_by_username.call_count == 2
         assert_success(connector)
 
     def test_handle_action_when_list_departing_employee_updates_summary(
