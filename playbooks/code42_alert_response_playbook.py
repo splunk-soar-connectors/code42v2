@@ -455,7 +455,7 @@ def send_email_1(action=None, success=None, container=None, results=None, handle
                     'context': {'artifact_id': results_item_1[1]},
                 })
 
-    phantom.act(action="send email", parameters=parameters, assets=['gmail dev'], callback=join_prompt_response_type, name="send_email_1")
+    phantom.act(action="send email", parameters=parameters, assets=['smtp'], callback=join_prompt_response_type, name="send_email_1")
 
     return
 
@@ -576,19 +576,19 @@ def send_email_2(action=None, success=None, container=None, results=None, handle
         for results_item_2 in results_data_2:
             if results_item_1[0]:
                 parameters.append({
-                    'from': "",
-                    'to': results_item_1[0],
                     'cc': "",
+                    'to': results_item_1[0],
                     'bcc': "",
-                    'subject': results_item_2[0],
                     'body': formatted_data_1,
-                    'attachments': "",
+                    'from': "",
                     'headers': "",
+                    'subject': results_item_2[0],
+                    'attachments': "",
                     # context (artifact id) is added to associate results with the artifact
                     'context': {'artifact_id': results_item_1[1]},
                 })
 
-    phantom.act(action="send email", parameters=parameters, assets=['gmail dev'], callback=join_prompt_response_type, name="send_email_2")
+    phantom.act(action="send email", parameters=parameters, assets=['smtp'], callback=join_prompt_response_type, name="send_email_2")
 
     return
 
