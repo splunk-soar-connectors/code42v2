@@ -1924,8 +1924,8 @@
                     "column_order": 2
                 },
                 {
-                    "column_name": "Cloud Usernames",
-                    "data_path": "action_result.data.*.cloudUsernames",
+                    "column_name": "Cloud Username",
+                    "data_path": "action_result.data.*.cloudUsernames.*.username",
                     "data_type": "string",
                     "example_values": [
                         "test@example.com"

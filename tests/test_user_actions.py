@@ -282,4 +282,5 @@ class TestCode42UsersConnector(object):
             {"tag": "HIGH_IMPACT_EMPLOYEE"},
             {"tag": "ELEVATED_ACCESS_PRIVILEGES"},
         ]
+        expected_response["cloudUsernames"] = [{"username": "test@example.com"}]
         assert_successful_single_data(connector, expected_response)
