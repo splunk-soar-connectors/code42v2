@@ -1663,1039 +1663,6 @@
                         "z": 247
                     },
                     {
-                        "action": "block user",
-                        "action_type": "contain",
-                        "active": false,
-                        "active_keys": {},
-                        "active_values": {
-                            "username": "get_alert_details_1:action_result.data.*.username"
-                        },
-                        "angle": 0,
-                        "app": "Code42",
-                        "appid": "4d8f53a7-7b12-4d7d-8b01-6575680acf6f",
-                        "approver": "",
-                        "assets": [
-                            {
-                                "action": "block user",
-                                "actions": [
-                                    "get user profile",
-                                    "run advanced query",
-                                    "run query",
-                                    "hunt file",
-                                    "add case event",
-                                    "list cases",
-                                    "close case",
-                                    "update case",
-                                    "create case",
-                                    "remove legalhold custodian",
-                                    "add legalhold custodian",
-                                    "unblock user",
-                                    "reactivate user",
-                                    "deactivate user",
-                                    "block user",
-                                    "create user",
-                                    "set alert state",
-                                    "search alerts",
-                                    "get alert details",
-                                    "remove highrisk tag",
-                                    "add highrisk tag",
-                                    "get highrisk employee",
-                                    "list highrisk employees",
-                                    "remove highrisk employee",
-                                    "add highrisk employee",
-                                    "get departing employee",
-                                    "list departing employees",
-                                    "remove departing employee",
-                                    "add departing employee",
-                                    "on poll",
-                                    "test connectivity"
-                                ],
-                                "active": true,
-                                "app_name": "Code42",
-                                "app_version": "1.0.0",
-                                "appid": "4d8f53a7-7b12-4d7d-8b01-6575680acf6f",
-                                "asset_name": "partner",
-                                "config_type": "asset",
-                                "count": 0,
-                                "fields": {
-                                    "username": "get_alert_details_1:action_result.data.*.username"
-                                },
-                                "has_app": true,
-                                "id": 8,
-                                "loaded": false,
-                                "missing": false,
-                                "name": "code42",
-                                "output": [
-                                    {
-                                        "column_name": "Username",
-                                        "column_order": 0,
-                                        "contains": [
-                                            "email",
-                                            "user name"
-                                        ],
-                                        "data_path": "action_result.parameter.username",
-                                        "data_type": "string"
-                                    },
-                                    {
-                                        "column_name": "status",
-                                        "column_order": 1,
-                                        "data_path": "action_result.status",
-                                        "data_type": "string"
-                                    },
-                                    {
-                                        "data_path": "action_result.data",
-                                        "data_type": "string"
-                                    },
-                                    {
-                                        "data_path": "action_result.message",
-                                        "data_type": "string"
-                                    },
-                                    {
-                                        "data_path": "action_result.summary",
-                                        "data_type": "string"
-                                    }
-                                ],
-                                "parameters": {
-                                    "username": {
-                                        "contains": [
-                                            "email"
-                                        ],
-                                        "data_type": "string",
-                                        "default": "",
-                                        "description": "Username to block",
-                                        "key": "username",
-                                        "order": 0,
-                                        "primary": true,
-                                        "required": true,
-                                        "value_list": []
-                                    }
-                                },
-                                "product_name": "Code42",
-                                "product_vendor": "Code42",
-                                "targets": "8",
-                                "type": "generic"
-                            }
-                        ],
-                        "attrs": {
-                            ".action": {
-                                "text": "block user"
-                            },
-                            ".background": {
-                                "fill": "#000000",
-                                "stroke": "#5C6773"
-                            },
-                            ".color-band": {
-                                "fill": "#3C444D"
-                            },
-                            ".inPorts>.port-in": {
-                                "ref": ".background",
-                                "ref-x": 0.5
-                            },
-                            ".inPorts>.port-in>.port-body": {
-                                "port": {
-                                    "id": "in",
-                                    "type": "in"
-                                }
-                            },
-                            ".message": {
-                                "opacity": 0,
-                                "ref-x": 5,
-                                "ref-y": 105,
-                                "text": "Configuring now"
-                            },
-                            ".outPorts>.port-out": {
-                                "ref": ".background",
-                                "ref-x": 0.5
-                            },
-                            ".outPorts>.port-out>.port-body": {
-                                "port": {
-                                    "id": "out",
-                                    "type": "out"
-                                }
-                            },
-                            ".title": {
-                                "text": "Contain"
-                            },
-                            "g.approver image": {
-                                "opacity": 1
-                            },
-                            "g.code image": {
-                                "opacity": 1
-                            },
-                            "g.delete": {
-                                "display": "none"
-                            },
-                            "g.error": {
-                                "opacity": 0
-                            },
-                            "g.error image": {
-                                "xlink:href": "/inc/coa/img/block_icon_warn.svg"
-                            },
-                            "g.icon image": {
-                                "xlink:href": "/inc/coa/img/block_icon_contain.svg"
-                            },
-                            "g.notes": {
-                                "display": "block"
-                            },
-                            "g.notes image": {
-                                "opacity": 1
-                            },
-                            "g.timer image": {
-                                "opacity": 1
-                            }
-                        },
-                        "block_code": "def block_user_1(action=None, success=None, container=None, results=None, handle=None, filtered_artifacts=None, filtered_results=None, custom_function=None, **kwargs):\n    phantom.debug('block_user_1() called')\n        \n    #phantom.debug('Action: {0} {1}'.format(action['name'], ('SUCCEEDED' if success else 'FAILED')))\n    \n    # collect data for 'block_user_1' call\n    results_data_1 = phantom.collect2(container=container, datapath=['get_alert_details_1:action_result.data.*.username', 'get_alert_details_1:action_result.parameter.context.artifact_id'], action_results=results)\n\n    parameters = []\n    \n    # build parameters list for 'block_user_1' call\n    for results_item_1 in results_data_1:\n        if results_item_1[0]:\n            parameters.append({\n                'username': results_item_1[0],\n                # context (artifact id) is added to associate results with the artifact\n                'context': {'artifact_id': results_item_1[1]},\n            })\n\n    phantom.act(action=\"block user\", parameters=parameters, assets=['code42'], callback=join_update_case_2, name=\"block_user_1\")\n\n    return",
-                        "callback_code": "",
-                        "callback_start": 1,
-                        "callsback": true,
-                        "color": "",
-                        "connected_to_start": true,
-                        "connection_name": "prompt response type",
-                        "connection_type": "action",
-                        "custom_callback": "",
-                        "custom_code": "",
-                        "custom_join": "",
-                        "custom_name": "",
-                        "delay": 0,
-                        "description": "",
-                        "has_custom": false,
-                        "has_custom_block": false,
-                        "has_custom_callback": false,
-                        "has_custom_join": false,
-                        "id": "e0f34c72-b57a-48f3-93f6-488c0b957c7a",
-                        "inPorts": [
-                            "in"
-                        ],
-                        "join_code": "",
-                        "join_optional": [],
-                        "join_start": 1,
-                        "line_end": 312,
-                        "line_start": 289,
-                        "message": "Configuring now",
-                        "name": "block user",
-                        "notes": "",
-                        "number": 1,
-                        "order": 11,
-                        "outPorts": [
-                            "out"
-                        ],
-                        "ports": {
-                            "groups": {
-                                "in": {
-                                    "attrs": {
-                                        ".port-body": {
-                                            "fill": "#fff",
-                                            "magnet": true,
-                                            "r": 10,
-                                            "stroke": "#000"
-                                        },
-                                        ".port-label": {
-                                            "fill": "#000"
-                                        }
-                                    },
-                                    "label": {
-                                        "position": {
-                                            "args": {
-                                                "y": 10
-                                            },
-                                            "name": "left"
-                                        }
-                                    },
-                                    "position": {
-                                        "name": "left"
-                                    }
-                                },
-                                "out": {
-                                    "attrs": {
-                                        ".port-body": {
-                                            "fill": "#fff",
-                                            "magnet": true,
-                                            "r": 10,
-                                            "stroke": "#000"
-                                        },
-                                        ".port-label": {
-                                            "fill": "#000"
-                                        }
-                                    },
-                                    "label": {
-                                        "position": {
-                                            "args": {
-                                                "y": 10
-                                            },
-                                            "name": "right"
-                                        }
-                                    },
-                                    "position": {
-                                        "name": "right"
-                                    }
-                                }
-                            }
-                        },
-                        "position": {
-                            "x": 1800,
-                            "y": -40
-                        },
-                        "previous_function": "",
-                        "previous_name": "block_user_1",
-                        "required_params": {
-                            "username": true
-                        },
-                        "reviewer": "",
-                        "show_number": false,
-                        "size": {
-                            "height": 100,
-                            "width": 180
-                        },
-                        "state": "app_action_assets",
-                        "status": "",
-                        "title": "Contain",
-                        "type": "coa.Action",
-                        "warn": false,
-                        "z": 259
-                    },
-                    {
-                        "action": "add legalhold custodian",
-                        "action_type": "contain",
-                        "active": false,
-                        "active_keys": {},
-                        "active_values": {
-                            "matter_id": "prompt_matter_id:action_result.summary.responses.0",
-                            "username": "get_alert_details_1:action_result.data.*.username"
-                        },
-                        "angle": 0,
-                        "app": "Code42",
-                        "appid": "4d8f53a7-7b12-4d7d-8b01-6575680acf6f",
-                        "approver": "",
-                        "assets": [
-                            {
-                                "action": "add legalhold custodian",
-                                "actions": [
-                                    "get user profile",
-                                    "run advanced query",
-                                    "run query",
-                                    "hunt file",
-                                    "add case event",
-                                    "list cases",
-                                    "close case",
-                                    "update case",
-                                    "create case",
-                                    "remove legalhold custodian",
-                                    "add legalhold custodian",
-                                    "unblock user",
-                                    "reactivate user",
-                                    "deactivate user",
-                                    "block user",
-                                    "create user",
-                                    "set alert state",
-                                    "search alerts",
-                                    "get alert details",
-                                    "remove highrisk tag",
-                                    "add highrisk tag",
-                                    "get highrisk employee",
-                                    "list highrisk employees",
-                                    "remove highrisk employee",
-                                    "add highrisk employee",
-                                    "get departing employee",
-                                    "list departing employees",
-                                    "remove departing employee",
-                                    "add departing employee",
-                                    "on poll",
-                                    "test connectivity"
-                                ],
-                                "active": true,
-                                "app_name": "Code42",
-                                "app_version": "1.0.0",
-                                "appid": "4d8f53a7-7b12-4d7d-8b01-6575680acf6f",
-                                "asset_name": "partner",
-                                "config_type": "asset",
-                                "count": 0,
-                                "fields": {
-                                    "matter_id": "prompt_matter_id:action_result.summary.responses.0",
-                                    "username": "get_alert_details_1:action_result.data.*.username"
-                                },
-                                "has_app": true,
-                                "id": 8,
-                                "loaded": false,
-                                "missing": false,
-                                "name": "code42",
-                                "output": [
-                                    {
-                                        "column_name": "username",
-                                        "column_order": 0,
-                                        "contains": [
-                                            "email",
-                                            "user name"
-                                        ],
-                                        "data_path": "action_result.parameter.username",
-                                        "data_type": "string"
-                                    },
-                                    {
-                                        "column_name": "matter_id",
-                                        "column_order": 1,
-                                        "data_path": "action_result.parameter.matter_id",
-                                        "data_type": "string"
-                                    },
-                                    {
-                                        "column_name": "status",
-                                        "column_order": 2,
-                                        "data_path": "action_result.status",
-                                        "data_type": "string"
-                                    },
-                                    {
-                                        "data_path": "action_result.message",
-                                        "data_type": "string"
-                                    },
-                                    {
-                                        "data_path": "summary.total_objects",
-                                        "data_type": "numeric"
-                                    },
-                                    {
-                                        "data_path": "summary.total_objects_successful",
-                                        "data_type": "numeric"
-                                    },
-                                    {
-                                        "data_path": "action_result.summary",
-                                        "data_type": "string"
-                                    },
-                                    {
-                                        "data_path": "action_result.data",
-                                        "data_type": "string"
-                                    }
-                                ],
-                                "parameters": {
-                                    "matter_id": {
-                                        "data_type": "string",
-                                        "default": "",
-                                        "description": "The identifier of the legal hold matter",
-                                        "key": "matter_id",
-                                        "order": 1,
-                                        "primary": true,
-                                        "required": true,
-                                        "value_list": []
-                                    },
-                                    "username": {
-                                        "contains": [
-                                            "email"
-                                        ],
-                                        "data_type": "string",
-                                        "default": "",
-                                        "description": "Username of user to be added to legal hold matter",
-                                        "key": "username",
-                                        "order": 0,
-                                        "primary": true,
-                                        "required": true,
-                                        "value_list": []
-                                    }
-                                },
-                                "product_name": "Code42",
-                                "product_vendor": "Code42",
-                                "targets": "8",
-                                "type": "generic"
-                            }
-                        ],
-                        "attrs": {
-                            ".action": {
-                                "text": "add legalhold custodian"
-                            },
-                            ".background": {
-                                "fill": "#000000",
-                                "stroke": "#5C6773"
-                            },
-                            ".color-band": {
-                                "fill": "#3C444D"
-                            },
-                            ".inPorts>.port-in": {
-                                "ref": ".background",
-                                "ref-x": 0.5
-                            },
-                            ".inPorts>.port-in>.port-body": {
-                                "port": {
-                                    "id": "in",
-                                    "type": "in"
-                                }
-                            },
-                            ".message": {
-                                "opacity": 0,
-                                "ref-x": 5,
-                                "ref-y": 105,
-                                "text": "Configuring now"
-                            },
-                            ".outPorts>.port-out": {
-                                "ref": ".background",
-                                "ref-x": 0.5
-                            },
-                            ".outPorts>.port-out>.port-body": {
-                                "port": {
-                                    "id": "out",
-                                    "type": "out"
-                                }
-                            },
-                            ".title": {
-                                "text": "Contain"
-                            },
-                            "g.approver image": {
-                                "opacity": 1
-                            },
-                            "g.code image": {
-                                "opacity": 1
-                            },
-                            "g.delete": {
-                                "display": "none"
-                            },
-                            "g.error": {
-                                "opacity": 0
-                            },
-                            "g.error image": {
-                                "xlink:href": "/inc/coa/img/block_icon_warn.svg"
-                            },
-                            "g.icon image": {
-                                "xlink:href": "/inc/coa/img/block_icon_contain.svg"
-                            },
-                            "g.notes": {
-                                "display": "block"
-                            },
-                            "g.notes image": {
-                                "opacity": 1
-                            },
-                            "g.timer image": {
-                                "opacity": 1
-                            }
-                        },
-                        "block_code": "def add_legalhold_custodian_1(action=None, success=None, container=None, results=None, handle=None, filtered_artifacts=None, filtered_results=None, custom_function=None, **kwargs):\n    phantom.debug('add_legalhold_custodian_1() called')\n        \n    #phantom.debug('Action: {0} {1}'.format(action['name'], ('SUCCEEDED' if success else 'FAILED')))\n    \n    # collect data for 'add_legalhold_custodian_1' call\n    results_data_1 = phantom.collect2(container=container, datapath=['get_alert_details_1:action_result.data.*.username', 'get_alert_details_1:action_result.parameter.context.artifact_id'], action_results=results)\n    results_data_2 = phantom.collect2(container=container, datapath=['prompt_matter_id:action_result.summary.responses.0', 'prompt_matter_id:action_result.parameter.context.artifact_id'], action_results=results)\n\n    parameters = []\n    \n    # build parameters list for 'add_legalhold_custodian_1' call\n    for results_item_1 in results_data_1:\n        for results_item_2 in results_data_2:\n            if results_item_1[0] and results_item_2[0]:\n                parameters.append({\n                    'username': results_item_1[0],\n                    'matter_id': results_item_2[0],\n                    # context (artifact id) is added to associate results with the artifact\n                    'context': {'artifact_id': results_item_1[1]},\n                })\n\n    phantom.act(action=\"add legalhold custodian\", parameters=parameters, assets=['code42'], callback=join_update_case_2, name=\"add_legalhold_custodian_1\")\n\n    return",
-                        "callback_code": "",
-                        "callback_start": 1,
-                        "callsback": true,
-                        "color": "",
-                        "connected_to_start": true,
-                        "connection_name": "prompt matter id",
-                        "connection_type": "action",
-                        "custom_callback": "",
-                        "custom_code": "",
-                        "custom_join": "",
-                        "custom_name": "",
-                        "delay": 0,
-                        "description": "",
-                        "has_custom": false,
-                        "has_custom_block": false,
-                        "has_custom_callback": false,
-                        "has_custom_join": false,
-                        "id": "30124da0-7a82-4822-ad8a-b16800f7b642",
-                        "inPorts": [
-                            "in"
-                        ],
-                        "join_code": "",
-                        "join_optional": [],
-                        "join_start": 1,
-                        "line_end": 338,
-                        "line_start": 312,
-                        "message": "Configuring now",
-                        "name": "add legalhold custodian",
-                        "notes": "",
-                        "number": 1,
-                        "order": 12,
-                        "outPorts": [
-                            "out"
-                        ],
-                        "ports": {
-                            "groups": {
-                                "in": {
-                                    "attrs": {
-                                        ".port-body": {
-                                            "fill": "#fff",
-                                            "magnet": true,
-                                            "r": 10,
-                                            "stroke": "#000"
-                                        },
-                                        ".port-label": {
-                                            "fill": "#000"
-                                        }
-                                    },
-                                    "label": {
-                                        "position": {
-                                            "args": {
-                                                "y": 10
-                                            },
-                                            "name": "left"
-                                        }
-                                    },
-                                    "position": {
-                                        "name": "left"
-                                    }
-                                },
-                                "out": {
-                                    "attrs": {
-                                        ".port-body": {
-                                            "fill": "#fff",
-                                            "magnet": true,
-                                            "r": 10,
-                                            "stroke": "#000"
-                                        },
-                                        ".port-label": {
-                                            "fill": "#000"
-                                        }
-                                    },
-                                    "label": {
-                                        "position": {
-                                            "args": {
-                                                "y": 10
-                                            },
-                                            "name": "right"
-                                        }
-                                    },
-                                    "position": {
-                                        "name": "right"
-                                    }
-                                }
-                            }
-                        },
-                        "position": {
-                            "x": 1800,
-                            "y": -180
-                        },
-                        "previous_function": "",
-                        "previous_name": "add_legalhold_custodian_1",
-                        "required_params": {
-                            "matter_id": true,
-                            "username": true
-                        },
-                        "reviewer": "",
-                        "show_number": false,
-                        "size": {
-                            "height": 100,
-                            "width": 180
-                        },
-                        "state": "app_action_assets",
-                        "status": "",
-                        "title": "Contain",
-                        "type": "coa.Action",
-                        "warn": false,
-                        "z": 260
-                    },
-                    {
-                        "action": "update case",
-                        "action_type": "investigate",
-                        "active": false,
-                        "active_keys": {},
-                        "active_values": {
-                            "assignee": "",
-                            "case_name": "",
-                            "case_number": "create_case_1:action_result.data.*.number",
-                            "description": "",
-                            "findings": "prompt_response_type:action_result.summary.responses.0",
-                            "subject": ""
-                        },
-                        "angle": 0,
-                        "app": "Code42",
-                        "appid": "4d8f53a7-7b12-4d7d-8b01-6575680acf6f",
-                        "approver": "",
-                        "assets": [
-                            {
-                                "action": "update case",
-                                "actions": [
-                                    "get user profile",
-                                    "run advanced query",
-                                    "run query",
-                                    "hunt file",
-                                    "add case event",
-                                    "list cases",
-                                    "close case",
-                                    "update case",
-                                    "create case",
-                                    "remove legalhold custodian",
-                                    "add legalhold custodian",
-                                    "unblock user",
-                                    "reactivate user",
-                                    "deactivate user",
-                                    "block user",
-                                    "create user",
-                                    "set alert state",
-                                    "search alerts",
-                                    "get alert details",
-                                    "remove highrisk tag",
-                                    "add highrisk tag",
-                                    "get highrisk employee",
-                                    "list highrisk employees",
-                                    "remove highrisk employee",
-                                    "add highrisk employee",
-                                    "get departing employee",
-                                    "list departing employees",
-                                    "remove departing employee",
-                                    "add departing employee",
-                                    "on poll",
-                                    "test connectivity"
-                                ],
-                                "active": true,
-                                "app_name": "Code42",
-                                "app_version": "1.0.0",
-                                "appid": "4d8f53a7-7b12-4d7d-8b01-6575680acf6f",
-                                "asset_name": "partner",
-                                "config_type": "asset",
-                                "count": 0,
-                                "fields": {
-                                    "assignee": "",
-                                    "case_name": "",
-                                    "case_number": "create_case_1:action_result.data.*.number",
-                                    "description": "",
-                                    "findings": "prompt_response_type:action_result.summary.responses.0",
-                                    "subject": ""
-                                },
-                                "has_app": true,
-                                "id": 8,
-                                "loaded": false,
-                                "missing": false,
-                                "name": "code42",
-                                "output": [
-                                    {
-                                        "data_path": "action_result.status",
-                                        "data_type": "string"
-                                    },
-                                    {
-                                        "data_path": "action_result.message",
-                                        "data_type": "string"
-                                    },
-                                    {
-                                        "contains": [
-                                            "code42 case number"
-                                        ],
-                                        "data_path": "action_result.parameter.case_number",
-                                        "data_type": "numeric"
-                                    },
-                                    {
-                                        "data_path": "action_result.parameter.case_name",
-                                        "data_type": "string"
-                                    },
-                                    {
-                                        "data_path": "action_result.parameter.description",
-                                        "data_type": "string"
-                                    },
-                                    {
-                                        "contains": [
-                                            "email",
-                                            "user name"
-                                        ],
-                                        "data_path": "action_result.parameter.subject",
-                                        "data_type": "string"
-                                    },
-                                    {
-                                        "contains": [
-                                            "email",
-                                            "user name"
-                                        ],
-                                        "data_path": "action_result.parameter.assignee",
-                                        "data_type": "string"
-                                    },
-                                    {
-                                        "data_path": "action_result.parameter.findings",
-                                        "data_type": "string"
-                                    },
-                                    {
-                                        "column_name": "Case number",
-                                        "column_order": 0,
-                                        "contains": [
-                                            "code42 case number"
-                                        ],
-                                        "data_path": "action_result.data.*.number",
-                                        "data_type": "string"
-                                    },
-                                    {
-                                        "column_name": "Case name",
-                                        "column_order": 1,
-                                        "data_path": "action_result.data.*.name",
-                                        "data_type": "string"
-                                    },
-                                    {
-                                        "column_name": "Description",
-                                        "column_order": 2,
-                                        "data_path": "action_result.data.*.description",
-                                        "data_type": "string"
-                                    },
-                                    {
-                                        "column_name": "Subject",
-                                        "column_order": 3,
-                                        "contains": [
-                                            "email",
-                                            "user name"
-                                        ],
-                                        "data_path": "action_result.data.*.subjectUsername",
-                                        "data_type": "string"
-                                    },
-                                    {
-                                        "column_name": "Assignee",
-                                        "column_order": 4,
-                                        "contains": [
-                                            "email",
-                                            "user name"
-                                        ],
-                                        "data_path": "action_result.data.*.assigneeUsername",
-                                        "data_type": "string"
-                                    },
-                                    {
-                                        "column_name": "Findings",
-                                        "column_order": 5,
-                                        "data_path": "action_result.data.*.findings",
-                                        "data_type": "string"
-                                    },
-                                    {
-                                        "data_path": "action_result.summary.case_number",
-                                        "data_type": "numeric"
-                                    }
-                                ],
-                                "parameters": {
-                                    "assignee": {
-                                        "contains": [
-                                            "email",
-                                            "user name"
-                                        ],
-                                        "data_type": "string",
-                                        "default": null,
-                                        "description": "Assignee",
-                                        "key": "assignee",
-                                        "order": 4,
-                                        "primary": true,
-                                        "required": false
-                                    },
-                                    "case_name": {
-                                        "data_type": "string",
-                                        "default": null,
-                                        "description": "Case name",
-                                        "key": "case_name",
-                                        "order": 1,
-                                        "primary": false,
-                                        "required": false
-                                    },
-                                    "case_number": {
-                                        "contains": [
-                                            "case number"
-                                        ],
-                                        "data_type": "numeric",
-                                        "default": null,
-                                        "description": "Case number",
-                                        "key": "case_number",
-                                        "order": 0,
-                                        "primary": true,
-                                        "required": true
-                                    },
-                                    "description": {
-                                        "data_type": "string",
-                                        "default": "",
-                                        "description": "Description",
-                                        "key": "description",
-                                        "order": 2,
-                                        "primary": false,
-                                        "required": false
-                                    },
-                                    "findings": {
-                                        "data_type": "string",
-                                        "default": null,
-                                        "description": "Findings (markdown)",
-                                        "key": "findings",
-                                        "order": 5,
-                                        "primary": false,
-                                        "required": false
-                                    },
-                                    "subject": {
-                                        "contains": [
-                                            "email",
-                                            "user name"
-                                        ],
-                                        "data_type": "string",
-                                        "default": null,
-                                        "description": "Subject",
-                                        "key": "subject",
-                                        "order": 3,
-                                        "primary": true,
-                                        "required": false
-                                    }
-                                },
-                                "product_name": "Code42",
-                                "product_vendor": "Code42",
-                                "targets": "8",
-                                "type": "generic"
-                            }
-                        ],
-                        "attrs": {
-                            ".action": {
-                                "text": "update case"
-                            },
-                            ".background": {
-                                "fill": "#000000",
-                                "stroke": "#5C6773"
-                            },
-                            ".color-band": {
-                                "fill": "#3C444D"
-                            },
-                            ".inPorts>.port-in": {
-                                "ref": ".background",
-                                "ref-x": 0.5
-                            },
-                            ".inPorts>.port-in>.port-body": {
-                                "port": {
-                                    "id": "in",
-                                    "type": "in"
-                                }
-                            },
-                            ".message": {
-                                "opacity": 0,
-                                "ref-x": 5,
-                                "ref-y": 105,
-                                "text": "Configuring now"
-                            },
-                            ".outPorts>.port-out": {
-                                "ref": ".background",
-                                "ref-x": 0.5
-                            },
-                            ".outPorts>.port-out>.port-body": {
-                                "port": {
-                                    "id": "out",
-                                    "type": "out"
-                                }
-                            },
-                            ".title": {
-                                "text": "Investigate"
-                            },
-                            "g.approver image": {
-                                "opacity": 1
-                            },
-                            "g.code image": {
-                                "opacity": 1
-                            },
-                            "g.delete": {
-                                "display": "none"
-                            },
-                            "g.error": {
-                                "opacity": 0
-                            },
-                            "g.error image": {
-                                "xlink:href": "/inc/coa/img/block_icon_warn.svg"
-                            },
-                            "g.icon image": {
-                                "xlink:href": "/inc/coa/img/block_icon_investigate.svg"
-                            },
-                            "g.notes": {
-                                "display": "block"
-                            },
-                            "g.notes image": {
-                                "opacity": 1
-                            },
-                            "g.timer image": {
-                                "opacity": 1
-                            }
-                        },
-                        "block_code": "def update_case_2(action=None, success=None, container=None, results=None, handle=None, filtered_artifacts=None, filtered_results=None, custom_function=None, **kwargs):\n    phantom.debug('update_case_2() called')\n        \n    #phantom.debug('Action: {0} {1}'.format(action['name'], ('SUCCEEDED' if success else 'FAILED')))\n    \n    # collect data for 'update_case_2' call\n    results_data_1 = phantom.collect2(container=container, datapath=['prompt_response_type:action_result.summary.responses.0', 'prompt_response_type:action_result.parameter.context.artifact_id'], action_results=results)\n    results_data_2 = phantom.collect2(container=container, datapath=['create_case_1:action_result.data.*.number', 'create_case_1:action_result.parameter.context.artifact_id'], action_results=results)\n\n    parameters = []\n    \n    # build parameters list for 'update_case_2' call\n    for results_item_1 in results_data_1:\n        for results_item_2 in results_data_2:\n            if results_item_2[0]:\n                parameters.append({\n                    'subject': \"\",\n                    'assignee': \"\",\n                    'findings': results_item_1[0],\n                    'case_name': \"\",\n                    'case_number': results_item_2[0],\n                    'description': \"\",\n                    # context (artifact id) is added to associate results with the artifact\n                    'context': {'artifact_id': results_item_1[1]},\n                })\n\n    phantom.act(action=\"update case\", parameters=parameters, assets=['code42'], callback=close_case_2, name=\"update_case_2\")\n\n    return",
-                        "callback_code": "",
-                        "callback_start": 1,
-                        "callsback": true,
-                        "color": "",
-                        "connected_to_start": true,
-                        "connection_name": "add highrisk employee, prompt response type, block user, add legalhold custodian",
-                        "connection_type": "action",
-                        "custom_callback": "",
-                        "custom_code": "",
-                        "custom_join": "",
-                        "custom_name": "",
-                        "delay": 0,
-                        "description": "",
-                        "has_custom": false,
-                        "has_custom_block": false,
-                        "has_custom_callback": false,
-                        "has_custom_join": false,
-                        "id": "a3c086b3-8b3d-4b49-8cc5-4301af7c1939",
-                        "inPorts": [
-                            "in"
-                        ],
-                        "join_code": "def join_update_case_2(action=None, success=None, container=None, results=None, handle=None, filtered_artifacts=None, filtered_results=None, custom_function=None):\n    phantom.debug('join_update_case_2() called')\n    \n    # if the joined function has already been called, do nothing\n    if phantom.get_run_data(key='join_update_case_2_called'):\n        return\n\n    # no callbacks to check, call connected block \"update_case_2\"\n    phantom.save_run_data(key='join_update_case_2_called', value='update_case_2', auto=True)\n\n    update_case_2(container=container, handle=handle)\n    \n    return",
-                        "join_optional": [
-                            "add_highrisk_employee_1",
-                            "prompt_response_type",
-                            "block_user_1",
-                            "add_legalhold_custodian_1"
-                        ],
-                        "join_start": 368,
-                        "line_end": 382,
-                        "line_start": 338,
-                        "message": "Configuring now",
-                        "name": "update case",
-                        "notes": "",
-                        "number": 2,
-                        "order": 13,
-                        "outPorts": [
-                            "out"
-                        ],
-                        "ports": {
-                            "groups": {
-                                "in": {
-                                    "attrs": {
-                                        ".port-body": {
-                                            "fill": "#fff",
-                                            "magnet": true,
-                                            "r": 10,
-                                            "stroke": "#000"
-                                        },
-                                        ".port-label": {
-                                            "fill": "#000"
-                                        }
-                                    },
-                                    "label": {
-                                        "position": {
-                                            "args": {
-                                                "y": 10
-                                            },
-                                            "name": "left"
-                                        }
-                                    },
-                                    "position": {
-                                        "name": "left"
-                                    }
-                                },
-                                "out": {
-                                    "attrs": {
-                                        ".port-body": {
-                                            "fill": "#fff",
-                                            "magnet": true,
-                                            "r": 10,
-                                            "stroke": "#000"
-                                        },
-                                        ".port-label": {
-                                            "fill": "#000"
-                                        }
-                                    },
-                                    "label": {
-                                        "position": {
-                                            "args": {
-                                                "y": 10
-                                            },
-                                            "name": "right"
-                                        }
-                                    },
-                                    "position": {
-                                        "name": "right"
-                                    }
-                                }
-                            }
-                        },
-                        "position": {
-                            "x": 2120,
-                            "y": 60
-                        },
-                        "previous_function": "",
-                        "previous_name": "update_case_2",
-                        "required_params": {
-                            "case_number": true
-                        },
-                        "reviewer": "",
-                        "show_number": false,
-                        "size": {
-                            "height": 100,
-                            "width": 180
-                        },
-                        "state": "app_action_assets",
-                        "status": "",
-                        "title": "Investigate",
-                        "type": "coa.Action",
-                        "warn": false,
-                        "z": 262
-                    },
-                    {
                         "action": "add highrisk employee",
                         "action_type": "generic",
                         "active": false,
@@ -7111,6 +6078,1039 @@
                         "type": "coa.Action",
                         "warn": false,
                         "z": 301
+                    },
+                    {
+                        "action": "block user",
+                        "action_type": "contain",
+                        "active": false,
+                        "active_keys": {},
+                        "active_values": {
+                            "username": "get_alert_details_1:action_result.data.*.username"
+                        },
+                        "angle": 0,
+                        "app": "Code42",
+                        "appid": "4d8f53a7-7b12-4d7d-8b01-6575680acf6f",
+                        "approver": "",
+                        "assets": [
+                            {
+                                "action": "block user",
+                                "actions": [
+                                    "get user profile",
+                                    "run advanced query",
+                                    "run query",
+                                    "hunt file",
+                                    "add case event",
+                                    "list cases",
+                                    "close case",
+                                    "update case",
+                                    "create case",
+                                    "remove legalhold custodian",
+                                    "add legalhold custodian",
+                                    "unblock user",
+                                    "reactivate user",
+                                    "deactivate user",
+                                    "block user",
+                                    "create user",
+                                    "set alert state",
+                                    "search alerts",
+                                    "get alert details",
+                                    "remove highrisk tag",
+                                    "add highrisk tag",
+                                    "get highrisk employee",
+                                    "list highrisk employees",
+                                    "remove highrisk employee",
+                                    "add highrisk employee",
+                                    "get departing employee",
+                                    "list departing employees",
+                                    "remove departing employee",
+                                    "add departing employee",
+                                    "on poll",
+                                    "test connectivity"
+                                ],
+                                "active": true,
+                                "app_name": "Code42",
+                                "app_version": "1.0.0",
+                                "appid": "4d8f53a7-7b12-4d7d-8b01-6575680acf6f",
+                                "asset_name": "partner",
+                                "config_type": "asset",
+                                "count": 0,
+                                "fields": {
+                                    "username": "get_alert_details_1:action_result.data.*.username"
+                                },
+                                "has_app": true,
+                                "id": 8,
+                                "loaded": false,
+                                "missing": false,
+                                "name": "code42",
+                                "output": [
+                                    {
+                                        "column_name": "Username",
+                                        "column_order": 0,
+                                        "contains": [
+                                            "email",
+                                            "user name"
+                                        ],
+                                        "data_path": "action_result.parameter.username",
+                                        "data_type": "string"
+                                    },
+                                    {
+                                        "column_name": "status",
+                                        "column_order": 1,
+                                        "data_path": "action_result.status",
+                                        "data_type": "string"
+                                    },
+                                    {
+                                        "data_path": "action_result.data",
+                                        "data_type": "string"
+                                    },
+                                    {
+                                        "data_path": "action_result.message",
+                                        "data_type": "string"
+                                    },
+                                    {
+                                        "data_path": "action_result.summary",
+                                        "data_type": "string"
+                                    }
+                                ],
+                                "parameters": {
+                                    "username": {
+                                        "contains": [
+                                            "email"
+                                        ],
+                                        "data_type": "string",
+                                        "default": "",
+                                        "description": "Username to block",
+                                        "key": "username",
+                                        "order": 0,
+                                        "primary": true,
+                                        "required": true,
+                                        "value_list": []
+                                    }
+                                },
+                                "product_name": "Code42",
+                                "product_vendor": "Code42",
+                                "targets": "8",
+                                "type": "generic"
+                            }
+                        ],
+                        "attrs": {
+                            ".action": {
+                                "text": "block user"
+                            },
+                            ".background": {
+                                "fill": "#000000",
+                                "stroke": "#5C6773"
+                            },
+                            ".color-band": {
+                                "fill": "#3C444D"
+                            },
+                            ".inPorts>.port-in": {
+                                "ref": ".background",
+                                "ref-x": 0.5
+                            },
+                            ".inPorts>.port-in>.port-body": {
+                                "port": {
+                                    "id": "in",
+                                    "type": "in"
+                                }
+                            },
+                            ".message": {
+                                "opacity": 0,
+                                "ref-x": 5,
+                                "ref-y": 105,
+                                "text": "Configuring now"
+                            },
+                            ".outPorts>.port-out": {
+                                "ref": ".background",
+                                "ref-x": 0.5
+                            },
+                            ".outPorts>.port-out>.port-body": {
+                                "port": {
+                                    "id": "out",
+                                    "type": "out"
+                                }
+                            },
+                            ".title": {
+                                "text": "Contain"
+                            },
+                            "g.approver image": {
+                                "opacity": 1
+                            },
+                            "g.code image": {
+                                "opacity": 1
+                            },
+                            "g.delete": {
+                                "display": "none"
+                            },
+                            "g.error": {
+                                "opacity": 0
+                            },
+                            "g.error image": {
+                                "xlink:href": "/inc/coa/img/block_icon_warn.svg"
+                            },
+                            "g.icon image": {
+                                "xlink:href": "/inc/coa/img/block_icon_contain.svg"
+                            },
+                            "g.notes": {
+                                "display": "block"
+                            },
+                            "g.notes image": {
+                                "opacity": 1
+                            },
+                            "g.timer image": {
+                                "opacity": 1
+                            }
+                        },
+                        "block_code": "def block_user_1(action=None, success=None, container=None, results=None, handle=None, filtered_artifacts=None, filtered_results=None, custom_function=None, **kwargs):\n    phantom.debug('block_user_1() called')\n        \n    #phantom.debug('Action: {0} {1}'.format(action['name'], ('SUCCEEDED' if success else 'FAILED')))\n    \n    # collect data for 'block_user_1' call\n    results_data_1 = phantom.collect2(container=container, datapath=['get_alert_details_1:action_result.data.*.username', 'get_alert_details_1:action_result.parameter.context.artifact_id'], action_results=results)\n\n    parameters = []\n    \n    # build parameters list for 'block_user_1' call\n    for results_item_1 in results_data_1:\n        if results_item_1[0]:\n            parameters.append({\n                'username': results_item_1[0],\n                # context (artifact id) is added to associate results with the artifact\n                'context': {'artifact_id': results_item_1[1]},\n            })\n\n    phantom.act(action=\"block user\", parameters=parameters, assets=['code42'], callback=join_update_case_2, name=\"block_user_1\")\n\n    return",
+                        "callback_code": "",
+                        "callback_start": 1,
+                        "callsback": true,
+                        "color": "",
+                        "connected_to_start": true,
+                        "connection_name": "prompt response type",
+                        "connection_type": "action",
+                        "custom_callback": "",
+                        "custom_code": "",
+                        "custom_join": "",
+                        "custom_name": "",
+                        "delay": 0,
+                        "description": "",
+                        "has_custom": false,
+                        "has_custom_block": false,
+                        "has_custom_callback": false,
+                        "has_custom_join": false,
+                        "id": "e0f34c72-b57a-48f3-93f6-488c0b957c7a",
+                        "inPorts": [
+                            "in"
+                        ],
+                        "join_code": "",
+                        "join_optional": [],
+                        "join_start": 1,
+                        "line_end": 312,
+                        "line_start": 289,
+                        "message": "Configuring now",
+                        "name": "block user",
+                        "notes": "",
+                        "number": 1,
+                        "order": 11,
+                        "outPorts": [
+                            "out"
+                        ],
+                        "ports": {
+                            "groups": {
+                                "in": {
+                                    "attrs": {
+                                        ".port-body": {
+                                            "fill": "#fff",
+                                            "magnet": true,
+                                            "r": 10,
+                                            "stroke": "#000"
+                                        },
+                                        ".port-label": {
+                                            "fill": "#000"
+                                        }
+                                    },
+                                    "label": {
+                                        "position": {
+                                            "args": {
+                                                "y": 10
+                                            },
+                                            "name": "left"
+                                        }
+                                    },
+                                    "position": {
+                                        "name": "left"
+                                    }
+                                },
+                                "out": {
+                                    "attrs": {
+                                        ".port-body": {
+                                            "fill": "#fff",
+                                            "magnet": true,
+                                            "r": 10,
+                                            "stroke": "#000"
+                                        },
+                                        ".port-label": {
+                                            "fill": "#000"
+                                        }
+                                    },
+                                    "label": {
+                                        "position": {
+                                            "args": {
+                                                "y": 10
+                                            },
+                                            "name": "right"
+                                        }
+                                    },
+                                    "position": {
+                                        "name": "right"
+                                    }
+                                }
+                            }
+                        },
+                        "position": {
+                            "x": 1800,
+                            "y": -40
+                        },
+                        "previous_function": "",
+                        "previous_name": "block_user_1",
+                        "required_params": {
+                            "username": true
+                        },
+                        "reviewer": "",
+                        "show_number": false,
+                        "size": {
+                            "height": 100,
+                            "width": 180
+                        },
+                        "state": "app_action_assets",
+                        "status": "",
+                        "title": "Contain",
+                        "type": "coa.Action",
+                        "warn": false,
+                        "z": 302
+                    },
+                    {
+                        "action": "update case",
+                        "action_type": "investigate",
+                        "active": false,
+                        "active_keys": {},
+                        "active_values": {
+                            "assignee": "",
+                            "case_name": "",
+                            "case_number": "create_case_1:action_result.data.*.number",
+                            "description": "",
+                            "findings": "prompt_response_type:action_result.summary.responses.0",
+                            "subject": ""
+                        },
+                        "angle": 0,
+                        "app": "Code42",
+                        "appid": "4d8f53a7-7b12-4d7d-8b01-6575680acf6f",
+                        "approver": "",
+                        "assets": [
+                            {
+                                "action": "update case",
+                                "actions": [
+                                    "get user profile",
+                                    "run advanced query",
+                                    "run query",
+                                    "hunt file",
+                                    "add case event",
+                                    "list cases",
+                                    "close case",
+                                    "update case",
+                                    "create case",
+                                    "remove legalhold custodian",
+                                    "add legalhold custodian",
+                                    "unblock user",
+                                    "reactivate user",
+                                    "deactivate user",
+                                    "block user",
+                                    "create user",
+                                    "set alert state",
+                                    "search alerts",
+                                    "get alert details",
+                                    "remove highrisk tag",
+                                    "add highrisk tag",
+                                    "get highrisk employee",
+                                    "list highrisk employees",
+                                    "remove highrisk employee",
+                                    "add highrisk employee",
+                                    "get departing employee",
+                                    "list departing employees",
+                                    "remove departing employee",
+                                    "add departing employee",
+                                    "on poll",
+                                    "test connectivity"
+                                ],
+                                "active": true,
+                                "app_name": "Code42",
+                                "app_version": "1.0.0",
+                                "appid": "4d8f53a7-7b12-4d7d-8b01-6575680acf6f",
+                                "asset_name": "partner",
+                                "config_type": "asset",
+                                "count": 0,
+                                "fields": {
+                                    "assignee": "",
+                                    "case_name": "",
+                                    "case_number": "create_case_1:action_result.data.*.number",
+                                    "description": "",
+                                    "findings": "prompt_response_type:action_result.summary.responses.0",
+                                    "subject": ""
+                                },
+                                "has_app": true,
+                                "id": 8,
+                                "loaded": false,
+                                "missing": false,
+                                "name": "code42",
+                                "output": [
+                                    {
+                                        "data_path": "action_result.status",
+                                        "data_type": "string"
+                                    },
+                                    {
+                                        "data_path": "action_result.message",
+                                        "data_type": "string"
+                                    },
+                                    {
+                                        "contains": [
+                                            "code42 case number"
+                                        ],
+                                        "data_path": "action_result.parameter.case_number",
+                                        "data_type": "numeric"
+                                    },
+                                    {
+                                        "data_path": "action_result.parameter.case_name",
+                                        "data_type": "string"
+                                    },
+                                    {
+                                        "data_path": "action_result.parameter.description",
+                                        "data_type": "string"
+                                    },
+                                    {
+                                        "contains": [
+                                            "email",
+                                            "user name"
+                                        ],
+                                        "data_path": "action_result.parameter.subject",
+                                        "data_type": "string"
+                                    },
+                                    {
+                                        "contains": [
+                                            "email",
+                                            "user name"
+                                        ],
+                                        "data_path": "action_result.parameter.assignee",
+                                        "data_type": "string"
+                                    },
+                                    {
+                                        "data_path": "action_result.parameter.findings",
+                                        "data_type": "string"
+                                    },
+                                    {
+                                        "column_name": "Case number",
+                                        "column_order": 0,
+                                        "contains": [
+                                            "code42 case number"
+                                        ],
+                                        "data_path": "action_result.data.*.number",
+                                        "data_type": "string"
+                                    },
+                                    {
+                                        "column_name": "Case name",
+                                        "column_order": 1,
+                                        "data_path": "action_result.data.*.name",
+                                        "data_type": "string"
+                                    },
+                                    {
+                                        "column_name": "Description",
+                                        "column_order": 2,
+                                        "data_path": "action_result.data.*.description",
+                                        "data_type": "string"
+                                    },
+                                    {
+                                        "column_name": "Subject",
+                                        "column_order": 3,
+                                        "contains": [
+                                            "email",
+                                            "user name"
+                                        ],
+                                        "data_path": "action_result.data.*.subjectUsername",
+                                        "data_type": "string"
+                                    },
+                                    {
+                                        "column_name": "Assignee",
+                                        "column_order": 4,
+                                        "contains": [
+                                            "email",
+                                            "user name"
+                                        ],
+                                        "data_path": "action_result.data.*.assigneeUsername",
+                                        "data_type": "string"
+                                    },
+                                    {
+                                        "column_name": "Findings",
+                                        "column_order": 5,
+                                        "data_path": "action_result.data.*.findings",
+                                        "data_type": "string"
+                                    },
+                                    {
+                                        "data_path": "action_result.summary.case_number",
+                                        "data_type": "numeric"
+                                    }
+                                ],
+                                "parameters": {
+                                    "assignee": {
+                                        "contains": [
+                                            "email",
+                                            "user name"
+                                        ],
+                                        "data_type": "string",
+                                        "default": null,
+                                        "description": "Assignee",
+                                        "key": "assignee",
+                                        "order": 4,
+                                        "primary": true,
+                                        "required": false
+                                    },
+                                    "case_name": {
+                                        "data_type": "string",
+                                        "default": null,
+                                        "description": "Case name",
+                                        "key": "case_name",
+                                        "order": 1,
+                                        "primary": false,
+                                        "required": false
+                                    },
+                                    "case_number": {
+                                        "contains": [
+                                            "case number"
+                                        ],
+                                        "data_type": "numeric",
+                                        "default": null,
+                                        "description": "Case number",
+                                        "key": "case_number",
+                                        "order": 0,
+                                        "primary": true,
+                                        "required": true
+                                    },
+                                    "description": {
+                                        "data_type": "string",
+                                        "default": "",
+                                        "description": "Description",
+                                        "key": "description",
+                                        "order": 2,
+                                        "primary": false,
+                                        "required": false
+                                    },
+                                    "findings": {
+                                        "data_type": "string",
+                                        "default": null,
+                                        "description": "Findings (markdown)",
+                                        "key": "findings",
+                                        "order": 5,
+                                        "primary": false,
+                                        "required": false
+                                    },
+                                    "subject": {
+                                        "contains": [
+                                            "email",
+                                            "user name"
+                                        ],
+                                        "data_type": "string",
+                                        "default": null,
+                                        "description": "Subject",
+                                        "key": "subject",
+                                        "order": 3,
+                                        "primary": true,
+                                        "required": false
+                                    }
+                                },
+                                "product_name": "Code42",
+                                "product_vendor": "Code42",
+                                "targets": "8",
+                                "type": "generic"
+                            }
+                        ],
+                        "attrs": {
+                            ".action": {
+                                "text": "update case"
+                            },
+                            ".background": {
+                                "fill": "#000000",
+                                "stroke": "#5C6773"
+                            },
+                            ".color-band": {
+                                "fill": "#3C444D"
+                            },
+                            ".inPorts>.port-in": {
+                                "ref": ".background",
+                                "ref-x": 0.5
+                            },
+                            ".inPorts>.port-in>.port-body": {
+                                "port": {
+                                    "id": "in",
+                                    "type": "in"
+                                }
+                            },
+                            ".message": {
+                                "opacity": 0,
+                                "ref-x": 5,
+                                "ref-y": 105,
+                                "text": "Configuring now"
+                            },
+                            ".outPorts>.port-out": {
+                                "ref": ".background",
+                                "ref-x": 0.5
+                            },
+                            ".outPorts>.port-out>.port-body": {
+                                "port": {
+                                    "id": "out",
+                                    "type": "out"
+                                }
+                            },
+                            ".title": {
+                                "text": "Investigate"
+                            },
+                            "g.approver image": {
+                                "opacity": 1
+                            },
+                            "g.code image": {
+                                "opacity": 1
+                            },
+                            "g.delete": {
+                                "display": "none"
+                            },
+                            "g.error": {
+                                "opacity": 0
+                            },
+                            "g.error image": {
+                                "xlink:href": "/inc/coa/img/block_icon_warn.svg"
+                            },
+                            "g.icon image": {
+                                "xlink:href": "/inc/coa/img/block_icon_investigate.svg"
+                            },
+                            "g.notes": {
+                                "display": "block"
+                            },
+                            "g.notes image": {
+                                "opacity": 1
+                            },
+                            "g.timer image": {
+                                "opacity": 1
+                            }
+                        },
+                        "block_code": "def update_case_2(action=None, success=None, container=None, results=None, handle=None, filtered_artifacts=None, filtered_results=None, custom_function=None, **kwargs):\n    phantom.debug('update_case_2() called')\n        \n    #phantom.debug('Action: {0} {1}'.format(action['name'], ('SUCCEEDED' if success else 'FAILED')))\n    \n    # collect data for 'update_case_2' call\n    results_data_1 = phantom.collect2(container=container, datapath=['prompt_response_type:action_result.summary.responses.0', 'prompt_response_type:action_result.parameter.context.artifact_id'], action_results=results)\n    results_data_2 = phantom.collect2(container=container, datapath=['create_case_1:action_result.data.*.number', 'create_case_1:action_result.parameter.context.artifact_id'], action_results=results)\n\n    parameters = []\n    \n    # build parameters list for 'update_case_2' call\n    for results_item_1 in results_data_1:\n        for results_item_2 in results_data_2:\n            if results_item_2[0]:\n                parameters.append({\n                    'subject': \"\",\n                    'assignee': \"\",\n                    'findings': results_item_1[0],\n                    'case_name': \"\",\n                    'case_number': results_item_2[0],\n                    'description': \"\",\n                    # context (artifact id) is added to associate results with the artifact\n                    'context': {'artifact_id': results_item_1[1]},\n                })\n\n    phantom.act(action=\"update case\", parameters=parameters, assets=['code42'], callback=close_case_2, name=\"update_case_2\")\n\n    return",
+                        "callback_code": "",
+                        "callback_start": 1,
+                        "callsback": true,
+                        "color": "",
+                        "connected_to_start": true,
+                        "connection_name": "add highrisk employee, prompt response type, block user, add legalhold custodian",
+                        "connection_type": "action",
+                        "custom_callback": "",
+                        "custom_code": "",
+                        "custom_join": "",
+                        "custom_name": "",
+                        "delay": 0,
+                        "description": "",
+                        "has_custom": false,
+                        "has_custom_block": false,
+                        "has_custom_callback": false,
+                        "has_custom_join": false,
+                        "id": "a3c086b3-8b3d-4b49-8cc5-4301af7c1939",
+                        "inPorts": [
+                            "in"
+                        ],
+                        "join_code": "def join_update_case_2(action=None, success=None, container=None, results=None, handle=None, filtered_artifacts=None, filtered_results=None, custom_function=None):\n    phantom.debug('join_update_case_2() called')\n    \n    # if the joined function has already been called, do nothing\n    if phantom.get_run_data(key='join_update_case_2_called'):\n        return\n\n    # no callbacks to check, call connected block \"update_case_2\"\n    phantom.save_run_data(key='join_update_case_2_called', value='update_case_2', auto=True)\n\n    update_case_2(container=container, handle=handle)\n    \n    return",
+                        "join_optional": [
+                            "add_highrisk_employee_1",
+                            "prompt_response_type",
+                            "block_user_1",
+                            "add_legalhold_custodian_1"
+                        ],
+                        "join_start": 368,
+                        "line_end": 382,
+                        "line_start": 338,
+                        "message": "Configuring now",
+                        "name": "update case",
+                        "notes": "",
+                        "number": 2,
+                        "order": 13,
+                        "outPorts": [
+                            "out"
+                        ],
+                        "ports": {
+                            "groups": {
+                                "in": {
+                                    "attrs": {
+                                        ".port-body": {
+                                            "fill": "#fff",
+                                            "magnet": true,
+                                            "r": 10,
+                                            "stroke": "#000"
+                                        },
+                                        ".port-label": {
+                                            "fill": "#000"
+                                        }
+                                    },
+                                    "label": {
+                                        "position": {
+                                            "args": {
+                                                "y": 10
+                                            },
+                                            "name": "left"
+                                        }
+                                    },
+                                    "position": {
+                                        "name": "left"
+                                    }
+                                },
+                                "out": {
+                                    "attrs": {
+                                        ".port-body": {
+                                            "fill": "#fff",
+                                            "magnet": true,
+                                            "r": 10,
+                                            "stroke": "#000"
+                                        },
+                                        ".port-label": {
+                                            "fill": "#000"
+                                        }
+                                    },
+                                    "label": {
+                                        "position": {
+                                            "args": {
+                                                "y": 10
+                                            },
+                                            "name": "right"
+                                        }
+                                    },
+                                    "position": {
+                                        "name": "right"
+                                    }
+                                }
+                            }
+                        },
+                        "position": {
+                            "x": 2120,
+                            "y": 60
+                        },
+                        "previous_function": "",
+                        "previous_name": "update_case_2",
+                        "required_params": {
+                            "case_number": true
+                        },
+                        "reviewer": "",
+                        "show_number": false,
+                        "size": {
+                            "height": 100,
+                            "width": 180
+                        },
+                        "state": "app_action_assets",
+                        "status": "",
+                        "title": "Investigate",
+                        "type": "coa.Action",
+                        "warn": false,
+                        "z": 303
+                    },
+                    {
+                        "action": "add legalhold custodian",
+                        "action_type": "contain",
+                        "active": false,
+                        "active_keys": {},
+                        "active_values": {
+                            "matter_id": "prompt_matter_id:action_result.summary.responses.0",
+                            "username": "get_alert_details_1:action_result.data.*.username"
+                        },
+                        "angle": 0,
+                        "app": "Code42",
+                        "appid": "4d8f53a7-7b12-4d7d-8b01-6575680acf6f",
+                        "approver": "",
+                        "assets": [
+                            {
+                                "action": "add legalhold custodian",
+                                "actions": [
+                                    "get user profile",
+                                    "run advanced query",
+                                    "run query",
+                                    "hunt file",
+                                    "add case event",
+                                    "list cases",
+                                    "close case",
+                                    "update case",
+                                    "create case",
+                                    "remove legalhold custodian",
+                                    "add legalhold custodian",
+                                    "unblock user",
+                                    "reactivate user",
+                                    "deactivate user",
+                                    "block user",
+                                    "create user",
+                                    "set alert state",
+                                    "search alerts",
+                                    "get alert details",
+                                    "remove highrisk tag",
+                                    "add highrisk tag",
+                                    "get highrisk employee",
+                                    "list highrisk employees",
+                                    "remove highrisk employee",
+                                    "add highrisk employee",
+                                    "get departing employee",
+                                    "list departing employees",
+                                    "remove departing employee",
+                                    "add departing employee",
+                                    "on poll",
+                                    "test connectivity"
+                                ],
+                                "active": true,
+                                "app_name": "Code42",
+                                "app_version": "1.0.0",
+                                "appid": "4d8f53a7-7b12-4d7d-8b01-6575680acf6f",
+                                "asset_name": "partner",
+                                "config_type": "asset",
+                                "count": 0,
+                                "fields": {
+                                    "matter_id": "prompt_matter_id:action_result.summary.responses.0",
+                                    "username": "get_alert_details_1:action_result.data.*.username"
+                                },
+                                "has_app": true,
+                                "id": 8,
+                                "loaded": false,
+                                "missing": false,
+                                "name": "code42",
+                                "output": [
+                                    {
+                                        "column_name": "username",
+                                        "column_order": 0,
+                                        "contains": [
+                                            "email",
+                                            "user name"
+                                        ],
+                                        "data_path": "action_result.parameter.username",
+                                        "data_type": "string"
+                                    },
+                                    {
+                                        "column_name": "matter_id",
+                                        "column_order": 1,
+                                        "data_path": "action_result.parameter.matter_id",
+                                        "data_type": "string"
+                                    },
+                                    {
+                                        "column_name": "status",
+                                        "column_order": 2,
+                                        "data_path": "action_result.status",
+                                        "data_type": "string"
+                                    },
+                                    {
+                                        "data_path": "action_result.message",
+                                        "data_type": "string"
+                                    },
+                                    {
+                                        "data_path": "summary.total_objects",
+                                        "data_type": "numeric"
+                                    },
+                                    {
+                                        "data_path": "summary.total_objects_successful",
+                                        "data_type": "numeric"
+                                    },
+                                    {
+                                        "data_path": "action_result.summary",
+                                        "data_type": "string"
+                                    },
+                                    {
+                                        "data_path": "action_result.data",
+                                        "data_type": "string"
+                                    }
+                                ],
+                                "parameters": {
+                                    "matter_id": {
+                                        "data_type": "string",
+                                        "default": "",
+                                        "description": "The identifier of the legal hold matter",
+                                        "key": "matter_id",
+                                        "order": 1,
+                                        "primary": true,
+                                        "required": true,
+                                        "value_list": []
+                                    },
+                                    "username": {
+                                        "contains": [
+                                            "email"
+                                        ],
+                                        "data_type": "string",
+                                        "default": "",
+                                        "description": "Username of user to be added to legal hold matter",
+                                        "key": "username",
+                                        "order": 0,
+                                        "primary": true,
+                                        "required": true,
+                                        "value_list": []
+                                    }
+                                },
+                                "product_name": "Code42",
+                                "product_vendor": "Code42",
+                                "targets": "8",
+                                "type": "generic"
+                            }
+                        ],
+                        "attrs": {
+                            ".action": {
+                                "text": "add legalhold custodian"
+                            },
+                            ".background": {
+                                "fill": "#000000",
+                                "stroke": "#5C6773"
+                            },
+                            ".color-band": {
+                                "fill": "#3C444D"
+                            },
+                            ".inPorts>.port-in": {
+                                "ref": ".background",
+                                "ref-x": 0.5
+                            },
+                            ".inPorts>.port-in>.port-body": {
+                                "port": {
+                                    "id": "in",
+                                    "type": "in"
+                                }
+                            },
+                            ".message": {
+                                "opacity": 0,
+                                "ref-x": 5,
+                                "ref-y": 105,
+                                "text": "Configuring now"
+                            },
+                            ".outPorts>.port-out": {
+                                "ref": ".background",
+                                "ref-x": 0.5
+                            },
+                            ".outPorts>.port-out>.port-body": {
+                                "port": {
+                                    "id": "out",
+                                    "type": "out"
+                                }
+                            },
+                            ".title": {
+                                "text": "Contain"
+                            },
+                            "g.approver image": {
+                                "opacity": 1
+                            },
+                            "g.code image": {
+                                "opacity": 1
+                            },
+                            "g.delete": {
+                                "display": "none"
+                            },
+                            "g.error": {
+                                "opacity": 0
+                            },
+                            "g.error image": {
+                                "xlink:href": "/inc/coa/img/block_icon_warn.svg"
+                            },
+                            "g.icon image": {
+                                "xlink:href": "/inc/coa/img/block_icon_contain.svg"
+                            },
+                            "g.notes": {
+                                "display": "block"
+                            },
+                            "g.notes image": {
+                                "opacity": 1
+                            },
+                            "g.timer image": {
+                                "opacity": 1
+                            }
+                        },
+                        "block_code": "def add_legalhold_custodian_1(action=None, success=None, container=None, results=None, handle=None, filtered_artifacts=None, filtered_results=None, custom_function=None, **kwargs):\n    phantom.debug('add_legalhold_custodian_1() called')\n        \n    #phantom.debug('Action: {0} {1}'.format(action['name'], ('SUCCEEDED' if success else 'FAILED')))\n    \n    # collect data for 'add_legalhold_custodian_1' call\n    results_data_1 = phantom.collect2(container=container, datapath=['get_alert_details_1:action_result.data.*.username', 'get_alert_details_1:action_result.parameter.context.artifact_id'], action_results=results)\n    results_data_2 = phantom.collect2(container=container, datapath=['prompt_matter_id:action_result.summary.responses.0', 'prompt_matter_id:action_result.parameter.context.artifact_id'], action_results=results)\n\n    parameters = []\n    \n    # build parameters list for 'add_legalhold_custodian_1' call\n    for results_item_1 in results_data_1:\n        for results_item_2 in results_data_2:\n            if results_item_1[0] and results_item_2[0]:\n                parameters.append({\n                    'username': results_item_1[0],\n                    'matter_id': results_item_2[0],\n                    # context (artifact id) is added to associate results with the artifact\n                    'context': {'artifact_id': results_item_1[1]},\n                })\n\n    phantom.act(action=\"add legalhold custodian\", parameters=parameters, assets=['code42'], callback=join_update_case_2, name=\"add_legalhold_custodian_1\")\n\n    return",
+                        "callback_code": "",
+                        "callback_start": 1,
+                        "callsback": true,
+                        "color": "",
+                        "connected_to_start": true,
+                        "connection_name": "prompt matter id",
+                        "connection_type": "action",
+                        "custom_callback": "",
+                        "custom_code": "",
+                        "custom_join": "",
+                        "custom_name": "",
+                        "delay": 0,
+                        "description": "",
+                        "has_custom": false,
+                        "has_custom_block": false,
+                        "has_custom_callback": false,
+                        "has_custom_join": false,
+                        "id": "30124da0-7a82-4822-ad8a-b16800f7b642",
+                        "inPorts": [
+                            "in"
+                        ],
+                        "join_code": "",
+                        "join_optional": [],
+                        "join_start": 1,
+                        "line_end": 338,
+                        "line_start": 312,
+                        "message": "Configuring now",
+                        "name": "add legalhold custodian",
+                        "notes": "",
+                        "number": 1,
+                        "order": 12,
+                        "outPorts": [
+                            "out"
+                        ],
+                        "ports": {
+                            "groups": {
+                                "in": {
+                                    "attrs": {
+                                        ".port-body": {
+                                            "fill": "#fff",
+                                            "magnet": true,
+                                            "r": 10,
+                                            "stroke": "#000"
+                                        },
+                                        ".port-label": {
+                                            "fill": "#000"
+                                        }
+                                    },
+                                    "label": {
+                                        "position": {
+                                            "args": {
+                                                "y": 10
+                                            },
+                                            "name": "left"
+                                        }
+                                    },
+                                    "position": {
+                                        "name": "left"
+                                    }
+                                },
+                                "out": {
+                                    "attrs": {
+                                        ".port-body": {
+                                            "fill": "#fff",
+                                            "magnet": true,
+                                            "r": 10,
+                                            "stroke": "#000"
+                                        },
+                                        ".port-label": {
+                                            "fill": "#000"
+                                        }
+                                    },
+                                    "label": {
+                                        "position": {
+                                            "args": {
+                                                "y": 10
+                                            },
+                                            "name": "right"
+                                        }
+                                    },
+                                    "position": {
+                                        "name": "right"
+                                    }
+                                }
+                            }
+                        },
+                        "position": {
+                            "x": 1800,
+                            "y": -180
+                        },
+                        "previous_function": "",
+                        "previous_name": "add_legalhold_custodian_1",
+                        "required_params": {
+                            "matter_id": true,
+                            "username": true
+                        },
+                        "reviewer": "",
+                        "show_number": false,
+                        "size": {
+                            "height": 100,
+                            "width": 180
+                        },
+                        "state": "app_action_assets",
+                        "status": "",
+                        "title": "Contain",
+                        "type": "coa.Action",
+                        "warn": "",
+                        "z": 304
                     }
                 ]
             },
