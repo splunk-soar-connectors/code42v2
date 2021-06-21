@@ -179,7 +179,7 @@ polling. Then, hit `Poll Now`. You likely will want to increase the `Maximum Con
 properties to ingest more alerts.
 
 After the ingestion completes, go to the Sources tab and look at the newly ingested alerts.
-Click on alert and go to the "Analyst" view. Finally, use the "Action" and "Playbook" buttons
+Click on the alert and go to the "Analyst" view. Finally, use the "Action" and "Playbook" buttons
 to run actions or playbooks.
 
 ## Reset Polling Checkpoint
