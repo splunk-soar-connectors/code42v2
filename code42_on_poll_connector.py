@@ -30,7 +30,7 @@ JSON_TO_CEF_MAP = {
     "emailSender": "suser",
     "eventId": "externalId",
     "eventTimestamp": "end",
-    "exposure": "reason",
+    "exposure": "message",
     "fileCategory": "fileType",
     "fileName": "fname",
     "filePath": "filePath",

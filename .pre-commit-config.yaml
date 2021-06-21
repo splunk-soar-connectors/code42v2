@@ -3,9 +3,13 @@ repos:
     rev: 19.10b0
     hooks:
       - id: black
+        exclude: playbooks/
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v3.1.0
     hooks:
       - id: check-byte-order-marker
+        exclude: playbooks/
       - id: trailing-whitespace
+        exclude: playbooks/
       - id: end-of-file-fixer
+        exclude: playbooks/
