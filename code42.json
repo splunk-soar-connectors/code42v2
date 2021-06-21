@@ -896,7 +896,10 @@
                     "column_name": "Risk Tag",
                     "data_path": "action_result.data.*.riskFactors.*.tag",
                     "column_order": 7,
-                    "data_type": "string"
+                    "data_type": "string",
+                    "contains": [
+                        "code42 risk tag"
+                    ]
                 },
                 {
                     "data_path": "action_result.summary.is_high_risk_employee",
@@ -1987,7 +1990,7 @@
                 },
                 {
                     "column_name": "Risk Tag",
-                    "data_path": "action_result.data.*.riskFactors",
+                    "data_path": "action_result.data.*.riskFactors.*.tag",
                     "data_type": "string",
                     "example_values": [
                         "FLIGHT_RISK"
@@ -2040,7 +2043,8 @@
                 }
             ],
             "render": {
-                "type": "table"
+                "type": "custom",
+                "view": "code42_view.display_view"
             },
             "versions": "EQ(*)"
         },
