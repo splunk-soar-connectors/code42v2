@@ -93,26 +93,26 @@
                     "allow_list": true
                 },
                 "start_time": {
-                    "data_type": "numeric",
-                    "order": 1,
-                    "description": "Start of time range, in epoch time (milliseconds)",
-                    "verbose": "If not specified, the default is past 10 days"
+                    "description": "The start time to use in the initial poll in %Y-%m-%d %H:%M:%S format (defaults to 30 days back)",
+                    "data_type": "string",
+                    "required": false,
+                    "order": 1
                 },
-                "end_time": {
-                    "data_type": "numeric",
-                    "order": 2,
-                    "description": "End of time range, in epoch time (milliseconds)",
-                    "verbose": "If not specified, the default is now"
+                "end_type": {
+                    "description": "The end time to use in the initial poll in %Y-%m-%d %H:%M:%S format (defaults to the current time)",
+                    "data_type": "string",
+                    "required": false,
+                    "order": 2
                 },
                 "container_count": {
                     "data_type": "numeric",
                     "order": 3,
-                    "description": "Maximum number of container records to query for."
+                    "description": "Maximum number of alerts to create (only used in Poll Now)"
                 },
                 "artifact_count": {
                     "data_type": "numeric",
                     "order": 4,
-                    "description": "Maximum number of artifact records to query for."
+                    "description": "Maximum number of artifacts to create (only used in Poll Now)"
                 }
             },
             "output": [],

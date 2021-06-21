@@ -196,6 +196,7 @@ class Code42OnPollConnector:
             )
             param["end_date"] = config.get("end_date")
         else:
+            # Last time is stored as a float timestamp
             last_time_as_date_str = datetime.utcfromtimestamp(last_time).strftime(
                 "%Y-%m-%dT%H:%M:%S.%f"
             )
