@@ -327,6 +327,16 @@ class Code42Connector(BaseConnector):
             phantom.APP_SUCCESS, f"{username} was reactivated"
         )
 
+    @action_handler_for("get_user_profile")
+    def _handle_get_user_profile(self, param, action_result):
+        username = param["username"]
+        user_id = self._get_user_id(username)
+        response = self._client.detectionlists.get_user_by_id(user_id)
+        all_tags = response.data.get("riskFactors", [])
+        response["riskFactors"] = _convert_to_obj_list(all_tags, "tag")
+        action_result.add_data(response.data)
+        return action_result.set_status(phantom.APP_SUCCESS)
+
     """ALERTS ACTIONS"""
 
     @action_handler_for("get_alert_details")

@@ -143,7 +143,8 @@
                     "data_path": "action_result.parameter.username",
                     "data_type": "string",
                     "contains": [
-                        "email"
+                        "email",
+                        "user name"
                     ],
                     "column_name": "Username",
                     "column_order": 0
@@ -195,7 +196,8 @@
                         "1"
                     ],
                     "contains": [
-                        "email"
+                        "email",
+                        "user name"
                     ],
                     "column_order": 5
                 },
@@ -232,7 +234,8 @@
                     "required": true,
                     "primary": true,
                     "contains": [
-                        "email"
+                        "email",
+                        "user name"
                     ],
                     "value_list": [],
                     "default": "",
@@ -244,7 +247,8 @@
                     "data_path": "action_result.parameter.username",
                     "data_type": "string",
                     "contains": [
-                        "email"
+                        "email",
+                        "user name"
                     ],
                     "column_name": "Username",
                     "column_order": 0
@@ -351,7 +355,8 @@
                         "test@example.com"
                     ],
                     "contains": [
-                        "email"
+                        "email",
+                        "user name"
                     ],
                     "column_order": 3
                 },
@@ -404,7 +409,8 @@
                     "description": "The username of the departing employee to get",
                     "data_type": "string",
                     "contains": [
-                        "email"
+                        "email",
+                        "user name"
                     ],
                     "required": true,
                     "primary": true,
@@ -417,7 +423,8 @@
                     "data_type": "string",
                     "column_name": "Filter Type",
                     "contains": [
-                        "email"
+                        "email",
+                        "user name"
                     ],
                     "column_order": 0
                 },
@@ -456,7 +463,8 @@
                         "test@example.com"
                     ],
                     "contains": [
-                        "email"
+                        "email",
+                        "user name"
                     ],
                     "column_order": 3
                 },
@@ -512,7 +520,8 @@
                     "required": true,
                     "primary": true,
                     "contains": [
-                        "email"
+                        "email",
+                        "user name"
                     ],
                     "value_list": [],
                     "default": "",
@@ -532,7 +541,8 @@
                     "data_path": "action_result.parameter.username",
                     "data_type": "string",
                     "contains": [
-                        "email"
+                        "email",
+                        "user name"
                     ],
                     "column_name": "Username",
                     "column_order": 0
@@ -578,7 +588,8 @@
                         "1"
                     ],
                     "contains": [
-                        "email"
+                        "email",
+                        "user name"
                     ],
                     "column_order": 4
                 },
@@ -615,7 +626,8 @@
                     "required": true,
                     "primary": true,
                     "contains": [
-                        "email"
+                        "email",
+                        "user name"
                     ],
                     "value_list": [],
                     "default": "",
@@ -627,7 +639,8 @@
                     "data_path": "action_result.parameter.username",
                     "data_type": "string",
                     "contains": [
-                        "email"
+                        "email",
+                        "user name"
                     ],
                     "column_name": "Username",
                     "column_order": 0
@@ -733,7 +746,8 @@
                         "test@example.com"
                     ],
                     "contains": [
-                        "email"
+                        "email",
+                        "user name"
                     ],
                     "column_order": 3
                 },
@@ -1141,14 +1155,18 @@
                 },
                 {
                     "data_path": "action_result.status",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.name",
                     "data_type": "string",
-                    "column_name": "Status",
+                    "column_name": "Name",
                     "column_order": 1
                 },
                 {
-                    "data_path": "action_result.data.*.username",
+                    "data_path": "action_result.data.*.actor",
                     "data_type": "string",
-                    "column_name": "username",
+                    "column_name": "Actor",
                     "contains": [
                         "email",
                         "user name"
@@ -1156,9 +1174,16 @@
                     "column_order": 2
                 },
                 {
-                    "data_path": "action_result.data.*.occurred",
+                    "data_path": "action_result.data.*.actorId",
                     "data_type": "string",
-                    "column_name": "Occurred",
+                    "contains": [
+                        "email"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.createdAt",
+                    "data_type": "string",
+                    "column_name": "Created At",
                     "column_order": 3
                 },
                 {
@@ -1184,12 +1209,6 @@
                     "data_type": "string",
                     "column_name": "Severity",
                     "column_order": 7
-                },
-                {
-                    "data_path": "action_result.data.*.name",
-                    "data_type": "string",
-                    "column_name": "Name",
-                    "column_order": 8
                 },
                 {
                     "data_path": "action_result.summary.username",
@@ -1813,6 +1832,181 @@
                 {
                     "data_path": "action_result.summary",
                     "data_type": "string"
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "get user profile",
+            "identifier": "get_user_profile",
+            "description": "Get user profile",
+            "verbose": "",
+            "type": "generic",
+            "read_only": true,
+            "parameters": {
+                "username": {
+                    "description": "The username associated with the user profile to get",
+                    "data_type": "string",
+                    "contains": [
+                        "email",
+                        "user name"
+                    ],
+                    "required": true,
+                    "primary": true,
+                    "order": 0
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.parameter.username",
+                    "data_type": "string",
+                    "column_name": "Username",
+                    "contains": [
+                        "email",
+                        "user name"
+                    ],
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "status",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
+                },
+                {
+                    "column_name": "City",
+                    "data_path": "action_result.data.*.city",
+                    "data_type": "string",
+                    "example_values": [
+                        "New York"
+                    ],
+                    "column_order": 2
+                },
+                {
+                    "column_name": "Cloud Usernames",
+                    "data_path": "action_result.data.*.cloudUsernames",
+                    "data_type": "string",
+                    "example_values": [
+                        "test@example.com"
+                    ],
+                    "contains": [
+                        "email",
+                        "user name"
+                    ],
+                    "column_order": 3
+                },
+                {
+                    "column_name": "Country",
+                    "data_path": "action_result.data.*.country",
+                    "data_type": "string",
+                    "example_values": [
+                        "US"
+                    ],
+                    "column_order": 4
+                },
+                {
+                    "column_name": "Department",
+                    "data_path": "action_result.data.*.department",
+                    "data_type": "string",
+                    "example_values": [
+                        "Sales"
+                    ],
+                    "column_order": 5
+                },
+                {
+                    "column_name": "Display Name",
+                    "data_path": "action_result.data.*.displayName",
+                    "data_type": "string",
+                    "example_values": [
+                        "Jane Doe"
+                    ],
+                    "column_order": 6
+                },
+                {
+                    "column_name": "Manager Display Name",
+                    "data_path": "action_result.data.*.managerDisplayName",
+                    "data_type": "string",
+                    "example_values": [
+                        "Jane Doe"
+                    ],
+                    "column_order": 7
+                },
+                {
+                    "column_name": "Manager Username",
+                    "data_path": "action_result.data.*.managerUsername",
+                    "data_type": "string",
+                    "example_values": [
+                        "test@example.com"
+                    ],
+                    "contains": [
+                        "email",
+                        "user name"
+                    ],
+                    "column_order": 8
+                },
+                {
+                    "column_name": "Risk Tag",
+                    "data_path": "action_result.data.*.riskFactors",
+                    "data_type": "string",
+                    "example_values": [
+                        "FLIGHT_RISK"
+                    ],
+                    "column_order": 9
+                },
+                {
+                    "column_name": "State",
+                    "data_path": "action_result.data.*.state",
+                    "data_type": "string",
+                    "example_values": [
+                        "AZ"
+                    ],
+                    "column_order": 10
+                },
+                {
+                    "column_name": "Title",
+                    "data_path": "action_result.data.*.title",
+                    "data_type": "string",
+                    "example_values": [
+                        "Vice President"
+                    ],
+                    "column_order": 11
+                },
+                {
+                    "column_name": "User ID",
+                    "data_path": "action_result.data.*.userId",
+                    "data_type": "string",
+                    "example_values": [
+                        "1"
+                    ],
+                    "column_order": 12
+                },
+                {
+                    "column_name": "Username",
+                    "data_path": "action_result.data.*.userName",
+                    "data_type": "string",
+                    "example_values": [
+                        "test@example.com"
+                    ],
+                    "contains": [
+                        "email",
+                        "user name"
+                    ],
+                    "column_order": 13
                 }
             ],
             "render": {
@@ -3417,7 +3611,8 @@
                     "data_path": "action_result.data.*.emailSender",
                     "data_type": "string",
                     "contains": [
-                        "email"
+                        "email",
+                        "user name"
                     ]
                 },
                 {

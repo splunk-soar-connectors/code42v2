@@ -8,6 +8,7 @@ all: clean test validate style tar
 
 clean::
 	rm -f ../phcode42v2.tgz
+	rm -f code42_alert_response_playbook.tgz
 
 test::
 	pytest -vv
@@ -36,3 +37,6 @@ ssh::
 
 open-web::
 	open https://$(SERVER_ADDRESS):9999
+
+playbook:: clean
+	cd playbooks && tar cvfz ../code42_alert_response_playbook.tgz *
