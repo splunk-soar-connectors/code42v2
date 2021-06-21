@@ -200,7 +200,7 @@ def _create_container(alert, container_label):
     return {
         "name": alert.get("name"),
         "data": alert,
-        "severity": alert.get("severity").lower().capitalize(),
+        "severity": alert.get("severity"),
         "description": alert.get("description"),
         "source_data_identifier": alert["id"],
         "label": container_label,
@@ -364,6 +364,7 @@ def _create_artifact_json(container_id, alert_details, file_event):
         "cef": cef,
         "data": normalized_event,
         "start_time": normalized_event.get("eventTimestamp"),
+        "severity": alert_details.get("severity")
     }
     return artifact_dict
 
