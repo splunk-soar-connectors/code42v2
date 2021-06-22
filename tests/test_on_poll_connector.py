@@ -619,3 +619,16 @@ class TestCode42OnPollConnector(object):
         assert severity_filters[1]["operator"] == "IS"
         assert severity_filters[1]["term"] == "severity"
         assert severity_filters[1]["value"] == "MEDIUM"
+
+    def test_on_poll_when_no_alerts_is_still_successful(
+        self, mocker, mock_py42_for_alert_polling
+    ):
+        mock_py42_for_alert_polling.alerts.search.return_value = create_mock_response(
+            mocker, {"alerts": []}
+        )
+        mock_py42_for_alert_polling.alerts.get_details.return_value = create_mock_response(
+            mocker, {"alerts": []}
+        )
+        connector = _create_on_poll_connector(mock_py42_for_alert_polling)
+        connector.handle_action({})
+        assert_success(connector)
