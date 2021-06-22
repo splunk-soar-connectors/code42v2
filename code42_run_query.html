@@ -86,6 +86,7 @@
                             <th class="widget-th">Public IP</th>
                             <th class="widget-th">Private IP</th>
                             <th class="widget-th">Url</th>
+                            <th class="widget-th">Window Title</th>
                         </thead>
                         <tbody>
                             {% for event in result.data %}
@@ -221,6 +222,18 @@
                                             &nbsp;
                                             <span class="fa fa-caret-down" style="font-size: smaller;"></span>
                                         </a>
+                                    </td>
+                                    <td class="widget-td">
+                                        {% for title in event.windowTitle %}
+                                            <span class="glyphicon glyphicon-dot"></span>&nbsp;
+                                            <a href="javascript:;"
+                                               onclick="context_menu(this, [{'contains': ['code42 window title'], 'value': '{{ title.windowTitle }}' }], 0, {{ container.id }}, null, false);">
+                                                {{ title.windowTitle }}
+                                                &nbsp;
+                                                <span class="fa fa-caret-down" style="font-size: smaller;"></span>
+                                            </a>
+                                            {% if not forloop.last %}<br/> {% endif %}
+                                        {% endfor %}
                                     </td>
                                 </tr>
                             {% endfor %}

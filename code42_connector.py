@@ -688,7 +688,11 @@ class Code42Connector(BaseConnector):
 
     def _add_file_event_results(self, query, action_result):
         results = self._client.securitydata.search_file_events(query)
-        for result in results.data["fileEvents"]:
+        for result in results.data.get("fileEvents", []):
+            result = dict(result)
+            all_window_titles = result.get("windowTitle", [])
+            if all_window_titles:
+                result["windowTitle"] = _convert_to_obj_list(all_window_titles, "windowTitle")
             action_result.add_data(result)
 
         action_result.update_summary(

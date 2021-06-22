@@ -3282,10 +3282,17 @@
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.data.*.tabUrl",
+                    "data_path": "action_result.data.*.tab  Url",
                     "data_type": "string",
                     "contains": [
                         "url"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.windowTitle.*.windowTitle",
+                    "data_type": "string",
+                    "contains": [
+                        "code42 window title"
                     ]
                 },
                 {
