@@ -12,7 +12,7 @@ from py42.sdk.queries.fileevents.filters import (
     FileCategory,
 )
 
-from code42_util import get_thirty_days_ago, build_alerts_query
+from code42_util import get_thirty_days_ago, build_alerts_query, parse_datetime
 
 """The contents of this module that related to mapping alert observations to file events borrows heavily from the
 Code42 Cortex XSOAR integration as well as the code42cli python package.
@@ -70,8 +70,8 @@ FILE_EVENT_TO_SIGNATURE_ID_MAP = {
     "EMAILED": "C42204",
 }
 CEF_TIMESTAMP_FIELDS = ["end", "fileCreateTime", "fileModificationTime", "rt"]
-DEFAULT_CONTAINER_COUNT_FOR_POLL_NOW = 1
-DEFAULT_ARTIFACT_COUNT_FOR_POLL_NOW = 10
+DEFAULT_CONTAINER_COUNT = 1
+DEFAULT_ARTIFACT_COUNT = 10
 
 
 def get_file_category_value(key):
@@ -101,37 +101,66 @@ class Code42OnPollConnector:
         self._state = state or {}
 
     def handle_on_poll(self, param, action_result):
-        param = self._adjust_date_parameters(param)
-        query = build_alerts_query(param["start_date"], param.get("end_date"))
-        alerts = self._get_alerts(param, query)
-        details = {}
-        for alert in alerts:
-            details = self._get_alert_details(alert["id"])
-            container_id = self._init_container(details)
-            observations = details.get("observations", [])
-            file_events = self._get_file_events(param, observations, details)
-            self._save_artifacts_from_file_events(container_id, details, file_events)
+        source_id = param.get("container_id")
+        if source_id:
+            # Ignore all other query params when polling for specific alert IDs
+            alert_ids = source_id.split(",")
+            alerts = self._get_alert_details(alert_ids)
+            last_alert = self._create_containers_from_alert_detail_responses(alerts)
+        else:
+            start_date, end_date = self._adjust_date_parameters()
+            container_count, artifact_count = self._get_limit_counts(param)
+            alerts = self._get_alerts(
+                start_date, end_date, container_count=container_count
+            )
+            last_alert = self._create_containers_from_alert_search_responses(
+                alerts, artifact_count=artifact_count
+            )
 
-        # Save last time of last alert for future polling
-        if not self._connector.is_poll_now() and details.get("createdAt"):
-            self._state["last_time"] = details["createdAt"]
-            self._connector.save_state(self._state)
-
+        self._save_last_time(last_alert, source_id)
         return action_result.set_status(phantom.APP_SUCCESS)
 
-    def _get_alerts(self, param, query):
+    def _get_alerts(self, start_date, end_date, container_count=None):
+        query = self._create_query(start_date, end_date)
         response = self._client.alerts.search(query)
         alerts = response.data.get("alerts", [])
-        if self._connector.is_poll_now():
-            container_count = param.get(
-                "container_count", DEFAULT_CONTAINER_COUNT_FOR_POLL_NOW
-            )
+        if container_count:
             return alerts[:container_count]
 
         return alerts
 
-    def _get_alert_details(self, alert_id):
-        return self._client.alerts.get_details(alert_id).data["alerts"][0]
+    def _create_query(self, start_date, end_date):
+        severities = self._connector.get_config().get("severity_to_poll_for")
+        if severities:
+            severities = severities.replace(" ", "").split(",")
+        query = build_alerts_query(start_date, end_date, severities=severities)
+        return query
+
+    def _get_alert_details(self, alert_ids):
+        return self._client.alerts.get_details(alert_ids).data["alerts"]
+
+    def _create_containers_from_alert_detail_responses(self, alerts):
+        alert = {}
+        for alert in alerts:
+            self._create_container_from_alert(alert)
+        return alert
+
+    def _create_containers_from_alert_search_responses(
+        self, alerts, artifact_count=None
+    ):
+        alert = {}
+        for alert in alerts:
+            alert = dict(self._get_alert_details(alert["id"])[0])
+            self._create_container_from_alert(alert, artifact_count=artifact_count)
+        return alert
+
+    def _create_container_from_alert(self, alert, artifact_count=None):
+        container_id = self._init_container(alert)
+        observations = alert.get("observations", [])
+        file_events = self._get_file_events(
+            observations, alert, artifact_count=artifact_count
+        )
+        self._save_artifacts_from_file_events(container_id, alert, file_events)
 
     def _init_container(self, alert_details):
         container_label = self._get_container_label()
@@ -142,25 +171,25 @@ class Code42OnPollConnector:
     def _get_container_label(self):
         return self._connector.get_config().get("ingest", {}).get("container_label")
 
-    def _get_file_events(self, param, observations, alert_details):
-        artifact_count = param.get(
-            "artifact_count", DEFAULT_ARTIFACT_COUNT_FOR_POLL_NOW
-        )
+    def _get_file_events(self, observations, alert_details, artifact_count=None):
+        def _have_enough_events():
+            do_limit_count = artifact_count is not None
+            return do_limit_count and is_poll_now and len(file_events) >= artifact_count
+
         file_events = []
+        is_poll_now = self._connector.is_poll_now()
         for observation in observations:
-            events = self._get_file_events_for_observation(
-                param, observation, alert_details
-            )
+            events = self._get_file_events_for_observation(observation, alert_details)
             for event in events:
                 file_events.append(event)
-                if self._connector.is_poll_now() and len(file_events) >= artifact_count:
+                if _have_enough_events():
                     break
-            if self._connector.is_poll_now() and len(file_events) >= artifact_count:
+            if _have_enough_events():
                 break
 
         return file_events
 
-    def _get_file_events_for_observation(self, param, observation, alert_details):
+    def _get_file_events_for_observation(self, observation, alert_details):
         query = _get_file_event_query(observation, alert_details)
         response = self._client.securitydata.search_file_events(query)
         file_events = response.data.get("fileEvents", [])
@@ -172,22 +201,41 @@ class Code42OnPollConnector:
         ]
         self._connector.save_artifacts(artifacts)
 
-    def _adjust_date_parameters(self, param):
-        param["end_date"] = None  # Not used
-
+    def _adjust_date_parameters(self):
         last_time = (
-            None if self._connector.is_poll_now() else self._state.get("last_time", 0)
+            None if self._connector.is_poll_now() else self._state.get("last_time")
         )
         if not last_time:
-            # If there was never a stored last_time or is_poll_now().
-            param["start_date"] = get_thirty_days_ago().strftime("%Y-%m-%dT%H:%M:%S.%f")
+            # If there was never a stored last_time.
+            config = self._connector.get_config()
+            given_start_date = config.get("initial_poll_start_date")
+            start_time = given_start_date or get_thirty_days_ago().strftime(
+                "%Y-%m-%dT%H:%M:%S.%f"
+            )
+            end_time = config.get("initial_poll_end_date")
+            return start_time, end_time
         else:
+            # Last time is stored as a float timestamp
             last_time_as_date_str = datetime.utcfromtimestamp(last_time).strftime(
                 "%Y-%m-%dT%H:%M:%S.%f"
             )
-            param["start_date"] = last_time_as_date_str
+            return last_time_as_date_str, None
 
-        return param
+    def _get_limit_counts(self, param):
+        if self._connector.is_poll_now():
+            container_count = param.get("container_count", DEFAULT_CONTAINER_COUNT)
+            artifact_count = param.get("artifact_count", DEFAULT_ARTIFACT_COUNT)
+            return container_count, artifact_count
+        return None, None
+
+    def _save_last_time(self, alert, source_id):
+        # Save last time of last alert for future polling
+        # Note: checkpoints are not saved when polling for specific alerts via source_id.
+        last_created_at = alert.get("createdAt")
+        if not source_id and last_created_at:
+            checkpoint = parse_datetime(last_created_at).timestamp()
+            self._state["last_time"] = checkpoint
+            self._connector.save_state(self._state)
 
 
 def _create_container(alert, container_label):
@@ -358,6 +406,7 @@ def _create_artifact_json(container_id, alert_details, file_event):
         "cef": cef,
         "data": normalized_event,
         "start_time": normalized_event.get("eventTimestamp"),
+        "severity": alert_details.get("severity"),
     }
     return artifact_dict
 

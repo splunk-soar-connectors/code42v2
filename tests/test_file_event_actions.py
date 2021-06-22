@@ -1,4 +1,3 @@
-import json
 from datetime import datetime, timedelta, timezone
 
 import dateutil
@@ -247,7 +246,7 @@ class TestCode42FileEventsConnector(object):
         connector.handle_action(param)
 
         actual_query = mock_py42_client.securitydata.search_file_events.call_args[0][0]
-        query_json = json.loads(str(actual_query))
+        query_json = dict(actual_query)
 
         for key in eq_param:
             check_filter(query_json, "IS", eq_param[key])
@@ -316,9 +315,21 @@ class TestCode42FileEventsConnector(object):
         connector = _create_run_query_connector(mocker, mock_py42_client)
         connector.handle_action(param)
         action_result_data = connector.get_action_results()[0].get_data()
-        assert action_result_data[0] == MOCK_SECURITY_EVENT_RESPONSE["fileEvents"][0]
-        assert action_result_data[1] == MOCK_SECURITY_EVENT_RESPONSE["fileEvents"][1]
-        assert action_result_data[2] == MOCK_SECURITY_EVENT_RESPONSE["fileEvents"][2]
+        expected_event_1 = dict(MOCK_SECURITY_EVENT_RESPONSE["fileEvents"][0])
+        expected_event_1["windowTitle"] = [
+            {"windowTitle": expected_event_1["windowTitle"][0]}
+        ]
+        expected_event_2 = dict(MOCK_SECURITY_EVENT_RESPONSE["fileEvents"][1])
+        expected_event_2["windowTitle"] = [
+            {"windowTitle": expected_event_2["windowTitle"][0]}
+        ]
+        expected_event_3 = dict(MOCK_SECURITY_EVENT_RESPONSE["fileEvents"][2])
+        expected_event_3["windowTitle"] = [
+            {"windowTitle": expected_event_3["windowTitle"][0]}
+        ]
+        assert action_result_data[0] == expected_event_1
+        assert action_result_data[1] == expected_event_2
+        assert action_result_data[2] == expected_event_3
 
         assert_success(connector)
 
@@ -343,7 +354,7 @@ class TestCode42FileEventsConnector(object):
         connector = _create_run_query_connector(mocker, mock_py42_client)
         connector.handle_action(param)
         actual_query = mock_py42_client.securitydata.search_file_events.call_args[0][0]
-        query_json = json.loads(str(actual_query))
+        query_json = dict(actual_query)
         actual_date = dateutil.parser.parse(
             query_json["groups"][1]["filters"][0]["value"]
         )
@@ -358,7 +369,7 @@ class TestCode42FileEventsConnector(object):
         connector = _create_run_query_connector(mocker, mock_py42_client)
         connector.handle_action(param)
         actual_query = mock_py42_client.securitydata.search_file_events.call_args[0][0]
-        query_json = json.loads(str(actual_query))
+        query_json = dict(actual_query)
         assert query_json["groups"][0]["filters"][0]["term"] == "exposure"
         assert query_json["groups"][0]["filters"][0]["operator"] == "EXISTS"
         assert query_json["groups"][0]["filters"][0]["value"] is None
@@ -371,7 +382,7 @@ class TestCode42FileEventsConnector(object):
         connector = _create_run_query_connector(mocker, mock_py42_client)
         connector.handle_action(param)
         actual_query = mock_py42_client.securitydata.search_file_events.call_args[0][0]
-        query_json = json.loads(str(actual_query))
+        query_json = dict(actual_query)
         assert query_json["groups"][0]["filters"][0]["term"] == "trusted"
         assert query_json["groups"][0]["filters"][0]["operator"] == "IS"
         assert query_json["groups"][0]["filters"][0]["value"] == "FALSE"
@@ -396,9 +407,21 @@ class TestCode42FileEventsConnector(object):
         connector = _create_run_advanced_query_connector(mocker, mock_py42_client)
         connector.handle_action(param)
         action_result_data = connector.get_action_results()[0].get_data()
-        assert action_result_data[0] == MOCK_SECURITY_EVENT_RESPONSE["fileEvents"][0]
-        assert action_result_data[1] == MOCK_SECURITY_EVENT_RESPONSE["fileEvents"][1]
-        assert action_result_data[2] == MOCK_SECURITY_EVENT_RESPONSE["fileEvents"][2]
+        expected_event_1 = dict(MOCK_SECURITY_EVENT_RESPONSE["fileEvents"][0])
+        expected_event_1["windowTitle"] = [
+            {"windowTitle": expected_event_1["windowTitle"][0]}
+        ]
+        expected_event_2 = dict(MOCK_SECURITY_EVENT_RESPONSE["fileEvents"][1])
+        expected_event_2["windowTitle"] = [
+            {"windowTitle": expected_event_2["windowTitle"][0]}
+        ]
+        expected_event_3 = dict(MOCK_SECURITY_EVENT_RESPONSE["fileEvents"][2])
+        expected_event_3["windowTitle"] = [
+            {"windowTitle": expected_event_3["windowTitle"][0]}
+        ]
+        assert action_result_data[0] == expected_event_1
+        assert action_result_data[1] == expected_event_2
+        assert action_result_data[2] == expected_event_3
 
         assert_success(connector)
 

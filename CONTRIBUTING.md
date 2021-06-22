@@ -172,6 +172,23 @@ phenv pip uninstall stubs
 This app is built on top of several modules developed by Phantom. Since we don't have access to the source for these
 modules, we've stubbed them out in the `phantom` directory so that they can be imported by the test code.
 
-# TODO
+# Testing the App
 
-When we implement actions, describe how to create dummy events in the UI and test the actions via a playbook.
+First, get alerts into Phantom by going to your configured asset's Ingest Settings and enabling
+polling. Then, hit `Poll Now`. You likely will want to increase the `Maximum Containers` and `Maximum Artifacts`
+properties to ingest more alerts.
+
+After the ingestion completes, go to the Sources tab and look at the newly ingested alerts.
+Click on the alert and go to the "Analyst" view. Finally, use the "Action" and "Playbook" buttons
+to run actions or playbooks.
+
+## Reset Polling Checkpoint
+
+To clear a last poll timestamp for a given asset, `ssh` into the server and go to the directory
+`/opt/phantom/local_data/app_states/4d8f53a7-7b12-4d7d-8b01-6575680acf6f` (the last part is the Code42 app ID).
+
+Then, find your state file. It is in the format `<asset-id>_state.json`. (Note: to find your asset ID, look
+at the URL path's parameters when selecting assets on the "Asset Configuration" page).
+
+To reset your timestamp, edit your state file (such as with `vi`) and set the property `last_time` to have a value
+of `0`.

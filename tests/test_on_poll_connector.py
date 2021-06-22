@@ -1,4 +1,3 @@
-import json
 from datetime import datetime, timedelta, timezone
 
 import dateutil.parser
@@ -17,7 +16,7 @@ from tests.conftest import (
     MOCK_SECURITY_EVENT_RESPONSE,
 )
 
-EXPECTED_ARTIFACTS = expected = [
+EXPECTED_ARTIFACTS = [
     {
         "cef": {
             "deviceExternalId": "935873453596901068",
@@ -94,6 +93,7 @@ EXPECTED_ARTIFACTS = expected = [
         },
         "label": "Alerting",
         "name": "Code42 File Event Artifact",
+        "severity": "LOW",
         "source_data_identifier": "0_1d71796f-af5b-4231-9d8e-df6434da4663_935873453596901068_956171635867906205_5",
         "start_time": "2020-05-28T12:46:39.838Z",
     },
@@ -173,6 +173,7 @@ EXPECTED_ARTIFACTS = expected = [
         },
         "label": "Alerting",
         "name": "Code42 File Event Artifact",
+        "severity": "LOW",
         "source_data_identifier": "0_1d71796f-af5b-4231-9d8e-df6434da4663_935873453596901068_956171635867906205_5",
         "start_time": "2020-05-28T12:46:39.838Z",
     },
@@ -252,6 +253,7 @@ EXPECTED_ARTIFACTS = expected = [
         },
         "label": "Alerting",
         "name": "Code42 File Event Artifact",
+        "severity": "LOW",
         "source_data_identifier": "0_1d71796f-af5b-4231-9d8e-df6434da4663_935873453596901068_956171635867906205_5",
         "start_time": "2020-05-28T12:46:39.838Z",
     },
@@ -331,6 +333,7 @@ EXPECTED_ARTIFACTS = expected = [
         },
         "label": "Alerting",
         "name": "Code42 File Event Artifact",
+        "severity": "LOW",
         "source_data_identifier": "0_1d71796f-af5b-4231-9d8e-df6434da4663_935873453596901068_956171635867906205_5",
         "start_time": "2020-05-28T12:46:39.838Z",
     },
@@ -410,6 +413,7 @@ EXPECTED_ARTIFACTS = expected = [
         },
         "label": "Alerting",
         "name": "Code42 File Event Artifact",
+        "severity": "LOW",
         "source_data_identifier": "0_1d71796f-af5b-4231-9d8e-df6434da4663_935873453596901068_956171635867906205_5",
         "start_time": "2020-05-28T12:46:39.838Z",
     },
@@ -489,6 +493,7 @@ EXPECTED_ARTIFACTS = expected = [
         },
         "label": "Alerting",
         "name": "Code42 File Event Artifact",
+        "severity": "LOW",
         "source_data_identifier": "0_1d71796f-af5b-4231-9d8e-df6434da4663_935873453596901068_956171635867906205_5",
         "start_time": "2020-05-28T12:46:39.838Z",
     },
@@ -572,8 +577,8 @@ class TestCode42OnPollConnector(object):
         connector._is_poll_now = True
         param = {"container_count": 1, "artifact_count": 1}
         connector.handle_action(param)
-        actual_date_str = json.loads(
-            str(mock_py42_for_alert_polling.alerts.search.call_args[0][0])
+        actual_date_str = dict(
+            mock_py42_for_alert_polling.alerts.search.call_args[0][0]
         )["groups"][0]["filters"][0]["value"]
         actual_date = dateutil.parser.parse(actual_date_str)
         expected_date = datetime.now(timezone.utc) - timedelta(days=30)
@@ -585,12 +590,14 @@ class TestCode42OnPollConnector(object):
     ):
         connector = _create_on_poll_connector(mock_py42_for_alert_polling)
         connector._is_poll_now = False
-        test_timestamp = 1623293946
+        test_timestamp = 1622126077.236545
         connector._state = {"last_time": test_timestamp}
+        # For proving that it does not use the stored start_date
+        connector._config["initial_poll_start_date"] = 235235235
         param = {"container_count": 1, "artifact_count": 1}
         connector.handle_action(param)
-        actual_date_str = json.loads(
-            str(mock_py42_for_alert_polling.alerts.search.call_args[0][0])
+        actual_date_str = dict(
+            mock_py42_for_alert_polling.alerts.search.call_args[0][0]
         )["groups"][0]["filters"][0]["value"]
         actual_date = dateutil.parser.parse(actual_date_str)
         expected_date = datetime.utcfromtimestamp(0) + timedelta(seconds=test_timestamp)
@@ -606,8 +613,8 @@ class TestCode42OnPollConnector(object):
         connector._state = {"last_time": None}
         param = {"container_count": 1, "artifact_count": 1}
         connector.handle_action(param)
-        actual_date_str = json.loads(
-            str(mock_py42_for_alert_polling.alerts.search.call_args[0][0])
+        actual_date_str = dict(
+            mock_py42_for_alert_polling.alerts.search.call_args[0][0]
         )["groups"][0]["filters"][0]["value"]
         actual_date = dateutil.parser.parse(actual_date_str)
         expected_date = datetime.now(timezone.utc) - timedelta(days=30)
@@ -617,42 +624,45 @@ class TestCode42OnPollConnector(object):
     def test_on_poll_saves_state_with_last_alert_created_at(
         self, mocker, mock_py42_for_alert_polling
     ):
-        test_last_timestamp = "TEST TIMESTAMP"
+        test_last_timestamp = "2021-04-18T10:02:36.3198680Z"
+        alert_id_1 = MOCK_SEARCH_ALERTS_LIST_RESPONSE["alerts"][0]["id"]
+        alert_id_2 = MOCK_SEARCH_ALERTS_LIST_RESPONSE["alerts"][1]["id"]
 
         def get_alert_details(alert_id, *args, **kwargs):
-            if alert_id != MOCK_SEARCH_ALERTS_LIST_RESPONSE["alerts"][-1]["id"]:
-                return create_mock_response(mocker, MOCK_ALERT_DETAIL_RESPONSE)
+            created_at = None
+            if alert_id == alert_id_1:
+                created_at = 23423523
+            elif alert_id == alert_id_2:
+                created_at = test_last_timestamp
 
+            return create_mock_response(
+                mocker, {"alerts": [{"id": 0, "createdAt": created_at}]}
+            )
+
+        mock_py42_for_alert_polling.alerts.get_details.side_effect = get_alert_details
+        connector = _create_on_poll_connector(mock_py42_for_alert_polling)
+        connector._is_poll_now = False
+        param = {"container_count": 1, "artifact_count": 1}
+        connector.handle_action(param)
+        expected_epoch = dateutil.parser.parse(test_last_timestamp).timestamp()
+        expected_state = {"last_time": expected_epoch}
+        assert_state_saved(connector, expected_state)
+
+    def test_on_poll_when_specifying_source_ids_does_not_store_last_time(
+        self, mocker, mock_py42_for_alert_polling
+    ):
+        test_last_timestamp = "2021-04-18T10:02:36.3198680Z"
+
+        def get_alert_details(alert_id, *args, **kwargs):
             response_dict = {"alerts": [{"id": 0, "createdAt": test_last_timestamp}]}
             return create_mock_response(mocker, response_dict)
 
         mock_py42_for_alert_polling.alerts.get_details.side_effect = get_alert_details
         connector = _create_on_poll_connector(mock_py42_for_alert_polling)
         connector._is_poll_now = False
-        connector._state = {"last_time": None}
-        param = {"container_count": 1, "artifact_count": 1}
+        param = {"container_count": 1, "artifact_count": 1, "container_id": "I AM HERE"}
         connector.handle_action(param)
-        expected_state = {"last_time": test_last_timestamp}
-        assert_state_saved(connector, expected_state)
-
-    def test_on_poll_when_is_poll_now_does_not_save_state(
-        self, mocker, mock_py42_for_alert_polling
-    ):
-        test_last_timestamp = "TEST TIMESTAMP"
-
-        def get_alert_details(alert_id, *args, **kwargs):
-            if alert_id != MOCK_SEARCH_ALERTS_LIST_RESPONSE["alerts"][-1]["id"]:
-                return create_mock_response(mocker, MOCK_ALERT_DETAIL_RESPONSE)
-
-            response_dict = {"alerts": [{"id": 0, "createdAt": test_last_timestamp}]}
-            return create_mock_response(mocker, response_dict)
-
-        mock_py42_for_alert_polling.alerts.get_details.side_effect = get_alert_details
-        connector = _create_on_poll_connector(mock_py42_for_alert_polling)
-        connector._is_poll_now = True
-        param = {"container_count": 1, "artifact_count": 1}
-        connector.handle_action(param)
-        assert not connector._state
+        assert connector._state is None
         assert_success(connector)
 
     def test_on_poll_makes_file_event_query_with_expected_number_of_filter_groups(
@@ -664,7 +674,7 @@ class TestCode42OnPollConnector(object):
         call_args = (
             mock_py42_for_alert_polling.securitydata.search_file_events.call_args
         )
-        actual = json.loads(str(call_args[0][0]))
+        actual = dict(call_args[0][0])
         assert actual["groupClause"] == "AND"
         assert len(actual["groups"]) == 4
         assert actual["groups"][0]["filterClause"] == "AND"
@@ -681,7 +691,7 @@ class TestCode42OnPollConnector(object):
         )
 
         # Corresponds to unsupported exposure type observation
-        actual = json.loads(str(call_args[5][0][0]))
+        actual = dict(call_args[2][0][0])
 
         assert len(actual["groups"][3]["filters"]) == 3
         assert actual["groups"][3]["filters"][0]["operator"] == "IS_NOT"
@@ -706,7 +716,7 @@ class TestCode42OnPollConnector(object):
         )
 
         # Corresponds to exfiltration based observation
-        actual = json.loads(str(call_args[0][0][0]))
+        actual = dict(call_args[0][0][0])
 
         assert len(actual["groups"][3]["filters"]) == 3
         assert actual["groups"][3]["filters"][0]["operator"] == "IS"
@@ -725,7 +735,7 @@ class TestCode42OnPollConnector(object):
         )
 
         # Corresponds to outside-trusted-domains type observation
-        actual = json.loads(str(call_args[4][0][0]))
+        actual = dict(call_args[1][0][0])
 
         assert len(actual["groups"][3]["filters"]) == 1
         assert actual["groups"][3]["filters"][0]["operator"] == "IS"
@@ -734,7 +744,7 @@ class TestCode42OnPollConnector(object):
         assert_success(connector)
 
     def test_on_poll_makes_expected_file_event_actor_query(
-        self, mocker, mock_py42_for_alert_polling
+        self, mock_py42_for_alert_polling
     ):
         connector = _create_on_poll_connector(mock_py42_for_alert_polling)
         param = {"container_count": 1, "artifact_count": 1}
@@ -744,7 +754,7 @@ class TestCode42OnPollConnector(object):
         )
 
         # Corresponds to FedCloudSharePermissions observation type
-        actual = json.loads(str(call_args[1][0][0]))
+        actual = dict(call_args[1][0][0])
 
         assert actual["groups"][0]["filters"][0]["operator"] == "IS"
         assert actual["groups"][0]["filters"][0]["term"] == "actor"
@@ -752,7 +762,7 @@ class TestCode42OnPollConnector(object):
         assert_success(connector)
 
     def test_on_poll_makes_expected_file_event_device_user_name_query(
-        self, mocker, mock_py42_for_alert_polling
+        self, mock_py42_for_alert_polling
     ):
         connector = _create_on_poll_connector(mock_py42_for_alert_polling)
         param = {"container_count": 1, "artifact_count": 1}
@@ -762,10 +772,125 @@ class TestCode42OnPollConnector(object):
         )
 
         # Corresponds to FedEndpointExfiltration observation type
-        actual = json.loads(str(call_args[0][0][0]))
+        actual = dict(call_args[0][0][0])
 
         assert len(actual["groups"][0]["filters"]) == 1
         assert actual["groups"][0]["filters"][0]["operator"] == "IS"
         assert actual["groups"][0]["filters"][0]["term"] == "deviceUserName"
         assert actual["groups"][0]["filters"][0]["value"] == "cool.guy@code42.com"
         assert_success(connector)
+
+    def test_on_poll_when_given_container_id_param_creates_container_for_only_given_id(
+        self, mock_py42_for_alert_polling
+    ):
+        connector = _create_on_poll_connector(mock_py42_for_alert_polling)
+        test_alert_id = "11111111-9724-4005-b848-76af488cf5e2"
+        param = {"container_id": test_alert_id}
+        connector.handle_action(param)
+        mock_py42_for_alert_polling.alerts.get_details.assert_called_once_with(
+            [test_alert_id]
+        )
+        assert_success(connector)
+
+    def test_on_poll_when_given_multiple_container_ids_gets_details_for_all_ids(
+        self, mock_py42_for_alert_polling
+    ):
+        connector = _create_on_poll_connector(mock_py42_for_alert_polling)
+        test_alert_id_1 = "11111111-9724-4005-b848-76af488cf5e2"
+        test_alert_id_2 = "1111111-555f-4880-8909-f5679448e67c"
+        param = {"container_id": f"{test_alert_id_1},{test_alert_id_2}"}
+        connector.handle_action(param)
+        call_args = mock_py42_for_alert_polling.alerts.get_details.call_args_list
+        assert len(call_args) == 1
+        assert call_args[0][0][0] == [test_alert_id_1, test_alert_id_2]
+        assert_success(connector)
+
+    def test_on_poll_when_given_container_ids_ignores_all_other_query_params(
+        self, mock_py42_for_alert_polling
+    ):
+        connector = _create_on_poll_connector(mock_py42_for_alert_polling)
+        connector._config["severity_to_poll_for"] = "HIGH"
+        test_alert_id = "11111111-9724-4005-b848-76af488cf5e2"
+        param = {
+            "container_id": f"{test_alert_id}",
+            "start_time": 235235235,
+            "end_time": 235235235,
+        }
+        connector.handle_action(param)
+        call_args = mock_py42_for_alert_polling.alerts.get_details.call_args_list
+        assert len(call_args) == 1
+        assert call_args[0][0][0] == [test_alert_id]
+        # If using container IDs, not actual alert query gets made but we instead just use the details API.
+        assert not mock_py42_for_alert_polling.alerts.search.call_count
+        assert_success(connector)
+
+    def test_on_poll_when_configured_with_start_and_end_dates_and_no_stored_timestamp_uses_configured_dates(
+        self, mock_py42_for_alert_polling
+    ):
+        connector = _create_on_poll_connector(mock_py42_for_alert_polling)
+        test_start_date_str = "2020-05-04 12:23:32"
+        test_end_date_str = "2020-06-04 12:23:32"
+        connector._config["initial_poll_start_date"] = test_start_date_str
+        connector._config["initial_poll_end_date"] = test_end_date_str
+        connector.handle_action({})
+        call_args = dict(mock_py42_for_alert_polling.alerts.search.call_args[0][0])
+        actual_start_date_str = call_args["groups"][0]["filters"][0]["value"]
+        actual_end_date_str = call_args["groups"][0]["filters"][1]["value"]
+        actual_start_date = dateutil.parser.parse(actual_start_date_str)
+        actual_end_date = dateutil.parser.parse(actual_end_date_str)
+        expected_start_date = dateutil.parser.parse(test_start_date_str).replace(
+            tzinfo=actual_start_date.tzinfo
+        )
+        expected_end_date = dateutil.parser.parse(test_end_date_str).replace(
+            tzinfo=actual_end_date.tzinfo
+        )
+        assert abs((actual_start_date - expected_start_date)).seconds < 1
+        assert abs((actual_end_date - expected_end_date)).seconds < 1
+        assert_success(connector)
+
+    def test_on_poll_when_configured_with_severities_uses_severities(
+        self, mock_py42_for_alert_polling
+    ):
+        connector = _create_on_poll_connector(mock_py42_for_alert_polling)
+        connector._config["severity_to_poll_for"] = "LOW, MEDIUM"
+        connector.handle_action({})
+        call_args = dict(mock_py42_for_alert_polling.alerts.search.call_args[0][0])
+        severity_filters = call_args["groups"][0]["filters"]
+        assert len(severity_filters) == 2
+        assert severity_filters[0]["operator"] == "IS"
+        assert severity_filters[0]["term"] == "severity"
+        assert severity_filters[0]["value"] == "LOW"
+        assert severity_filters[1]["operator"] == "IS"
+        assert severity_filters[1]["term"] == "severity"
+        assert severity_filters[1]["value"] == "MEDIUM"
+
+    def test_on_poll_when_no_alerts_is_still_successful(
+        self, mocker, mock_py42_for_alert_polling
+    ):
+        mock_py42_for_alert_polling.alerts.search.return_value = create_mock_response(
+            mocker, {"alerts": []}
+        )
+        mock_py42_for_alert_polling.alerts.get_details.return_value = create_mock_response(
+            mocker, {"alerts": []}
+        )
+        connector = _create_on_poll_connector(mock_py42_for_alert_polling)
+        connector.handle_action({})
+        assert_success(connector)
+
+    def test_on_poll_when_no_file_events_is_still_successful(
+        self, mocker, mock_py42_for_alert_polling
+    ):
+        mock_py42_for_alert_polling.securitydata.search_file_events.return_value = create_mock_response(
+            mocker, {"fileEvents": []}
+        )
+        connector = _create_on_poll_connector(mock_py42_for_alert_polling)
+        connector.handle_action({})
+        assert_success(connector)
+
+    def test_on_poll_sorts_queries_alerts_in_ascending_order(
+        self, mocker, mock_py42_for_alert_polling
+    ):
+        connector = _create_on_poll_connector(mock_py42_for_alert_polling)
+        connector.handle_action({})
+        actual_query = mock_py42_for_alert_polling.alerts.search.call_args[0][0]
+        assert actual_query.sort_direction == "asc"

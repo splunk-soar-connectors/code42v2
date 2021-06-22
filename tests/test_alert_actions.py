@@ -1,4 +1,3 @@
-import json
 from datetime import datetime, timedelta, timezone
 from unittest import mock
 
@@ -154,7 +153,7 @@ class TestCode42AlertsConnector(object):
         connector = _create_search_alerts_connector(mock_py42_client)
         connector.handle_action(param)
         actual_query = mock_py42_client.alerts.search.call_args[0][0]
-        query_json = json.loads(str(actual_query))
+        query_json = dict(actual_query)
         actual_date = dateutil.parser.parse(
             query_json["groups"][1]["filters"][0]["value"]
         )

@@ -220,6 +220,9 @@ class Code42Connector(BaseConnector):
         for page in results_generator:
             employees = page.data.get("items", [])
             for employee in employees:
+                all_tags = employee.get("riskFactors", [])
+                if all_tags:
+                    employee["riskFactors"] = _convert_to_obj_list(all_tags, "tag")
                 action_result.add_data(employee)
 
         total_count = page.data.get("totalCount", 0) if page else None
@@ -334,7 +337,11 @@ class Code42Connector(BaseConnector):
         user_id = self._get_user_id(username)
         response = self._client.detectionlists.get_user_by_id(user_id)
         all_tags = response.data.get("riskFactors", [])
+        all_cloud_usernames = response.data.get("cloudUsernames", [])
         response["riskFactors"] = _convert_to_obj_list(all_tags, "tag")
+        response["cloudUsernames"] = _convert_to_obj_list(
+            all_cloud_usernames, "username"
+        )
         action_result.add_data(response.data)
         return action_result.set_status(phantom.APP_SUCCESS)
 
@@ -409,7 +416,8 @@ class Code42Connector(BaseConnector):
         if legal_hold_membership_id is None:
             return action_result.set_status(
                 phantom.APP_ERROR,
-                f"Code42: User is not an active member of legal hold matter {matter_id} for action 'remove_legalhold_custodian'.",
+                f"Code42: User is not an active member of "
+                f"legal hold matter {matter_id} for action 'remove_legalhold_custodian'.",
             )
         self._client.legalhold.remove_from_matter(legal_hold_membership_id)
         action_result.add_data({"userId": user_id})
@@ -680,7 +688,13 @@ class Code42Connector(BaseConnector):
 
     def _add_file_event_results(self, query, action_result):
         results = self._client.securitydata.search_file_events(query)
-        for result in results.data["fileEvents"]:
+        for result in results.data.get("fileEvents", []):
+            result = dict(result)
+            all_window_titles = result.get("windowTitle", [])
+            if all_window_titles:
+                result["windowTitle"] = _convert_to_obj_list(
+                    all_window_titles, "windowTitle"
+                )
             action_result.add_data(result)
 
         action_result.update_summary(

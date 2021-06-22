@@ -85,6 +85,7 @@ _MOCK_LIST_HIGH_RISK_EMPLOYEES_RESPONSE = {
             "cloudUsernames": ["alias1",],
             "totalBytes": 0,
             "numEvents": 3,
+            "riskFactors": ["FLIGHT_RISK", "CONTRACT_EMPLOYEE"],
         },
         {
             "type$": "HIGH_RISK_EMPLOYEE_V2",
@@ -499,8 +500,14 @@ class TestCode42DetectionListsConnector(object):
         action_results = connector.get_action_results()
         assert len(action_results) == 1
         data = action_results[0].get_data()
-        assert data[0] == _MOCK_LIST_HIGH_RISK_EMPLOYEES_RESPONSE["items"][0]
-        assert data[1] == _MOCK_LIST_HIGH_RISK_EMPLOYEES_RESPONSE["items"][1]
+        expected_employee_1 = dict(_MOCK_LIST_HIGH_RISK_EMPLOYEES_RESPONSE["items"][0])
+        expected_employee_1["riskFactors"] = [
+            {"tag": "FLIGHT_RISK"},
+            {"tag": "CONTRACT_EMPLOYEE"},
+        ]
+        expected_employee_2 = dict(_MOCK_LIST_HIGH_RISK_EMPLOYEES_RESPONSE["items"][1])
+        assert data[0] == expected_employee_1
+        assert data[1] == expected_employee_2
 
     def test_handle_action_when_get_high_risk_employee_calls_get_with_expected_params(
         self, mock_py42_with_user

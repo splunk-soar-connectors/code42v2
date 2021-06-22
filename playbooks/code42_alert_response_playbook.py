@@ -26,7 +26,7 @@ def get_alert_details_1(action=None, success=None, container=None, results=None,
         'alert_id': source_data_identifier_value,
     })
 
-    phantom.act(action="get alert details", parameters=parameters, assets=['partner'], callback=prompt_further_investigation, name="get_alert_details_1")
+    phantom.act(action="get alert details", parameters=parameters, assets=['code42'], callback=prompt_further_investigation, name="get_alert_details_1")
 
     return
 
@@ -108,7 +108,7 @@ def create_case_1(action=None, success=None, container=None, results=None, handl
                     'context': {'artifact_id': results_item_1[1]},
                 })
 
-    phantom.act(action="create case", parameters=parameters, assets=['partner'], callback=add_case_event_1, name="create_case_1")
+    phantom.act(action="create case", parameters=parameters, assets=['code42'], callback=add_case_event_1, name="create_case_1")
 
     return
 
@@ -134,7 +134,7 @@ def add_case_event_1(action=None, success=None, container=None, results=None, ha
                     'context': {'artifact_id': container_item[1]},
                 })
 
-    phantom.act(action="add case event", parameters=parameters, assets=['partner'], callback=hunt_file_1, name="add_case_event_1", parent_action=action)
+    phantom.act(action="add case event", parameters=parameters, assets=['code42'], callback=hunt_file_1, name="add_case_event_1", parent_action=action)
 
     return
 
@@ -282,7 +282,7 @@ def add_highrisk_employee_1(action=None, success=None, container=None, results=N
                 'context': {'artifact_id': results_item_1[1]},
             })
 
-    phantom.act(action="add highrisk employee", parameters=parameters, assets=['partner'], callback=join_update_case_2, name="add_highrisk_employee_1")
+    phantom.act(action="add highrisk employee", parameters=parameters, assets=['code42'], callback=join_update_case_2, name="add_highrisk_employee_1")
 
     return
 
@@ -305,7 +305,7 @@ def block_user_1(action=None, success=None, container=None, results=None, handle
                 'context': {'artifact_id': results_item_1[1]},
             })
 
-    phantom.act(action="block user", parameters=parameters, assets=['partner'], callback=join_update_case_2, name="block_user_1")
+    phantom.act(action="block user", parameters=parameters, assets=['code42'], callback=join_update_case_2, name="block_user_1")
 
     return
 
@@ -331,7 +331,7 @@ def add_legalhold_custodian_1(action=None, success=None, container=None, results
                     'context': {'artifact_id': results_item_1[1]},
                 })
 
-    phantom.act(action="add legalhold custodian", parameters=parameters, assets=['partner'], callback=join_update_case_2, name="add_legalhold_custodian_1")
+    phantom.act(action="add legalhold custodian", parameters=parameters, assets=['code42'], callback=join_update_case_2, name="add_legalhold_custodian_1")
 
     return
 
@@ -361,7 +361,7 @@ def update_case_2(action=None, success=None, container=None, results=None, handl
                     'context': {'artifact_id': results_item_1[1]},
                 })
 
-    phantom.act(action="update case", parameters=parameters, assets=['partner'], callback=close_case_2, name="update_case_2")
+    phantom.act(action="update case", parameters=parameters, assets=['code42'], callback=close_case_2, name="update_case_2")
 
     return
 
@@ -398,7 +398,7 @@ def close_case_2(action=None, success=None, container=None, results=None, handle
                 'context': {'artifact_id': results_item_1[1]},
             })
 
-    phantom.act(action="close case", parameters=parameters, assets=['partner'], name="close_case_2", parent_action=action)
+    phantom.act(action="close case", parameters=parameters, assets=['code42'], name="close_case_2", parent_action=action)
 
     return
 
@@ -422,7 +422,7 @@ def hunt_file_1(action=None, success=None, container=None, results=None, handle=
                 'context': {'artifact_id': inputs_item_1[2]},
             })
 
-    phantom.act(action="hunt file", parameters=parameters, assets=['partner'], callback=get_user_profile_1, name="hunt_file_1", parent_action=action)
+    phantom.act(action="hunt file", parameters=parameters, assets=['code42'], callback=get_user_profile_1, name="hunt_file_1", parent_action=action)
 
     return
 
@@ -455,7 +455,7 @@ def send_email_1(action=None, success=None, container=None, results=None, handle
                     'context': {'artifact_id': results_item_1[1]},
                 })
 
-    phantom.act(action="send email", parameters=parameters, assets=['gmail dev'], callback=join_prompt_response_type, name="send_email_1")
+    phantom.act(action="send email", parameters=parameters, assets=['smtp'], callback=join_prompt_response_type, name="send_email_1")
 
     return
 
@@ -506,7 +506,7 @@ def get_user_profile_1(action=None, success=None, container=None, results=None, 
                 'context': {'artifact_id': results_item_1[1]},
             })
 
-    phantom.act(action="get user profile", parameters=parameters, assets=['partner'], callback=format_1, name="get_user_profile_1", parent_action=action)
+    phantom.act(action="get user profile", parameters=parameters, assets=['code42'], callback=format_1, name="get_user_profile_1", parent_action=action)
 
     return
 
@@ -576,19 +576,19 @@ def send_email_2(action=None, success=None, container=None, results=None, handle
         for results_item_2 in results_data_2:
             if results_item_1[0]:
                 parameters.append({
-                    'from': "",
-                    'to': results_item_1[0],
                     'cc': "",
+                    'to': results_item_1[0],
                     'bcc': "",
-                    'subject': results_item_2[0],
                     'body': formatted_data_1,
-                    'attachments': "",
+                    'from': "",
                     'headers': "",
+                    'subject': results_item_2[0],
+                    'attachments': "",
                     # context (artifact id) is added to associate results with the artifact
                     'context': {'artifact_id': results_item_1[1]},
                 })
 
-    phantom.act(action="send email", parameters=parameters, assets=['gmail dev'], callback=join_prompt_response_type, name="send_email_2")
+    phantom.act(action="send email", parameters=parameters, assets=['smtp'], callback=join_prompt_response_type, name="send_email_2")
 
     return
 

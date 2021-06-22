@@ -1,7 +1,7 @@
 {
     "appid": "4d8f53a7-7b12-4d7d-8b01-6575680acf6f",
     "name": "Code42",
-    "description": "This app integrates with Code42 to execute various investigate actions",
+    "description": "Code42 provides simple, fast detection and response to everyday data loss from insider threats by focusing on customer data on endpoints and the cloud.",
     "type": "generic",
     "product_vendor": "Code42",
     "logo": "logo_code42.svg",
@@ -47,6 +47,24 @@
             "data_type": "password",
             "required": true,
             "order": 2
+        },
+        "initial_poll_start_date": {
+            "description": "The start date to use in the initial poll in yyyy-MM-dd HH:MM:SS format (defaults to 30 days back)",
+            "data_type": "string",
+            "required": false,
+            "order": 3
+        },
+        "initial_poll_end_date": {
+            "description": "The end date to use in the initial poll in yyyy-MM-dd HH:MM:SS format (defaults to the current time)",
+            "data_type": "string",
+            "required": false,
+            "order": 4
+        },
+        "severity_to_poll_for": {
+            "description": "A comma separated list of alert severities to poll for, such as HIGH, LOW, or MEDIUM (defaults to getting all alerts)",
+            "data_type": "string",
+            "required": false,
+            "order": 5
         }
     },
     "actions": [
@@ -75,26 +93,28 @@
                     "allow_list": true
                 },
                 "start_time": {
-                    "data_type": "numeric",
-                    "order": 1,
-                    "description": "Start of time range, in epoch time (milliseconds)",
-                    "verbose": "If not specified, the default is past 10 days"
+                    "description": "The start time to use in the initial poll in yyyy-MM-dd HH:MM:SS format (defaults to 30 days back)",
+                    "verbose": "Configure this parameter via the `start_date` configuration parameter on the asset.",
+                    "data_type": "string",
+                    "required": false,
+                    "order": 1
                 },
                 "end_time": {
-                    "data_type": "numeric",
-                    "order": 2,
-                    "description": "End of time range, in epoch time (milliseconds)",
-                    "verbose": "If not specified, the default is now"
+                    "description": "The end time to use in the initial poll in yyyy-MM-dd HH:MM:SS format (defaults to the current time)",
+                    "verbose": "Configure this parameter via the `end_date` configuration parameter on the asset.",
+                    "data_type": "string",
+                    "required": false,
+                    "order": 2
                 },
                 "container_count": {
                     "data_type": "numeric",
                     "order": 3,
-                    "description": "Maximum number of container records to query for."
+                    "description": "Maximum number of alerts to create (only used in Poll Now)"
                 },
                 "artifact_count": {
                     "data_type": "numeric",
                     "order": 4,
-                    "description": "Maximum number of artifact records to query for."
+                    "description": "Maximum number of artifacts to create (only used in Poll Now)"
                 }
             },
             "output": [],
@@ -115,7 +135,8 @@
                     "required": true,
                     "primary": true,
                     "contains": [
-                        "email"
+                        "email",
+                        "user name"
                     ],
                     "value_list": [],
                     "default": "",
@@ -361,6 +382,15 @@
                     "column_order": 3
                 },
                 {
+                    "column_name": "Risk Tag",
+                    "data_path": "action_result.data.*.riskFactors.*.tag",
+                    "column_order": 4,
+                    "data_type": "string",
+                    "contains": [
+                        "code42 risk tag"
+                    ]
+                },
+                {
                     "column_name": "Notes",
                     "data_path": "action_result.data.*.notes",
                     "data_type": "string",
@@ -379,7 +409,7 @@
                     "column_order": 5
                 },
                 {
-                    "column_name": "Num Events",
+                    "column_name": "Number of Events",
                     "data_path": "action_result.data.*.numEvents",
                     "data_type": "numeric",
                     "example_values": [
@@ -393,7 +423,8 @@
                 }
             ],
             "render": {
-                "type": "table"
+                "type": "custom",
+                "view": "code42_view.display_view"
             },
             "versions": "EQ(*)"
         },
@@ -487,21 +518,13 @@
                     "column_order": 5
                 },
                 {
-                    "column_name": "Num Events",
-                    "data_path": "action_result.data.*.numEvents",
-                    "data_type": "numeric",
-                    "example_values": [
-                        0
-                    ],
-                    "column_order": 6
-                },
-                {
                     "data_path": "action_result.summary.is_departing_employee",
                     "data_type": "boolean"
                 }
             ],
             "render": {
-                "type": "table"
+                "type": "custom",
+                "view": "code42_view.display_view"
             },
             "versions": "EQ(*)"
         },
@@ -770,7 +793,7 @@
                     "column_order": 5
                 },
                 {
-                    "column_name": "Num Events",
+                    "column_name": "Number of Events",
                     "data_path": "action_result.data.*.numEvents",
                     "data_type": "numeric",
                     "example_values": [
@@ -784,7 +807,8 @@
                 }
             ],
             "render": {
-                "type": "table"
+                "type": "custom",
+                "view": "code42_view.display_view"
             },
             "versions": "EQ(*)"
         },
@@ -878,19 +902,13 @@
                     "column_order": 5
                 },
                 {
-                    "column_name": "Num Events",
-                    "data_path": "action_result.data.*.numEvents",
-                    "data_type": "numeric",
-                    "example_values": [
-                        0
-                    ],
-                    "column_order": 6
-                },
-                {
                     "column_name": "Risk Tag",
                     "data_path": "action_result.data.*.riskFactors.*.tag",
                     "column_order": 7,
-                    "data_type": "string"
+                    "data_type": "string",
+                    "contains": [
+                        "code42 risk tag"
+                    ]
                 },
                 {
                     "data_path": "action_result.summary.is_high_risk_employee",
@@ -898,7 +916,8 @@
                 }
             ],
             "render": {
-                "type": "table"
+                "type": "custom",
+                "view": "code42_view.display_view"
             },
             "versions": "EQ(*)"
         },
@@ -928,7 +947,7 @@
                     "description": "A risk tag to add to the user",
                     "data_type": "string",
                     "required": true,
-                    "primary": false,
+                    "primary": true,
                     "default": "",
                     "value_list": [
                         "HIGH_IMPACT_EMPLOYEE",
@@ -938,6 +957,9 @@
                         "FLIGHT_RISK",
                         "ELEVATED_ACCESS_PRIVILEGES",
                         "SUSPICIOUS_SYSTEM_ACTIVITY"
+                    ],
+                    "contains": [
+                        "code42 risk tag"
                     ],
                     "order": 1
                 }
@@ -957,7 +979,10 @@
                     "data_path": "action_result.parameter.risk_tag",
                     "data_type": "string",
                     "column_name": "Risk Tag",
-                    "column_order": 1
+                    "column_order": 1,
+                    "contains": [
+                        "code42 risk tag"
+                    ]
                 },
                 {
                     "data_path": "action_result.status",
@@ -1041,7 +1066,7 @@
                     "description": "A risk tag to remove from the user",
                     "data_type": "string",
                     "required": true,
-                    "primary": false,
+                    "primary": true,
                     "value_list": [
                         "HIGH_IMPACT_EMPLOYEE",
                         "CONTRACT_EMPLOYEE",
@@ -1052,6 +1077,9 @@
                         "SUSPICIOUS_SYSTEM_ACTIVITY"
                     ],
                     "default": "",
+                    "contains": [
+                        "code42 risk tag"
+                    ],
                     "order": 1
                 }
             },
@@ -1070,7 +1098,10 @@
                     "data_path": "action_result.parameter.risk_tag",
                     "data_type": "string",
                     "column_name": "Risk Tag",
-                    "column_order": 1
+                    "column_order": 1,
+                    "contains": [
+                        "code42 risk tag"
+                    ]
                 },
                 {
                     "data_path": "action_result.status",
@@ -1258,7 +1289,7 @@
                     "description": "Username of the actor listed on alert",
                     "data_type": "string",
                     "required": false,
-                    "primary": false,
+                    "primary": true,
                     "contains": [
                         "email",
                         "user name"
@@ -1271,7 +1302,7 @@
                     "description": "Alert state",
                     "data_type": "string",
                     "required": false,
-                    "primary": false,
+                    "primary": true,
                     "value_list": [
                         "OPEN",
                         "RESOLVED",
@@ -1279,7 +1310,10 @@
                         "IN_PROGRESS"
                     ],
                     "default": "",
-                    "order": 1
+                    "order": 1,
+                    "contains": [
+                        "code42 alert state"
+                    ]
                 },
                 "start_date": {
                     "description": "Beginning of date range to search. Time (in UTC) may also be supplied but is not required.",
@@ -1301,6 +1335,29 @@
                 }
             },
             "output": [
+                {
+                    "data_path": "action_result.parameter.username",
+                    "data_type": "string",
+                    "contains": [
+                        "email",
+                        "user name"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.alert_state",
+                    "data_type": "string",
+                    "contains": [
+                        "code42 alert state"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.start_date",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.end_date",
+                    "data_type": "string"
+                },
                 {
                     "data_path": "action_result.data.*.actor",
                     "data_type": "string",
@@ -1342,26 +1399,6 @@
                     "column_order": 5
                 },
                 {
-                    "data_path": "action_result.parameter.username",
-                    "data_type": "string",
-                    "contains": [
-                        "email",
-                        "user name"
-                    ]
-                },
-                {
-                    "data_path": "action_result.parameter.alert_state",
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.parameter.start_date",
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.parameter.end_date",
-                    "data_type": "string"
-                },
-                {
                     "data_path": "action_result.status",
                     "data_type": "string"
                 },
@@ -1383,7 +1420,8 @@
                 }
             ],
             "render": {
-                "type": "table"
+                "type": "custom",
+                "view": "code42_view.display_view"
             },
             "versions": "EQ(*)"
         },
@@ -1898,8 +1936,8 @@
                     "column_order": 2
                 },
                 {
-                    "column_name": "Cloud Usernames",
-                    "data_path": "action_result.data.*.cloudUsernames",
+                    "column_name": "Cloud Username",
+                    "data_path": "action_result.data.*.cloudUsernames.*.username",
                     "data_type": "string",
                     "example_values": [
                         "test@example.com"
@@ -1961,7 +1999,7 @@
                 },
                 {
                     "column_name": "Risk Tag",
-                    "data_path": "action_result.data.*.riskFactors",
+                    "data_path": "action_result.data.*.riskFactors.*.tag",
                     "data_type": "string",
                     "example_values": [
                         "FLIGHT_RISK"
@@ -2007,10 +2045,15 @@
                         "user name"
                     ],
                     "column_order": 13
+                },
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
                 }
             ],
             "render": {
-                "type": "table"
+                "type": "custom",
+                "view": "code42_view.display_view"
             },
             "versions": "EQ(*)"
         },
@@ -2253,7 +2296,7 @@
                     "data_path": "action_result.data.*.number",
                     "data_type": "string",
                     "contains": [
-                        "case number"
+                        "code42 case number"
                     ],
                     "column_name": "Case number",
                     "column_order": 0
@@ -2319,7 +2362,7 @@
                     "required": true,
                     "primary": true,
                     "contains": [
-                        "case number"
+                        "code42 case number"
                     ],
                     "order": 0
                 },
@@ -2381,7 +2424,7 @@
                     "data_path": "action_result.parameter.case_number",
                     "data_type": "numeric",
                     "contains": [
-                        "case number"
+                        "code42 case number"
                     ]
                 },
                 {
@@ -2416,7 +2459,7 @@
                     "data_path": "action_result.data.*.number",
                     "data_type": "string",
                     "contains": [
-                        "case number"
+                        "code42 case number"
                     ],
                     "column_name": "Case number",
                     "column_order": 0
@@ -2482,7 +2525,7 @@
                     "required": true,
                     "primary": true,
                     "contains": [
-                        "case number"
+                        "code42 case number"
                     ],
                     "order": 0
                 }
@@ -2492,14 +2535,14 @@
                     "data_path": "action_result.parameter.case_number",
                     "data_type": "numeric",
                     "contains": [
-                        "case number"
+                        "code42 case number"
                     ]
                 },
                 {
                     "data_path": "action_result.data.*.number",
                     "data_type": "string",
                     "contains": [
-                        "case number"
+                        "code42 case number"
                     ],
                     "column_name": "Case number",
                     "column_order": 0
@@ -2588,7 +2631,7 @@
                     "description": "Filter cases by assignee username",
                     "data_type": "string",
                     "required": false,
-                    "primary": false,
+                    "primary": true,
                     "contains": [
                         "email",
                         "user name"
@@ -2646,7 +2689,7 @@
                     "data_path": "action_result.data.*.number",
                     "data_type": "string",
                     "contains": [
-                        "case number"
+                        "code42 case number"
                     ],
                     "example_values": [
                         "1"
@@ -2737,7 +2780,7 @@
                     "required": true,
                     "primary": true,
                     "contains": [
-                        "case number"
+                        "code42 case number"
                     ],
                     "order": 0
                 },
@@ -2747,7 +2790,7 @@
                     "required": true,
                     "primary": true,
                     "contains": [
-                        "file event"
+                        "code42 file event"
                     ],
                     "order": 1
                 }
@@ -2759,7 +2802,7 @@
                     "column_name": "Case Number",
                     "column_order": 0,
                     "contains": [
-                        "case number"
+                        "code42 case number"
                     ]
                 },
                 {
@@ -2768,7 +2811,7 @@
                     "column_name": "Event ID",
                     "column_order": 1,
                     "contains": [
-                        "file event"
+                        "code42 file event"
                     ]
                 },
                 {
@@ -2915,7 +2958,10 @@
                     "required": false,
                     "primary": true,
                     "default": "",
-                    "order": 3
+                    "order": 3,
+                    "contains": [
+                        "file name"
+                    ]
                 },
                 "file_path": {
                     "description": "Path of the file observed",
@@ -2944,6 +2990,9 @@
                         "Video",
                         "VirtualDiskImage",
                         "Archive"
+                    ],
+                    "contains": [
+                        "code42 file category"
                     ]
                 },
                 "username": {
@@ -2960,7 +3009,7 @@
                     "description": "Hostname",
                     "data_type": "string",
                     "order": 7,
-                    "primary": false,
+                    "primary": true,
                     "contains": [
                         "host name"
                     ]
@@ -2969,7 +3018,7 @@
                     "description": "Private IPv4 or IPv6 address",
                     "data_type": "string",
                     "order": 8,
-                    "primary": false,
+                    "primary": true,
                     "contains": [
                         "ip",
                         "ipv6"
@@ -2979,7 +3028,7 @@
                     "description": "Public IPv4 or IPv6 address",
                     "data_type": "string",
                     "order": 9,
-                    "primary": false,
+                    "primary": true,
                     "contains": [
                         "ip",
                         "ipv6"
@@ -2989,7 +3038,7 @@
                     "description": "Type of exposure that occurred",
                     "data_type": "string",
                     "order": 10,
-                    "primary": false,
+                    "primary": true,
                     "value_list": [
                         "All",
                         "SharedViaLink",
@@ -2999,19 +3048,25 @@
                         "RemovableMedia",
                         "IsPublic",
                         "OutsideTrustedDomains"
+                    ],
+                    "contains": [
+                        "code42 exposure type"
                     ]
                 },
                 "process_name": {
                     "description": "Process name involved in the exposure",
                     "data_type": "string",
                     "order": 11,
-                    "primary": false
+                    "primary": true,
+                    "contains": [
+                        "code42 process name"
+                    ]
                 },
                 "url": {
                     "description": "Urls of all the browser tabs open during exposure",
                     "data_type": "string",
                     "order": 12,
-                    "primary": false,
+                    "primary": true,
                     "contains": [
                         "url"
                     ]
@@ -3020,7 +3075,10 @@
                     "description": "Names of all the open browser tabs or windows during exposure.",
                     "data_type": "string",
                     "order": 13,
-                    "primary": false
+                    "primary": true,
+                    "contains": [
+                        "code42 window title"
+                    ]
                 },
                 "untrusted_only": {
                     "description": "Return only events representing untrusted activity",
@@ -3030,6 +3088,106 @@
                 }
             },
             "output": [
+                {
+                    "data_path": "action_result.parameter.start_date",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.end_date",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.file_name",
+                    "data_type": "string",
+                    "contains": [
+                        "file name"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.file_hash",
+                    "data_type": "string",
+                    "contains": [
+                        "md5",
+                        "sha256"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.file_path",
+                    "data_type": "string",
+                    "contains": [
+                        "file path"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.untrusted_only",
+                    "data_type": "boolean"
+                },
+                {
+                    "data_path": "action_result.parameter.file_category",
+                    "data_type": "string",
+                    "contains": [
+                        "code42 file category"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.username",
+                    "data_type": "string",
+                    "contains": [
+                        "email",
+                        "user name"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.hostname",
+                    "data_type": "string",
+                    "contains": [
+                        "host name"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.private_ip",
+                    "data_type": "string",
+                    "contains": [
+                        "ip",
+                        "ipv6"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.public_ip",
+                    "data_type": "string",
+                    "contains": [
+                        "ip",
+                        "ipv6"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.exposure_type",
+                    "data_type": "string",
+                    "contains": [
+                        "code42 exposure type"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.process_name",
+                    "data_type": "string",
+                    "contains": [
+                        "code42 process name"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.url",
+                    "data_type": "string",
+                    "contains": [
+                        "url"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.window_title",
+                    "data_type": "string",
+                    "contains": [
+                        "code42 window title"
+                    ]
+                },
                 {
                     "data_path": "action_result.data.*.eventTimestamp",
                     "data_type": "string",
@@ -3099,7 +3257,11 @@
                 },
                 {
                     "data_path": "action_result.data.*.actor",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "contains": [
+                        "email",
+                        "user name"
+                    ]
                 },
                 {
                     "data_path": "action_result.data.*.fileId",
@@ -3121,10 +3283,17 @@
                     ]
                 },
                 {
+                    "data_path": "action_result.data.*.windowTitle.*.windowTitle",
+                    "data_type": "string",
+                    "contains": [
+                        "code42 window title"
+                    ]
+                },
+                {
                     "data_path": "action_result.data.*.eventId",
                     "data_type": "string",
                     "contains": [
-                        "file event"
+                        "code42 file event"
                     ]
                 },
                 {
@@ -3345,101 +3514,17 @@
                     "data_type": "numeric"
                 },
                 {
-                    "data_path": "action_result.parameter.file_name",
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.parameter.untrusted_only",
-                    "data_type": "boolean"
-                },
-                {
                     "data_path": "summary.total_objects",
                     "data_type": "numeric"
                 },
                 {
                     "data_path": "summary.total_objects_successful",
                     "data_type": "numeric"
-                },
-                {
-                    "data_path": "action_result.parameter.start_date",
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.parameter.end_date",
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.parameter.file_hash",
-                    "data_type": "string",
-                    "contains": [
-                        "md5",
-                        "sha256"
-                    ]
-                },
-                {
-                    "data_path": "action_result.parameter.file_path",
-                    "data_type": "string",
-                    "contains": [
-                        "file path"
-                    ]
-                },
-                {
-                    "data_path": "action_result.parameter.file_category",
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.parameter.username",
-                    "data_type": "string",
-                    "contains": [
-                        "email",
-                        "user name"
-                    ]
-                },
-                {
-                    "data_path": "action_result.parameter.hostname",
-                    "data_type": "string",
-                    "contains": [
-                        "host name"
-                    ]
-                },
-                {
-                    "data_path": "action_result.parameter.private_ip",
-                    "data_type": "string",
-                    "contains": [
-                        "ip",
-                        "ipv6"
-                    ]
-                },
-                {
-                    "data_path": "action_result.parameter.public_ip",
-                    "data_type": "string",
-                    "contains": [
-                        "ip",
-                        "ipv6"
-                    ]
-                },
-                {
-                    "data_path": "action_result.parameter.exposure_type",
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.parameter.process_name",
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.parameter.url",
-                    "data_type": "string",
-                    "contains": [
-                        "url"
-                    ]
-                },
-                {
-                    "data_path": "action_result.parameter.window_title",
-                    "data_type": "string"
                 }
             ],
             "render": {
-                "type": "table"
+                "type": "custom",
+                "view": "code42_view.display_view"
             },
             "versions": "EQ(*)"
         },
@@ -3555,7 +3640,7 @@
                     "data_path": "action_result.data.*.eventId",
                     "data_type": "string",
                     "contains": [
-                        "file event"
+                        "code42 file event"
                     ]
                 },
                 {
@@ -3582,7 +3667,8 @@
                     "data_path": "action_result.data.*.emailFrom",
                     "data_type": "string",
                     "contains": [
-                        "email"
+                        "email",
+                        "user name"
                     ]
                 },
                 {
