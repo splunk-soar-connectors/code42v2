@@ -352,11 +352,9 @@ class TestCode42OnPollConnector(object):
         connector._is_poll_now = False
         test_timestamp = 1623293946
         connector._state = {"last_time": test_timestamp}
-        param = {
-            "container_count": 1,
-            "artifact_count": 1,
-            "start_date": "2020-05-04 12:23:32",  # For prooving that it does not use the stored start_date
-        }
+        # For proving that it does not use the stored start_date
+        connector._config["initial_poll_start_date"] = 235235235
+        param = {"container_count": 1, "artifact_count": 1}
         connector.handle_action(param)
         actual_date_str = dict(
             mock_py42_for_alert_polling.alerts.search.call_args[0][0]
@@ -567,12 +565,12 @@ class TestCode42OnPollConnector(object):
         self, mock_py42_for_alert_polling
     ):
         connector = _create_on_poll_connector(mock_py42_for_alert_polling)
+        connector._config["severity_to_poll_for"] = "HIGH"
         test_alert_id = "11111111-9724-4005-b848-76af488cf5e2"
         param = {
             "container_id": f"{test_alert_id}",
             "start_time": 235235235,
             "end_time": 235235235,
-            "severity": "HIGH",
         }
         connector.handle_action(param)
         call_args = mock_py42_for_alert_polling.alerts.get_details.call_args_list
@@ -588,8 +586,8 @@ class TestCode42OnPollConnector(object):
         connector = _create_on_poll_connector(mock_py42_for_alert_polling)
         test_start_date_str = "2020-05-04 12:23:32"
         test_end_date_str = "2020-06-04 12:23:32"
-        connector._config["start_date"] = test_start_date_str
-        connector._config["end_date"] = test_end_date_str
+        connector._config["initial_poll_start_date"] = test_start_date_str
+        connector._config["initial_poll_end_date"] = test_end_date_str
         connector.handle_action({})
         call_args = dict(mock_py42_for_alert_polling.alerts.search.call_args[0][0])
         actual_start_date_str = call_args["groups"][0]["filters"][0]["value"]
@@ -610,14 +608,14 @@ class TestCode42OnPollConnector(object):
         self, mock_py42_for_alert_polling
     ):
         connector = _create_on_poll_connector(mock_py42_for_alert_polling)
-        connector._config["severity"] = "LOW, HIGH"
+        connector._config["severity_to_poll_for"] = "LOW, MEDIUM"
         connector.handle_action({})
         call_args = dict(mock_py42_for_alert_polling.alerts.search.call_args[0][0])
         severity_filters = call_args["groups"][0]["filters"]
         assert len(severity_filters) == 2
         assert severity_filters[0]["operator"] == "IS"
         assert severity_filters[0]["term"] == "severity"
-        assert severity_filters[0]["value"] == "HIGH"
+        assert severity_filters[0]["value"] == "LOW"
         assert severity_filters[1]["operator"] == "IS"
         assert severity_filters[1]["term"] == "severity"
-        assert severity_filters[1]["value"] == "LOW"
+        assert severity_filters[1]["value"] == "MEDIUM"

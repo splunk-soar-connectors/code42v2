@@ -112,7 +112,7 @@ class Code42OnPollConnector:
             artifact_count = param.get(
                 "artifact_count", DEFAULT_ARTIFACT_COUNT_FOR_POLL_NOW
             )
-            severities = self._connector.get_config().get("severity")
+            severities = self._connector.get_config().get("severity_to_poll_for")
             if severities:
                 severities = severities.replace(" ", "").split(",")
             query = build_alerts_query(
@@ -204,11 +204,11 @@ class Code42OnPollConnector:
         if not last_time:
             # If there was never a stored last_time.
             config = self._connector.get_config()
-            given_start_date = config.get("start_date")
+            given_start_date = config.get("initial_poll_start_date")
             param["start_time"] = given_start_date or get_thirty_days_ago().strftime(
                 "%Y-%m-%dT%H:%M:%S.%f"
             )
-            param["end_time"] = config.get("end_date")
+            param["end_time"] = config.get("initial_poll_end_date")
         else:
             # Last time is stored as a float timestamp
             last_time_as_date_str = datetime.utcfromtimestamp(last_time).strftime(
