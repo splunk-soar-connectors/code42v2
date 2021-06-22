@@ -3084,10 +3084,7 @@
                     "description": "Return only events representing untrusted activity",
                     "data_type": "boolean",
                     "order": 14,
-                    "primary": false,
-                    "contains": [
-                        "code42 untrusted only"
-                    ]
+                    "primary": false
                 }
             },
             "output": [
@@ -3123,10 +3120,7 @@
                 },
                 {
                     "data_path": "action_result.parameter.untrusted_only",
-                    "data_type": "boolean",
-                    "contains": [
-                        "code42 untrusted only"
-                    ]
+                    "data_type": "boolean"
                 },
                 {
                     "data_path": "action_result.parameter.file_category",
