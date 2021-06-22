@@ -1,4 +1,17 @@
+from py42.sdk.queries.alerts.filters import DateObserved
+
 from code42_util import build_alerts_query
+from code42_util import build_date_range_filter
+
+
+def test_build_date_range_filter_when_given_float_timestamp_returns_expected_filter():
+    test_timestamp = "2021-05-25T15:26:52.373Z"
+    filter_object = dict(build_date_range_filter(DateObserved, test_timestamp, None))
+    assert filter_object["filterClause"] == "AND"
+    assert len(filter_object["filters"]) == 1
+    assert filter_object["filters"][0]["operator"] == "ON_OR_AFTER"
+    assert filter_object["filters"][0]["term"] == "createdAt"
+    assert filter_object["filters"][0]["value"] == test_timestamp
 
 
 def test_build_alerts_query_returns_expected_query():

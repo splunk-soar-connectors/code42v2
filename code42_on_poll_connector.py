@@ -198,7 +198,7 @@ class Code42OnPollConnector:
 
     def _adjust_date_parameters(self, param):
         last_time = (
-            None if self._connector.is_poll_now() else self._state.get("last_time", 0)
+            None if self._connector.is_poll_now() else self._state.get("last_time")
         )
         if not last_time:
             # If there was never a stored last_time.
@@ -214,6 +214,7 @@ class Code42OnPollConnector:
                 "%Y-%m-%dT%H:%M:%S.%f"
             )
             param["start_time"] = last_time_as_date_str
+            param["end_time"] = None
 
         return param
 

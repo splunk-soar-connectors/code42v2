@@ -116,9 +116,7 @@ class Code42Connector(BaseConnector):
             self.save_progress(f"Code42: handling action {action_id}...")
             return action_handler(self, param, action_result)
         except Exception as ex:
-            import traceback
-            tb = traceback.format_exc()
-            msg = f"Code42: Failed execution of action {action_id}: {ex}\n{tb}"
+            msg = f"Code42: Failed execution of action {action_id}: {ex}"
             return action_result.set_status(phantom.APP_ERROR, msg)
 
     @action_handler_for("test_connectivity")
