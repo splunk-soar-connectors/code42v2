@@ -876,3 +876,13 @@ class TestCode42OnPollConnector(object):
         connector = _create_on_poll_connector(mock_py42_for_alert_polling)
         connector.handle_action({})
         assert_success(connector)
+
+    def test_on_pol_when_no_file_events_is_still_successful(
+        self, mocker, mock_py42_for_alert_polling
+    ):
+        mock_py42_for_alert_polling.securitydata.search_file_events.return_value = create_mock_response(
+            mocker, {"fileEvents": []}
+        )
+        connector = _create_on_poll_connector(mock_py42_for_alert_polling)
+        connector.handle_action({})
+        assert_success(connector)
