@@ -1289,7 +1289,7 @@
                     "description": "Username of the actor listed on alert",
                     "data_type": "string",
                     "required": false,
-                    "primary": false,
+                    "primary": true,
                     "contains": [
                         "email",
                         "user name"
@@ -1302,7 +1302,7 @@
                     "description": "Alert state",
                     "data_type": "string",
                     "required": false,
-                    "primary": false,
+                    "primary": true,
                     "value_list": [
                         "OPEN",
                         "RESOLVED",
@@ -2631,7 +2631,7 @@
                     "description": "Filter cases by assignee username",
                     "data_type": "string",
                     "required": false,
-                    "primary": false,
+                    "primary": true,
                     "contains": [
                         "email",
                         "user name"
