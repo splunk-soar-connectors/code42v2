@@ -39,6 +39,11 @@ def test_build_alerts_query_when_given_username_returns_expected_query():
     _assert_on_or_before(actual["groups"][1]["filters"][1], end_date)
 
 
+def test_build_alerts_query_returns_query_with_sort_direction_ascending():
+    actual = build_alerts_query("2021-05-13T16:51:35.425Z", "2021-06-13T16:51:35.425Z")
+    assert actual.sort_direction == "asc"
+
+
 def _assert_on_or_after(actual_filter, expected):
     assert actual_filter == {
         "operator": "ON_OR_AFTER",

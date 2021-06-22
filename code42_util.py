@@ -40,4 +40,5 @@ def build_alerts_query(
         filters.append(Severity.is_in(severities))
     filters.append(build_date_range_filter(DateObserved, start_date, end_date))
     query = AlertQuery.all(*filters)
+    query.sort_direction = "asc"
     return query

@@ -877,7 +877,7 @@ class TestCode42OnPollConnector(object):
         connector.handle_action({})
         assert_success(connector)
 
-    def test_on_pol_when_no_file_events_is_still_successful(
+    def test_on_poll_when_no_file_events_is_still_successful(
         self, mocker, mock_py42_for_alert_polling
     ):
         mock_py42_for_alert_polling.securitydata.search_file_events.return_value = create_mock_response(
@@ -886,3 +886,11 @@ class TestCode42OnPollConnector(object):
         connector = _create_on_poll_connector(mock_py42_for_alert_polling)
         connector.handle_action({})
         assert_success(connector)
+
+    def test_on_poll_sorts_queries_alerts_in_ascending_order(
+        self, mocker, mock_py42_for_alert_polling
+    ):
+        connector = _create_on_poll_connector(mock_py42_for_alert_polling)
+        connector.handle_action({})
+        actual_query = mock_py42_for_alert_polling.alerts.search.call_args[0][0]
+        assert actual_query.sort_direction == "asc"
