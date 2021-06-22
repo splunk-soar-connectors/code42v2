@@ -94,14 +94,14 @@
                 },
                 "start_time": {
                     "description": "The start time to use in the initial poll in yyyy-MM-dd HH:MM:SS format (defaults to 30 days back)",
-                    "verbose": "Configure this parameter via the `start_date` configuration parameter.",
+                    "verbose": "Configure this parameter via the `start_date` configuration parameter on the asset.",
                     "data_type": "string",
                     "required": false,
                     "order": 1
                 },
                 "end_time": {
                     "description": "The end time to use in the initial poll in yyyy-MM-dd HH:MM:SS format (defaults to the current time)",
-                    "verbose": "Configure this parameter via the `end_date` configuration parameter.",
+                    "verbose": "Configure this parameter via the `end_date` configuration parameter on the asset.",
                     "data_type": "string",
                     "required": false,
                     "order": 2
