@@ -692,7 +692,9 @@ class Code42Connector(BaseConnector):
             result = dict(result)
             all_window_titles = result.get("windowTitle", [])
             if all_window_titles:
-                result["windowTitle"] = _convert_to_obj_list(all_window_titles, "windowTitle")
+                result["windowTitle"] = _convert_to_obj_list(
+                    all_window_titles, "windowTitle"
+                )
             action_result.add_data(result)
 
         action_result.update_summary(
