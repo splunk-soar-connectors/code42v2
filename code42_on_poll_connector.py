@@ -106,46 +106,51 @@ class Code42OnPollConnector:
             # Ignore all other query params when polling for specific alert IDs
             alert_ids = source_id.split(",")
             alerts = self._get_alert_details(alert_ids)
-            last_alert = self._create_container_from_alerts(alerts)
+            last_alert = self._create_containers_from_alert_detail_responses(alerts)
         else:
-            param = self._adjust_date_parameters(param)
-            artifact_count = param.get("artifact_count", DEFAULT_ARTIFACT_COUNT)
-            alerts = self._get_alerts(param)
-            alert = {}
-            for alert in alerts:
-                alert = dict(self._get_alert_details(alert["id"])[0])
-                self._create_container_from_alert(alert, artifact_count=artifact_count)
-
-            last_alert = alert
+            start_date, end_date = self._adjust_date_parameters()
+            container_count, artifact_count = self._get_limit_counts(param)
+            alerts = self._get_alerts(
+                start_date, end_date, container_count=container_count
+            )
+            last_alert = self._create_containers_from_alert_search_responses(
+                alerts, artifact_count=artifact_count
+            )
 
         self._save_last_time(last_alert, source_id)
         return action_result.set_status(phantom.APP_SUCCESS)
 
-    def _get_alerts(self, param):
-        query = self._create_query(param)
+    def _get_alerts(self, start_date, end_date, container_count=None):
+        query = self._create_query(start_date, end_date)
         response = self._client.alerts.search(query)
         alerts = response.data.get("alerts", [])
-        if self._connector.is_poll_now():
-            container_count = param.get("container_count", DEFAULT_CONTAINER_COUNT)
+        if container_count:
             return alerts[:container_count]
 
         return alerts
 
-    def _create_query(self, param):
+    def _create_query(self, start_date, end_date):
         severities = self._connector.get_config().get("severity_to_poll_for")
         if severities:
             severities = severities.replace(" ", "").split(",")
-        query = build_alerts_query(
-            param["start_time"], param.get("end_time"), severities=severities
-        )
+        query = build_alerts_query(start_date, end_date, severities=severities)
         return query
 
     def _get_alert_details(self, alert_ids):
         return self._client.alerts.get_details(alert_ids).data["alerts"]
 
-    def _create_container_from_alerts(self, alerts, artifact_count=None):
+    def _create_containers_from_alert_detail_responses(self, alerts):
         alert = {}
         for alert in alerts:
+            self._create_container_from_alert(alert)
+        return alert
+
+    def _create_containers_from_alert_search_responses(
+        self, alerts, artifact_count=None
+    ):
+        alert = {}
+        for alert in alerts:
+            alert = dict(self._get_alert_details(alert["id"])[0])
             self._create_container_from_alert(alert, artifact_count=artifact_count)
         return alert
 
@@ -196,7 +201,7 @@ class Code42OnPollConnector:
         ]
         self._connector.save_artifacts(artifacts)
 
-    def _adjust_date_parameters(self, param):
+    def _adjust_date_parameters(self):
         last_time = (
             None if self._connector.is_poll_now() else self._state.get("last_time")
         )
@@ -204,19 +209,24 @@ class Code42OnPollConnector:
             # If there was never a stored last_time.
             config = self._connector.get_config()
             given_start_date = config.get("initial_poll_start_date")
-            param["start_time"] = given_start_date or get_thirty_days_ago().strftime(
+            start_time = given_start_date or get_thirty_days_ago().strftime(
                 "%Y-%m-%dT%H:%M:%S.%f"
             )
-            param["end_time"] = config.get("initial_poll_end_date")
+            end_time = config.get("initial_poll_end_date")
+            return start_time, end_time
         else:
             # Last time is stored as a float timestamp
             last_time_as_date_str = datetime.utcfromtimestamp(last_time).strftime(
                 "%Y-%m-%dT%H:%M:%S.%f"
             )
-            param["start_time"] = last_time_as_date_str
-            param["end_time"] = None
+            return last_time_as_date_str, None
 
-        return param
+    def _get_limit_counts(self, param):
+        if self._connector.is_poll_now():
+            container_count = param.get("container_count", DEFAULT_CONTAINER_COUNT)
+            artifact_count = param.get("artifact_count", DEFAULT_ARTIFACT_COUNT)
+            return container_count, artifact_count
+        return None, None
 
     def _save_last_time(self, alert, source_id):
         # Save last time of last alert for future polling
