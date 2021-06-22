@@ -166,11 +166,8 @@ class Code42OnPollConnector:
 
     def _get_file_events(self, observations, alert_details, artifact_count=None):
         def _have_enough_events():
-            return (
-                artifact_count is not None
-                and is_poll_now
-                and len(file_events) >= artifact_count
-            )
+            do_limit_count = artifact_count is not None
+            return do_limit_count and is_poll_now and len(file_events) >= artifact_count
 
         file_events = []
         is_poll_now = self._connector.is_poll_now()
