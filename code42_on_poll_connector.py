@@ -101,30 +101,40 @@ class Code42OnPollConnector:
         self._state = state or {}
 
     def handle_on_poll(self, param, action_result):
-        param = self._adjust_date_parameters(param)
-        severities = self._connector.get_config().get("severity")
-        if severities:
-            severities = severities.replace(" ", "").split(",")
-        query = build_alerts_query(
-            param["start_time"], param.get("end_time"), severities=severities
-        )
-        alerts = self._get_alerts(param, query)
         source_id = param.get("container_id")
         if source_id:
+            # Ignore all other query params when polling for specific alert IDs
             alert_ids = source_id.split(",")
-            alerts = [alert for alert in alerts if alert["id"] in alert_ids]
+            alerts = self._get_alert_details(alert_ids)
+            artifact_count = None
+        else:
+            param = self._adjust_date_parameters(param)
+            artifact_count = param.get(
+                "artifact_count", DEFAULT_ARTIFACT_COUNT_FOR_POLL_NOW
+            )
+            severities = self._connector.get_config().get("severity")
+            if severities:
+                severities = severities.replace(" ", "").split(",")
+            query = build_alerts_query(
+                param["start_time"], param.get("end_time"), severities=severities
+            )
+            alerts = self._get_alerts(param, query)
+            alert_ids = [alert["id"] for alert in alerts]
+            alerts = self._get_alert_details(alert_ids)
 
-        details = {}
+        alert = None
         for alert in alerts:
-            details = self._get_alert_details(alert["id"])
-            container_id = self._init_container(details)
-            observations = details.get("observations", [])
-            file_events = self._get_file_events(param, observations, details)
-            self._save_artifacts_from_file_events(container_id, details, file_events)
+            container_id = self._init_container(alert)
+            observations = alert.get("observations", [])
+            file_events = self._get_file_events(
+                observations, alert, artifact_count=artifact_count
+            )
+            self._save_artifacts_from_file_events(container_id, alert, file_events)
 
         # Save last time of last alert for future polling
-        last_created_at = details.get("createdAt")
-        if last_created_at:
+        # Note: checkpoints are not saved when polling for specific alerts via source_id.
+        last_created_at = alert.get("createdAt")
+        if not source_id and last_created_at:
             checkpoint = parse_datetime(last_created_at).timestamp()
             self._state["last_time"] = checkpoint
             self._connector.save_state(self._state)
@@ -142,8 +152,8 @@ class Code42OnPollConnector:
 
         return alerts
 
-    def _get_alert_details(self, alert_id):
-        return self._client.alerts.get_details(alert_id).data["alerts"][0]
+    def _get_alert_details(self, alert_ids):
+        return self._client.alerts.get_details(alert_ids).data["alerts"]
 
     def _init_container(self, alert_details):
         container_label = self._get_container_label()
@@ -154,25 +164,28 @@ class Code42OnPollConnector:
     def _get_container_label(self):
         return self._connector.get_config().get("ingest", {}).get("container_label")
 
-    def _get_file_events(self, param, observations, alert_details):
-        artifact_count = param.get(
-            "artifact_count", DEFAULT_ARTIFACT_COUNT_FOR_POLL_NOW
-        )
-        file_events = []
-        for observation in observations:
-            events = self._get_file_events_for_observation(
-                param, observation, alert_details
+    def _get_file_events(self, observations, alert_details, artifact_count=None):
+        def _have_enough_events():
+            return (
+                artifact_count is not None
+                and is_poll_now
+                and len(file_events) >= artifact_count
             )
+
+        file_events = []
+        is_poll_now = self._connector.is_poll_now()
+        for observation in observations:
+            events = self._get_file_events_for_observation(observation, alert_details)
             for event in events:
                 file_events.append(event)
-                if self._connector.is_poll_now() and len(file_events) >= artifact_count:
+                if _have_enough_events():
                     break
-            if self._connector.is_poll_now() and len(file_events) >= artifact_count:
+            if _have_enough_events():
                 break
 
         return file_events
 
-    def _get_file_events_for_observation(self, param, observation, alert_details):
+    def _get_file_events_for_observation(self, observation, alert_details):
         query = _get_file_event_query(observation, alert_details)
         response = self._client.securitydata.search_file_events(query)
         file_events = response.data.get("fileEvents", [])

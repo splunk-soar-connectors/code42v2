@@ -16,7 +16,7 @@ from tests.conftest import (
     MOCK_SECURITY_EVENT_RESPONSE,
 )
 
-EXPECTED_ARTIFACTS = expected = [
+EXPECTED_ARTIFACTS = [
     {
         "cef": {
             "deviceExternalId": "935873453596901068",
@@ -93,9 +93,9 @@ EXPECTED_ARTIFACTS = expected = [
         },
         "label": "Alerting",
         "name": "Code42 File Event Artifact",
+        "severity": "LOW",
         "source_data_identifier": "0_1d71796f-af5b-4231-9d8e-df6434da4663_935873453596901068_956171635867906205_5",
         "start_time": "2020-05-28T12:46:39.838Z",
-        "severity": "LOW",
     },
     {
         "cef": {
@@ -173,9 +173,9 @@ EXPECTED_ARTIFACTS = expected = [
         },
         "label": "Alerting",
         "name": "Code42 File Event Artifact",
+        "severity": "LOW",
         "source_data_identifier": "0_1d71796f-af5b-4231-9d8e-df6434da4663_935873453596901068_956171635867906205_5",
         "start_time": "2020-05-28T12:46:39.838Z",
-        "severity": "LOW",
     },
     {
         "cef": {
@@ -253,249 +253,9 @@ EXPECTED_ARTIFACTS = expected = [
         },
         "label": "Alerting",
         "name": "Code42 File Event Artifact",
+        "severity": "LOW",
         "source_data_identifier": "0_1d71796f-af5b-4231-9d8e-df6434da4663_935873453596901068_956171635867906205_5",
         "start_time": "2020-05-28T12:46:39.838Z",
-        "severity": "LOW",
-    },
-    {
-        "cef": {
-            "deviceExternalId": "935873453596901068",
-            "dvchost": "host.docker.internal",
-            "end": "1590669999838",
-            "eventName": "READ_BY_APP",
-            "externalId": "0_1d71796f-af5b-4231-9d8e-df6434da4663_935873453596901068_956171635867906205_5",
-            "fileCreateTime": "1590669814902",
-            "fileHashMd5": "9cea266b4e07974df1982ae3b9de92ce",
-            "fileModificationTime": "1590669815105",
-            "filePath": "C:/Users/QA/Downloads/",
-            "fileType": "IMAGE",
-            "fname": "company_secrets.txt",
-            "fsize": 265122,
-            "message": "ApplicationRead",
-            "request": "example.com",
-            "requestClientApplication": "Jira",
-            "rt": "1590670310040",
-            "shost": "HOSTNAME",
-            "signatureId": "C42203",
-            "sourceServiceName": "Endpoint",
-            "spriv": "QA",
-            "sproc": "chrome.exe",
-            "src": "255.255.255.255",
-            "suid": "912098363086307495",
-            "suser": "test@example.com",
-        },
-        "container_id": "CONTAINER_ID",
-        "data": {
-            "createTimestamp": "2020-05-28T12:43:34.902Z",
-            "destinationCategory": "Cloud Storage",
-            "destinationName": "Google Drive",
-            "deviceUid": "935873453596901068",
-            "deviceUserName": "test@example.com",
-            "domainName": "host.docker.internal",
-            "eventId": "0_1d71796f-af5b-4231-9d8e-df6434da4663_935873453596901068_956171635867906205_5",
-            "eventTimestamp": "2020-05-28T12:46:39.838Z",
-            "eventType": "READ_BY_APP",
-            "exposure": ["ApplicationRead"],
-            "fileCategory": "IMAGE",
-            "fileCategoryByBytes": "Image",
-            "fileCategoryByExtension": "Image",
-            "fileName": "company_secrets.txt",
-            "fileOwner": "Test",
-            "filePath": "C:/Users/QA/Downloads/",
-            "fileSize": 265122,
-            "fileType": "FILE",
-            "insertionTimestamp": "2020-05-28T12:51:50.040Z",
-            "md5Checksum": "9cea266b4e07974df1982ae3b9de92ce",
-            "mimeTypeByBytes": "image/png",
-            "mimeTypeByExtension": "image/png",
-            "mimeTypeMismatch": False,
-            "modifyTimestamp": "2020-05-28T12:43:35.105Z",
-            "operatingSystemUser": "IEUser",
-            "osHostName": "HOSTNAME",
-            "outsideActiveHours": False,
-            "privateIpAddresses": ["255.255.255.255", "127.0.0.1"],
-            "processName": "chrome.exe",
-            "processOwner": "QA",
-            "publicIpAddress": "255.255.255.255",
-            "remoteActivity": "UNKNOWN",
-            "riskIndicators": [
-                {"name": "Google Drive upload", "weight": 5},
-                {"name": "Spreadsheet", "weight": 0},
-            ],
-            "riskScore": 5,
-            "riskSeverity": "HIGH",
-            "sha256Checksum": "34d0c9fc9c907ec374cf7e8ca1ff8a172e36eccee687f0a9b69dd169debb81e1",
-            "source": "Endpoint",
-            "tabUrl": "example.com",
-            "trusted": False,
-            "userUid": "912098363086307495",
-            "windowTitle": ["Jira"],
-        },
-        "label": "Alerting",
-        "name": "Code42 File Event Artifact",
-        "source_data_identifier": "0_1d71796f-af5b-4231-9d8e-df6434da4663_935873453596901068_956171635867906205_5",
-        "start_time": "2020-05-28T12:46:39.838Z",
-        "severity": "LOW",
-    },
-    {
-        "cef": {
-            "deviceExternalId": "935873453596901068",
-            "dvchost": "host.docker.internal",
-            "end": "1590669999838",
-            "eventName": "READ_BY_APP",
-            "externalId": "0_1d71796f-af5b-4231-9d8e-df6434da4663_935873453596901068_956171635867906205_5",
-            "fileCreateTime": "1590669814902",
-            "fileHashMd5": "9cea266b4e07974df1982ae3b9de92ce",
-            "fileModificationTime": "1590669815105",
-            "filePath": "C:/Users/QA/Downloads/",
-            "fileType": "IMAGE",
-            "fname": "company_secrets.txt",
-            "fsize": 265122,
-            "message": "ApplicationRead",
-            "request": "example.com",
-            "requestClientApplication": "Jira",
-            "rt": "1590670310040",
-            "shost": "HOSTNAME",
-            "signatureId": "C42203",
-            "sourceServiceName": "Endpoint",
-            "spriv": "QA",
-            "sproc": "chrome.exe",
-            "src": "255.255.255.255",
-            "suid": "912098363086307495",
-            "suser": "test@example.com",
-        },
-        "container_id": "CONTAINER_ID",
-        "data": {
-            "createTimestamp": "2020-05-28T12:43:34.902Z",
-            "destinationCategory": "Cloud Storage",
-            "destinationName": "Google Drive",
-            "deviceUid": "935873453596901068",
-            "deviceUserName": "test@example.com",
-            "domainName": "host.docker.internal",
-            "eventId": "0_1d71796f-af5b-4231-9d8e-df6434da4663_935873453596901068_956171635867906205_5",
-            "eventTimestamp": "2020-05-28T12:46:39.838Z",
-            "eventType": "READ_BY_APP",
-            "exposure": ["ApplicationRead"],
-            "fileCategory": "IMAGE",
-            "fileCategoryByBytes": "Image",
-            "fileCategoryByExtension": "Image",
-            "fileName": "company_secrets.txt",
-            "fileOwner": "Test",
-            "filePath": "C:/Users/QA/Downloads/",
-            "fileSize": 265122,
-            "fileType": "FILE",
-            "insertionTimestamp": "2020-05-28T12:51:50.040Z",
-            "md5Checksum": "9cea266b4e07974df1982ae3b9de92ce",
-            "mimeTypeByBytes": "image/png",
-            "mimeTypeByExtension": "image/png",
-            "mimeTypeMismatch": False,
-            "modifyTimestamp": "2020-05-28T12:43:35.105Z",
-            "operatingSystemUser": "IEUser",
-            "osHostName": "HOSTNAME",
-            "outsideActiveHours": False,
-            "privateIpAddresses": ["255.255.255.255", "127.0.0.1"],
-            "processName": "chrome.exe",
-            "processOwner": "QA",
-            "publicIpAddress": "255.255.255.255",
-            "remoteActivity": "UNKNOWN",
-            "riskIndicators": [
-                {"name": "Google Drive upload", "weight": 5},
-                {"name": "Spreadsheet", "weight": 0},
-            ],
-            "riskScore": 5,
-            "riskSeverity": "HIGH",
-            "sha256Checksum": "34d0c9fc9c907ec374cf7e8ca1ff8a172e36eccee687f0a9b69dd169debb81e1",
-            "source": "Endpoint",
-            "tabUrl": "example.com",
-            "trusted": False,
-            "userUid": "912098363086307495",
-            "windowTitle": ["Jira"],
-        },
-        "label": "Alerting",
-        "name": "Code42 File Event Artifact",
-        "source_data_identifier": "0_1d71796f-af5b-4231-9d8e-df6434da4663_935873453596901068_956171635867906205_5",
-        "start_time": "2020-05-28T12:46:39.838Z",
-        "severity": "LOW",
-    },
-    {
-        "cef": {
-            "deviceExternalId": "935873453596901068",
-            "dvchost": "host.docker.internal",
-            "end": "1590669999838",
-            "eventName": "READ_BY_APP",
-            "externalId": "0_1d71796f-af5b-4231-9d8e-df6434da4663_935873453596901068_956171635867906205_5",
-            "fileCreateTime": "1590669814902",
-            "fileHashMd5": "9cea266b4e07974df1982ae3b9de92ce",
-            "fileModificationTime": "1590669815105",
-            "filePath": "C:/Users/QA/Downloads/",
-            "fileType": "IMAGE",
-            "fname": "company_secrets.txt",
-            "fsize": 265122,
-            "message": "ApplicationRead",
-            "request": "example.com",
-            "requestClientApplication": "Jira",
-            "rt": "1590670310040",
-            "shost": "HOSTNAME",
-            "signatureId": "C42203",
-            "sourceServiceName": "Endpoint",
-            "spriv": "QA",
-            "sproc": "chrome.exe",
-            "src": "255.255.255.255",
-            "suid": "912098363086307495",
-            "suser": "test@example.com",
-        },
-        "container_id": "CONTAINER_ID",
-        "data": {
-            "createTimestamp": "2020-05-28T12:43:34.902Z",
-            "destinationCategory": "Cloud Storage",
-            "destinationName": "Google Drive",
-            "deviceUid": "935873453596901068",
-            "deviceUserName": "test@example.com",
-            "domainName": "host.docker.internal",
-            "eventId": "0_1d71796f-af5b-4231-9d8e-df6434da4663_935873453596901068_956171635867906205_5",
-            "eventTimestamp": "2020-05-28T12:46:39.838Z",
-            "eventType": "READ_BY_APP",
-            "exposure": ["ApplicationRead"],
-            "fileCategory": "IMAGE",
-            "fileCategoryByBytes": "Image",
-            "fileCategoryByExtension": "Image",
-            "fileName": "company_secrets.txt",
-            "fileOwner": "Test",
-            "filePath": "C:/Users/QA/Downloads/",
-            "fileSize": 265122,
-            "fileType": "FILE",
-            "insertionTimestamp": "2020-05-28T12:51:50.040Z",
-            "md5Checksum": "9cea266b4e07974df1982ae3b9de92ce",
-            "mimeTypeByBytes": "image/png",
-            "mimeTypeByExtension": "image/png",
-            "mimeTypeMismatch": False,
-            "modifyTimestamp": "2020-05-28T12:43:35.105Z",
-            "operatingSystemUser": "IEUser",
-            "osHostName": "HOSTNAME",
-            "outsideActiveHours": False,
-            "privateIpAddresses": ["255.255.255.255", "127.0.0.1"],
-            "processName": "chrome.exe",
-            "processOwner": "QA",
-            "publicIpAddress": "255.255.255.255",
-            "remoteActivity": "UNKNOWN",
-            "riskIndicators": [
-                {"name": "Google Drive upload", "weight": 5},
-                {"name": "Spreadsheet", "weight": 0},
-            ],
-            "riskScore": 5,
-            "riskSeverity": "HIGH",
-            "sha256Checksum": "34d0c9fc9c907ec374cf7e8ca1ff8a172e36eccee687f0a9b69dd169debb81e1",
-            "source": "Endpoint",
-            "tabUrl": "example.com",
-            "trusted": False,
-            "userUid": "912098363086307495",
-            "windowTitle": ["Jira"],
-        },
-        "label": "Alerting",
-        "name": "Code42 File Event Artifact",
-        "source_data_identifier": "0_1d71796f-af5b-4231-9d8e-df6434da4663_935873453596901068_956171635867906205_5",
-        "start_time": "2020-05-28T12:46:39.838Z",
-        "severity": "LOW",
     },
 ]
 
@@ -542,7 +302,7 @@ class TestCode42OnPollConnector(object):
         connector.handle_action({})
         expected_alert = MOCK_ALERT_DETAIL_RESPONSE["alerts"][0]
         expected_container = _create_expected_container(expected_alert)
-        assert_container_added(connector, [expected_container, expected_container])
+        assert_container_added(connector, [expected_container])
 
     def test_on_poll_when_is_poll_now_honors_container_count_param(
         self, mock_py42_for_alert_polling
@@ -629,10 +389,12 @@ class TestCode42OnPollConnector(object):
         test_last_timestamp = "2021-04-18T10:02:36.3198680Z"
 
         def get_alert_details(alert_id, *args, **kwargs):
-            if alert_id != MOCK_SEARCH_ALERTS_LIST_RESPONSE["alerts"][-1]["id"]:
-                return create_mock_response(mocker, MOCK_ALERT_DETAIL_RESPONSE)
-
-            response_dict = {"alerts": [{"id": 0, "createdAt": test_last_timestamp}]}
+            response_dict = {
+                "alerts": [
+                    {"id": 0, "createdAt": 23423523},  # Not expected
+                    {"id": 0, "createdAt": test_last_timestamp},
+                ]
+            }
             return create_mock_response(mocker, response_dict)
 
         mock_py42_for_alert_polling.alerts.get_details.side_effect = get_alert_details
@@ -643,6 +405,23 @@ class TestCode42OnPollConnector(object):
         expected_epoch = dateutil.parser.parse(test_last_timestamp).timestamp()
         expected_state = {"last_time": expected_epoch}
         assert_state_saved(connector, expected_state)
+
+    def test_on_poll_when_specifying_source_ids_does_not_store_last_time(
+        self, mocker, mock_py42_for_alert_polling
+    ):
+        test_last_timestamp = "2021-04-18T10:02:36.3198680Z"
+
+        def get_alert_details(alert_id, *args, **kwargs):
+            response_dict = {"alerts": [{"id": 0, "createdAt": test_last_timestamp}]}
+            return create_mock_response(mocker, response_dict)
+
+        mock_py42_for_alert_polling.alerts.get_details.side_effect = get_alert_details
+        connector = _create_on_poll_connector(mock_py42_for_alert_polling)
+        connector._is_poll_now = False
+        param = {"container_count": 1, "artifact_count": 1, "container_id": "I AM HERE"}
+        connector.handle_action(param)
+        assert connector._state is None
+        assert_success(connector)
 
     def test_on_poll_makes_file_event_query_with_expected_number_of_filter_groups(
         self, mock_py42_for_alert_polling
@@ -670,7 +449,7 @@ class TestCode42OnPollConnector(object):
         )
 
         # Corresponds to unsupported exposure type observation
-        actual = dict(call_args[5][0][0])
+        actual = dict(call_args[2][0][0])
 
         assert len(actual["groups"][3]["filters"]) == 3
         assert actual["groups"][3]["filters"][0]["operator"] == "IS_NOT"
@@ -714,7 +493,7 @@ class TestCode42OnPollConnector(object):
         )
 
         # Corresponds to outside-trusted-domains type observation
-        actual = dict(call_args[4][0][0])
+        actual = dict(call_args[1][0][0])
 
         assert len(actual["groups"][3]["filters"]) == 1
         assert actual["groups"][3]["filters"][0]["operator"] == "IS"
@@ -767,11 +546,11 @@ class TestCode42OnPollConnector(object):
         param = {"container_id": test_alert_id}
         connector.handle_action(param)
         mock_py42_for_alert_polling.alerts.get_details.assert_called_once_with(
-            test_alert_id
+            [test_alert_id]
         )
         assert_success(connector)
 
-    def test_on_poll_when_given_multiple_container_ids_creates_containers_for_all_ids(
+    def test_on_poll_when_given_multiple_container_ids_gets_details_for_all_ids(
         self, mock_py42_for_alert_polling
     ):
         connector = _create_on_poll_connector(mock_py42_for_alert_polling)
@@ -780,9 +559,27 @@ class TestCode42OnPollConnector(object):
         param = {"container_id": f"{test_alert_id_1},{test_alert_id_2}"}
         connector.handle_action(param)
         call_args = mock_py42_for_alert_polling.alerts.get_details.call_args_list
-        assert len(call_args) == 2
-        assert call_args[0][0][0] == test_alert_id_1
-        assert call_args[1][0][0] == test_alert_id_2
+        assert len(call_args) == 1
+        assert call_args[0][0][0] == [test_alert_id_1, test_alert_id_2]
+        assert_success(connector)
+
+    def test_on_poll_when_given_container_ids_ignores_all_other_query_params(
+        self, mock_py42_for_alert_polling
+    ):
+        connector = _create_on_poll_connector(mock_py42_for_alert_polling)
+        test_alert_id = "11111111-9724-4005-b848-76af488cf5e2"
+        param = {
+            "container_id": f"{test_alert_id}",
+            "start_time": 235235235,
+            "end_time": 235235235,
+            "severity": "HIGH",
+        }
+        connector.handle_action(param)
+        call_args = mock_py42_for_alert_polling.alerts.get_details.call_args_list
+        assert len(call_args) == 1
+        assert call_args[0][0][0] == [test_alert_id]
+        # If using container IDs, not actual alert query gets made but we instead just use the details API.
+        assert not mock_py42_for_alert_polling.alerts.search.call_count
         assert_success(connector)
 
     def test_on_poll_when_configured_with_start_and_end_dates_and_no_stored_timestamp_uses_configured_dates(
