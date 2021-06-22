@@ -3009,7 +3009,7 @@
                     "description": "Hostname",
                     "data_type": "string",
                     "order": 7,
-                    "primary": false,
+                    "primary": true,
                     "contains": [
                         "host name"
                     ]
@@ -3018,7 +3018,7 @@
                     "description": "Private IPv4 or IPv6 address",
                     "data_type": "string",
                     "order": 8,
-                    "primary": false,
+                    "primary": true,
                     "contains": [
                         "ip",
                         "ipv6"
@@ -3028,7 +3028,7 @@
                     "description": "Public IPv4 or IPv6 address",
                     "data_type": "string",
                     "order": 9,
-                    "primary": false,
+                    "primary": true,
                     "contains": [
                         "ip",
                         "ipv6"
@@ -3038,7 +3038,7 @@
                     "description": "Type of exposure that occurred",
                     "data_type": "string",
                     "order": 10,
-                    "primary": false,
+                    "primary": true,
                     "value_list": [
                         "All",
                         "SharedViaLink",
@@ -3057,7 +3057,7 @@
                     "description": "Process name involved in the exposure",
                     "data_type": "string",
                     "order": 11,
-                    "primary": false,
+                    "primary": true,
                     "contains": [
                         "code42 process name"
                     ]
@@ -3066,7 +3066,7 @@
                     "description": "Urls of all the browser tabs open during exposure",
                     "data_type": "string",
                     "order": 12,
-                    "primary": false,
+                    "primary": true,
                     "contains": [
                         "url"
                     ]
@@ -3075,7 +3075,7 @@
                     "description": "Names of all the open browser tabs or windows during exposure.",
                     "data_type": "string",
                     "order": 13,
-                    "primary": false,
+                    "primary": true,
                     "contains": [
                         "code42 window title"
                     ]
