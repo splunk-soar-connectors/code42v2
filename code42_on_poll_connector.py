@@ -122,7 +122,7 @@ class Code42OnPollConnector:
             alert_ids = [alert["id"] for alert in alerts]
             alerts = self._get_alert_details(alert_ids)
 
-        alert = None
+        alert = {}
         for alert in alerts:
             container_id = self._init_container(alert)
             observations = alert.get("observations", [])

@@ -350,7 +350,7 @@ class TestCode42OnPollConnector(object):
     ):
         connector = _create_on_poll_connector(mock_py42_for_alert_polling)
         connector._is_poll_now = False
-        test_timestamp = 1623293946
+        test_timestamp = 1622126077.236545
         connector._state = {"last_time": test_timestamp}
         # For proving that it does not use the stored start_date
         connector._config["initial_poll_start_date"] = 235235235
