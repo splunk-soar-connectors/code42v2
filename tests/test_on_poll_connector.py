@@ -674,7 +674,7 @@ class TestCode42OnPollConnector(object):
         def get_alert_details(alert_id, *args, **kwargs):
             created_at = None
             if alert_id == alert_id_1:
-                created_at = 23423523
+                created_at = "2021-03-18T10:02:36.000000Z"
             elif alert_id == alert_id_2:
                 created_at = test_last_timestamp
 
@@ -685,8 +685,38 @@ class TestCode42OnPollConnector(object):
         mock_py42_for_alert_polling.alerts.get_details.side_effect = get_alert_details
         connector = _create_on_poll_connector(mock_py42_for_alert_polling)
         connector._is_poll_now = False
-        param = {"container_count": 1, "artifact_count": 1}
-        connector.handle_action(param)
+        connector.handle_action({})
+        expected_epoch = dateutil.parser.parse(test_last_timestamp).timestamp()
+        expected_state = {"last_time": expected_epoch}
+        assert_state_saved(connector, expected_state)
+
+    def test_on_poll_when_is_poll_now_saves_state_with_last_alert_created_at(
+        self, mocker, mock_py42_for_alert_polling
+    ):
+        test_last_timestamp = "2021-04-18T10:02:36.3198680Z"
+        alert_id_1 = MOCK_SEARCH_ALERTS_LIST_RESPONSE["alerts"][0]["id"]
+        alert_id_2 = MOCK_SEARCH_ALERTS_LIST_RESPONSE["alerts"][1]["id"]
+
+        def get_alert_details(alert_id, *args, **kwargs):
+            created_at = None
+            if alert_id == alert_id_1:
+                # It should not save this date.
+                created_at = "2021-03-11T10:02:36.000000Z"
+            elif alert_id == alert_id_2:
+                # It should save this date.
+                created_at = test_last_timestamp
+
+            return create_mock_response(
+                mocker, {"alerts": [{"id": 0, "createdAt": created_at}]}
+            )
+
+        mock_py42_for_alert_polling.alerts.get_details.side_effect = get_alert_details
+        connector = _create_on_poll_connector(mock_py42_for_alert_polling)
+        connector._is_poll_now = True
+
+        # Need to specify counts because they matter in when using Poll Now.
+        connector.handle_action({"container_count": 100, "artifact_count": 100})
+
         expected_epoch = dateutil.parser.parse(test_last_timestamp).timestamp()
         expected_state = {"last_time": expected_epoch}
         assert_state_saved(connector, expected_state)
