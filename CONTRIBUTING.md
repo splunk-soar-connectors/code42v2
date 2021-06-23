@@ -209,7 +209,7 @@ To automatically run the `code42_alert_response_playbook` playbook on new Code42
 4. (optional) If you have enabled polling previously, you might want to delete events, reset your timestamp,
    and re-poll.
 
-5. View a newly ingested security event. Notice the new event rows' label column now says `code42 alerts`.
+5. View a newly ingested security event. Notice the new event row's label column now says `code42 alerts`.
    Now, go into the alert and go to Analyst mode.
 
 Notice that the playbook has started and is awaiting your response!
