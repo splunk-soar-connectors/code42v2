@@ -5,7 +5,7 @@ from code42_util import build_date_range_filter
 
 
 def test_build_date_range_filter_when_given_float_timestamp_returns_expected_filter():
-    test_timestamp = "2021-05-25T15:26:52.373Z"
+    test_timestamp = "2021-05-25T15:26:52.373123Z"
     filter_object = dict(build_date_range_filter(DateObserved, test_timestamp, None))
     assert filter_object["filterClause"] == "AND"
     assert len(filter_object["filters"]) == 1
@@ -15,8 +15,8 @@ def test_build_date_range_filter_when_given_float_timestamp_returns_expected_fil
 
 
 def test_build_alerts_query_returns_expected_query():
-    start_date = "2021-05-13T16:51:35.425Z"
-    end_date = "2021-06-13T16:51:35.425Z"
+    start_date = "2021-05-13T16:51:35.425333Z"
+    end_date = "2021-06-13T16:51:35.425000Z"
     actual = dict(build_alerts_query(start_date, end_date))
     assert actual["groupClause"] == "AND"
     assert len(actual["groups"]) == 1
@@ -26,9 +26,23 @@ def test_build_alerts_query_returns_expected_query():
     _assert_on_or_before(actual["groups"][0]["filters"][1], end_date)
 
 
-def test_build_alerts_query_when_given_username_returns_expected_query():
+def test_build_alerts_query_when_using_milliseconds_returns_expected_query():
     start_date = "2021-05-13T16:51:35.425Z"
     end_date = "2021-06-13T16:51:35.425Z"
+    actual = dict(build_alerts_query(start_date, end_date))
+    assert actual["groupClause"] == "AND"
+    assert len(actual["groups"]) == 1
+    assert actual["groups"][0]["filterClause"] == "AND"
+    assert len(actual["groups"][0]["filters"]) == 2
+    expected_start_date = f"{start_date[:-1]}000Z"
+    expected_end_date = f"{end_date[:-1]}000Z"
+    _assert_on_or_after(actual["groups"][0]["filters"][0], expected_start_date)
+    _assert_on_or_before(actual["groups"][0]["filters"][1], expected_end_date)
+
+
+def test_build_alerts_query_when_given_username_returns_expected_query():
+    start_date = "2021-05-13T16:51:35.425123Z"
+    end_date = "2021-06-13T16:51:35.425123Z"
     username = "test@example.com"
     actual = dict(build_alerts_query(start_date, end_date, username=username))
     assert actual["groupClause"] == "AND"
