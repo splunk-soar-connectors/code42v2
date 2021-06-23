@@ -604,11 +604,31 @@ class TestCode42OnPollConnector(object):
         assert abs((actual_date - expected_date)).seconds < 1
         assert_success(connector)
 
-    def test_on_poll_when_is_not_poll_now_uses_previously_stored_timestamp(
+    def test_on_poll_uses_previously_stored_timestamp(
         self, mock_py42_for_alert_polling
     ):
         connector = _create_on_poll_connector(mock_py42_for_alert_polling)
         connector._is_poll_now = False
+        test_timestamp = 1622126077.236545
+        connector._state = {"last_time": test_timestamp}
+        # For proving that it does not use the stored start_date
+        connector._config["initial_poll_start_date"] = 235235235
+        param = {"container_count": 1, "artifact_count": 1}
+        connector.handle_action(param)
+        actual_date_str = dict(
+            mock_py42_for_alert_polling.alerts.search.call_args[0][0]
+        )["groups"][0]["filters"][0]["value"]
+        actual_date = dateutil.parser.parse(actual_date_str)
+        expected_date = datetime.utcfromtimestamp(0) + timedelta(seconds=test_timestamp)
+        expected_date = expected_date.replace(tzinfo=actual_date.tzinfo)
+        assert abs((actual_date - expected_date)).seconds < 1
+        assert_success(connector)
+
+    def test_on_poll_when_is_poll_now_uses_previously_stored_timestamp(
+        self, mock_py42_for_alert_polling
+    ):
+        connector = _create_on_poll_connector(mock_py42_for_alert_polling)
+        connector._is_poll_now = True
         test_timestamp = 1622126077.236545
         connector._state = {"last_time": test_timestamp}
         # For proving that it does not use the stored start_date
