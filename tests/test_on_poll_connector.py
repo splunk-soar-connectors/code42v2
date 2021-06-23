@@ -611,8 +611,10 @@ class TestCode42OnPollConnector(object):
         connector._is_poll_now = False
         test_timestamp = 1622126077.236545
         connector._state = {"last_time": test_timestamp}
-        # For proving that it does not use the stored start_date
+
+        # For proving that it does not use the start_date from the app config
         connector._config["initial_poll_start_date"] = 235235235
+
         param = {"container_count": 1, "artifact_count": 1}
         connector.handle_action(param)
         actual_date_str = dict(
@@ -631,8 +633,10 @@ class TestCode42OnPollConnector(object):
         connector._is_poll_now = True
         test_timestamp = 1622126077.236545
         connector._state = {"last_time": test_timestamp}
-        # For proving that it does not use the stored start_date
+
+        # For proving that it does not use the start_date from the app config
         connector._config["initial_poll_start_date"] = 235235235
+
         param = {"container_count": 1, "artifact_count": 1}
         connector.handle_action(param)
         actual_date_str = dict(
