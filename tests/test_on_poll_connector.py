@@ -554,6 +554,16 @@ class TestCode42OnPollConnector(object):
         expected_container = _create_expected_container(expected_alert)
         assert_container_added(connector, [expected_container])
 
+    def test_on_poll_when_is_poll_now_and_container_count_exceeds_alert_count_creates_containers_for_all(
+        self, mock_py42_for_alert_polling
+    ):
+        connector = _create_on_poll_connector(mock_py42_for_alert_polling)
+        connector._is_poll_now = True
+        connector.handle_action({"container_count": 100})
+        expected_alert = MOCK_ALERT_DETAIL_RESPONSE["alerts"][0]
+        expected_container = _create_expected_container(expected_alert)
+        assert_container_added(connector, [expected_container, expected_container])
+
     def test_on_poll_adds_artifacts_per_file_event_per_alert(
         self, mock_py42_for_alert_polling
     ):
@@ -570,6 +580,15 @@ class TestCode42OnPollConnector(object):
         connector.handle_action(param)
         assert_artifacts_added(connector, [EXPECTED_ARTIFACTS[0]])
 
+    def test_on_poll_when_is_poll_now_and_artifact_count_exceeds_event_count_creates_artifacts_for_all(
+        self, mock_py42_for_alert_polling
+    ):
+        connector = _create_on_poll_connector(mock_py42_for_alert_polling)
+        connector._is_poll_now = True
+        param = {"container_count": 100, "artifact_count": 100}
+        connector.handle_action(param)
+        assert_artifacts_added(connector, EXPECTED_ARTIFACTS)
+
     def test_on_poll_when_is_poll_now_uses_start_date_of_30_days_back(
         self, mock_py42_for_alert_polling
     ):
@@ -585,15 +604,39 @@ class TestCode42OnPollConnector(object):
         assert abs((actual_date - expected_date)).seconds < 1
         assert_success(connector)
 
-    def test_on_poll_when_is_not_poll_now_uses_previously_stored_timestamp(
+    def test_on_poll_uses_previously_stored_timestamp(
         self, mock_py42_for_alert_polling
     ):
         connector = _create_on_poll_connector(mock_py42_for_alert_polling)
         connector._is_poll_now = False
         test_timestamp = 1622126077.236545
         connector._state = {"last_time": test_timestamp}
-        # For proving that it does not use the stored start_date
+
+        # For proving that it does not use `initial_poll_start_date` from the app config
         connector._config["initial_poll_start_date"] = 235235235
+
+        param = {"container_count": 1, "artifact_count": 1}
+        connector.handle_action(param)
+        actual_date_str = dict(
+            mock_py42_for_alert_polling.alerts.search.call_args[0][0]
+        )["groups"][0]["filters"][0]["value"]
+        actual_date = dateutil.parser.parse(actual_date_str)
+        expected_date = datetime.utcfromtimestamp(0) + timedelta(seconds=test_timestamp)
+        expected_date = expected_date.replace(tzinfo=actual_date.tzinfo)
+        assert abs((actual_date - expected_date)).seconds < 1
+        assert_success(connector)
+
+    def test_on_poll_when_is_poll_now_uses_previously_stored_timestamp(
+        self, mock_py42_for_alert_polling
+    ):
+        connector = _create_on_poll_connector(mock_py42_for_alert_polling)
+        connector._is_poll_now = True
+        test_timestamp = 1622126077.236545
+        connector._state = {"last_time": test_timestamp}
+
+        # For proving that it does not use `initial_poll_start_date` from the app config
+        connector._config["initial_poll_start_date"] = 235235235
+
         param = {"container_count": 1, "artifact_count": 1}
         connector.handle_action(param)
         actual_date_str = dict(
@@ -631,7 +674,7 @@ class TestCode42OnPollConnector(object):
         def get_alert_details(alert_id, *args, **kwargs):
             created_at = None
             if alert_id == alert_id_1:
-                created_at = 23423523
+                created_at = "2021-03-18T10:02:36.000000Z"
             elif alert_id == alert_id_2:
                 created_at = test_last_timestamp
 
@@ -642,8 +685,38 @@ class TestCode42OnPollConnector(object):
         mock_py42_for_alert_polling.alerts.get_details.side_effect = get_alert_details
         connector = _create_on_poll_connector(mock_py42_for_alert_polling)
         connector._is_poll_now = False
-        param = {"container_count": 1, "artifact_count": 1}
-        connector.handle_action(param)
+        connector.handle_action({})
+        expected_epoch = dateutil.parser.parse(test_last_timestamp).timestamp()
+        expected_state = {"last_time": expected_epoch}
+        assert_state_saved(connector, expected_state)
+
+    def test_on_poll_when_is_poll_now_saves_state_with_last_alert_created_at(
+        self, mocker, mock_py42_for_alert_polling
+    ):
+        test_last_timestamp = "2021-04-18T10:02:36.3198680Z"
+        alert_id_1 = MOCK_SEARCH_ALERTS_LIST_RESPONSE["alerts"][0]["id"]
+        alert_id_2 = MOCK_SEARCH_ALERTS_LIST_RESPONSE["alerts"][1]["id"]
+
+        def get_alert_details(alert_id, *args, **kwargs):
+            created_at = None
+            if alert_id == alert_id_1:
+                # It should not save this date.
+                created_at = "2021-03-11T10:02:36.000000Z"
+            elif alert_id == alert_id_2:
+                # It should save this date.
+                created_at = test_last_timestamp
+
+            return create_mock_response(
+                mocker, {"alerts": [{"id": 0, "createdAt": created_at}]}
+            )
+
+        mock_py42_for_alert_polling.alerts.get_details.side_effect = get_alert_details
+        connector = _create_on_poll_connector(mock_py42_for_alert_polling)
+        connector._is_poll_now = True
+
+        # Need to specify counts because they matter in when using Poll Now.
+        connector.handle_action({"container_count": 100, "artifact_count": 100})
+
         expected_epoch = dateutil.parser.parse(test_last_timestamp).timestamp()
         expected_state = {"last_time": expected_epoch}
         assert_state_saved(connector, expected_state)
@@ -660,6 +733,23 @@ class TestCode42OnPollConnector(object):
         mock_py42_for_alert_polling.alerts.get_details.side_effect = get_alert_details
         connector = _create_on_poll_connector(mock_py42_for_alert_polling)
         connector._is_poll_now = False
+        param = {"container_count": 1, "artifact_count": 1, "container_id": "I AM HERE"}
+        connector.handle_action(param)
+        assert connector._state is None
+        assert_success(connector)
+
+    def test_on_poll_when_is_poll_now_and_specifying_source_ids_does_not_store_last_time(
+        self, mocker, mock_py42_for_alert_polling
+    ):
+        test_last_timestamp = "2021-04-18T10:02:36.3198680Z"
+
+        def get_alert_details(alert_id, *args, **kwargs):
+            response_dict = {"alerts": [{"id": 0, "createdAt": test_last_timestamp}]}
+            return create_mock_response(mocker, response_dict)
+
+        mock_py42_for_alert_polling.alerts.get_details.side_effect = get_alert_details
+        connector = _create_on_poll_connector(mock_py42_for_alert_polling)
+        connector._is_poll_now = True
         param = {"container_count": 1, "artifact_count": 1, "container_id": "I AM HERE"}
         connector.handle_action(param)
         assert connector._state is None
@@ -888,7 +978,7 @@ class TestCode42OnPollConnector(object):
         assert_success(connector)
 
     def test_on_poll_sorts_queries_alerts_in_ascending_order(
-        self, mocker, mock_py42_for_alert_polling
+        self, mock_py42_for_alert_polling
     ):
         connector = _create_on_poll_connector(mock_py42_for_alert_polling)
         connector.handle_action({})

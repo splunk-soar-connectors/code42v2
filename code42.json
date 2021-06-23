@@ -89,7 +89,7 @@
                 "container_id": {
                     "data_type": "string",
                     "order": 0,
-                    "description": "Container IDs to limit the ingestion to.",
+                    "description": "Alert IDs to limit the ingestion to (limited to 100)",
                     "allow_list": true
                 },
                 "start_time": {
