@@ -34,8 +34,11 @@ def test_build_alerts_query_when_using_milliseconds_returns_expected_query():
     assert len(actual["groups"]) == 1
     assert actual["groups"][0]["filterClause"] == "AND"
     assert len(actual["groups"][0]["filters"]) == 2
+
+    # py42 uses microsecond-level precision for querying alerts by date.
     expected_start_date = f"{start_date[:-1]}000Z"
     expected_end_date = f"{end_date[:-1]}000Z"
+
     _assert_on_or_after(actual["groups"][0]["filters"][0], expected_start_date)
     _assert_on_or_before(actual["groups"][0]["filters"][1], expected_end_date)
 
