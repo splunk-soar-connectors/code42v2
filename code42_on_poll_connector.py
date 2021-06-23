@@ -108,7 +108,7 @@ class Code42OnPollConnector:
             alerts = self._get_alert_details(alert_ids)
             last_alert = self._create_containers_from_alert_detail_responses(alerts)
         else:
-            start_date, end_date = self._adjust_date_parameters()
+            start_date, end_date = self._get_date_parameters()
             container_count, artifact_count = self._get_limit_counts(param)
             alerts = self._get_alerts(
                 start_date, end_date, container_count=container_count
@@ -201,7 +201,7 @@ class Code42OnPollConnector:
         ]
         self._connector.save_artifacts(artifacts)
 
-    def _adjust_date_parameters(self):
+    def _get_date_parameters(self):
         last_time = self._state.get("last_time")
         if not last_time:
             # If there was never a stored last_time.
