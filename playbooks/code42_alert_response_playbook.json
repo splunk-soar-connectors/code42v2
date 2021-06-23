@@ -7,7 +7,6 @@
             "clean": true,
             "code_block": "",
             "description": "",
-            "hash": "49dbac5d84b8a61b98a547a4585cf4c9e6684bf6",
             "joint": {
                 "cells": [
                     {
@@ -4348,7 +4347,7 @@
                                     {
                                         "column_name": "Risk Tag",
                                         "column_order": 9,
-                                        "data_path": "action_result.data.*.riskFactors",
+                                        "data_path": "action_result.data.*.riskFactors.*.tag",
                                         "data_type": "string",
                                         "example_values": [
                                             "FLIGHT_RISK"
@@ -7018,7 +7017,7 @@
                         "callback_code": "# read-only block view not available",
                         "callback_start": 1,
                         "callsback": false,
-                        "connected_to_start": false,
+                        "connected_to_start": true,
                         "connection_name": "",
                         "connection_type": "",
                         "custom_callback": "",
@@ -7121,10 +7120,10 @@
         "schema": 4,
         "version": "4.10.3.51237"
     },
-    "create_time": "2021-06-21T18:30:08.156052+00:00",
+    "create_time": "2021-06-21T18:31:15.108522+00:00",
     "draft_mode": false,
     "labels": [
-        "*"
+        "code42 alerts"
     ],
     "tags": []
 }
