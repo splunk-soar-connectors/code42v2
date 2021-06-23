@@ -51,4 +51,4 @@ Next, make sure you have a Code42 asset that has permissions to retrieve Code42 
 
 In Ingest settings, set the label to the newly created `code42 alerts` label.
 
-Make sure the playbook named `code42_alert_response_playbook` is active.
+Additionally, ensure the playbook named `code42_alert_response_playbook` is active.
