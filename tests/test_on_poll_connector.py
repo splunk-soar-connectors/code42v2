@@ -554,6 +554,16 @@ class TestCode42OnPollConnector(object):
         expected_container = _create_expected_container(expected_alert)
         assert_container_added(connector, [expected_container])
 
+    def test_on_poll_when_is_poll_now_and_container_count_exceeds_alert_count_creates_containers_for_all(
+        self, mock_py42_for_alert_polling
+    ):
+        connector = _create_on_poll_connector(mock_py42_for_alert_polling)
+        connector._is_poll_now = True
+        connector.handle_action({"container_count": 100})
+        expected_alert = MOCK_ALERT_DETAIL_RESPONSE["alerts"][0]
+        expected_container = _create_expected_container(expected_alert)
+        assert_container_added(connector, [expected_container, expected_container])
+
     def test_on_poll_adds_artifacts_per_file_event_per_alert(
         self, mock_py42_for_alert_polling
     ):
@@ -569,6 +579,15 @@ class TestCode42OnPollConnector(object):
         param = {"container_count": 1, "artifact_count": 1}
         connector.handle_action(param)
         assert_artifacts_added(connector, [EXPECTED_ARTIFACTS[0]])
+
+    def test_on_poll_when_is_poll_and_artifact_count_exceeds_event_count_creates_artifacts_for_all(
+        self, mock_py42_for_alert_polling
+    ):
+        connector = _create_on_poll_connector(mock_py42_for_alert_polling)
+        connector._is_poll_now = True
+        param = {"container_count": 100, "artifact_count": 100}
+        connector.handle_action(param)
+        assert_artifacts_added(connector, EXPECTED_ARTIFACTS)
 
     def test_on_poll_when_is_poll_now_uses_start_date_of_30_days_back(
         self, mock_py42_for_alert_polling
