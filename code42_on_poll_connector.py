@@ -202,9 +202,7 @@ class Code42OnPollConnector:
         self._connector.save_artifacts(artifacts)
 
     def _adjust_date_parameters(self):
-        last_time = (
-            None if self._connector.is_poll_now() else self._state.get("last_time")
-        )
+        last_time = self._state.get("last_time")
         if not last_time:
             # If there was never a stored last_time.
             config = self._connector.get_config()

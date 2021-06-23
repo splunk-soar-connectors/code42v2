@@ -684,6 +684,23 @@ class TestCode42OnPollConnector(object):
         assert connector._state is None
         assert_success(connector)
 
+    def test_on_poll_when_is_poll_now_uses_last_time(
+        self, mocker, mock_py42_for_alert_polling
+    ):
+        test_last_timestamp = "2021-04-18T10:02:36.3198680Z"
+
+        def get_alert_details(alert_id, *args, **kwargs):
+            response_dict = {"alerts": [{"id": 0, "createdAt": test_last_timestamp}]}
+            return create_mock_response(mocker, response_dict)
+
+        mock_py42_for_alert_polling.alerts.get_details.side_effect = get_alert_details
+        connector = _create_on_poll_connector(mock_py42_for_alert_polling)
+        connector._is_poll_now = True
+        param = {"container_count": 1, "artifact_count": 1, "container_id": "I AM HERE"}
+        connector.handle_action(param)
+        assert connector._state is None
+        assert_success(connector)
+
     def test_on_poll_makes_file_event_query_with_expected_number_of_filter_groups(
         self, mock_py42_for_alert_polling
     ):
