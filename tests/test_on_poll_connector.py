@@ -684,7 +684,7 @@ class TestCode42OnPollConnector(object):
         assert connector._state is None
         assert_success(connector)
 
-    def test_on_poll_when_is_poll_now_uses_last_time(
+    def test_on_poll_when_is_poll_now_and_specifying_source_ids_does_not_store_last_time(
         self, mocker, mock_py42_for_alert_polling
     ):
         test_last_timestamp = "2021-04-18T10:02:36.3198680Z"
