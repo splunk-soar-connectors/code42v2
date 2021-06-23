@@ -580,7 +580,7 @@ class TestCode42OnPollConnector(object):
         connector.handle_action(param)
         assert_artifacts_added(connector, [EXPECTED_ARTIFACTS[0]])
 
-    def test_on_poll_when_is_poll_and_artifact_count_exceeds_event_count_creates_artifacts_for_all(
+    def test_on_poll_when_is_poll_now_and_artifact_count_exceeds_event_count_creates_artifacts_for_all(
         self, mock_py42_for_alert_polling
     ):
         connector = _create_on_poll_connector(mock_py42_for_alert_polling)
