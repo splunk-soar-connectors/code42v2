@@ -888,7 +888,7 @@ class TestCode42OnPollConnector(object):
         assert_success(connector)
 
     def test_on_poll_sorts_queries_alerts_in_ascending_order(
-        self, mocker, mock_py42_for_alert_polling
+        self, mock_py42_for_alert_polling
     ):
         connector = _create_on_poll_connector(mock_py42_for_alert_polling)
         connector.handle_action({})
