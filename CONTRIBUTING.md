@@ -197,25 +197,19 @@ of `0`.
 
 To automatically run the `code42_alert_response_playbook` playbook on new Code42 Alerts, do the following:
 
-1. Add a custom event label.
+1. Add a custom event label. Go to Administration -> Event Settings -> Label Settings.
+   Create a new label named `code42 alerts`.
 
-Go to Administration -> Event Settings -> Label Settings.
-Create a new label named something like “code42 alerts”.
+2. Activate the playbook by going to Playbooks -> `code42_alert_response_playbook` -> Edit Playbook ->
+   Playbook Settings -> Active, and then enabling the switch.
 
-2. Make sure the playbook is `active` by editing the playbook settings and enabling the switch.
+3. Specify the ingest label on the Code42 App by going to Apps -> Code42 -> `<your asset>` -> Ingest Settings -> Edit.
+   Where it says `Label to apply to objects from this source`, select `code42 alerts` 
 
-3. Specify the ingest label on the Code42 App.
+4. (optional) If you have enabled polling previously, you might want to delete events, reset your timestamp, 
+   and re-poll.
 
-Go to Apps -> Code42 -> <your asset> -> Ingest Settings -> Edit
-The part that is titled `Label to apply to objects from this source`,
+5. View a newly ingested security event. Notice the new event rows' label column now says `code42 alerts`. 
+   Now, go into the alert and go to Analyst mode. 
 
-4. (optional) If you have already enabled polling previously, you might want 
-   to delete events, reset your timestamp, and re-poll.
-
-Notice the new event rows' label column now says `code42 alerts`.
-Now, go into the alert and go to Analyst mode.
-Notice that the playbook has started and is awaiting response!
-
-
-
-
+Notice that the playbook has started and is awaiting your response!
