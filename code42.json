@@ -21,7 +21,7 @@
         "wheel": [
             {
                 "module": "py42",
-                "input_file": "wheels/py42-1.14.2-py2.py3-none-any.whl"
+                "input_file": "wheels/py42-1.15.1-py2.py3-none-any.whl"
             }
         ]
     },
