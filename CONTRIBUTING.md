@@ -192,3 +192,24 @@ at the URL path's parameters when selecting assets on the "Asset Configuration" 
 
 To reset your timestamp, edit your state file (such as with `vi`) and set the property `last_time` to have a value
 of `0`.
+
+## Running the Playbook
+
+To automatically run the `code42_alert_response_playbook` playbook on new Code42 Alerts, do the following:
+
+1. Add a custom event label. Go to Administration -> Event Settings -> Label Settings.
+   Create a new label named `code42 alerts`.
+
+2. Activate the playbook by going to Playbooks -> `code42_alert_response_playbook` -> Edit Playbook ->
+   Playbook Settings -> Active, and then enabling the switch.
+
+3. Specify the ingest label on the Code42 App by going to Apps -> Code42 -> `<your asset>` -> Ingest Settings -> Edit.
+   Where it says `Label to apply to objects from this source`, select `code42 alerts`
+
+4. (optional) If you have enabled polling previously, you might want to delete events, reset your timestamp,
+   and re-poll.
+
+5. View a newly ingested security event. Notice the new event row's label column now says `code42 alerts`.
+   Now, go into the alert and go to Analyst mode.
+
+Notice that the playbook has started and is awaiting your response!
