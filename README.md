@@ -38,7 +38,7 @@ The playbook lives in the directory `playbooks/` and is an example of how to res
 Install the playbook by first creating a tar of the `.py` and `.json` files.
 
 ```bash
-python ./build-scripts/compile_app.pyc -t
+make playbook
 ```
 
 Then, upload it to Splunk SOAR.
