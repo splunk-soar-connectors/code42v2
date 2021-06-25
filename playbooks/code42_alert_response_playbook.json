@@ -895,7 +895,7 @@
                                 "id": 8,
                                 "loaded": false,
                                 "missing": false,
-                                "name": "peter",
+                                "name": "code42",
                                 "output": [
                                     {
                                         "contains": [
@@ -1056,7 +1056,7 @@
                                 "opacity": 1
                             }
                         },
-                        "block_code": "def close_case_2(action=None, success=None, container=None, results=None, handle=None, filtered_artifacts=None, filtered_results=None, custom_function=None, **kwargs):\n    phantom.debug('close_case_2() called')\n        \n    #phantom.debug('Action: {0} {1}'.format(action['name'], ('SUCCEEDED' if success else 'FAILED')))\n    \n    # collect data for 'close_case_2' call\n    results_data_1 = phantom.collect2(container=container, datapath=['create_case_1:action_result.data.*.number', 'create_case_1:action_result.parameter.context.artifact_id'], action_results=results)\n\n    parameters = []\n    \n    # build parameters list for 'close_case_2' call\n    for results_item_1 in results_data_1:\n        if results_item_1[0]:\n            parameters.append({\n                'case_number': results_item_1[0],\n                # context (artifact id) is added to associate results with the artifact\n                'context': {'artifact_id': results_item_1[1]},\n            })\n\n    phantom.act(action=\"close case\", parameters=parameters, assets=['peter'], name=\"close_case_2\", parent_action=action)\n\n    return",
+                        "block_code": "def close_case_2(action=None, success=None, container=None, results=None, handle=None, filtered_artifacts=None, filtered_results=None, custom_function=None, **kwargs):\n    phantom.debug('close_case_2() called')\n        \n    #phantom.debug('Action: {0} {1}'.format(action['name'], ('SUCCEEDED' if success else 'FAILED')))\n    \n    # collect data for 'close_case_2' call\n    results_data_1 = phantom.collect2(container=container, datapath=['create_case_1:action_result.data.*.number', 'create_case_1:action_result.parameter.context.artifact_id'], action_results=results)\n\n    parameters = []\n    \n    # build parameters list for 'close_case_2' call\n    for results_item_1 in results_data_1:\n        if results_item_1[0]:\n            parameters.append({\n                'case_number': results_item_1[0],\n                # context (artifact id) is added to associate results with the artifact\n                'context': {'artifact_id': results_item_1[1]},\n            })\n\n    phantom.act(action=\"close case\", parameters=parameters, assets=['code42'], name=\"close_case_2\", parent_action=action)\n\n    return",
                         "callback_code": "",
                         "callback_start": 1,
                         "callsback": true,
@@ -1543,7 +1543,7 @@
                                 "id": 8,
                                 "loaded": false,
                                 "missing": false,
-                                "name": "peter",
+                                "name": "code42",
                                 "output": [
                                     {
                                         "column_name": "Username",
@@ -1712,7 +1712,7 @@
                                 "opacity": 1
                             }
                         },
-                        "block_code": "def add_highrisk_employee_1(action=None, success=None, container=None, results=None, handle=None, filtered_artifacts=None, filtered_results=None, custom_function=None, **kwargs):\n    phantom.debug('add_highrisk_employee_1() called')\n        \n    #phantom.debug('Action: {0} {1}'.format(action['name'], ('SUCCEEDED' if success else 'FAILED')))\n    \n    # collect data for 'add_highrisk_employee_1' call\n    results_data_1 = phantom.collect2(container=container, datapath=['get_alert_details_1:action_result.summary.username', 'get_alert_details_1:action_result.parameter.context.artifact_id'], action_results=results)\n\n    parameters = []\n    \n    # build parameters list for 'add_highrisk_employee_1' call\n    for results_item_1 in results_data_1:\n        if results_item_1[0]:\n            parameters.append({\n                'note': \"\",\n                'username': results_item_1[0],\n                # context (artifact id) is added to associate results with the artifact\n                'context': {'artifact_id': results_item_1[1]},\n            })\n\n    phantom.act(action=\"add highrisk employee\", parameters=parameters, assets=['peter'], callback=join_update_case_2, name=\"add_highrisk_employee_1\")\n\n    return",
+                        "block_code": "def add_highrisk_employee_1(action=None, success=None, container=None, results=None, handle=None, filtered_artifacts=None, filtered_results=None, custom_function=None, **kwargs):\n    phantom.debug('add_highrisk_employee_1() called')\n        \n    #phantom.debug('Action: {0} {1}'.format(action['name'], ('SUCCEEDED' if success else 'FAILED')))\n    \n    # collect data for 'add_highrisk_employee_1' call\n    results_data_1 = phantom.collect2(container=container, datapath=['get_alert_details_1:action_result.summary.username', 'get_alert_details_1:action_result.parameter.context.artifact_id'], action_results=results)\n\n    parameters = []\n    \n    # build parameters list for 'add_highrisk_employee_1' call\n    for results_item_1 in results_data_1:\n        if results_item_1[0]:\n            parameters.append({\n                'note': \"\",\n                'username': results_item_1[0],\n                # context (artifact id) is added to associate results with the artifact\n                'context': {'artifact_id': results_item_1[1]},\n            })\n\n    phantom.act(action=\"add highrisk employee\", parameters=parameters, assets=['code42'], callback=join_update_case_2, name=\"add_highrisk_employee_1\")\n\n    return",
                         "callback_code": "",
                         "callback_start": 1,
                         "callsback": true,
@@ -2745,7 +2745,7 @@
                                 "id": 10,
                                 "loaded": false,
                                 "missing": false,
-                                "name": "gmail dev",
+                                "name": "smtp",
                                 "output": [
                                     {
                                         "column_name": "Status",
@@ -3024,7 +3024,7 @@
                                 "opacity": 1
                             }
                         },
-                        "block_code": "def send_email_2(action=None, success=None, container=None, results=None, handle=None, filtered_artifacts=None, filtered_results=None, custom_function=None, **kwargs):\n    phantom.debug('send_email_2() called')\n        \n    #phantom.debug('Action: {0} {1}'.format(action['name'], ('SUCCEEDED' if success else 'FAILED')))\n    \n    # collect data for 'send_email_2' call\n    results_data_1 = phantom.collect2(container=container, datapath=['prompt_manager_email:action_result.summary.responses.0', 'prompt_manager_email:action_result.parameter.context.artifact_id'], action_results=results)\n    results_data_2 = phantom.collect2(container=container, datapath=['get_alert_details_1:action_result.data.*.name', 'get_alert_details_1:action_result.parameter.context.artifact_id'], action_results=results)\n    formatted_data_1 = phantom.get_format_data(name='format_1')\n\n    parameters = []\n    \n    # build parameters list for 'send_email_2' call\n    for results_item_1 in results_data_1:\n        for results_item_2 in results_data_2:\n            if results_item_1[0]:\n                parameters.append({\n                    'cc': \"\",\n                    'to': results_item_1[0],\n                    'bcc': \"\",\n                    'body': formatted_data_1,\n                    'from': \"\",\n                    'headers': \"\",\n                    'subject': results_item_2[0],\n                    'attachments': \"\",\n                    # context (artifact id) is added to associate results with the artifact\n                    'context': {'artifact_id': results_item_1[1]},\n                })\n\n    phantom.act(action=\"send email\", parameters=parameters, assets=['gmail dev'], callback=join_prompt_response_type, name=\"send_email_2\")\n\n    return",
+                        "block_code": "def send_email_2(action=None, success=None, container=None, results=None, handle=None, filtered_artifacts=None, filtered_results=None, custom_function=None, **kwargs):\n    phantom.debug('send_email_2() called')\n        \n    #phantom.debug('Action: {0} {1}'.format(action['name'], ('SUCCEEDED' if success else 'FAILED')))\n    \n    # collect data for 'send_email_2' call\n    results_data_1 = phantom.collect2(container=container, datapath=['prompt_manager_email:action_result.summary.responses.0', 'prompt_manager_email:action_result.parameter.context.artifact_id'], action_results=results)\n    results_data_2 = phantom.collect2(container=container, datapath=['get_alert_details_1:action_result.data.*.name', 'get_alert_details_1:action_result.parameter.context.artifact_id'], action_results=results)\n    formatted_data_1 = phantom.get_format_data(name='format_1')\n\n    parameters = []\n    \n    # build parameters list for 'send_email_2' call\n    for results_item_1 in results_data_1:\n        for results_item_2 in results_data_2:\n            if results_item_1[0]:\n                parameters.append({\n                    'cc': \"\",\n                    'to': results_item_1[0],\n                    'bcc': \"\",\n                    'body': formatted_data_1,\n                    'from': \"\",\n                    'headers': \"\",\n                    'subject': results_item_2[0],\n                    'attachments': \"\",\n                    # context (artifact id) is added to associate results with the artifact\n                    'context': {'artifact_id': results_item_1[1]},\n                })\n\n    phantom.act(action=\"send email\", parameters=parameters, assets=['smtp'], callback=join_prompt_response_type, name=\"send_email_2\")\n\n    return",
                         "callback_code": "",
                         "callback_start": 1,
                         "callsback": true,
@@ -3415,7 +3415,7 @@
                                 "id": 8,
                                 "loaded": false,
                                 "missing": false,
-                                "name": "peter",
+                                "name": "code42",
                                 "output": [
                                     {
                                         "column_name": "Case Number",
@@ -3558,7 +3558,7 @@
                                 "opacity": 1
                             }
                         },
-                        "block_code": "def add_case_event_1(action=None, success=None, container=None, results=None, handle=None, filtered_artifacts=None, filtered_results=None, custom_function=None, **kwargs):\n    phantom.debug('add_case_event_1() called')\n        \n    #phantom.debug('Action: {0} {1}'.format(action['name'], ('SUCCEEDED' if success else 'FAILED')))\n    \n    # collect data for 'add_case_event_1' call\n    container_data = phantom.collect2(container=container, datapath=['artifact:*.source_data_identifier', 'artifact:*.id'])\n    results_data_1 = phantom.collect2(container=container, datapath=['create_case_1:action_result.data.*.number', 'create_case_1:action_result.parameter.context.artifact_id'], action_results=results)\n\n    parameters = []\n    \n    # build parameters list for 'add_case_event_1' call\n    for container_item in container_data:\n        for results_item_1 in results_data_1:\n            if container_item[0] and results_item_1[0]:\n                parameters.append({\n                    'event_id': container_item[0],\n                    'case_number': results_item_1[0],\n                    # context (artifact id) is added to associate results with the artifact\n                    'context': {'artifact_id': container_item[1]},\n                })\n\n    phantom.act(action=\"add case event\", parameters=parameters, assets=['peter'], callback=hunt_file_1, name=\"add_case_event_1\", parent_action=action)\n\n    return",
+                        "block_code": "def add_case_event_1(action=None, success=None, container=None, results=None, handle=None, filtered_artifacts=None, filtered_results=None, custom_function=None, **kwargs):\n    phantom.debug('add_case_event_1() called')\n        \n    #phantom.debug('Action: {0} {1}'.format(action['name'], ('SUCCEEDED' if success else 'FAILED')))\n    \n    # collect data for 'add_case_event_1' call\n    container_data = phantom.collect2(container=container, datapath=['artifact:*.source_data_identifier', 'artifact:*.id'])\n    results_data_1 = phantom.collect2(container=container, datapath=['create_case_1:action_result.data.*.number', 'create_case_1:action_result.parameter.context.artifact_id'], action_results=results)\n\n    parameters = []\n    \n    # build parameters list for 'add_case_event_1' call\n    for container_item in container_data:\n        for results_item_1 in results_data_1:\n            if container_item[0] and results_item_1[0]:\n                parameters.append({\n                    'event_id': container_item[0],\n                    'case_number': results_item_1[0],\n                    # context (artifact id) is added to associate results with the artifact\n                    'context': {'artifact_id': container_item[1]},\n                })\n\n    phantom.act(action=\"add case event\", parameters=parameters, assets=['code42'], callback=hunt_file_1, name=\"add_case_event_1\", parent_action=action)\n\n    return",
                         "callback_code": "",
                         "callback_start": 1,
                         "callsback": true,
@@ -3732,7 +3732,7 @@
                                 "id": 8,
                                 "loaded": false,
                                 "missing": false,
-                                "name": "peter",
+                                "name": "code42",
                                 "output": [
                                     {
                                         "column_name": "hash",
@@ -3871,7 +3871,7 @@
                                 "opacity": 1
                             }
                         },
-                        "block_code": "def hunt_file_1(action=None, success=None, container=None, results=None, handle=None, filtered_artifacts=None, filtered_results=None, custom_function=None, **kwargs):\n    phantom.debug('hunt_file_1() called')\n        \n    #phantom.debug('Action: {0} {1}'.format(action['name'], ('SUCCEEDED' if success else 'FAILED')))\n    \n    # collect data for 'hunt_file_1' call\n    inputs_data_1 = phantom.collect2(container=container, datapath=['add_case_event_1:artifact:*.cef.fileHashMd5', 'add_case_event_1:artifact:*.cef.fname', 'add_case_event_1:artifact:*.id'], action_results=results)\n\n    parameters = []\n    \n    # build parameters list for 'hunt_file_1' call\n    for inputs_item_1 in inputs_data_1:\n        if inputs_item_1[0]:\n            parameters.append({\n                'hash': inputs_item_1[0],\n                'file_name': inputs_item_1[1],\n                # context (artifact id) is added to associate results with the artifact\n                'context': {'artifact_id': inputs_item_1[2]},\n            })\n\n    phantom.act(action=\"hunt file\", parameters=parameters, assets=['peter'], callback=get_user_profile_1, name=\"hunt_file_1\", parent_action=action)\n\n    return",
+                        "block_code": "def hunt_file_1(action=None, success=None, container=None, results=None, handle=None, filtered_artifacts=None, filtered_results=None, custom_function=None, **kwargs):\n    phantom.debug('hunt_file_1() called')\n        \n    #phantom.debug('Action: {0} {1}'.format(action['name'], ('SUCCEEDED' if success else 'FAILED')))\n    \n    # collect data for 'hunt_file_1' call\n    inputs_data_1 = phantom.collect2(container=container, datapath=['add_case_event_1:artifact:*.cef.fileHashMd5', 'add_case_event_1:artifact:*.cef.fname', 'add_case_event_1:artifact:*.id'], action_results=results)\n\n    parameters = []\n    \n    # build parameters list for 'hunt_file_1' call\n    for inputs_item_1 in inputs_data_1:\n        if inputs_item_1[0]:\n            parameters.append({\n                'hash': inputs_item_1[0],\n                'file_name': inputs_item_1[1],\n                # context (artifact id) is added to associate results with the artifact\n                'context': {'artifact_id': inputs_item_1[2]},\n            })\n\n    phantom.act(action=\"hunt file\", parameters=parameters, assets=['code42'], callback=get_user_profile_1, name=\"hunt_file_1\", parent_action=action)\n\n    return",
                         "callback_code": "",
                         "callback_start": 415,
                         "callsback": true,
@@ -4043,7 +4043,7 @@
                                 "id": 8,
                                 "loaded": false,
                                 "missing": false,
-                                "name": "peter",
+                                "name": "code42",
                                 "output": [
                                     {
                                         "column_name": "Username",
@@ -4286,7 +4286,7 @@
                                 "opacity": 1
                             }
                         },
-                        "block_code": "def get_user_profile_1(action=None, success=None, container=None, results=None, handle=None, filtered_artifacts=None, filtered_results=None, custom_function=None, **kwargs):\n    phantom.debug('get_user_profile_1() called')\n        \n    #phantom.debug('Action: {0} {1}'.format(action['name'], ('SUCCEEDED' if success else 'FAILED')))\n    \n    # collect data for 'get_user_profile_1' call\n    results_data_1 = phantom.collect2(container=container, datapath=['get_alert_details_1:action_result.data.*.actor', 'get_alert_details_1:action_result.parameter.context.artifact_id'], action_results=results)\n\n    parameters = []\n    \n    # build parameters list for 'get_user_profile_1' call\n    for results_item_1 in results_data_1:\n        if results_item_1[0]:\n            parameters.append({\n                'username': results_item_1[0],\n                # context (artifact id) is added to associate results with the artifact\n                'context': {'artifact_id': results_item_1[1]},\n            })\n\n    phantom.act(action=\"get user profile\", parameters=parameters, assets=['peter'], callback=format_1, name=\"get_user_profile_1\", parent_action=action)\n\n    return",
+                        "block_code": "def get_user_profile_1(action=None, success=None, container=None, results=None, handle=None, filtered_artifacts=None, filtered_results=None, custom_function=None, **kwargs):\n    phantom.debug('get_user_profile_1() called')\n        \n    #phantom.debug('Action: {0} {1}'.format(action['name'], ('SUCCEEDED' if success else 'FAILED')))\n    \n    # collect data for 'get_user_profile_1' call\n    results_data_1 = phantom.collect2(container=container, datapath=['get_alert_details_1:action_result.data.*.actor', 'get_alert_details_1:action_result.parameter.context.artifact_id'], action_results=results)\n\n    parameters = []\n    \n    # build parameters list for 'get_user_profile_1' call\n    for results_item_1 in results_data_1:\n        if results_item_1[0]:\n            parameters.append({\n                'username': results_item_1[0],\n                # context (artifact id) is added to associate results with the artifact\n                'context': {'artifact_id': results_item_1[1]},\n            })\n\n    phantom.act(action=\"get user profile\", parameters=parameters, assets=['code42'], callback=format_1, name=\"get_user_profile_1\", parent_action=action)\n\n    return",
                         "callback_code": "",
                         "callback_start": 1,
                         "callsback": true,
@@ -4444,7 +4444,7 @@
                                 "id": 10,
                                 "loaded": false,
                                 "missing": false,
-                                "name": "gmail dev",
+                                "name": "smtp",
                                 "output": [
                                     {
                                         "column_name": "Status",
@@ -4723,7 +4723,7 @@
                                 "opacity": 1
                             }
                         },
-                        "block_code": "def send_email_1(action=None, success=None, container=None, results=None, handle=None, filtered_artifacts=None, filtered_results=None, custom_function=None, **kwargs):\n    phantom.debug('send_email_1() called')\n        \n    #phantom.debug('Action: {0} {1}'.format(action['name'], ('SUCCEEDED' if success else 'FAILED')))\n    \n    # collect data for 'send_email_1' call\n    results_data_1 = phantom.collect2(container=container, datapath=['get_user_profile_1:action_result.data.*.managerUsername', 'get_user_profile_1:action_result.parameter.context.artifact_id'], action_results=results)\n    results_data_2 = phantom.collect2(container=container, datapath=['get_alert_details_1:action_result.data.*.name', 'get_alert_details_1:action_result.parameter.context.artifact_id'], action_results=results)\n    formatted_data_1 = phantom.get_format_data(name='format_1')\n\n    parameters = []\n    \n    # build parameters list for 'send_email_1' call\n    for results_item_1 in results_data_1:\n        for results_item_2 in results_data_2:\n            if results_item_1[0]:\n                parameters.append({\n                    'cc': \"\",\n                    'to': results_item_1[0],\n                    'bcc': \"\",\n                    'body': formatted_data_1,\n                    'from': \"\",\n                    'headers': \"\",\n                    'subject': results_item_2[0],\n                    'attachments': \"\",\n                    # context (artifact id) is added to associate results with the artifact\n                    'context': {'artifact_id': results_item_1[1]},\n                })\n\n    phantom.act(action=\"send email\", parameters=parameters, assets=['gmail dev'], callback=join_prompt_response_type, name=\"send_email_1\")\n\n    return",
+                        "block_code": "def send_email_1(action=None, success=None, container=None, results=None, handle=None, filtered_artifacts=None, filtered_results=None, custom_function=None, **kwargs):\n    phantom.debug('send_email_1() called')\n        \n    #phantom.debug('Action: {0} {1}'.format(action['name'], ('SUCCEEDED' if success else 'FAILED')))\n    \n    # collect data for 'send_email_1' call\n    results_data_1 = phantom.collect2(container=container, datapath=['get_user_profile_1:action_result.data.*.managerUsername', 'get_user_profile_1:action_result.parameter.context.artifact_id'], action_results=results)\n    results_data_2 = phantom.collect2(container=container, datapath=['get_alert_details_1:action_result.data.*.name', 'get_alert_details_1:action_result.parameter.context.artifact_id'], action_results=results)\n    formatted_data_1 = phantom.get_format_data(name='format_1')\n\n    parameters = []\n    \n    # build parameters list for 'send_email_1' call\n    for results_item_1 in results_data_1:\n        for results_item_2 in results_data_2:\n            if results_item_1[0]:\n                parameters.append({\n                    'cc': \"\",\n                    'to': results_item_1[0],\n                    'bcc': \"\",\n                    'body': formatted_data_1,\n                    'from': \"\",\n                    'headers': \"\",\n                    'subject': results_item_2[0],\n                    'attachments': \"\",\n                    # context (artifact id) is added to associate results with the artifact\n                    'context': {'artifact_id': results_item_1[1]},\n                })\n\n    phantom.act(action=\"send email\", parameters=parameters, assets=['smtp'], callback=join_prompt_response_type, name=\"send_email_1\")\n\n    return",
                         "callback_code": "",
                         "callback_start": 1,
                         "callsback": true,
@@ -4895,7 +4895,7 @@
                                 "id": 8,
                                 "loaded": false,
                                 "missing": false,
-                                "name": "peter",
+                                "name": "code42",
                                 "output": [
                                     {
                                         "column_name": "Alert ID",
@@ -5077,7 +5077,7 @@
                                 "opacity": 1
                             }
                         },
-                        "block_code": "def get_alert_details_1(action=None, success=None, container=None, results=None, handle=None, filtered_artifacts=None, filtered_results=None, custom_function=None, **kwargs):\n    phantom.debug('get_alert_details_1() called')\n\n    source_data_identifier_value = container.get('source_data_identifier', None)\n\n    # collect data for 'get_alert_details_1' call\n\n    parameters = []\n    \n    # build parameters list for 'get_alert_details_1' call\n    parameters.append({\n        'alert_id': source_data_identifier_value,\n    })\n\n    phantom.act(action=\"get alert details\", parameters=parameters, assets=['peter'], callback=prompt_further_investigation, name=\"get_alert_details_1\")\n\n    return",
+                        "block_code": "def get_alert_details_1(action=None, success=None, container=None, results=None, handle=None, filtered_artifacts=None, filtered_results=None, custom_function=None, **kwargs):\n    phantom.debug('get_alert_details_1() called')\n\n    source_data_identifier_value = container.get('source_data_identifier', None)\n\n    # collect data for 'get_alert_details_1' call\n\n    parameters = []\n    \n    # build parameters list for 'get_alert_details_1' call\n    parameters.append({\n        'alert_id': source_data_identifier_value,\n    })\n\n    phantom.act(action=\"get alert details\", parameters=parameters, assets=['code42'], callback=prompt_further_investigation, name=\"get_alert_details_1\")\n\n    return",
                         "callback_code": "",
                         "callback_start": 1,
                         "callsback": true,
@@ -5248,7 +5248,7 @@
                                 "id": 8,
                                 "loaded": false,
                                 "missing": false,
-                                "name": "peter",
+                                "name": "code42",
                                 "output": [
                                     {
                                         "column_name": "Username",
@@ -5368,7 +5368,7 @@
                                 "opacity": 1
                             }
                         },
-                        "block_code": "def block_user_1(action=None, success=None, container=None, results=None, handle=None, filtered_artifacts=None, filtered_results=None, custom_function=None, **kwargs):\n    phantom.debug('block_user_1() called')\n        \n    #phantom.debug('Action: {0} {1}'.format(action['name'], ('SUCCEEDED' if success else 'FAILED')))\n    \n    # collect data for 'block_user_1' call\n    results_data_1 = phantom.collect2(container=container, datapath=['get_alert_details_1:action_result.data.*.username', 'get_alert_details_1:action_result.parameter.context.artifact_id'], action_results=results)\n\n    parameters = []\n    \n    # build parameters list for 'block_user_1' call\n    for results_item_1 in results_data_1:\n        if results_item_1[0]:\n            parameters.append({\n                'username': results_item_1[0],\n                # context (artifact id) is added to associate results with the artifact\n                'context': {'artifact_id': results_item_1[1]},\n            })\n\n    phantom.act(action=\"block user\", parameters=parameters, assets=['peter'], callback=join_update_case_2, name=\"block_user_1\")\n\n    return",
+                        "block_code": "def block_user_1(action=None, success=None, container=None, results=None, handle=None, filtered_artifacts=None, filtered_results=None, custom_function=None, **kwargs):\n    phantom.debug('block_user_1() called')\n        \n    #phantom.debug('Action: {0} {1}'.format(action['name'], ('SUCCEEDED' if success else 'FAILED')))\n    \n    # collect data for 'block_user_1' call\n    results_data_1 = phantom.collect2(container=container, datapath=['get_alert_details_1:action_result.data.*.username', 'get_alert_details_1:action_result.parameter.context.artifact_id'], action_results=results)\n\n    parameters = []\n    \n    # build parameters list for 'block_user_1' call\n    for results_item_1 in results_data_1:\n        if results_item_1[0]:\n            parameters.append({\n                'username': results_item_1[0],\n                # context (artifact id) is added to associate results with the artifact\n                'context': {'artifact_id': results_item_1[1]},\n            })\n\n    phantom.act(action=\"block user\", parameters=parameters, assets=['code42'], callback=join_update_case_2, name=\"block_user_1\")\n\n    return",
                         "callback_code": "",
                         "callback_start": 1,
                         "callsback": true,
@@ -5549,7 +5549,7 @@
                                 "id": 8,
                                 "loaded": false,
                                 "missing": false,
-                                "name": "peter",
+                                "name": "code42",
                                 "output": [
                                     {
                                         "data_path": "action_result.status",
@@ -5787,7 +5787,7 @@
                                 "opacity": 1
                             }
                         },
-                        "block_code": "def update_case_2(action=None, success=None, container=None, results=None, handle=None, filtered_artifacts=None, filtered_results=None, custom_function=None, **kwargs):\n    phantom.debug('update_case_2() called')\n        \n    #phantom.debug('Action: {0} {1}'.format(action['name'], ('SUCCEEDED' if success else 'FAILED')))\n    \n    # collect data for 'update_case_2' call\n    results_data_1 = phantom.collect2(container=container, datapath=['prompt_response_type:action_result.summary.responses.0', 'prompt_response_type:action_result.parameter.context.artifact_id'], action_results=results)\n    results_data_2 = phantom.collect2(container=container, datapath=['create_case_1:action_result.data.*.number', 'create_case_1:action_result.parameter.context.artifact_id'], action_results=results)\n\n    parameters = []\n    \n    # build parameters list for 'update_case_2' call\n    for results_item_1 in results_data_1:\n        for results_item_2 in results_data_2:\n            if results_item_2[0]:\n                parameters.append({\n                    'subject': \"\",\n                    'assignee': \"\",\n                    'findings': results_item_1[0],\n                    'case_name': \"\",\n                    'case_number': results_item_2[0],\n                    'description': \"\",\n                    # context (artifact id) is added to associate results with the artifact\n                    'context': {'artifact_id': results_item_1[1]},\n                })\n\n    phantom.act(action=\"update case\", parameters=parameters, assets=['peter'], callback=close_case_2, name=\"update_case_2\")\n\n    return",
+                        "block_code": "def update_case_2(action=None, success=None, container=None, results=None, handle=None, filtered_artifacts=None, filtered_results=None, custom_function=None, **kwargs):\n    phantom.debug('update_case_2() called')\n        \n    #phantom.debug('Action: {0} {1}'.format(action['name'], ('SUCCEEDED' if success else 'FAILED')))\n    \n    # collect data for 'update_case_2' call\n    results_data_1 = phantom.collect2(container=container, datapath=['prompt_response_type:action_result.summary.responses.0', 'prompt_response_type:action_result.parameter.context.artifact_id'], action_results=results)\n    results_data_2 = phantom.collect2(container=container, datapath=['create_case_1:action_result.data.*.number', 'create_case_1:action_result.parameter.context.artifact_id'], action_results=results)\n\n    parameters = []\n    \n    # build parameters list for 'update_case_2' call\n    for results_item_1 in results_data_1:\n        for results_item_2 in results_data_2:\n            if results_item_2[0]:\n                parameters.append({\n                    'subject': \"\",\n                    'assignee': \"\",\n                    'findings': results_item_1[0],\n                    'case_name': \"\",\n                    'case_number': results_item_2[0],\n                    'description': \"\",\n                    # context (artifact id) is added to associate results with the artifact\n                    'context': {'artifact_id': results_item_1[1]},\n                })\n\n    phantom.act(action=\"update case\", parameters=parameters, assets=['code42'], callback=close_case_2, name=\"update_case_2\")\n\n    return",
                         "callback_code": "",
                         "callback_start": 1,
                         "callsback": true,
@@ -5965,7 +5965,7 @@
                                 "id": 8,
                                 "loaded": false,
                                 "missing": false,
-                                "name": "peter",
+                                "name": "code42",
                                 "output": [
                                     {
                                         "column_name": "username",
@@ -6109,7 +6109,7 @@
                                 "opacity": 1
                             }
                         },
-                        "block_code": "def add_legalhold_custodian_1(action=None, success=None, container=None, results=None, handle=None, filtered_artifacts=None, filtered_results=None, custom_function=None, **kwargs):\n    phantom.debug('add_legalhold_custodian_1() called')\n        \n    #phantom.debug('Action: {0} {1}'.format(action['name'], ('SUCCEEDED' if success else 'FAILED')))\n    \n    # collect data for 'add_legalhold_custodian_1' call\n    results_data_1 = phantom.collect2(container=container, datapath=['get_alert_details_1:action_result.data.*.username', 'get_alert_details_1:action_result.parameter.context.artifact_id'], action_results=results)\n    results_data_2 = phantom.collect2(container=container, datapath=['prompt_matter_id:action_result.summary.responses.0', 'prompt_matter_id:action_result.parameter.context.artifact_id'], action_results=results)\n\n    parameters = []\n    \n    # build parameters list for 'add_legalhold_custodian_1' call\n    for results_item_1 in results_data_1:\n        for results_item_2 in results_data_2:\n            if results_item_1[0] and results_item_2[0]:\n                parameters.append({\n                    'username': results_item_1[0],\n                    'matter_id': results_item_2[0],\n                    # context (artifact id) is added to associate results with the artifact\n                    'context': {'artifact_id': results_item_1[1]},\n                })\n\n    phantom.act(action=\"add legalhold custodian\", parameters=parameters, assets=['peter'], callback=join_update_case_2, name=\"add_legalhold_custodian_1\")\n\n    return",
+                        "block_code": "def add_legalhold_custodian_1(action=None, success=None, container=None, results=None, handle=None, filtered_artifacts=None, filtered_results=None, custom_function=None, **kwargs):\n    phantom.debug('add_legalhold_custodian_1() called')\n        \n    #phantom.debug('Action: {0} {1}'.format(action['name'], ('SUCCEEDED' if success else 'FAILED')))\n    \n    # collect data for 'add_legalhold_custodian_1' call\n    results_data_1 = phantom.collect2(container=container, datapath=['get_alert_details_1:action_result.data.*.username', 'get_alert_details_1:action_result.parameter.context.artifact_id'], action_results=results)\n    results_data_2 = phantom.collect2(container=container, datapath=['prompt_matter_id:action_result.summary.responses.0', 'prompt_matter_id:action_result.parameter.context.artifact_id'], action_results=results)\n\n    parameters = []\n    \n    # build parameters list for 'add_legalhold_custodian_1' call\n    for results_item_1 in results_data_1:\n        for results_item_2 in results_data_2:\n            if results_item_1[0] and results_item_2[0]:\n                parameters.append({\n                    'username': results_item_1[0],\n                    'matter_id': results_item_2[0],\n                    # context (artifact id) is added to associate results with the artifact\n                    'context': {'artifact_id': results_item_1[1]},\n                })\n\n    phantom.act(action=\"add legalhold custodian\", parameters=parameters, assets=['code42'], callback=join_update_case_2, name=\"add_legalhold_custodian_1\")\n\n    return",
                         "callback_code": "",
                         "callback_start": 1,
                         "callsback": true,
@@ -6289,7 +6289,7 @@
                                 "id": 8,
                                 "loaded": false,
                                 "missing": false,
-                                "name": "peter",
+                                "name": "code42",
                                 "output": [
                                     {
                                         "data_path": "action_result.status",
@@ -6480,7 +6480,7 @@
                                 "opacity": 1
                             }
                         },
-                        "block_code": "def create_case_1(action=None, success=None, container=None, results=None, handle=None, filtered_artifacts=None, filtered_results=None, custom_function=None, **kwargs):\n    phantom.debug('create_case_1() called')\n        \n    #phantom.debug('Action: {0} {1}'.format(action['name'], ('SUCCEEDED' if success else 'FAILED')))\n    \n    # collect data for 'create_case_1' call\n    results_data_1 = phantom.collect2(container=container, datapath=['get_alert_details_1:action_result.data.*.actor', 'get_alert_details_1:action_result.parameter.context.artifact_id'], action_results=results)\n    results_data_2 = phantom.collect2(container=container, datapath=['prompt_further_investigation:action_result.summary.responses.1', 'prompt_further_investigation:action_result.parameter.context.artifact_id'], action_results=results)\n\n    parameters = []\n    \n    # build parameters list for 'create_case_1' call\n    for results_item_1 in results_data_1:\n        for results_item_2 in results_data_2:\n            if results_item_2[0]:\n                parameters.append({\n                    'subject': results_item_1[0],\n                    'assignee': \"\",\n                    'findings': \"\",\n                    'case_name': results_item_2[0],\n                    'description': \"\",\n                    # context (artifact id) is added to associate results with the artifact\n                    'context': {'artifact_id': results_item_1[1]},\n                })\n\n    phantom.act(action=\"create case\", parameters=parameters, assets=['peter'], callback=add_case_event_1, name=\"create_case_1\")\n\n    return",
+                        "block_code": "def create_case_1(action=None, success=None, container=None, results=None, handle=None, filtered_artifacts=None, filtered_results=None, custom_function=None, **kwargs):\n    phantom.debug('create_case_1() called')\n        \n    #phantom.debug('Action: {0} {1}'.format(action['name'], ('SUCCEEDED' if success else 'FAILED')))\n    \n    # collect data for 'create_case_1' call\n    results_data_1 = phantom.collect2(container=container, datapath=['get_alert_details_1:action_result.data.*.actor', 'get_alert_details_1:action_result.parameter.context.artifact_id'], action_results=results)\n    results_data_2 = phantom.collect2(container=container, datapath=['prompt_further_investigation:action_result.summary.responses.1', 'prompt_further_investigation:action_result.parameter.context.artifact_id'], action_results=results)\n\n    parameters = []\n    \n    # build parameters list for 'create_case_1' call\n    for results_item_1 in results_data_1:\n        for results_item_2 in results_data_2:\n            if results_item_2[0]:\n                parameters.append({\n                    'subject': results_item_1[0],\n                    'assignee': \"\",\n                    'findings': \"\",\n                    'case_name': results_item_2[0],\n                    'description': \"\",\n                    # context (artifact id) is added to associate results with the artifact\n                    'context': {'artifact_id': results_item_1[1]},\n                })\n\n    phantom.act(action=\"create case\", parameters=parameters, assets=['code42'], callback=add_case_event_1, name=\"create_case_1\")\n\n    return",
                         "callback_code": "",
                         "callback_start": 1,
                         "callsback": true,
