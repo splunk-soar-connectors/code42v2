@@ -62,7 +62,7 @@ def prompt_further_investigation(action=None, success=None, container=None, resu
         },
     ]
 
-    phantom.prompt2(container=container, user=user, message=message, respond_in_mins=30, name="prompt_further_investigation", parameters=parameters, response_types=response_types, callback=create_case_1)
+    phantom.prompt2(container=container, user=user, message=message, respond_in_mins=30, name="prompt_further_investigation", parameters=parameters, response_types=response_types, callback=decision_4)
 
     return
 
@@ -589,6 +589,26 @@ def send_email_2(action=None, success=None, container=None, results=None, handle
                 })
 
     phantom.act(action="send email", parameters=parameters, assets=['smtp'], callback=join_prompt_response_type, name="send_email_2")
+
+    return
+
+def decision_4(action=None, success=None, container=None, results=None, handle=None, filtered_artifacts=None, filtered_results=None, custom_function=None, **kwargs):
+    phantom.debug('decision_4() called')
+
+    # check for 'if' condition 1
+    matched = phantom.decision(
+        container=container,
+        action_results=results,
+        conditions=[
+            ["prompt_further_investigation:action_result.summary.responses.0", "==", "Yes"],
+        ])
+
+    # call connected blocks if condition 1 matched
+    if matched:
+        create_case_1(action=action, success=success, container=container, results=results, handle=handle, custom_function=custom_function)
+        return
+
+    # call connected blocks for 'else' condition 2
 
     return
 
