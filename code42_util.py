@@ -11,7 +11,7 @@ def get_thirty_days_ago():
 
 
 def parse_datetime(date_str):
-    return dateutil.parser.parse(date_str)
+    return dateutil.parser.parse(date_str).replace(tzinfo=timezone.utc)
 
 
 def build_date_range_filter(date_filter_cls, start_date_str, end_date_str):

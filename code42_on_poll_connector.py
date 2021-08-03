@@ -474,6 +474,8 @@ def convert_file_event_timestamp_to_cef_timestamp(timestamp_value):
         _datetime = datetime.strptime(timestamp_value, "%Y-%m-%dT%H:%M:%S.%fZ")
     except ValueError:
         _datetime = datetime.strptime(timestamp_value, "%Y-%m-%dT%H:%M:%SZ")
+
+    _datetime = _datetime.replace(tzinfo=timezone.utc)
     value = f"{_datetime_to_ms_since_epoch(_datetime):.0f}"
     return value
 
