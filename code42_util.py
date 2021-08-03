@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 import dateutil.parser
 from py42.sdk.queries.alerts.alert_query import AlertQuery
@@ -6,7 +6,8 @@ from py42.sdk.queries.alerts.filters import Actor, AlertState, DateObserved, Sev
 
 
 def get_thirty_days_ago():
-    return datetime.utcnow() - timedelta(days=30)
+    now = datetime.utcnow().replace(tzinfo=timezone.utc)
+    return now - timedelta(days=30)
 
 
 def parse_datetime(date_str):
