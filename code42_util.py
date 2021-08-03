@@ -6,7 +6,7 @@ from py42.sdk.queries.alerts.filters import Actor, AlertState, DateObserved, Sev
 
 
 def get_thirty_days_ago():
-    now = datetime.utcnow().replace(tzinfo=timezone.utc)
+    now = datetime.now(tz=timezone.utc)
     return now - timedelta(days=30)
 
 
