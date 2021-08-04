@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 
 import dateutil.parser
 import phantom.app as phantom
@@ -214,7 +214,7 @@ class Code42OnPollConnector:
             return start_time, end_time
         else:
             # Last time is stored as a float timestamp
-            last_time_as_date_str = datetime.utcfromtimestamp(last_time).strftime(
+            last_time_as_date_str = datetime.fromtimestamp(last_time, tz=timezone.utc).strftime(
                 "%Y-%m-%dT%H:%M:%S.%f"
             )
             return last_time_as_date_str, None
@@ -474,12 +474,14 @@ def convert_file_event_timestamp_to_cef_timestamp(timestamp_value):
         _datetime = datetime.strptime(timestamp_value, "%Y-%m-%dT%H:%M:%S.%fZ")
     except ValueError:
         _datetime = datetime.strptime(timestamp_value, "%Y-%m-%dT%H:%M:%SZ")
+
+    _datetime = _datetime.replace(tzinfo=timezone.utc)
     value = f"{_datetime_to_ms_since_epoch(_datetime):.0f}"
     return value
 
 
 def _datetime_to_ms_since_epoch(_datetime):
-    epoch = datetime.utcfromtimestamp(0)
+    epoch = datetime.fromtimestamp(0, tz=timezone.utc)
     total_seconds = (_datetime - epoch).total_seconds()
     # total_seconds will be in decimals (millisecond precision)
     return total_seconds * 1000
