@@ -621,7 +621,9 @@ class TestCode42OnPollConnector(object):
             mock_py42_for_alert_polling.alerts.search.call_args[0][0]
         )["groups"][0]["filters"][0]["value"]
         actual_date = dateutil.parser.parse(actual_date_str)
-        expected_date = datetime.fromtimestamp(0, tz=timezone.utc) + timedelta(seconds=test_timestamp)
+        expected_date = datetime.fromtimestamp(0, tz=timezone.utc) + timedelta(
+            seconds=test_timestamp
+        )
         expected_date = expected_date.replace(tzinfo=actual_date.tzinfo)
         assert abs((actual_date - expected_date)).seconds < 1
         assert_success(connector)
@@ -643,7 +645,9 @@ class TestCode42OnPollConnector(object):
             mock_py42_for_alert_polling.alerts.search.call_args[0][0]
         )["groups"][0]["filters"][0]["value"]
         actual_date = dateutil.parser.parse(actual_date_str)
-        expected_date = datetime.fromtimestamp(0, tz=timezone.utc) + timedelta(seconds=test_timestamp)
+        expected_date = datetime.fromtimestamp(0, tz=timezone.utc) + timedelta(
+            seconds=test_timestamp
+        )
         expected_date = expected_date.replace(tzinfo=actual_date.tzinfo)
         assert abs((actual_date - expected_date)).seconds < 1
         assert_success(connector)
