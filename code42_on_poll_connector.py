@@ -214,9 +214,9 @@ class Code42OnPollConnector:
             return start_time, end_time
         else:
             # Last time is stored as a float timestamp
-            last_time_as_date_str = datetime.fromtimestamp(last_time, tz=timezone.utc).strftime(
-                "%Y-%m-%dT%H:%M:%S.%f"
-            )
+            last_time_as_date_str = datetime.fromtimestamp(
+                last_time, tz=timezone.utc
+            ).strftime("%Y-%m-%dT%H:%M:%S.%f")
             return last_time_as_date_str, None
 
     def _get_limit_counts(self, param):
