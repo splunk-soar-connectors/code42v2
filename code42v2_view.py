@@ -1,8 +1,16 @@
-# File: code42_view.py
-# Copyright (c) 2018-2021 Splunk Inc.
+# File: code42v2_view.py
 #
-# Licensed under Apache 2.0 (https://www.apache.org/licenses/LICENSE-2.0.txt)
+# Copyright (c) Code42, 2021
 #
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software distributed under
+# the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+# either express or implied. See the License for the specific language governing permissions
 
 
 def get_ctx_result(provides, result):
@@ -45,4 +53,4 @@ def display_view(provides, all_app_runs, context):
                 continue
             results.append(ctx_result)
 
-    return f"code42_{provides.replace(' ', '_')}.html"
+    return f"code42v2_{provides.replace(' ', '_')}.html"

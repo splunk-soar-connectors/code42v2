@@ -1,18 +1,26 @@
+# File: code42v2_on_poll_connector.py
+#
+# Copyright (c) Code42, 2021
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software distributed under
+# the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+# either express or implied. See the License for the specific language governing permissions
+
+
 from datetime import datetime, timezone
 
 import dateutil.parser
 import phantom.app as phantom
 from py42.sdk.queries.fileevents.file_event_query import FileEventQuery
-from py42.sdk.queries.fileevents.filters import (
-    ExposureType,
-    DeviceUsername,
-    Actor,
-    EventTimestamp,
-    EventType,
-    FileCategory,
-)
+from py42.sdk.queries.fileevents.filters import Actor, DeviceUsername, EventTimestamp, EventType, ExposureType, FileCategory
 
-from code42_util import get_thirty_days_ago, build_alerts_query, parse_datetime
+from code42v2_util import build_alerts_query, get_thirty_days_ago, parse_datetime
 
 """The contents of this module that related to mapping alert observations to file events borrows heavily from the
 Code42 Cortex XSOAR integration as well as the code42cli python package.

@@ -1,9 +1,24 @@
+# File: code42v2_connector.py
+#
+# Copyright (c) Code42, 2021
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software distributed under
+# the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+# either express or implied. See the License for the specific language governing permissions
+# and limitations under the License.
+
+
 # Python 3 Compatibility imports
 from __future__ import print_function, unicode_literals
 
 import json
 
-# Phantom App imports
 import phantom.app as phantom
 import phantom.utils as utils
 import py42.sdk
@@ -11,31 +26,20 @@ import requests
 from phantom.action_result import ActionResult
 from phantom.base_connector import BaseConnector
 from phantom.vault import Vault
-from py42.exceptions import Py42BadRequestError
-from py42.exceptions import Py42NotFoundError
-from py42.exceptions import Py42UpdateClosedCaseError
+from py42.exceptions import Py42BadRequestError, Py42NotFoundError, Py42UpdateClosedCaseError
 from py42.sdk.queries.fileevents.file_event_query import FileEventQuery
-from py42.sdk.queries.fileevents.filters import (
-    EventTimestamp,
-    MD5,
-    SHA256,
-    FileCategory,
-    DeviceUsername,
-    OSHostname,
-    ProcessName,
-    PublicIPAddress,
-    PrivateIPAddress,
-    TabURL,
-    WindowTitle,
-    TrustedActivity,
-)
+from py42.sdk.queries.fileevents.filters import (MD5, SHA256, DeviceUsername, EventTimestamp, FileCategory, OSHostname,
+                                                 PrivateIPAddress, ProcessName, PublicIPAddress, TabURL, TrustedActivity,
+                                                 WindowTitle)
 from py42.sdk.queries.fileevents.filters.exposure_filter import ExposureType
 from py42.sdk.queries.fileevents.filters.file_filter import FileName, FilePath
 from py42.services.detectionlists.departing_employee import DepartingEmployeeFilters
 from py42.services.detectionlists.high_risk_employee import HighRiskEmployeeFilters
 
-from code42_on_poll_connector import Code42OnPollConnector
-from code42_util import build_alerts_query, build_date_range_filter
+# Phantom App imports
+from code42v2_consts import *
+from code42v2_on_poll_connector import Code42OnPollConnector
+from code42v2_util import build_alerts_query, build_date_range_filter
 
 
 class RetVal(tuple):
@@ -95,6 +99,20 @@ class Code42Connector(BaseConnector):
         self._password = config["password"]
 
         return phantom.APP_SUCCESS
+
+    def _validate_integer(self, action_result, parameter, key, allow_zero=False):
+        try:
+            if not float(parameter).is_integer():
+                return action_result.set_status(phantom.APP_ERROR, CODE42V2_VALID_INT_MSG.format(param=key)), None
+
+            parameter = int(parameter)
+        except:
+            return action_result.set_status(phantom.APP_ERROR, CODE42V2_VALID_INT_MSG.format(param=key)), None
+
+        if parameter < 0:
+            return action_result.set_status(phantom.APP_ERROR, CODE42V2_NON_NEG_INT_MSG.format(param=key)), None
+        if not allow_zero and parameter == 0:
+            return action_result.set_status(phantom.APP_ERROR, CODE42V2_NON_NEG_NON_ZERO_INT_MSG.format(param=key)), None
 
     def handle_action(self, param):
         action_id = self.get_action_identifier()
@@ -161,6 +179,9 @@ class Code42Connector(BaseConnector):
     @action_handler_for("list_departing_employees")
     def _handle_list_departing_employees(self, param, action_result):
         filter_type = param.get("filter_type", DepartingEmployeeFilters.OPEN)
+        if filter_type not in CODE42V2_FILTER_TYPE_DEPARTING_LIST:
+            msg = CODE42V2_VALUE_LIST_ERR_MSG.format('filter_type', CODE42V2_FILTER_TYPE_DEPARTING_LIST)
+            return action_result.set_status(phantom.APP_SUCCESS, msg)
         results_generator = self._client.detectionlists.departing_employee.get_all(
             filter_type=filter_type
         )
@@ -196,6 +217,10 @@ class Code42Connector(BaseConnector):
         username = param["username"]
         user_id = self._get_user_id(username)
         response = self._client.detectionlists.high_risk_employee.add(user_id)
+
+        note = param.get("note")
+        if note:
+            self._client.detectionlists.update_user_notes(user_id, note)
         action_result.add_data(response.data)
         status_message = f"{username} was added to the high risk employees list"
         return action_result.set_status(phantom.APP_SUCCESS, status_message)
@@ -212,6 +237,9 @@ class Code42Connector(BaseConnector):
     @action_handler_for("list_highrisk_employees")
     def _handle_list_high_risk_employees(self, param, action_result):
         filter_type = param.get("filter_type", HighRiskEmployeeFilters.OPEN)
+        if filter_type not in CODE42V2_FILTER_TYPE_HIGH_RISK_LIST:
+            msg = CODE42V2_VALUE_LIST_ERR_MSG.format('filter_type', CODE42V2_FILTER_TYPE_HIGH_RISK_LIST)
+            return action_result.set_status(phantom.APP_SUCCESS, msg)
         results_generator = self._client.detectionlists.high_risk_employee.get_all(
             filter_type=filter_type
         )
@@ -248,7 +276,12 @@ class Code42Connector(BaseConnector):
     @action_handler_for("add_highrisk_tag")
     def _handle_add_high_risk_tag(self, param, action_result):
         username = param["username"]
+
         risk_tag = param["risk_tag"]
+        if risk_tag not in CODE42V2_RISK_TAG_LIST:
+            msg = CODE42V2_VALUE_LIST_ERR_MSG.format('risk_tag', CODE42V2_RISK_TAG_LIST)
+            return action_result.set_status(phantom.APP_SUCCESS, msg)
+
         user_id = self._get_user_id(username)
         response = self._client.detectionlists.add_user_risk_tags(user_id, risk_tag)
         all_tags = response.data.get("riskFactors", [])
@@ -260,7 +293,12 @@ class Code42Connector(BaseConnector):
     @action_handler_for("remove_highrisk_tag")
     def _handle_remove_high_risk_tag(self, param, action_result):
         username = param["username"]
+
         risk_tag = param["risk_tag"]
+        if risk_tag not in CODE42V2_RISK_TAG_LIST:
+            msg = CODE42V2_VALUE_LIST_ERR_MSG.format('risk_tag', CODE42V2_RISK_TAG_LIST)
+            return action_result.set_status(phantom.APP_SUCCESS, msg)
+
         user_id = self._get_user_id(username)
         response = self._client.detectionlists.remove_user_risk_tags(user_id, risk_tag)
         all_tags = response.data.get("riskFactors", [])
@@ -364,13 +402,17 @@ class Code42Connector(BaseConnector):
         if is_default_dict(param):
             return action_result.set_status(
                 phantom.APP_ERROR,
-                "Code42: Must supply a search term when calling action 'search_alerts`.",
+                "Code42: Must supply a search term when calling action 'search_alerts'",
             )
 
         username = param.get("username")
         start_date = param.get("start_date")
         end_date = param.get("end_date")
         alert_state = param.get("alert_state")
+
+        if alert_state not in CODE42V2_ALERT_STATE:
+            msg = CODE42V2_VALUE_LIST_ERR_MSG.format('alert_state', CODE42V2_ALERT_STATE)
+            return action_result.set_status(phantom.APP_SUCCESS, msg)
 
         query = build_alerts_query(
             start_date, end_date, username=username, alert_state=alert_state
@@ -387,6 +429,10 @@ class Code42Connector(BaseConnector):
         alert_id = param["alert_id"]
         alert_state = param["alert_state"]
         note = param.get("note")
+
+        if alert_state not in CODE42V2_ALERT_STATE:
+            msg = CODE42V2_VALUE_LIST_ERR_MSG.format('alert_state', CODE42V2_ALERT_STATE)
+            return action_result.set_status(phantom.APP_SUCCESS, msg)
         response = self._client.alerts.update_state(alert_state, [alert_id], note=note)
         action_result.add_data(response.data)
         action_result.update_summary({"alert_id": alert_id})
@@ -452,7 +498,10 @@ class Code42Connector(BaseConnector):
 
     @action_handler_for("update_case")
     def _handle_update_case(self, param, action_result):
-        case_number = param["case_number"]
+        ret_val, case_number = self._validate_integer(action_result, param["case_number"], CODE42V2_CASE_NUM_KEY)
+        if phantom.is_fail(ret_val):
+            return action_result.get_status()
+
         name = param.get("case_name")
         subject = param.get("subject")
         if subject:
@@ -480,7 +529,10 @@ class Code42Connector(BaseConnector):
 
     @action_handler_for("close_case")
     def _handle_close_case(self, param, action_result):
-        case_number = param["case_number"]
+        ret_val, case_number = self._validate_integer(action_result, param["case_number"], CODE42V2_CASE_NUM_KEY)
+        if phantom.is_fail(ret_val):
+            return action_result.get_status()
+
         try:
             response = self._client.cases.update(case_number, status="CLOSED")
             status_message = f"Case number {case_number} successfully closed"
@@ -496,6 +548,10 @@ class Code42Connector(BaseConnector):
     @action_handler_for("list_cases")
     def _handle_list_cases(self, param, action_result):
         status = param["status"]
+        if status not in CODE42V2_CASE_STATUS_LIST:
+            msg = CODE42V2_VALUE_LIST_ERR_MSG.format('status', CODE42V2_CASE_STATUS_LIST)
+            return action_result.set_status(phantom.APP_SUCCESS, msg)
+
         if status == "ALL":
             status = None
         assignee = param.get("assignee")
@@ -519,7 +575,10 @@ class Code42Connector(BaseConnector):
 
     @action_handler_for("add_case_event")
     def _handle_add_case_event(self, param, action_result):
-        case_number = param["case_number"]
+        ret_val, case_number = self._validate_integer(action_result, param["case_number"], CODE42V2_CASE_NUM_KEY)
+        if phantom.is_fail(ret_val):
+            return action_result.get_status()
+
         event_id = param["event_id"]
         try:
             self._client.cases.file_events.add(
@@ -573,6 +632,16 @@ class Code42Connector(BaseConnector):
                 phantom.APP_ERROR,
                 "Code42: Must supply a search term when calling action 'run_query'.",
             )
+
+        file_category = param.get("file_category")
+        if file_category and (file_category not in CODE42V2_FILE_CATEGORY_LIST):
+            msg = CODE42V2_VALUE_LIST_ERR_MSG.format('file_category', CODE42V2_FILE_CATEGORY_LIST)
+            return action_result.set_status(phantom.APP_SUCCESS, msg)
+
+        exposure_type = param.get("exposure_type")
+        if exposure_type and exposure_type not in CODE42V2_EXPOSURE_TYPE_LIST:
+            msg = CODE42V2_VALUE_LIST_ERR_MSG.format('exposure_type', CODE42V2_EXPOSURE_TYPE_LIST)
+            return action_result.set_status(phantom.APP_SUCCESS, msg)
 
         query = self._build_file_events_query(
             param.get("start_date"),
@@ -729,8 +798,9 @@ class Code42Connector(BaseConnector):
 
 
 def main():
-    import pudb
     import argparse
+
+    import pudb
 
     pudb.set_trace()
 

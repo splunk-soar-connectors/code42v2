@@ -1,11 +1,11 @@
 {
     "appid": "4d8f53a7-7b12-4d7d-8b01-6575680acf6f",
-    "name": "Code42",
-    "description": "Code42 provides simple, fast detection and response to everyday data loss from insider threats by focusing on customer data on endpoints and the cloud.",
+    "name": "Code42 v2",
+    "description": "Code42 provides simple, fast detection and response to everyday data loss from insider threats by focusing on customer data on endpoints and the cloud",
     "type": "generic",
     "product_vendor": "Code42",
-    "logo": "logo_code42.svg",
-    "logo_dark": "logo_code42_dark.svg",
+    "logo": "logo_code42v2.svg",
+    "logo_dark": "logo_code42v2_dark.svg",
     "product_name": "Code42",
     "python_version": "3",
     "product_version_regex": ".*",
@@ -14,42 +14,14 @@
     "app_version": "1.0.0",
     "utctime_updated": "2021-05-07T19:50:55.080648Z",
     "package_name": "phantom_code42",
-    "main_module": "code42_connector.pyc",
-    "min_phantom_version": "4.10.3.51237",
+    "main_module": "code42v2_connector.py",
+    "min_phantom_version": "5.0.0",
     "app_wizard_version": "1.0.0",
     "pip_dependencies": {
         "wheel": [
             {
-                "module": "certifi",
-                "input_file": "wheels/certifi-2021.10.8-py2.py3-none-any.whl"
-            },
-            {
-                "module": "chardet",
-                "input_file": "wheels/chardet-3.0.4-py2.py3-none-any.whl"
-            },
-            {
-                "module": "idna",
-                "input_file": "wheels/idna-2.10-py2.py3-none-any.whl"
-            },
-            {
                 "module": "py42",
                 "input_file": "wheels/py42-1.15.1-py2.py3-none-any.whl"
-            },
-            {
-                "module": "python_dateutil",
-                "input_file": "wheels/python_dateutil-2.8.1-py2.py3-none-any.whl"
-            },
-            {
-                "module": "requests",
-                "input_file": "wheels/requests-2.25.0-py2.py3-none-any.whl"
-            },
-            {
-                "module": "six",
-                "input_file": "wheels/six-1.16.0-py2.py3-none-any.whl"
-            },
-            {
-                "module": "urllib3",
-                "input_file": "wheels/urllib3-1.26.7-py2.py3-none-any.whl"
             }
         ]
     },
@@ -58,7 +30,6 @@
             "description": "Cloud instance to connect to",
             "data_type": "string",
             "required": true,
-            "value_list": [],
             "default": "https://console.us.code42.com",
             "order": 0
         },
@@ -66,8 +37,6 @@
             "description": "Username to connect with",
             "data_type": "string",
             "required": true,
-            "value_list": [],
-            "default": "",
             "order": 1
         },
         "password": {
@@ -79,19 +48,16 @@
         "initial_poll_start_date": {
             "description": "The start date to use in the initial poll in yyyy-MM-dd HH:MM:SS format (defaults to 30 days back)",
             "data_type": "string",
-            "required": false,
             "order": 3
         },
         "initial_poll_end_date": {
             "description": "The end date to use in the initial poll in yyyy-MM-dd HH:MM:SS format (defaults to the current time)",
             "data_type": "string",
-            "required": false,
             "order": 4
         },
         "severity_to_poll_for": {
             "description": "A comma separated list of alert severities to poll for, such as HIGH, LOW, or MEDIUM (defaults to getting all alerts)",
             "data_type": "string",
-            "required": false,
             "order": 5
         }
     },
@@ -100,7 +66,6 @@
             "action": "test connectivity",
             "identifier": "test_connectivity",
             "description": "Validate the asset configuration for connectivity using supplied configuration",
-            "verbose": "",
             "type": "test",
             "read_only": true,
             "parameters": {},
@@ -109,7 +74,7 @@
         },
         {
             "action": "on poll",
-            "description": "Callback action for the on_poll ingest functionality.",
+            "description": "Callback action for the on_poll ingest functionality",
             "type": "ingest",
             "identifier": "on_poll",
             "read_only": true,
@@ -123,13 +88,11 @@
                 "start_time": {
                     "description": "Parameter ignored in this app",
                     "data_type": "string",
-                    "required": false,
                     "order": 1
                 },
                 "end_time": {
                     "description": "Parameter ignored in this app",
                     "data_type": "string",
-                    "required": false,
                     "order": 2
                 },
                 "container_count": {
@@ -151,8 +114,8 @@
             "identifier": "add_departing_employee",
             "description": "Add a departing employee to the departing employees detection list",
             "verbose": "There is a short delay before you can query the updated results.",
+            "type": "contain",
             "undo": "remove departing employee",
-            "type": "generic",
             "read_only": false,
             "parameters": {
                 "username": {
@@ -164,24 +127,16 @@
                         "email",
                         "user name"
                     ],
-                    "value_list": [],
-                    "default": "",
                     "order": 0
                 },
                 "departure_date": {
                     "description": "Date of departure for employee in format yyyy-MM-dd",
                     "data_type": "string",
-                    "required": false,
-                    "primary": false,
-                    "default": "",
                     "order": 1
                 },
                 "note": {
                     "description": "A note to include",
                     "data_type": "string",
-                    "required": false,
-                    "primary": false,
-                    "default": "",
                     "order": 2
                 }
             },
@@ -209,24 +164,6 @@
                     "column_order": 2
                 },
                 {
-                    "data_path": "action_result.status",
-                    "data_type": "string",
-                    "column_name": "status",
-                    "column_order": 3
-                },
-                {
-                    "data_path": "action_result.message",
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "summary.total_objects",
-                    "data_type": "numeric"
-                },
-                {
-                    "data_path": "summary.total_objects_successful",
-                    "data_type": "numeric"
-                },
-                {
                     "column_name": "User ID",
                     "data_path": "action_result.data.*.userId",
                     "data_type": "string",
@@ -236,7 +173,6 @@
                     "column_order": 4
                 },
                 {
-                    "column_name": "Username",
                     "data_path": "action_result.data.*.userName",
                     "data_type": "string",
                     "example_values": [
@@ -246,19 +182,43 @@
                         "email",
                         "user name"
                     ],
+                    "column_name": "Username",
                     "column_order": 5
                 },
                 {
-                    "column_name": "Created At",
                     "data_path": "action_result.data.*.createdAt",
                     "data_type": "string",
                     "example_values": [
                         "2021-05-20T19:40:14.8909434Z"
-                    ]
+                    ],
+                    "column_name": "Created At",
+                    "column_order": 6
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ],
+                    "column_name": "Status",
+                    "column_order": 3
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
                 },
                 {
                     "data_path": "action_result.summary",
                     "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
                 }
             ],
             "render": {
@@ -271,8 +231,8 @@
             "identifier": "remove_departing_employee",
             "description": "Remove a departing employee from the departing employees detection list",
             "verbose": "There is a short delay before you can query the updated results.",
+            "type": "correct",
             "undo": "add departing employee",
-            "type": "generic",
             "read_only": false,
             "parameters": {
                 "username": {
@@ -284,8 +244,6 @@
                         "email",
                         "user name"
                     ],
-                    "value_list": [],
-                    "default": "",
                     "order": 0
                 }
             },
@@ -301,9 +259,22 @@
                     "column_order": 0
                 },
                 {
+                    "data_path": "action_result.data.*.userId",
+                    "data_type": "string",
+                    "example_values": [
+                        "1"
+                    ],
+                    "column_name": "User ID",
+                    "column_order": 2
+                },
+                {
                     "data_path": "action_result.status",
                     "data_type": "string",
-                    "column_name": "status",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ],
+                    "column_name": "Status",
                     "column_order": 1
                 },
                 {
@@ -311,25 +282,22 @@
                     "data_type": "string"
                 },
                 {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
+                },
+                {
                     "data_path": "summary.total_objects",
-                    "data_type": "numeric"
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
                 },
                 {
                     "data_path": "summary.total_objects_successful",
-                    "data_type": "numeric"
-                },
-                {
-                    "column_name": "User ID ",
-                    "data_path": "action_result.data.*.userId",
-                    "data_type": "string",
+                    "data_type": "numeric",
                     "example_values": [
-                        "1"
-                    ],
-                    "column_order": 2
-                },
-                {
-                    "data_path": "action_result.summary",
-                    "data_type": "string"
+                        1
+                    ]
                 }
             ],
             "render": {
@@ -341,15 +309,12 @@
             "action": "list departing employees",
             "identifier": "list_departing_employees",
             "description": "Returns a list of users who are on the departing employees list",
-            "verbose": "",
-            "type": "generic",
+            "type": "investigate",
             "read_only": true,
             "parameters": {
                 "filter_type": {
                     "description": "Filters the results based on specific filters",
                     "data_type": "string",
-                    "required": false,
-                    "primary": false,
                     "value_list": [
                         "EXFILTRATION_30_DAYS",
                         "EXFILTRATION_24_HOURS",
@@ -368,34 +333,15 @@
                     "column_order": 0
                 },
                 {
-                    "data_path": "action_result.status",
-                    "data_type": "string",
-                    "column_name": "status",
-                    "column_order": 1
-                },
-                {
-                    "data_path": "action_result.message",
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "summary.total_objects",
-                    "data_type": "numeric"
-                },
-                {
-                    "data_path": "summary.total_objects_successful",
-                    "data_type": "numeric"
-                },
-                {
-                    "column_name": "User ID",
                     "data_path": "action_result.data.*.userId",
                     "data_type": "string",
                     "example_values": [
                         "1"
                     ],
+                    "column_name": "User ID",
                     "column_order": 2
                 },
                 {
-                    "column_name": "Username",
                     "data_path": "action_result.data.*.userName",
                     "data_type": "string",
                     "example_values": [
@@ -405,24 +351,25 @@
                         "email",
                         "user name"
                     ],
+                    "column_name": "Username",
                     "column_order": 3
                 },
                 {
-                    "column_name": "Risk Tag",
                     "data_path": "action_result.data.*.riskFactors.*.tag",
-                    "column_order": 4,
                     "data_type": "string",
                     "contains": [
                         "code42 risk tag"
-                    ]
+                    ],
+                    "column_name": "Risk Tag",
+                    "column_order": 7
                 },
                 {
-                    "column_name": "Notes",
                     "data_path": "action_result.data.*.notes",
                     "data_type": "string",
                     "example_values": [
                         "note"
                     ],
+                    "column_name": "Notes",
                     "column_order": 4
                 },
                 {
@@ -444,13 +391,44 @@
                     "column_order": 6
                 },
                 {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ],
+                    "column_name": "Status",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
                     "data_path": "action_result.summary.total_count",
-                    "data_type": "numeric"
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
                 }
             ],
             "render": {
                 "type": "custom",
-                "view": "code42_view.display_view"
+                "view": "code42v2_view.display_view"
             },
             "versions": "EQ(*)"
         },
@@ -458,8 +436,7 @@
             "action": "get departing employee",
             "identifier": "get_departing_employee",
             "description": "Get a departing employee",
-            "verbose": "",
-            "type": "generic",
+            "type": "investigate",
             "read_only": true,
             "parameters": {
                 "username": {
@@ -478,42 +455,23 @@
                 {
                     "data_path": "action_result.parameter.username",
                     "data_type": "string",
-                    "column_name": "Filter Type",
                     "contains": [
                         "email",
                         "user name"
                     ],
+                    "column_name": "Filter Type",
                     "column_order": 0
                 },
                 {
-                    "data_path": "action_result.status",
-                    "data_type": "string",
-                    "column_name": "status",
-                    "column_order": 1
-                },
-                {
-                    "data_path": "action_result.message",
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "summary.total_objects",
-                    "data_type": "numeric"
-                },
-                {
-                    "data_path": "summary.total_objects_successful",
-                    "data_type": "numeric"
-                },
-                {
-                    "column_name": "User ID",
                     "data_path": "action_result.data.*.userId",
                     "data_type": "string",
                     "example_values": [
                         "1"
                     ],
+                    "column_name": "User ID",
                     "column_order": 2
                 },
                 {
-                    "column_name": "Username",
                     "data_path": "action_result.data.*.userName",
                     "data_type": "string",
                     "example_values": [
@@ -523,34 +481,67 @@
                         "email",
                         "user name"
                     ],
+                    "column_name": "Username",
                     "column_order": 3
                 },
                 {
-                    "column_name": "Notes",
                     "data_path": "action_result.data.*.notes",
                     "data_type": "string",
                     "example_values": [
                         "note"
                     ],
+                    "column_name": "Notes",
                     "column_order": 4
                 },
                 {
-                    "column_name": "Creation Date",
                     "data_path": "action_result.data.*.createdAt",
                     "data_type": "string",
                     "example_values": [
                         "2021-05-21T00:00:00.0000000Z"
                     ],
+                    "column_name": "Creation Date",
                     "column_order": 5
                 },
                 {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ],
+                    "column_name": "Status",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
                     "data_path": "action_result.summary.is_departing_employee",
-                    "data_type": "boolean"
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
                 }
             ],
             "render": {
                 "type": "custom",
-                "view": "code42_view.display_view"
+                "view": "code42v2_view.display_view"
             },
             "versions": "EQ(*)"
         },
@@ -558,9 +549,8 @@
             "action": "add highrisk employee",
             "identifier": "add_highrisk_employee",
             "description": "Add a high risk employee to the high risk employees detection list",
-            "verbose": "",
             "undo": "remove highrisk employee",
-            "type": "generic",
+            "type": "contain",
             "read_only": false,
             "parameters": {
                 "username": {
@@ -572,16 +562,11 @@
                         "email",
                         "user name"
                     ],
-                    "value_list": [],
-                    "default": "",
                     "order": 0
                 },
                 "note": {
                     "description": "A note to include",
                     "data_type": "string",
-                    "required": false,
-                    "primary": false,
-                    "default": "",
                     "order": 1
                 }
             },
@@ -603,34 +588,15 @@
                     "column_order": 1
                 },
                 {
-                    "data_path": "action_result.status",
-                    "data_type": "string",
-                    "column_name": "status",
-                    "column_order": 2
-                },
-                {
-                    "data_path": "action_result.message",
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "summary.total_objects",
-                    "data_type": "numeric"
-                },
-                {
-                    "data_path": "summary.total_objects_successful",
-                    "data_type": "numeric"
-                },
-                {
-                    "column_name": "User ID",
                     "data_path": "action_result.data.*.userId",
                     "data_type": "string",
                     "example_values": [
                         "1"
                     ],
+                    "column_name": "User ID",
                     "column_order": 3
                 },
                 {
-                    "column_name": "Username",
                     "data_path": "action_result.data.*.userName",
                     "data_type": "string",
                     "example_values": [
@@ -639,20 +605,48 @@
                     "contains": [
                         "email",
                         "user name"
-                    ],
-                    "column_order": 4
+                    ]
                 },
                 {
-                    "column_name": "Created At",
                     "data_path": "action_result.data.*.createdAt",
                     "data_type": "string",
                     "example_values": [
                         "2021-05-20T19:40:14.8909434Z"
-                    ]
+                    ],
+                    "column_name": "Created At",
+                    "column_order": 4
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ],
+                    "column_name": "Status",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
                 },
                 {
                     "data_path": "action_result.summary",
                     "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
                 }
             ],
             "render": {
@@ -664,9 +658,8 @@
             "action": "remove highrisk employee",
             "identifier": "remove_highrisk_employee",
             "description": "Remove a high risk employee from the high risk employees detection list",
-            "verbose": "",
             "undo": "add highrisk employee",
-            "type": "generic",
+            "type": "correct",
             "read_only": false,
             "parameters": {
                 "username": {
@@ -678,8 +671,6 @@
                         "email",
                         "user name"
                     ],
-                    "value_list": [],
-                    "default": "",
                     "order": 0
                 }
             },
@@ -695,8 +686,21 @@
                     "column_order": 0
                 },
                 {
+                    "data_path": "action_result.data.*.userId",
+                    "data_type": "string",
+                    "example_values": [
+                        "1"
+                    ],
+                    "column_name": "User ID",
+                    "column_order": 2
+                },
+                {
                     "data_path": "action_result.status",
                     "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ],
                     "column_name": "Status",
                     "column_order": 1
                 },
@@ -705,25 +709,22 @@
                     "data_type": "string"
                 },
                 {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
+                },
+                {
                     "data_path": "summary.total_objects",
-                    "data_type": "numeric"
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
                 },
                 {
                     "data_path": "summary.total_objects_successful",
-                    "data_type": "numeric"
-                },
-                {
-                    "column_name": "User ID",
-                    "data_path": "action_result.data.*.userId",
-                    "data_type": "string",
+                    "data_type": "numeric",
                     "example_values": [
-                        "1"
-                    ],
-                    "column_order": 2
-                },
-                {
-                    "data_path": "action_result.summary",
-                    "data_type": "string"
+                        1
+                    ]
                 }
             ],
             "render": {
@@ -735,15 +736,12 @@
             "action": "list highrisk employees",
             "identifier": "list_highrisk_employees",
             "description": "Returns a list of users who are on the high-risk employees list",
-            "verbose": "",
-            "type": "generic",
+            "type": "investigate",
             "read_only": true,
             "parameters": {
                 "filter_type": {
                     "description": "Filters the results based on specific filters",
                     "data_type": "string",
-                    "required": false,
-                    "primary": false,
                     "value_list": [
                         "EXFILTRATION_30_DAYS",
                         "EXFILTRATION_24_HOURS",
@@ -761,34 +759,15 @@
                     "column_order": 0
                 },
                 {
-                    "data_path": "action_result.status",
-                    "data_type": "string",
-                    "column_name": "status",
-                    "column_order": 1
-                },
-                {
-                    "data_path": "action_result.message",
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "summary.total_objects",
-                    "data_type": "numeric"
-                },
-                {
-                    "data_path": "summary.total_objects_successful",
-                    "data_type": "numeric"
-                },
-                {
-                    "column_name": "User ID",
                     "data_path": "action_result.data.*.userId",
                     "data_type": "string",
                     "example_values": [
                         "1"
                     ],
+                    "column_name": "User ID",
                     "column_order": 2
                 },
                 {
-                    "column_name": "Username",
                     "data_path": "action_result.data.*.userName",
                     "data_type": "string",
                     "example_values": [
@@ -798,43 +777,68 @@
                         "email",
                         "user name"
                     ],
+                    "column_name": "Username",
                     "column_order": 3
                 },
                 {
-                    "column_name": "Notes",
                     "data_path": "action_result.data.*.notes",
                     "data_type": "string",
                     "example_values": [
                         "note"
                     ],
+                    "column_name": "Notes",
                     "column_order": 4
                 },
                 {
-                    "column_name": "Creation Date",
                     "data_path": "action_result.data.*.createdAt",
                     "data_type": "string",
                     "example_values": [
                         "2021-05-21T00:00:00.0000000Z"
                     ],
+                    "column_name": "Creation Date",
                     "column_order": 5
                 },
                 {
-                    "column_name": "Number of Events",
                     "data_path": "action_result.data.*.numEvents",
                     "data_type": "numeric",
                     "example_values": [
                         0
                     ],
+                    "column_name": "Number of Events",
                     "column_order": 6
                 },
                 {
-                    "data_path": "action_result.summary.total_count",
-                    "data_type": "numeric"
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ],
+                    "column_name": "Status",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
                 }
             ],
             "render": {
                 "type": "custom",
-                "view": "code42_view.display_view"
+                "view": "code42v2_view.display_view"
             },
             "versions": "EQ(*)"
         },
@@ -842,8 +846,7 @@
             "action": "get highrisk employee",
             "identifier": "get_highrisk_employee",
             "description": "Get a high risk employee",
-            "verbose": "",
-            "type": "generic",
+            "type": "investigate",
             "read_only": true,
             "parameters": {
                 "username": {
@@ -862,42 +865,26 @@
                 {
                     "data_path": "action_result.parameter.username",
                     "data_type": "string",
-                    "column_name": "Filter Type",
+                    "example_values": [
+                        "test@example.com"
+                    ],
                     "contains": [
                         "email",
                         "user name"
                     ],
+                    "column_name": "Username",
                     "column_order": 0
                 },
                 {
-                    "data_path": "action_result.status",
-                    "data_type": "string",
-                    "column_name": "status",
-                    "column_order": 1
-                },
-                {
-                    "data_path": "action_result.message",
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "summary.total_objects",
-                    "data_type": "numeric"
-                },
-                {
-                    "data_path": "summary.total_objects_successful",
-                    "data_type": "numeric"
-                },
-                {
-                    "column_name": "User ID",
                     "data_path": "action_result.data.*.userId",
                     "data_type": "string",
                     "example_values": [
                         "1"
                     ],
+                    "column_name": "User ID",
                     "column_order": 2
                 },
                 {
-                    "column_name": "Username",
                     "data_path": "action_result.data.*.userName",
                     "data_type": "string",
                     "example_values": [
@@ -906,44 +893,75 @@
                     "contains": [
                         "email",
                         "user name"
-                    ],
-                    "column_order": 3
+                    ]
                 },
                 {
-                    "column_name": "Notes",
                     "data_path": "action_result.data.*.notes",
                     "data_type": "string",
                     "example_values": [
                         "note"
                     ],
-                    "column_order": 4
+                    "column_name": "Notes",
+                    "column_order": 3
                 },
                 {
-                    "column_name": "Creation Date",
                     "data_path": "action_result.data.*.createdAt",
                     "data_type": "string",
                     "example_values": [
                         "2021-05-21T00:00:00.0000000Z"
                     ],
-                    "column_order": 5
+                    "column_name": "Creation Date",
+                    "column_order": 4
                 },
                 {
-                    "column_name": "Risk Tag",
                     "data_path": "action_result.data.*.riskFactors.*.tag",
-                    "column_order": 7,
                     "data_type": "string",
                     "contains": [
                         "code42 risk tag"
-                    ]
+                    ],
+                    "column_name": "Risk Tag",
+                    "column_order": 5
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ],
+                    "column_name": "Status",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
                 },
                 {
                     "data_path": "action_result.summary.is_high_risk_employee",
-                    "data_type": "boolean"
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
                 }
             ],
             "render": {
                 "type": "custom",
-                "view": "code42_view.display_view"
+                "view": "code42v2_view.display_view"
             },
             "versions": "EQ(*)"
         },
@@ -951,9 +969,8 @@
             "action": "add highrisk tag",
             "identifier": "add_highrisk_tag",
             "description": "Add a risk tag to a user",
-            "verbose": "",
             "undo": "remove highrisk tag",
-            "type": "generic",
+            "type": "contain",
             "read_only": false,
             "parameters": {
                 "username": {
@@ -965,8 +982,6 @@
                         "email",
                         "user name"
                     ],
-                    "value_list": [],
-                    "default": "",
                     "order": 0
                 },
                 "risk_tag": {
@@ -974,7 +989,6 @@
                     "data_type": "string",
                     "required": true,
                     "primary": true,
-                    "default": "",
                     "value_list": [
                         "HIGH_IMPACT_EMPLOYEE",
                         "CONTRACT_EMPLOYEE",
@@ -998,26 +1012,63 @@
                         "email",
                         "user name"
                     ],
+                    "example_values": [
+                        "test@gmail.com"
+                    ],
                     "column_name": "Username",
                     "column_order": 0
                 },
                 {
                     "data_path": "action_result.parameter.risk_tag",
                     "data_type": "string",
-                    "column_name": "Risk Tag",
-                    "column_order": 1,
                     "contains": [
                         "code42 risk tag"
+                    ],
+                    "column_name": "Risk Tag",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.data.*.userId",
+                    "data_type": "string",
+                    "example_values": [
+                        "1"
+                    ],
+                    "column_name": "User ID",
+                    "column_order": 3
+                },
+                {
+                    "data_path": "action_result.data.*.userName",
+                    "data_type": "string",
+                    "example_values": [
+                        "1"
+                    ],
+                    "contains": [
+                        "email",
+                        "user name"
                     ]
+                },
+                {
+                    "data_path": "action_result.data.*.riskFactors.*.tag",
+                    "data_type": "string",
+                    "column_name": "Risk Tag",
+                    "column_order": 4
                 },
                 {
                     "data_path": "action_result.status",
                     "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ],
                     "column_name": "Status",
                     "column_order": 2
                 },
                 {
                     "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.summary",
                     "data_type": "string"
                 },
                 {
@@ -1027,38 +1078,6 @@
                 {
                     "data_path": "summary.total_objects_successful",
                     "data_type": "numeric"
-                },
-                {
-                    "column_name": "User ID",
-                    "data_path": "action_result.data.*.userId",
-                    "data_type": "string",
-                    "example_values": [
-                        "1"
-                    ],
-                    "column_order": 3
-                },
-                {
-                    "column_name": "Username",
-                    "data_path": "action_result.data.*.userName",
-                    "data_type": "string",
-                    "example_values": [
-                        "1"
-                    ],
-                    "contains": [
-                        "email",
-                        "user name"
-                    ],
-                    "column_order": 4
-                },
-                {
-                    "column_name": "Risk Tag",
-                    "data_path": "action_result.data.*.riskFactors.*.tag",
-                    "column_order": 5,
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.summary",
-                    "data_type": "string"
                 }
             ],
             "render": {
@@ -1070,9 +1089,8 @@
             "action": "remove highrisk tag",
             "identifier": "remove_highrisk_tag",
             "description": "Remove a risk tag from a user",
-            "verbose": "",
             "undo": "add highrisk tag",
-            "type": "generic",
+            "type": "correct",
             "read_only": false,
             "parameters": {
                 "username": {
@@ -1084,8 +1102,6 @@
                         "email",
                         "user name"
                     ],
-                    "value_list": [],
-                    "default": "",
                     "order": 0
                 },
                 "risk_tag": {
@@ -1102,7 +1118,6 @@
                         "ELEVATED_ACCESS_PRIVILEGES",
                         "SUSPICIOUS_SYSTEM_ACTIVITY"
                     ],
-                    "default": "",
                     "contains": [
                         "code42 risk tag"
                     ],
@@ -1123,41 +1138,22 @@
                 {
                     "data_path": "action_result.parameter.risk_tag",
                     "data_type": "string",
-                    "column_name": "Risk Tag",
-                    "column_order": 1,
                     "contains": [
                         "code42 risk tag"
-                    ]
+                    ],
+                    "column_name": "Risk Tag",
+                    "column_order": 1
                 },
                 {
-                    "data_path": "action_result.status",
-                    "data_type": "string",
-                    "column_name": "Status",
-                    "column_order": 2
-                },
-                {
-                    "data_path": "action_result.message",
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "summary.total_objects",
-                    "data_type": "numeric"
-                },
-                {
-                    "data_path": "summary.total_objects_successful",
-                    "data_type": "numeric"
-                },
-                {
-                    "column_name": "User ID",
                     "data_path": "action_result.data.*.userId",
                     "data_type": "string",
                     "example_values": [
                         "1"
                     ],
+                    "column_name": "User ID",
                     "column_order": 3
                 },
                 {
-                    "column_name": "Username",
                     "data_path": "action_result.data.*.userName",
                     "data_type": "string",
                     "example_values": [
@@ -1166,18 +1162,45 @@
                     "contains": [
                         "email",
                         "user name"
-                    ],
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.riskFactors.*.tag",
+                    "data_type": "string",
+                    "column_name": "Risk Tag",
                     "column_order": 4
                 },
                 {
-                    "column_name": "Risk Tag",
-                    "data_path": "action_result.data.*.riskFactors.*.tag",
-                    "column_order": 5,
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ],
+                    "column_name": "Status",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.message",
                     "data_type": "string"
                 },
                 {
                     "data_path": "action_result.summary",
                     "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
                 }
             ],
             "render": {
@@ -1189,7 +1212,6 @@
             "action": "get alert details",
             "identifier": "get_alert_details",
             "description": "Get alert details",
-            "verbose": "",
             "type": "investigate",
             "read_only": true,
             "parameters": {
@@ -1198,8 +1220,9 @@
                     "data_type": "string",
                     "required": true,
                     "primary": true,
-                    "value_list": [],
-                    "default": "",
+                    "contains": [
+                        "code42 alert id"
+                    ],
                     "order": 0
                 }
             },
@@ -1207,12 +1230,11 @@
                 {
                     "data_path": "action_result.parameter.alert_id",
                     "data_type": "string",
+                    "contains": [
+                        "code42 alert id"
+                    ],
                     "column_name": "Alert ID",
                     "column_order": 0
-                },
-                {
-                    "data_path": "action_result.status",
-                    "data_type": "string"
                 },
                 {
                     "data_path": "action_result.data.*.name",
@@ -1223,11 +1245,11 @@
                 {
                     "data_path": "action_result.data.*.actor",
                     "data_type": "string",
-                    "column_name": "Actor",
                     "contains": [
                         "email",
                         "user name"
                     ],
+                    "column_name": "Actor",
                     "column_order": 2
                 },
                 {
@@ -1268,34 +1290,50 @@
                     "column_order": 7
                 },
                 {
-                    "data_path": "action_result.summary.username",
+                    "data_path": "action_result.status",
                     "data_type": "string",
-                    "column_name": "Username",
-                    "contains": [
-                        "email",
-                        "user name"
+                    "example_values": [
+                        "success",
+                        "failed"
                     ]
-                },
-                {
-                    "data_path": "action_result.summary.user_id",
-                    "data_type": "string",
-                    "column_name": "User Id"
-                },
-                {
-                    "data_path": "action_result.summary",
-                    "data_type": "string"
                 },
                 {
                     "data_path": "action_result.message",
                     "data_type": "string"
                 },
                 {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.summary.username",
+                    "data_type": "string",
+                    "contains": [
+                        "email",
+                        "user name"
+                    ],
+                    "column_name": "Username",
+                    "column_order": 8
+                },
+                {
+                    "data_path": "action_result.summary.user_id",
+                    "data_type": "string",
+                    "column_name": "User ID",
+                    "column_order": 9
+                },
+                {
                     "data_path": "summary.total_objects",
-                    "data_type": "numeric"
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
                 },
                 {
                     "data_path": "summary.total_objects_successful",
-                    "data_type": "numeric"
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
                 }
             ],
             "render": {
@@ -1314,20 +1352,16 @@
                 "username": {
                     "description": "Username of the actor listed on alert",
                     "data_type": "string",
-                    "required": false,
                     "primary": true,
                     "contains": [
                         "email",
                         "user name"
                     ],
-                    "value_list": [],
-                    "default": "",
                     "order": 0
                 },
                 "alert_state": {
                     "description": "Alert state",
                     "data_type": "string",
-                    "required": false,
                     "primary": true,
                     "value_list": [
                         "OPEN",
@@ -1335,28 +1369,19 @@
                         "PENDING",
                         "IN_PROGRESS"
                     ],
-                    "default": "",
                     "order": 1,
                     "contains": [
                         "code42 alert state"
                     ]
                 },
                 "start_date": {
-                    "description": "Beginning of date range to search. Time (in UTC) may also be supplied but is not required.",
+                    "description": "Beginning of date range to search. Time (in UTC) may also be supplied but is not required",
                     "data_type": "string",
-                    "required": false,
-                    "primary": false,
-                    "value_list": [],
-                    "default": "",
                     "order": 2
                 },
                 "end_date": {
-                    "description": "End of date range to search. Time (in UTC) may also be supplied but is not required.",
+                    "description": "End of date range to search. Time (in UTC) may also be supplied but is not required",
                     "data_type": "string",
-                    "required": false,
-                    "primary": false,
-                    "value_list": [],
-                    "default": "",
                     "order": 3
                 }
             },
@@ -1426,28 +1451,38 @@
                 },
                 {
                     "data_path": "action_result.status",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
                 },
                 {
                     "data_path": "action_result.message",
                     "data_type": "string"
                 },
                 {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
+                },
+                {
                     "data_path": "summary.total_objects",
-                    "data_type": "numeric"
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
                 },
                 {
                     "data_path": "summary.total_objects_successful",
-                    "data_type": "numeric"
-                },
-                {
-                    "data_path": "action_result.summary",
-                    "data_type": "string"
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
                 }
             ],
             "render": {
                 "type": "custom",
-                "view": "code42_view.display_view"
+                "view": "code42v2_view.display_view"
             },
             "versions": "EQ(*)"
         },
@@ -1455,39 +1490,33 @@
             "action": "set alert state",
             "identifier": "set_alert_state",
             "description": "Set the state of the alert",
-            "verbose": "",
             "type": "generic",
             "read_only": false,
             "parameters": {
                 "alert_id": {
                     "description": "Alert ID",
                     "data_type": "string",
+                    "contains": [
+                        "code42 alert id"
+                    ],
                     "required": true,
-                    "primary": true,
-                    "value_list": [],
-                    "default": "",
                     "order": 0
                 },
                 "alert_state": {
                     "description": "Alert State",
                     "data_type": "string",
                     "required": true,
-                    "primary": true,
                     "value_list": [
                         "OPEN",
                         "RESOLVED",
                         "PENDING",
                         "IN_PROGRESS"
                     ],
-                    "default": "",
                     "order": 1
                 },
                 "note": {
                     "description": "A note to include",
                     "data_type": "string",
-                    "required": false,
-                    "primary": false,
-                    "default": "",
                     "order": 2
                 }
             },
@@ -1495,7 +1524,10 @@
                 {
                     "data_path": "action_result.parameter.alert_id",
                     "data_type": "string",
-                    "column_name": "Alert Id",
+                    "contains": [
+                        "code42 alert id"
+                    ],
+                    "column_name": "Alert ID",
                     "column_order": 0
                 },
                 {
@@ -1511,9 +1543,17 @@
                     "column_order": 2
                 },
                 {
+                    "data_path": "action_result.data",
+                    "data_type": "string"
+                },
+                {
                     "data_path": "action_result.status",
                     "data_type": "string",
-                    "column_name": "status",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ],
+                    "column_name": "Status",
                     "column_order": 3
                 },
                 {
@@ -1521,20 +1561,22 @@
                     "data_type": "string"
                 },
                 {
-                    "data_path": "summary.total_objects",
-                    "data_type": "numeric"
-                },
-                {
-                    "data_path": "summary.total_objects_successful",
-                    "data_type": "numeric"
-                },
-                {
                     "data_path": "action_result.summary",
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.data",
-                    "data_type": "string"
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
                 }
             ],
             "render": {
@@ -1546,7 +1588,7 @@
             "action": "create user",
             "identifier": "create_user",
             "description": "Create a new Code42 user account",
-            "verbose": "There is a short delay before you will be able to add the new user to departing employee or high risk employee list.",
+            "verbose": "There is a short delay before you will be able to add the new user to departing employee or high risk employee list. For the password parameter: Defaults to no password set, which leaves user in 'invited' state. They will need to reset password via email prior to first login.",
             "type": "generic",
             "read_only": false,
             "parameters": {
@@ -1554,8 +1596,6 @@
                     "description": "Org UID to create user in",
                     "data_type": "string",
                     "required": true,
-                    "primary": true,
-                    "default": "",
                     "order": 0
                 },
                 "username": {
@@ -1567,40 +1607,27 @@
                         "email",
                         "user name"
                     ],
-                    "default": "",
                     "order": 1
                 },
                 "password": {
                     "description": "Password for newly created user",
-                    "verbose": "Defaults to no password set, which leaves user in 'invited' state. They will need to reset password via email prior to first login.",
                     "data_type": "string",
-                    "required": false,
-                    "primary": false,
                     "default": null,
                     "order": 2
                 },
                 "first_name": {
                     "description": "User's first name",
                     "data_type": "string",
-                    "required": false,
-                    "primary": false,
-                    "default": "",
                     "order": 3
                 },
                 "last_name": {
                     "description": "User's last name",
                     "data_type": "string",
-                    "required": false,
-                    "primary": false,
-                    "default": "",
                     "order": 4
                 },
                 "notes": {
                     "description": "Notes about user",
                     "data_type": "string",
-                    "required": false,
-                    "primary": false,
-                    "default": "",
                     "order": 5
                 }
             },
@@ -1640,13 +1667,25 @@
                     "column_order": 4
                 },
                 {
+                    "data_path": "action_result.parameter.password",
+                    "data_type": "password"
+                },
+                {
+                    "data_path": "action_result.data",
+                    "data_type": "string"
+                },
+                {
                     "data_path": "action_result.status",
                     "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ],
                     "column_name": "Status",
                     "column_order": 5
                 },
                 {
-                    "data_path": "action_result.data",
+                    "data_path": "action_result.message",
                     "data_type": "string"
                 },
                 {
@@ -1658,12 +1697,18 @@
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.message",
-                    "data_type": "string"
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
                 },
                 {
-                    "data_path": "action_result.parameter.password",
-                    "data_type": "password"
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
                 }
             ],
             "render": {
@@ -1689,8 +1734,6 @@
                         "email",
                         "user name"
                     ],
-                    "value_list": [],
-                    "default": "",
                     "order": 0
                 }
             },
@@ -1706,14 +1749,18 @@
                     "column_order": 0
                 },
                 {
-                    "data_path": "action_result.status",
-                    "data_type": "string",
-                    "column_name": "status",
-                    "column_order": 1
-                },
-                {
                     "data_path": "action_result.data",
                     "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ],
+                    "column_name": "Status",
+                    "column_order": 1
                 },
                 {
                     "data_path": "action_result.message",
@@ -1722,6 +1769,20 @@
                 {
                     "data_path": "action_result.summary",
                     "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
                 }
             ],
             "render": {
@@ -1733,9 +1794,8 @@
             "action": "deactivate user",
             "identifier": "deactivate_user",
             "description": "Deactivates user's Code42 account",
-            "verbose": "",
             "undo": "reactivate user",
-            "type": "generic",
+            "type": "correct",
             "read_only": false,
             "parameters": {
                 "username": {
@@ -1747,8 +1807,6 @@
                         "email",
                         "user name"
                     ],
-                    "value_list": [],
-                    "default": "",
                     "order": 0
                 }
             },
@@ -1766,7 +1824,11 @@
                 {
                     "data_path": "action_result.status",
                     "data_type": "string",
-                    "column_name": "status",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ],
+                    "column_name": "Status",
                     "column_order": 1
                 },
                 {
@@ -1780,6 +1842,20 @@
                 {
                     "data_path": "action_result.summary",
                     "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
                 }
             ],
             "render": {
@@ -1791,9 +1867,8 @@
             "action": "reactivate user",
             "identifier": "reactivate_user",
             "description": "Reactivates a deactivated user's Code42 account",
-            "verbose": "",
             "undo": "deactivate user",
-            "type": "generic",
+            "type": "contain",
             "read_only": false,
             "parameters": {
                 "username": {
@@ -1805,8 +1880,6 @@
                         "email",
                         "user name"
                     ],
-                    "value_list": [],
-                    "default": "",
                     "order": 0
                 }
             },
@@ -1824,7 +1897,11 @@
                 {
                     "data_path": "action_result.status",
                     "data_type": "string",
-                    "column_name": "status",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ],
+                    "column_name": "Status",
                     "column_order": 1
                 },
                 {
@@ -1838,6 +1915,20 @@
                 {
                     "data_path": "action_result.summary",
                     "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
                 }
             ],
             "render": {
@@ -1849,7 +1940,6 @@
             "action": "unblock user",
             "identifier": "unblock_user",
             "description": "Unblocks a user, allowing access to their Code42 account",
-            "verbose": "",
             "undo": "block user",
             "type": "contain",
             "read_only": false,
@@ -1863,8 +1953,6 @@
                         "email",
                         "user name"
                     ],
-                    "value_list": [],
-                    "default": "",
                     "order": 0
                 }
             },
@@ -1882,7 +1970,11 @@
                 {
                     "data_path": "action_result.status",
                     "data_type": "string",
-                    "column_name": "status",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ],
+                    "column_name": "Status",
                     "column_order": 1
                 },
                 {
@@ -1896,6 +1988,20 @@
                 {
                     "data_path": "action_result.summary",
                     "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
                 }
             ],
             "render": {
@@ -1907,19 +2013,18 @@
             "action": "get user profile",
             "identifier": "get_user_profile",
             "description": "Get user profile",
-            "verbose": "",
-            "type": "generic",
+            "type": "investigate",
             "read_only": true,
             "parameters": {
                 "username": {
                     "description": "The username associated with the user profile to get",
                     "data_type": "string",
+                    "required": true,
+                    "primary": true,
                     "contains": [
                         "email",
                         "user name"
                     ],
-                    "required": true,
-                    "primary": true,
                     "order": 0
                 }
             },
@@ -1927,42 +2032,23 @@
                 {
                     "data_path": "action_result.parameter.username",
                     "data_type": "string",
-                    "column_name": "Username",
                     "contains": [
                         "email",
                         "user name"
                     ],
+                    "column_name": "Username",
                     "column_order": 0
                 },
                 {
-                    "data_path": "action_result.status",
-                    "data_type": "string",
-                    "column_name": "status",
-                    "column_order": 1
-                },
-                {
-                    "data_path": "action_result.message",
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "summary.total_objects",
-                    "data_type": "numeric"
-                },
-                {
-                    "data_path": "summary.total_objects_successful",
-                    "data_type": "numeric"
-                },
-                {
-                    "column_name": "City",
                     "data_path": "action_result.data.*.city",
                     "data_type": "string",
                     "example_values": [
                         "New York"
                     ],
+                    "column_name": "City",
                     "column_order": 2
                 },
                 {
-                    "column_name": "Cloud Username",
                     "data_path": "action_result.data.*.cloudUsernames.*.username",
                     "data_type": "string",
                     "example_values": [
@@ -1972,46 +2058,46 @@
                         "email",
                         "user name"
                     ],
+                    "column_name": "Cloud Username",
                     "column_order": 3
                 },
                 {
-                    "column_name": "Country",
                     "data_path": "action_result.data.*.country",
                     "data_type": "string",
                     "example_values": [
                         "US"
                     ],
+                    "column_name": "Country",
                     "column_order": 4
                 },
                 {
-                    "column_name": "Department",
                     "data_path": "action_result.data.*.department",
                     "data_type": "string",
                     "example_values": [
                         "Sales"
                     ],
+                    "column_name": "Department",
                     "column_order": 5
                 },
                 {
-                    "column_name": "Display Name",
                     "data_path": "action_result.data.*.displayName",
                     "data_type": "string",
                     "example_values": [
                         "Jane Doe"
                     ],
+                    "column_name": "Display Name",
                     "column_order": 6
                 },
                 {
-                    "column_name": "Manager Display Name",
                     "data_path": "action_result.data.*.managerDisplayName",
                     "data_type": "string",
                     "example_values": [
                         "Jane Doe"
                     ],
+                    "column_name": "Manager Display Name",
                     "column_order": 7
                 },
                 {
-                    "column_name": "Manager Username",
                     "data_path": "action_result.data.*.managerUsername",
                     "data_type": "string",
                     "example_values": [
@@ -2021,46 +2107,46 @@
                         "email",
                         "user name"
                     ],
+                    "column_name": "Manager Username",
                     "column_order": 8
                 },
                 {
-                    "column_name": "Risk Tag",
                     "data_path": "action_result.data.*.riskFactors.*.tag",
                     "data_type": "string",
                     "example_values": [
                         "FLIGHT_RISK"
                     ],
+                    "column_name": "Risk Tag",
                     "column_order": 9
                 },
                 {
-                    "column_name": "State",
                     "data_path": "action_result.data.*.state",
                     "data_type": "string",
                     "example_values": [
                         "AZ"
                     ],
+                    "column_name": "State",
                     "column_order": 10
                 },
                 {
-                    "column_name": "Title",
                     "data_path": "action_result.data.*.title",
                     "data_type": "string",
                     "example_values": [
                         "Vice President"
                     ],
+                    "column_name": "Title",
                     "column_order": 11
                 },
                 {
-                    "column_name": "User ID",
                     "data_path": "action_result.data.*.userId",
                     "data_type": "string",
                     "example_values": [
                         "1"
                     ],
+                    "column_name": "User ID",
                     "column_order": 12
                 },
                 {
-                    "column_name": "Username",
                     "data_path": "action_result.data.*.userName",
                     "data_type": "string",
                     "example_values": [
@@ -2070,16 +2156,45 @@
                         "email",
                         "user name"
                     ],
+                    "column_name": "Username",
                     "column_order": 13
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ],
+                    "column_name": "Status",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
                 },
                 {
                     "data_path": "action_result.summary",
                     "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
                 }
             ],
             "render": {
                 "type": "custom",
-                "view": "code42_view.display_view"
+                "view": "code42v2_view.display_view"
             },
             "versions": "EQ(*)"
         },
@@ -2087,7 +2202,6 @@
             "action": "add legalhold custodian",
             "identifier": "add_legalhold_custodian",
             "description": "Add a user (custodian) to a legal hold matter",
-            "verbose": "",
             "undo": "remove legalhold custodian",
             "type": "contain",
             "read_only": false,
@@ -2101,8 +2215,6 @@
                         "email",
                         "user name"
                     ],
-                    "value_list": [],
-                    "default": "",
                     "order": 0
                 },
                 "matter_id": {
@@ -2110,8 +2222,9 @@
                     "data_type": "string",
                     "required": true,
                     "primary": true,
-                    "value_list": [],
-                    "default": "",
+                    "contains": [
+                        "code42 matter id"
+                    ],
                     "order": 1
                 }
             },
@@ -2129,13 +2242,24 @@
                 {
                     "data_path": "action_result.parameter.matter_id",
                     "data_type": "string",
+                    "contains": [
+                        "code42 matter id"
+                    ],
                     "column_name": "matter_id",
                     "column_order": 1
                 },
                 {
+                    "data_path": "action_result.data",
+                    "data_type": "string"
+                },
+                {
                     "data_path": "action_result.status",
                     "data_type": "string",
-                    "column_name": "status",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ],
+                    "column_name": "Status",
                     "column_order": 2
                 },
                 {
@@ -2143,20 +2267,22 @@
                     "data_type": "string"
                 },
                 {
-                    "data_path": "summary.total_objects",
-                    "data_type": "numeric"
-                },
-                {
-                    "data_path": "summary.total_objects_successful",
-                    "data_type": "numeric"
-                },
-                {
                     "data_path": "action_result.summary",
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.data",
-                    "data_type": "string"
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
                 }
             ],
             "render": {
@@ -2168,9 +2294,8 @@
             "action": "remove legalhold custodian",
             "identifier": "remove_legalhold_custodian",
             "description": "Remove user (custodian) from a legal hold matter",
-            "verbose": "",
             "undo": "add legalhold custodian",
-            "type": "contain",
+            "type": "correct",
             "read_only": false,
             "parameters": {
                 "username": {
@@ -2182,8 +2307,6 @@
                         "email",
                         "user name"
                     ],
-                    "value_list": [],
-                    "default": "",
                     "order": 0
                 },
                 "matter_id": {
@@ -2191,8 +2314,9 @@
                     "data_type": "string",
                     "required": true,
                     "primary": true,
-                    "value_list": [],
-                    "default": "",
+                    "contains": [
+                        "code42 matter id"
+                    ],
                     "order": 1
                 }
             },
@@ -2210,43 +2334,56 @@
                 {
                     "data_path": "action_result.parameter.matter_id",
                     "data_type": "string",
+                    "contains": [
+                        "code42 matter id"
+                    ],
                     "column_name": "Matter ID",
                     "column_order": 1
                 },
                 {
-                    "data_path": "action_result.status",
-                    "data_type": "string",
-                    "column_name": "Status",
-                    "column_order": 2
+                    "data_path": "action_result.data",
+                    "data_type": "string"
                 },
                 {
-                    "column_name": "User ID ",
                     "data_path": "action_result.data.*.userId",
                     "data_type": "string",
                     "example_values": [
                         "1"
                     ],
+                    "column_name": "User ID",
                     "column_order": 3
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ],
+                    "column_name": "Status",
+                    "column_order": 2
                 },
                 {
                     "data_path": "action_result.message",
                     "data_type": "string"
                 },
                 {
-                    "data_path": "summary.total_objects",
-                    "data_type": "numeric"
-                },
-                {
-                    "data_path": "summary.total_objects_successful",
-                    "data_type": "numeric"
-                },
-                {
                     "data_path": "action_result.summary",
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.data",
-                    "data_type": "string"
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
                 }
             ],
             "render": {
@@ -2258,75 +2395,47 @@
             "action": "create case",
             "identifier": "create_case",
             "description": "Create a Code42 case",
-            "type": "investigate",
+            "type": "generic",
             "read_only": false,
             "parameters": {
                 "case_name": {
                     "description": "Case name",
                     "data_type": "string",
                     "required": true,
-                    "primary": false,
                     "order": 0
                 },
                 "subject": {
                     "description": "Subject of case (username)",
                     "data_type": "string",
-                    "required": false,
                     "primary": true,
                     "contains": [
                         "email",
                         "user name"
                     ],
-                    "default": "",
                     "order": 1
                 },
                 "description": {
                     "description": "Description",
                     "data_type": "string",
-                    "required": false,
-                    "primary": false,
-                    "default": "",
                     "order": 2
                 },
                 "assignee": {
                     "description": "Assignee (username)",
                     "data_type": "string",
-                    "required": false,
                     "primary": true,
                     "contains": [
                         "email",
                         "user name"
                     ],
-                    "default": "",
                     "order": 3
                 },
                 "findings": {
                     "description": "Findings (markdown text)",
                     "data_type": "string",
-                    "required": false,
-                    "primary": false,
-                    "default": "",
                     "order": 4
                 }
             },
             "output": [
-                {
-                    "data_path": "action_result.status",
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.message",
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.data.*.number",
-                    "data_type": "string",
-                    "contains": [
-                        "code42 case number"
-                    ],
-                    "column_name": "Case number",
-                    "column_order": 0
-                },
                 {
                     "data_path": "action_result.parameter.case_name",
                     "data_type": "string",
@@ -2366,8 +2475,43 @@
                     "column_order": 5
                 },
                 {
+                    "data_path": "action_result.data.*.number",
+                    "data_type": "string",
+                    "contains": [
+                        "code42 case number"
+                    ],
+                    "column_name": "Case number",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
                     "data_path": "action_result.summary.case_number",
                     "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
                 }
             ],
             "render": {
@@ -2379,7 +2523,7 @@
             "action": "update case",
             "identifier": "update_case",
             "description": "Update the details of a case",
-            "type": "investigate",
+            "type": "generic",
             "read_only": false,
             "parameters": {
                 "case_number": {
@@ -2395,22 +2539,16 @@
                 "case_name": {
                     "description": "Case name",
                     "data_type": "string",
-                    "required": false,
-                    "primary": false,
                     "order": 1
                 },
                 "description": {
                     "description": "Description",
                     "data_type": "string",
-                    "required": false,
-                    "primary": false,
-                    "default": "",
                     "order": 2
                 },
                 "subject": {
                     "description": "Subject",
                     "data_type": "string",
-                    "required": false,
                     "primary": true,
                     "contains": [
                         "email",
@@ -2421,7 +2559,6 @@
                 "assignee": {
                     "description": "Assignee",
                     "data_type": "string",
-                    "required": false,
                     "primary": true,
                     "contains": [
                         "email",
@@ -2432,20 +2569,10 @@
                 "findings": {
                     "description": "Findings (markdown)",
                     "data_type": "string",
-                    "required": false,
-                    "primary": false,
                     "order": 5
                 }
             },
             "output": [
-                {
-                    "data_path": "action_result.status",
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.message",
-                    "data_type": "string"
-                },
                 {
                     "data_path": "action_result.parameter.case_number",
                     "data_type": "numeric",
@@ -2529,8 +2656,34 @@
                     "column_order": 5
                 },
                 {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
                     "data_path": "action_result.summary.case_number",
                     "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
                 }
             ],
             "render": {
@@ -2542,7 +2695,7 @@
             "action": "close case",
             "identifier": "close_case",
             "description": "Change the status of a Code42 case to 'CLOSED'",
-            "type": "investigate",
+            "type": "generic",
             "read_only": false,
             "parameters": {
                 "case_number": {
@@ -2563,6 +2716,10 @@
                     "contains": [
                         "code42 case number"
                     ]
+                },
+                {
+                    "data_path": "action_result.data",
+                    "data_type": "string"
                 },
                 {
                     "data_path": "action_result.data.*.number",
@@ -2613,11 +2770,11 @@
                 },
                 {
                     "data_path": "action_result.status",
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.data",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
                 },
                 {
                     "data_path": "action_result.message",
@@ -2626,6 +2783,20 @@
                 {
                     "data_path": "action_result.summary.case_number",
                     "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
                 }
             ],
             "render": {
@@ -2644,7 +2815,6 @@
                     "description": "Filter cases by status",
                     "data_type": "string",
                     "required": true,
-                    "primary": false,
                     "value_list": [
                         "ALL",
                         "OPEN",
@@ -2656,7 +2826,6 @@
                 "assignee": {
                     "description": "Filter cases by assignee username",
                     "data_type": "string",
-                    "required": false,
                     "primary": true,
                     "contains": [
                         "email",
@@ -2668,7 +2837,6 @@
                 "subject": {
                     "description": "Filter cases by subject username",
                     "data_type": "string",
-                    "required": false,
                     "primary": true,
                     "contains": [
                         "email",
@@ -2698,11 +2866,6 @@
                         "email",
                         "user name"
                     ]
-                },
-                {
-                    "data_path": "action_result.status",
-                    "data_type": "string",
-                    "column_name": "Status"
                 },
                 {
                     "column_name": "Case Status",
@@ -2780,12 +2943,36 @@
                     "column_order": 6
                 },
                 {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ],
+                    "column_name": "Status",
+                    "column_order": 7
+                },
+                {
                     "data_path": "action_result.message",
                     "data_type": "string"
                 },
                 {
                     "data_path": "action_result.summary.total_count",
                     "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
                 }
             ],
             "render": {
@@ -2796,8 +2983,8 @@
         {
             "action": "add case event",
             "identifier": "add_case_event",
-            "description": "Associates a file event with a Code42 case.",
-            "type": "investigate",
+            "description": "Associates a file event with a Code42 case",
+            "type": "generic",
             "read_only": false,
             "parameters": {
                 "case_number": {
@@ -2841,10 +3028,18 @@
                     ]
                 },
                 {
+                    "data_path": "action_result.data",
+                    "data_type": "string"
+                },
+                {
                     "data_path": "action_result.status",
                     "data_type": "string",
                     "column_name": "Status",
-                    "column_order": 2
+                    "column_order": 2,
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
                 },
                 {
                     "data_path": "action_result.message",
@@ -2859,8 +3054,18 @@
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.data",
-                    "data_type": "string"
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
                 }
             ],
             "render": {
@@ -2872,7 +3077,6 @@
             "action": "hunt file",
             "identifier": "hunt_file",
             "description": "Searches Code42 for a backed-up file with a matching hash and downloads it",
-            "verbose": "",
             "type": "investigate",
             "read_only": true,
             "parameters": {
@@ -2885,15 +3089,15 @@
                         "md5",
                         "sha256"
                     ],
-                    "default": "",
                     "order": 0
                 },
                 "file_name": {
-                    "description": "The name to give to the file after it is downloaded. If not supplied, the hash will be used.",
+                    "description": "The name to give to the file after it is downloaded. If not supplied, the hash will be used",
                     "data_type": "string",
-                    "required": false,
                     "primary": true,
-                    "default": "",
+                    "contains": [
+                        "file name"
+                    ],
                     "order": 1
                 }
             },
@@ -2911,22 +3115,25 @@
                 {
                     "data_path": "action_result.parameter.file_name",
                     "data_type": "string",
+                    "contains": [
+                        "file name"
+                    ],
                     "column_name": "status",
                     "column_order": 1
-                },
-                {
-                    "data_path": "action_result.status",
-                    "data_type": "string",
-                    "column_name": "status",
-                    "column_order": 2
                 },
                 {
                     "data_path": "action_result.data",
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.summary",
-                    "data_type": "string"
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "status",
+                    "column_order": 2,
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
                 },
                 {
                     "data_path": "action_result.message",
@@ -2935,6 +3142,20 @@
                 {
                     "data_path": "action_result.summary",
                     "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
                 }
             ],
             "render": {
@@ -2951,39 +3172,29 @@
             "read_only": true,
             "parameters": {
                 "start_date": {
-                    "description": "Beginning of date range to search. Time (in UTC) may also be supplied but is not required.",
+                    "description": "Beginning of date range to search. Time (in UTC) may also be supplied but is not required",
                     "data_type": "string",
-                    "required": false,
-                    "primary": false,
-                    "default": "",
                     "order": 0
                 },
                 "end_date": {
-                    "description": "End of date range to search. Time (in UTC) may also be supplied but is not required.",
+                    "description": "End of date range to search. Time (in UTC) may also be supplied but is not required",
                     "data_type": "string",
-                    "required": false,
-                    "primary": false,
-                    "default": "",
                     "order": 1
                 },
                 "file_hash": {
                     "description": "Md5 or sha256 hash of a file",
                     "data_type": "string",
-                    "required": false,
                     "primary": true,
                     "contains": [
                         "md5",
                         "sha256"
                     ],
-                    "default": "",
                     "order": 2
                 },
                 "file_name": {
                     "description": "Name of the file observed",
                     "data_type": "string",
-                    "required": false,
                     "primary": true,
-                    "default": "",
                     "order": 3,
                     "contains": [
                         "file name"
@@ -3098,7 +3309,7 @@
                     ]
                 },
                 "window_title": {
-                    "description": "Names of all the open browser tabs or windows during exposure.",
+                    "description": "Names of all the open browser tabs or windows during exposure",
                     "data_type": "string",
                     "order": 13,
                     "primary": true,
@@ -3109,8 +3320,7 @@
                 "untrusted_only": {
                     "description": "Return only events representing untrusted activity",
                     "data_type": "boolean",
-                    "order": 14,
-                    "primary": false
+                    "order": 14
                 }
             },
             "output": [
@@ -3525,7 +3735,11 @@
                 },
                 {
                     "data_path": "action_result.status",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
                 },
                 {
                     "data_path": "action_result.message",
@@ -3541,16 +3755,22 @@
                 },
                 {
                     "data_path": "summary.total_objects",
-                    "data_type": "numeric"
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
                 },
                 {
                     "data_path": "summary.total_objects_successful",
-                    "data_type": "numeric"
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
                 }
             ],
             "render": {
                 "type": "custom",
-                "view": "code42_view.display_view"
+                "view": "code42v2_view.display_view"
             },
             "versions": "EQ(*)"
         },
@@ -3558,7 +3778,6 @@
             "action": "run advanced query",
             "identifier": "run_advanced_query",
             "description": "Run an advanced query using JSON",
-            "verbose": "",
             "type": "investigate",
             "read_only": true,
             "parameters": {
@@ -3566,12 +3785,14 @@
                     "description": "The raw JSON of the query to execute",
                     "data_type": "string",
                     "required": true,
-                    "primary": true,
-                    "default": "",
                     "order": 0
                 }
             },
             "output": [
+                {
+                    "data_path": "action_result.parameter.json_query",
+                    "data_type": "numeric"
+                },
                 {
                     "data_path": "action_result.data.*.eventTimestamp",
                     "data_type": "string",
@@ -3872,7 +4093,11 @@
                 },
                 {
                     "data_path": "action_result.status",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
                 },
                 {
                     "data_path": "action_result.message",
@@ -3884,15 +4109,17 @@
                 },
                 {
                     "data_path": "summary.total_objects",
-                    "data_type": "numeric"
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
                 },
                 {
                     "data_path": "summary.total_objects_successful",
-                    "data_type": "numeric"
-                },
-                {
-                    "data_path": "action_result.parameter.json_query",
-                    "data_type": "numeric"
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
                 }
             ],
             "render": {

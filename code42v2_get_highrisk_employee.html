@@ -9,10 +9,22 @@
 
 {% block widget_content %} <!-- Main Start Block -->
 
-<!-- File: code42_search_alerts.html
-  Copyright (c) 2018-2021 Splunk Inc.
-  Licensed under Apache 2.0 (https://www.apache.org/licenses/LICENSE-2.0.txt)
+<!-- File: code42v2_get_highrisk_employee.html
+
+  Copyright (c) Code42, 2021
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software distributed under
+  the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+  either express or implied. See the License for the specific language governing permissions
+  and limitations under the License.
 -->
+
 <style>
 
     .code42v2 a:hover {
@@ -49,6 +61,10 @@
         font-size: 12px;
     }
 
+    .code42v2 .dataTable .glyphicon.glyphicon-dot:before {
+        content: "\25cf"; font-size: 10px;
+    }
+
 </style>
 
 <div class="code42v2" style="overflow: auto; width: 100%; height: 100%; padding-left:10px; padding-right:10px">
@@ -56,46 +72,47 @@
 
     {% for result in results %} <!-- loop for each result -->
         {% if not result.data %}
-            <h4 class="wf-h4-style">No alerts found</h4>
+            <h4 class="wf-h4-style">This user is not a high risk employee</h4>
         {% else %}
 
-            <div class="alert">
+            <div class="employee">
                 &nbsp;
-                <h4 class="wf-h4-style">Alerts</h4>
+                <h4 class="wf-h4-style">High Risk Employee</h4>
                     <table class="phantom-table dataTable">
                         <thead>
-                            <th class="widget-th">Actor</th>
-                            <th class="widget-th">State</th>
-                            <th class="widget-th">Severity</th>
-                            <th class="widget-th">Name</th>
-                            <th class="widget-th">Created At</th>
-                            <th class="widget-th">Description</th>
+                            <th class="widget-th">Username</th>
+                            <th class="widget-th">User ID</th>
+                            <th class="widget-th">Risk Tags</th>
+                            <th class="widget-th">Notes</th>
+                            <th class="widget-th">Creation Date</th>
                         </thead>
                         <tbody>
-                            {% for alert in result.data %}
+                            {% for employee in result.data %}
                                 <tr>
                                     <td class="widget-td">
                                         <a href="javascript:;" onclick="context_menu(this, [{'contains': ['email', 'user name'],
-                                            'value':'{{ alert.actor }}' }], 0,
+                                            'value':'{{ employee.userName }}' }], 0,
                                             {{ container.id }}, null, false);">
-                                                {{ alert.actor }}
+                                                {{ employee.userName }}
                                                 &nbsp;
                                             <span class="fa fa-caret-down" style="font-size: smaller;"></span>
                                         </a>
                                     </td>
+                                    <td class="widget-td">{{ employee.userId }}</td>
                                     <td class="widget-td">
-                                        <a href="javascript:;" onclick="context_menu(this, [{'contains': ['code42 alert state'],
-                                            'value':'{{ alert.state }}' }], 0,
-                                            {{ container.id }}, null, false);">
-                                                {{ alert.state }}
+                                        {% for tag in employee.riskFactors %}
+                                            <span class="glyphicon glyphicon-dot"></span>&nbsp;
+                                            <a href="javascript:;"
+                                               onclick="context_menu(this, [{'contains': ['code42 risk tag'], 'value': '{{ tag.tag }}' }], 0, {{ container.id }}, null, false);">
+                                                {{ tag.tag }}
                                                 &nbsp;
-                                            <span class="fa fa-caret-down" style="font-size: smaller;"></span>
-                                        </a>
+                                                <span class="fa fa-caret-down" style="font-size: smaller;"></span>
+                                            </a>
+                                            {% if not forloop.last %}<br/> {% endif %}
+                                        {% endfor %}
                                     </td>
-                                    <td class="widget-td">{{ alert.severity }}</td>
-                                    <td class="widget-td">{{ alert.name }}</td>
-                                    <td class="widget-td">{{ alert.createdAt }}</td>
-                                    <td class="widget-td">{{ alert.description }}</td>
+                                    <td class="widget-td">{{ employee.notes }}</td>
+                                    <td class="widget-td">{{ employee.createdAt }}</td>
                                 </tr>
                             {% endfor %}
                         </tbody>
