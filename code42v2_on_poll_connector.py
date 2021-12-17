@@ -17,9 +17,10 @@ from datetime import datetime, timezone
 
 import dateutil.parser
 import phantom.app as phantom
-from code42v2_util import build_alerts_query, get_thirty_days_ago, parse_datetime
 from py42.sdk.queries.fileevents.file_event_query import FileEventQuery
 from py42.sdk.queries.fileevents.filters import Actor, DeviceUsername, EventTimestamp, EventType, ExposureType, FileCategory
+
+from code42v2_util import build_alerts_query, get_thirty_days_ago, parse_datetime
 
 """The contents of this module that related to mapping alert observations to file events borrows heavily from the
 Code42 Cortex XSOAR integration as well as the code42cli python package.
