@@ -1,6 +1,6 @@
 # File: code42v2_connector.py
 #
-# Copyright (c) Code42, 2021
+# Copyright (c) 2022 Splunk Inc., Code42
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,11 +17,13 @@
 # Python 3 Compatibility imports
 from __future__ import print_function, unicode_literals
 
+import ipaddress
 import json
 
 import phantom.app as phantom
 import phantom.utils as utils
 import py42.sdk
+import py42.settings as settings
 import requests
 from phantom.action_result import ActionResult
 from phantom.base_connector import BaseConnector
@@ -87,6 +89,21 @@ class Code42Connector(BaseConnector):
         self._username = None
         self._password = None
         self._client = None
+        self._proxy = None
+
+    def _is_ipv6(self, input_ip_address):
+        """ Function that checks given address and return True if address is valid IPv4 or IPV6 address.
+
+        :param input_ip_address: IP address
+        :return: status (success/failure)
+        """
+
+        try:
+            ipaddress.ip_address(input_ip_address)
+        except:
+            return False
+
+        return True
 
     def initialize(self):
         # use this to store data that needs to be accessed across actions
@@ -97,6 +114,16 @@ class Code42Connector(BaseConnector):
         self._username = config["username"]
         self._password = config["password"]
 
+        # handle proxies
+        self._proxy = {}
+        env_vars = config.get('_reserved_environment_variables', {})
+        if 'HTTP_PROXY' in env_vars:
+            self._proxy['http'] = env_vars['HTTP_PROXY']['value']
+        if 'HTTPS_PROXY' in env_vars:
+            self._proxy['https'] = env_vars['HTTPS_PROXY']['value']
+        settings.proxies = self._proxy
+
+        self.set_validator('ipv6', self._is_ipv6)
         return phantom.APP_SUCCESS
 
     def _validate_integer(self, action_result, parameter, key, allow_zero=False):
@@ -113,6 +140,8 @@ class Code42Connector(BaseConnector):
         if not allow_zero and parameter == 0:
             return action_result.set_status(phantom.APP_ERROR, CODE42V2_NON_NEG_NON_ZERO_INT_MSG.format(param=key)), None
 
+        return phantom.APP_SUCCESS, parameter
+
     def handle_action(self, param):
         action_id = self.get_action_identifier()
         self.debug_print("action_id", action_id)
@@ -122,7 +151,7 @@ class Code42Connector(BaseConnector):
 
         if not action_handler:
             return action_result.set_status(
-                phantom.APP_ERROR, f"Code42: Action {action_id} does not exist."
+                phantom.APP_ERROR, f"Code42: Action {action_id} does not exist"
             )
 
         try:
@@ -191,7 +220,7 @@ class Code42Connector(BaseConnector):
             for employee in employees:
                 action_result.add_data(employee)
 
-        total_count = page.data.get("totalCount", 0) if page else None
+        total_count = page.data.get("totalCount", 0) if page else 0
         action_result.update_summary({"total_count": total_count})
         return action_result.set_status(phantom.APP_SUCCESS)
 
@@ -252,7 +281,7 @@ class Code42Connector(BaseConnector):
                     employee["riskFactors"] = _convert_to_obj_list(all_tags, "tag")
                 action_result.add_data(employee)
 
-        total_count = page.data.get("totalCount", 0) if page else None
+        total_count = page.data.get("totalCount", 0) if page else 0
         action_result.update_summary({"total_count": total_count})
         return action_result.set_status(phantom.APP_SUCCESS)
 
@@ -286,7 +315,7 @@ class Code42Connector(BaseConnector):
         all_tags = response.data.get("riskFactors", [])
         response["riskFactors"] = _convert_to_obj_list(all_tags, "tag")
         action_result.add_data(response.data)
-        message = f"All risk tags for user: {','.join(all_tags)}"
+        message = f"All risk tags for user: {', '.join(all_tags)}"
         return action_result.set_status(phantom.APP_SUCCESS, message)
 
     @action_handler_for("remove_highrisk_tag")
@@ -304,13 +333,45 @@ class Code42Connector(BaseConnector):
         response["riskFactors"] = _convert_to_obj_list(all_tags, "tag")
         action_result.add_data(response.data)
         message = (
-            f"All risk tags for user: {','.join(all_tags)}"
+            f"All risk tags for user: {', '.join(all_tags)}"
             if all_tags
             else "User has no risk tags"
         )
         return action_result.set_status(phantom.APP_SUCCESS, message)
 
     """ USER ACTIONS """
+
+    @action_handler_for("list_users")
+    def _handle_list_users(self, param, action_result):
+        org_uid = param.get("org_uid")
+        role_id = param.get("role_id")
+        email = param.get("email")
+        active_user = param.get("user_status", 'All')
+        if active_user not in CODE42V2_USER_STATUS_LIST:
+            msg = CODE42V2_VALUE_LIST_ERR_MSG.format('user_status', CODE42V2_USER_STATUS_LIST)
+            return action_result.set_status(phantom.APP_SUCCESS, msg)
+        if active_user == 'All':
+            active = None
+        elif active_user == 'Active':
+            active = True
+        elif active_user == 'Inactive':
+            active = False
+        response = self._client.users.get_all(
+            org_uid=org_uid,
+            role_id=role_id,
+            email=email,
+            active=active,
+        )
+
+        page = None
+        for page in response:
+            users = page.data.get("users", [])
+            for user in users:
+                action_result.add_data(user)
+
+        total_count = page.data.get("totalCount", 0) if page else 0
+        action_result.update_summary({"total_users": total_count})
+        return action_result.set_status(phantom.APP_SUCCESS)
 
     @action_handler_for("create_user")
     def _handle_create_user(self, param, action_result):
@@ -380,6 +441,7 @@ class Code42Connector(BaseConnector):
             all_cloud_usernames, "username"
         )
         action_result.add_data(response.data)
+        action_result.update_summary({"user_id": response.data['userId']})
         return action_result.set_status(phantom.APP_SUCCESS)
 
     """ALERTS ACTIONS"""
@@ -446,7 +508,7 @@ class Code42Connector(BaseConnector):
         self._check_matter_is_accessible(matter_id)
         response = self._client.legalhold.add_to_matter(user_id, matter_id)
         action_result.add_data(response.data)
-        status_message = f"{username} was added to legal hold matter {matter_id}."
+        status_message = f"{username} was added to legal hold matter {matter_id}"
         return action_result.set_status(phantom.APP_SUCCESS, status_message)
 
     @action_handler_for("remove_legalhold_custodian")
@@ -462,11 +524,11 @@ class Code42Connector(BaseConnector):
             return action_result.set_status(
                 phantom.APP_ERROR,
                 f"Code42: User is not an active member of "
-                f"legal hold matter {matter_id} for action 'remove_legalhold_custodian'.",
+                f"legal hold matter {matter_id} for action 'remove_legalhold_custodian'",
             )
         self._client.legalhold.remove_from_matter(legal_hold_membership_id)
         action_result.add_data({"userId": user_id})
-        status_message = f"{username} was removed from legal hold matter {matter_id}."
+        status_message = f"{username} was removed from legal hold matter {matter_id}"
         return action_result.set_status(phantom.APP_SUCCESS, status_message)
 
     """ CASES ACTIONS """
@@ -568,7 +630,7 @@ class Code42Connector(BaseConnector):
             for case in cases:
                 action_result.add_data(case)
 
-        total_count = page.data.get("totalCount", 0) if page else None
+        total_count = page.data.get("totalCount", 0) if page else 0
         action_result.update_summary({"total_count": total_count})
         return action_result.set_status(phantom.APP_SUCCESS)
 
@@ -587,19 +649,19 @@ class Code42Connector(BaseConnector):
             if "NO_SUCH_CASE" in err.response.text:
                 self._handle_case_not_found(err, case_number)
             elif "NO_SUCH_EVENT" in err.response.text:
-                message = f"Event ID {event_id} not found."
+                message = f"Event ID {event_id} not found"
                 err.args = (message,)
                 raise err
             else:
-                raise
+                raise err
         status_message = f"Event {event_id} added to case number {case_number}"
         action_result.update_summary({"case_number": case_number, "event_id": event_id})
         return action_result.set_status(phantom.APP_SUCCESS, status_message)
 
     @staticmethod
     def _handle_case_not_found(exception, case_number):
-        """Returns a better error message when cases service returns 404."""
-        message = f"Case number {case_number} not found."
+        """Returns a better error message when cases service returns 404"""
+        message = f"Case number {case_number} not found"
         exception.args = (message,)
         raise exception
 
@@ -629,7 +691,7 @@ class Code42Connector(BaseConnector):
         if is_default_dict(param):
             return action_result.set_status(
                 phantom.APP_ERROR,
-                "Code42: Must supply a search term when calling action 'run_query'.",
+                "Code42: Must supply a search term when calling action 'run_query'",
             )
 
         file_category = param.get("file_category")
@@ -641,6 +703,15 @@ class Code42Connector(BaseConnector):
         if exposure_type and exposure_type not in CODE42V2_EXPOSURE_TYPE_LIST:
             msg = CODE42V2_VALUE_LIST_ERR_MSG.format('exposure_type', CODE42V2_EXPOSURE_TYPE_LIST)
             return action_result.set_status(phantom.APP_SUCCESS, msg)
+
+        max_results = param.get("max_results", MAX_RESULTS_DEFAULT)
+        ret_val, max_results = self._validate_integer(
+            action_result,
+            max_results,
+            CODE42V2_MAX_RESULTS_KEY
+        )
+        if phantom.is_fail(ret_val):
+            return action_result.get_status()
 
         query = self._build_file_events_query(
             param.get("start_date"),
@@ -659,13 +730,27 @@ class Code42Connector(BaseConnector):
             param.get("window_title"),
             param.get("untrusted_only"),
         )
-        self._add_file_event_results(query, action_result)
+        self._add_file_event_results(query, action_result, max_results)
         return action_result.set_status(phantom.APP_SUCCESS)
 
     @action_handler_for("run_advanced_query")
     def _handle_run_json_query(self, param, action_result):
-        query = param["json_query"]
-        self._add_file_event_results(query, action_result)
+        query = json.loads(param["json_query"])
+
+        # removed page related keys from query
+        for key in PAGE_KEYS:
+            if key in query:
+                del query[key]
+
+        max_results = param.get("max_results", MAX_RESULTS_DEFAULT)
+        ret_val, max_results = self._validate_integer(
+            action_result,
+            max_results,
+            CODE42V2_MAX_RESULTS_KEY
+        )
+        if phantom.is_fail(ret_val):
+            return action_result.get_status()
+        self._add_file_event_results(query, action_result, max_results)
         return action_result.set_status(phantom.APP_SUCCESS)
 
     def finalize(self):
@@ -754,21 +839,52 @@ class Code42Connector(BaseConnector):
         chunks = [chunk for chunk in response.iter_content(chunk_size=128) if chunk]
         return b"".join(chunks)
 
-    def _add_file_event_results(self, query, action_result):
-        results = self._client.securitydata.search_file_events(query)
-        for result in results.data.get("fileEvents", []):
-            result = dict(result)
-            all_window_titles = result.get("windowTitle", [])
-            if all_window_titles:
-                result["windowTitle"] = _convert_to_obj_list(
-                    all_window_titles, "windowTitle"
-                )
-            action_result.add_data(result)
+    def _add_file_event_results(self, query, action_result, max_results):
+        if isinstance(query, FileEventQuery):
+            query.pgToken = ""
+            query.pgSize = PAGE_SIZE
+        else:
+            query['pgToken'] = ""
+            query['pgSize'] = PAGE_SIZE
+        items_list = []
+        total_counts = 0
+        results = {}
 
+        while True:
+            results = self._client.securitydata.search_file_events(
+                query if isinstance(query, FileEventQuery) else json.dumps(query)
+            )
+            for result in results.data.get("fileEvents", []):
+                result = dict(result)
+                all_window_titles = result.get("windowTitle", [])
+                if all_window_titles:
+                    result["windowTitle"] = _convert_to_obj_list(
+                        all_window_titles, "windowTitle"
+                    )
+                items_list.append(result)
+
+            # Max results fetched. Hence, exit the paginator.
+            if len(items_list) >= max_results:
+                items_list = items_list[:max_results]
+                break
+
+            if results.data.get('nextPgToken'):
+                if isinstance(query, FileEventQuery):
+                    query.pgToken = results.data.get('nextPgToken')
+                else:
+                    query['pgToken'] = results.data.get('nextPgToken')
+            else:
+                break
+
+        for item in items_list:
+            action_result.add_data(item)
+
+        if results and results.data:
+            total_counts = results.data.get("totalCount", 0)
         action_result.update_summary(
             {
-                "total_count": results.data["totalCount"],
-                "results_returned_count": len(results.data["fileEvents"]),
+                "total_count": total_counts,
+                "results_returned_count": len(items_list),
             }
         )
 
@@ -798,6 +914,7 @@ class Code42Connector(BaseConnector):
 
 def main():
     import argparse
+    import sys
 
     import pudb
 
@@ -828,7 +945,7 @@ def main():
             login_url = Code42Connector._get_phantom_base_url() + "/login"
 
             print("Accessing the Login page")
-            r = requests.get(login_url, verify=False)
+            r = requests.get(login_url, verify=False)  # nosemgrep
             csrftoken = r.cookies["csrftoken"]
 
             data = dict()
@@ -841,11 +958,11 @@ def main():
             headers["Referer"] = login_url
 
             print("Logging into Platform to get the session id")
-            r2 = requests.post(login_url, verify=False, data=data, headers=headers)
+            r2 = requests.post(login_url, verify=False, data=data, headers=headers)  # nosemgrep
             session_id = r2.cookies["sessionid"]
         except Exception as e:
             print("Unable to get session id from the platform. Error: " + str(e))
-            exit(1)
+            sys.exit(1)
 
     with open(args.input_test_json) as f:
         in_json = f.read()
@@ -864,7 +981,7 @@ def main():
         ret_val = connector._handle_action(json_string, None)
         print(json.dumps(json.loads(ret_val), indent=4))
 
-    exit(0)
+    sys.exit(0)
 
 
 if __name__ == "__main__":

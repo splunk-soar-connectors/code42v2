@@ -1,6 +1,6 @@
 # File: code42v2_on_poll_connector.py
 #
-# Copyright (c) Code42, 2021
+# Copyright (c) 2022 Splunk Inc., Code42
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -112,7 +112,8 @@ class Code42OnPollConnector:
         source_id = param.get("container_id")
         if source_id:
             # Ignore all other query params when polling for specific alert IDs
-            alert_ids = source_id.split(",")
+            alert_ids = [x.strip() for x in source_id.split(',')]
+            alert_ids = list(filter(None, alert_ids))
             alerts = self._get_alert_details(alert_ids)
             last_alert = self._create_containers_from_alert_detail_responses(alerts)
         else:
@@ -473,7 +474,7 @@ def _handle_nested_json_fields(cef_field_key, cef_field_value):
 
 
 def _convert_list_to_csv(_list):
-    value = ",".join([val for val in _list])
+    value = ",".join([val for val in _list if val])
     return value
 
 

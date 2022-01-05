@@ -1,6 +1,6 @@
 # File: code42v2_consts.py
 #
-# Copyright (c) Code42, 2021
+# Copyright (c) 2022 Splunk Inc., Code42
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,6 +12,11 @@
 # the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
 # either express or implied. See the License for the specific language governing permissions
 
+# max_results default value
+MAX_RESULTS_DEFAULT = 1000
+
+# default page size
+PAGE_SIZE = 10000
 
 # value list for filter_type parameter in list departing employee action
 CODE42V2_FILTER_TYPE_DEPARTING_LIST = [
@@ -82,11 +87,22 @@ CODE42V2_EXPOSURE_TYPE_LIST = [
     "OutsideTrustedDomains"
 ]
 
+# value list for active_user parameter in list users action
+CODE42V2_USER_STATUS_LIST = [
+    "Active",
+    "Inactive",
+    "All"
+]
+
+# page related keys
+PAGE_KEYS = ['pgNum', 'pgSize', 'pgToken']
+
 # integer validation constants
 CODE42V2_VALID_INT_MSG = "Please provide a valid integer value in the '{param}' parameter"
 CODE42V2_NON_NEG_INT_MSG = "Please provide a valid non-negative integer value in the '{param}' parameter"
 CODE42V2_NON_NEG_NON_ZERO_INT_MSG = "Please provide a valid non-zero positive integer value in '{param}' parameter"
-CODE42V2_CASE_NUM_KEY = "'case number' action parameter"
+CODE42V2_CASE_NUM_KEY = "'case_number' action parameter"
+CODE42V2_MAX_RESULTS_KEY = "'max_results' action parameter"
 
 # value_list validation constants
-CODE42V2_VALUE_LIST_ERR_MSG = "Please provide a valid value in the '{}' action parameter.\n Expected values are {}"
+CODE42V2_VALUE_LIST_ERR_MSG = "Please provide a valid value in the '{}' action parameter. Expected values are {}"

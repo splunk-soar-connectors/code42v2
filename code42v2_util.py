@@ -1,6 +1,6 @@
 # File: code42v2_util.py
 #
-# Copyright (c) Code42, 2021
+# Copyright (c) 2022 Splunk Inc., Code42
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -26,7 +26,12 @@ def get_thirty_days_ago():
 
 
 def parse_datetime(date_str):
-    return dateutil.parser.parse(date_str).replace(tzinfo=timezone.utc)
+    date_time_obj = dateutil.parser.parse(date_str)
+    if date_time_obj.utcoffset():
+        date_time_obj = date_time_obj.replace(tzinfo=timezone.utc) - date_time_obj.utcoffset()
+    else:
+        date_time_obj = date_time_obj.replace(tzinfo=timezone.utc)
+    return date_time_obj
 
 
 def build_date_range_filter(date_filter_cls, start_date_str, end_date_str):
