@@ -475,7 +475,7 @@ class Code42Connector(BaseConnector):
         end_date = param.get("end_date")
         alert_state = param.get("alert_state")
 
-        if alert_state not in CODE42V2_ALERT_STATE:
+        if alert_state and alert_state not in CODE42V2_ALERT_STATE:
             msg = CODE42V2_VALUE_LIST_ERR_MSG.format('alert_state', CODE42V2_ALERT_STATE)
             return action_result.set_status(phantom.APP_ERROR, msg)
 
@@ -704,7 +704,7 @@ class Code42Connector(BaseConnector):
             return action_result.set_status(phantom.APP_ERROR, msg)
 
         exposure_type = param.get("exposure_type")
-        if exposure_type and exposure_type not in CODE42V2_EXPOSURE_TYPE_LIST:
+        if exposure_type and (exposure_type not in CODE42V2_EXPOSURE_TYPE_LIST):
             msg = CODE42V2_VALUE_LIST_ERR_MSG.format('exposure_type', CODE42V2_EXPOSURE_TYPE_LIST)
             return action_result.set_status(phantom.APP_ERROR, msg)
 

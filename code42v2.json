@@ -8,6 +8,7 @@
     "logo_dark": "logo_code42v2_dark.svg",
     "product_name": "Code42 v2",
     "python_version": "3",
+    "fips_compliant": true,
     "product_version_regex": ".*",
     "publisher": "Code42",
     "license": "Copyright (c) 2022 Splunk Inc., Code42",
