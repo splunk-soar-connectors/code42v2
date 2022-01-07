@@ -1523,6 +1523,7 @@
                         "code42 alert id"
                     ],
                     "required": true,
+                    "primary": true,
                     "order": 0
                 },
                 "alert_state": {
@@ -1627,6 +1628,7 @@
                 "email": {
                     "description": "User's email",
                     "data_type": "string",
+                    "primary": true,
                     "contains": [
                         "email"
                     ],
