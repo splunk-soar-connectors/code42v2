@@ -6,7 +6,7 @@
     "product_vendor": "Code42",
     "logo": "logo_code42v2.svg",
     "logo_dark": "logo_code42v2_dark.svg",
-    "product_name": "Code42",
+    "product_name": "Code42 v2",
     "python_version": "3",
     "product_version_regex": ".*",
     "publisher": "Code42",
@@ -191,7 +191,7 @@
                     "data_path": "action_result.parameter.departure_date",
                     "data_type": "string",
                     "column_name": "Departure Date",
-                    "column_order": 2
+                    "column_order": 3
                 },
                 {
                     "data_path": "action_result.parameter.note",
@@ -236,7 +236,7 @@
                         "failed"
                     ],
                     "column_name": "Status",
-                    "column_order": 3
+                    "column_order": 2
                 },
                 {
                     "data_path": "action_result.message",
@@ -1626,6 +1626,9 @@
                 "email": {
                     "description": "User's email",
                     "data_type": "string",
+                    "contains": [
+                        "email"
+                    ],
                     "order": 2
                 },
                 "user_status": {
@@ -1658,21 +1661,28 @@
                 {
                     "data_path": "action_result.parameter.email",
                     "data_type": "string",
+                    "contains": [
+                        "email"
+                    ],
                     "example_values": [
                         "test@gmail.com"
                     ]
                 },
                 {
-                    "data_path": "action_result.parameter.active",
+                    "data_path": "action_result.parameter.user_status",
                     "data_type": "string",
                     "example_values": [
-                        "True",
-                        "False"
+                        "Active",
+                        "Inactive",
+                        "All"
                     ]
                 },
                 {
                     "data_path": "action_result.data.*.email",
                     "data_type": "string",
+                    "contains": [
+                        "email"
+                    ],
                     "example_values": [
                         "test@gmail.com"
                     ],
@@ -1779,6 +1789,10 @@
                 {
                     "data_path": "action_result.data.*.username",
                     "data_type": "string",
+                    "contains": [
+                        "user name",
+                        "email"
+                    ],
                     "example_values": [
                         "test@gmail.com"
                     ]
@@ -2357,7 +2371,7 @@
                         "user name"
                     ],
                     "column_name": "Cloud Username",
-                    "column_order": 3
+                    "column_order": 4
                 },
                 {
                     "data_path": "action_result.data.*.country",
@@ -2366,7 +2380,7 @@
                         "US"
                     ],
                     "column_name": "Country",
-                    "column_order": 4
+                    "column_order": 5
                 },
                 {
                     "data_path": "action_result.data.*.department",
@@ -2375,7 +2389,7 @@
                         "Sales"
                     ],
                     "column_name": "Department",
-                    "column_order": 5
+                    "column_order": 6
                 },
                 {
                     "data_path": "action_result.data.*.displayName",
@@ -2384,7 +2398,7 @@
                         "Jane Doe"
                     ],
                     "column_name": "Display Name",
-                    "column_order": 6
+                    "column_order": 7
                 },
                 {
                     "data_path": "action_result.data.*.managerDisplayName",
@@ -2393,7 +2407,7 @@
                         "Jane Doe"
                     ],
                     "column_name": "Manager Display Name",
-                    "column_order": 7
+                    "column_order": 8
                 },
                 {
                     "data_path": "action_result.data.*.managerUsername",
@@ -2406,7 +2420,7 @@
                         "user name"
                     ],
                     "column_name": "Manager Username",
-                    "column_order": 8
+                    "column_order": 9
                 },
                 {
                     "data_path": "action_result.data.*.riskFactors.*.tag",
@@ -2415,7 +2429,7 @@
                         "FLIGHT_RISK"
                     ],
                     "column_name": "Risk Tag",
-                    "column_order": 9
+                    "column_order": 10
                 },
                 {
                     "data_path": "action_result.data.*.state",
@@ -2424,7 +2438,7 @@
                         "AZ"
                     ],
                     "column_name": "State",
-                    "column_order": 10
+                    "column_order": 11
                 },
                 {
                     "data_path": "action_result.data.*.title",
@@ -2433,7 +2447,7 @@
                         "Vice President"
                     ],
                     "column_name": "Title",
-                    "column_order": 11
+                    "column_order": 12
                 },
                 {
                     "data_path": "action_result.data.*.userId",
@@ -4127,13 +4141,13 @@
                 {
                     "data_path": "action_result.data.*.eventType",
                     "data_type": "string",
-                    "column_name": "Event type",
+                    "column_name": "Event Type",
                     "column_order": 1
                 },
                 {
                     "data_path": "action_result.data.*.fileName",
                     "data_type": "string",
-                    "column_name": "Filename",
+                    "column_name": "File Name",
                     "column_order": 2,
                     "contains": [
                         "file name"
@@ -4142,7 +4156,7 @@
                 {
                     "data_path": "action_result.data.*.filePath",
                     "data_type": "string",
-                    "column_name": "File path",
+                    "column_name": "File Path",
                     "column_order": 3,
                     "contains": [
                         "file path"
@@ -4151,19 +4165,19 @@
                 {
                     "data_path": "action_result.data.*.createTimestamp",
                     "data_type": "string",
-                    "column_name": "File created date",
+                    "column_name": "File Created Date",
                     "column_order": 4
                 },
                 {
                     "data_path": "action_result.data.*.modifyTimestamp",
                     "data_type": "string",
-                    "column_name": "File modified date",
+                    "column_name": "File Modified Date",
                     "column_order": 5
                 },
                 {
                     "data_path": "action_result.data.*.md5Checksum",
                     "data_type": "string",
-                    "column_name": "MD5 hash",
+                    "column_name": "MD5 Hash",
                     "column_order": 6,
                     "contains": [
                         "md5"
@@ -4172,7 +4186,7 @@
                 {
                     "data_path": "action_result.data.*.sha256Checksum",
                     "data_type": "string",
-                    "column_name": "SHA256 hash",
+                    "column_name": "SHA256 Hash",
                     "column_order": 7,
                     "contains": [
                         "sha256"
@@ -4422,7 +4436,9 @@
                     "example_values": [
                         "success",
                         "failed"
-                    ]
+                    ],
+                    "column_name": "Status",
+                    "column_order": 8
                 },
                 {
                     "data_path": "action_result.message",

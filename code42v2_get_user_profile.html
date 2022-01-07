@@ -120,6 +120,8 @@
                                                 <span class="fa fa-caret-down" style="font-size: smaller;"></span>
                                             </a>
                                             {% if not forloop.last %}<br/> {% endif %}
+                                        {% empty %}
+                                            None
                                         {% endfor %}
                                     </td>
                                     <td class="widget-td">

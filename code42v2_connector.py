@@ -127,18 +127,19 @@ class Code42Connector(BaseConnector):
         return phantom.APP_SUCCESS
 
     def _validate_integer(self, action_result, parameter, key, allow_zero=False):
-        try:
-            if not float(parameter).is_integer():
+        if parameter is not None:
+            try:
+                if not float(parameter).is_integer():
+                    return action_result.set_status(phantom.APP_ERROR, CODE42V2_VALID_INT_MSG.format(param=key)), None
+
+                parameter = int(parameter)
+            except:
                 return action_result.set_status(phantom.APP_ERROR, CODE42V2_VALID_INT_MSG.format(param=key)), None
 
-            parameter = int(parameter)
-        except:
-            return action_result.set_status(phantom.APP_ERROR, CODE42V2_VALID_INT_MSG.format(param=key)), None
-
-        if parameter < 0:
-            return action_result.set_status(phantom.APP_ERROR, CODE42V2_NON_NEG_INT_MSG.format(param=key)), None
-        if not allow_zero and parameter == 0:
-            return action_result.set_status(phantom.APP_ERROR, CODE42V2_NON_NEG_NON_ZERO_INT_MSG.format(param=key)), None
+            if parameter < 0:
+                return action_result.set_status(phantom.APP_ERROR, CODE42V2_NON_NEG_INT_MSG.format(param=key)), None
+            if not allow_zero and parameter == 0:
+                return action_result.set_status(phantom.APP_ERROR, CODE42V2_NON_NEG_NON_ZERO_INT_MSG.format(param=key)), None
 
         return phantom.APP_SUCCESS, parameter
 
@@ -209,7 +210,7 @@ class Code42Connector(BaseConnector):
         filter_type = param.get("filter_type", DepartingEmployeeFilters.OPEN)
         if filter_type not in CODE42V2_FILTER_TYPE_DEPARTING_LIST:
             msg = CODE42V2_VALUE_LIST_ERR_MSG.format('filter_type', CODE42V2_FILTER_TYPE_DEPARTING_LIST)
-            return action_result.set_status(phantom.APP_SUCCESS, msg)
+            return action_result.set_status(phantom.APP_ERROR, msg)
         results_generator = self._client.detectionlists.departing_employee.get_all(
             filter_type=filter_type
         )
@@ -267,7 +268,7 @@ class Code42Connector(BaseConnector):
         filter_type = param.get("filter_type", HighRiskEmployeeFilters.OPEN)
         if filter_type not in CODE42V2_FILTER_TYPE_HIGH_RISK_LIST:
             msg = CODE42V2_VALUE_LIST_ERR_MSG.format('filter_type', CODE42V2_FILTER_TYPE_HIGH_RISK_LIST)
-            return action_result.set_status(phantom.APP_SUCCESS, msg)
+            return action_result.set_status(phantom.APP_ERROR, msg)
         results_generator = self._client.detectionlists.high_risk_employee.get_all(
             filter_type=filter_type
         )
@@ -308,7 +309,7 @@ class Code42Connector(BaseConnector):
         risk_tag = param["risk_tag"]
         if risk_tag not in CODE42V2_RISK_TAG_LIST:
             msg = CODE42V2_VALUE_LIST_ERR_MSG.format('risk_tag', CODE42V2_RISK_TAG_LIST)
-            return action_result.set_status(phantom.APP_SUCCESS, msg)
+            return action_result.set_status(phantom.APP_ERROR, msg)
 
         user_id = self._get_user_id(username)
         response = self._client.detectionlists.add_user_risk_tags(user_id, risk_tag)
@@ -325,7 +326,7 @@ class Code42Connector(BaseConnector):
         risk_tag = param["risk_tag"]
         if risk_tag not in CODE42V2_RISK_TAG_LIST:
             msg = CODE42V2_VALUE_LIST_ERR_MSG.format('risk_tag', CODE42V2_RISK_TAG_LIST)
-            return action_result.set_status(phantom.APP_SUCCESS, msg)
+            return action_result.set_status(phantom.APP_ERROR, msg)
 
         user_id = self._get_user_id(username)
         response = self._client.detectionlists.remove_user_risk_tags(user_id, risk_tag)
@@ -344,12 +345,15 @@ class Code42Connector(BaseConnector):
     @action_handler_for("list_users")
     def _handle_list_users(self, param, action_result):
         org_uid = param.get("org_uid")
-        role_id = param.get("role_id")
         email = param.get("email")
+        role_id = param.get("role_id")
+        ret_val, role_id = self._validate_integer(action_result, role_id, CODE42V2_ROLE_ID_KEY)
+        if phantom.is_fail(ret_val):
+            return action_result.get_status()
         active_user = param.get("user_status", 'All')
         if active_user not in CODE42V2_USER_STATUS_LIST:
             msg = CODE42V2_VALUE_LIST_ERR_MSG.format('user_status', CODE42V2_USER_STATUS_LIST)
-            return action_result.set_status(phantom.APP_SUCCESS, msg)
+            return action_result.set_status(phantom.APP_ERROR, msg)
         if active_user == 'All':
             active = None
         elif active_user == 'Active':
@@ -473,7 +477,7 @@ class Code42Connector(BaseConnector):
 
         if alert_state not in CODE42V2_ALERT_STATE:
             msg = CODE42V2_VALUE_LIST_ERR_MSG.format('alert_state', CODE42V2_ALERT_STATE)
-            return action_result.set_status(phantom.APP_SUCCESS, msg)
+            return action_result.set_status(phantom.APP_ERROR, msg)
 
         query = build_alerts_query(
             start_date, end_date, username=username, alert_state=alert_state
@@ -493,7 +497,7 @@ class Code42Connector(BaseConnector):
 
         if alert_state not in CODE42V2_ALERT_STATE:
             msg = CODE42V2_VALUE_LIST_ERR_MSG.format('alert_state', CODE42V2_ALERT_STATE)
-            return action_result.set_status(phantom.APP_SUCCESS, msg)
+            return action_result.set_status(phantom.APP_ERROR, msg)
         response = self._client.alerts.update_state(alert_state, [alert_id], note=note)
         action_result.add_data(response.data)
         action_result.update_summary({"alert_id": alert_id})
@@ -611,7 +615,7 @@ class Code42Connector(BaseConnector):
         status = param["status"]
         if status not in CODE42V2_CASE_STATUS_LIST:
             msg = CODE42V2_VALUE_LIST_ERR_MSG.format('status', CODE42V2_CASE_STATUS_LIST)
-            return action_result.set_status(phantom.APP_SUCCESS, msg)
+            return action_result.set_status(phantom.APP_ERROR, msg)
 
         if status == "ALL":
             status = None
@@ -697,12 +701,12 @@ class Code42Connector(BaseConnector):
         file_category = param.get("file_category")
         if file_category and (file_category not in CODE42V2_FILE_CATEGORY_LIST):
             msg = CODE42V2_VALUE_LIST_ERR_MSG.format('file_category', CODE42V2_FILE_CATEGORY_LIST)
-            return action_result.set_status(phantom.APP_SUCCESS, msg)
+            return action_result.set_status(phantom.APP_ERROR, msg)
 
         exposure_type = param.get("exposure_type")
         if exposure_type and exposure_type not in CODE42V2_EXPOSURE_TYPE_LIST:
             msg = CODE42V2_VALUE_LIST_ERR_MSG.format('exposure_type', CODE42V2_EXPOSURE_TYPE_LIST)
-            return action_result.set_status(phantom.APP_SUCCESS, msg)
+            return action_result.set_status(phantom.APP_ERROR, msg)
 
         max_results = param.get("max_results", MAX_RESULTS_DEFAULT)
         ret_val, max_results = self._validate_integer(

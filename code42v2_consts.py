@@ -11,6 +11,7 @@
 # Unless required by applicable law or agreed to in writing, software distributed under
 # the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
 # either express or implied. See the License for the specific language governing permissions
+# and limitations under the License.
 
 # max_results default value
 MAX_RESULTS_DEFAULT = 1000
@@ -98,11 +99,12 @@ CODE42V2_USER_STATUS_LIST = [
 PAGE_KEYS = ['pgNum', 'pgSize', 'pgToken']
 
 # integer validation constants
-CODE42V2_VALID_INT_MSG = "Please provide a valid integer value in the '{param}' parameter"
-CODE42V2_NON_NEG_INT_MSG = "Please provide a valid non-negative integer value in the '{param}' parameter"
-CODE42V2_NON_NEG_NON_ZERO_INT_MSG = "Please provide a valid non-zero positive integer value in '{param}' parameter"
-CODE42V2_CASE_NUM_KEY = "'case_number' action parameter"
-CODE42V2_MAX_RESULTS_KEY = "'max_results' action parameter"
+CODE42V2_VALID_INT_MSG = "Please provide a valid integer value in the '{param}' action parameter"
+CODE42V2_NON_NEG_INT_MSG = "Please provide a valid non-negative integer value in the '{param}' action parameter"
+CODE42V2_NON_NEG_NON_ZERO_INT_MSG = "Please provide a valid non-zero positive integer value in '{param}' action parameter"
+CODE42V2_CASE_NUM_KEY = "case_number"
+CODE42V2_MAX_RESULTS_KEY = "max_results"
+CODE42V2_ROLE_ID_KEY = "role_id"
 
 # value_list validation constants
 CODE42V2_VALUE_LIST_ERR_MSG = "Please provide a valid value in the '{}' action parameter. Expected values are {}"
