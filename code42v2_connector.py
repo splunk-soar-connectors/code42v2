@@ -19,6 +19,7 @@ from __future__ import print_function, unicode_literals
 
 import ipaddress
 import json
+import os
 
 import phantom.app as phantom
 import phantom.utils as utils
@@ -119,8 +120,13 @@ class Code42Connector(BaseConnector):
         env_vars = config.get('_reserved_environment_variables', {})
         if 'HTTP_PROXY' in env_vars:
             self._proxy['http'] = env_vars['HTTP_PROXY']['value']
+        elif 'HTTP_PROXY' in os.environ:
+            self._proxy['http'] = os.environ.get('HTTP_PROXY')
+
         if 'HTTPS_PROXY' in env_vars:
             self._proxy['https'] = env_vars['HTTPS_PROXY']['value']
+        elif 'HTTPS_PROXY' in os.environ:
+            self._proxy['https'] = os.environ.get('HTTPS_PROXY')
         settings.proxies = self._proxy
 
         self.set_validator('ipv6', self._is_ipv6)
@@ -846,13 +852,13 @@ class Code42Connector(BaseConnector):
     def _add_file_event_results(self, query, action_result, max_results):
         if isinstance(query, FileEventQuery):
             query.pgToken = ""
-            query.pgSize = PAGE_SIZE
+            query.pgSize = min(PAGE_SIZE, max_results)
         else:
             query['pgToken'] = ""
-            query['pgSize'] = PAGE_SIZE
+            query['pgSize'] = min(PAGE_SIZE, max_results)
         items_list = []
         total_counts = 0
-        results = {}
+        results = None
 
         while True:
             results = self._client.securitydata.search_file_events(
