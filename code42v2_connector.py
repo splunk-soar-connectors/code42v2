@@ -92,7 +92,7 @@ class Code42Connector(BaseConnector):
         self._client = None
         self._proxy = None
 
-    def _is_ipv6(self, input_ip_address):
+    def _is_valid_ip(self, input_ip_address):
         """ Function that checks given address and return True if address is valid IPv4 or IPV6 address.
 
         :param input_ip_address: IP address
@@ -129,7 +129,7 @@ class Code42Connector(BaseConnector):
             self._proxy['https'] = os.environ.get('HTTPS_PROXY')
         settings.proxies = self._proxy
 
-        self.set_validator('ipv6', self._is_ipv6)
+        self.set_validator('ipv6', self._is_valid_ip)
         return phantom.APP_SUCCESS
 
     def _validate_integer(self, action_result, parameter, key, allow_zero=False):

@@ -185,18 +185,27 @@
                         "email",
                         "user name"
                     ],
+                    "example_values": [
+                        "test@gmail.com"
+                    ],
                     "column_name": "Username",
                     "column_order": 0
                 },
                 {
                     "data_path": "action_result.parameter.departure_date",
                     "data_type": "string",
+                    "example_values": [
+                        "2021-12-21"
+                    ],
                     "column_name": "Departure Date",
                     "column_order": 3
                 },
                 {
                     "data_path": "action_result.parameter.note",
                     "data_type": "string",
+                    "example_values": [
+                        "Notes"
+                    ],
                     "column_name": "Note",
                     "column_order": 4
                 },
@@ -241,7 +250,10 @@
                 },
                 {
                     "data_path": "action_result.message",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values": [
+                        "Username was added to the departing employees list"
+                    ]
                 },
                 {
                     "data_path": "action_result.summary",
@@ -290,6 +302,9 @@
                         "email",
                         "user name"
                     ],
+                    "example_values": [
+                        "test@gmail.com"
+                    ],
                     "column_name": "Username",
                     "column_order": 0
                 },
@@ -314,7 +329,10 @@
                 },
                 {
                     "data_path": "action_result.message",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values": [
+                        "Username was removed from the departing employees list"
+                    ]
                 },
                 {
                     "data_path": "action_result.summary",
@@ -364,6 +382,9 @@
                 {
                     "data_path": "action_result.parameter.filter_type",
                     "data_type": "string",
+                    "example_values": [
+                        "OPEN"
+                    ],
                     "column_name": "Filter Type",
                     "column_order": 0
                 },
@@ -437,7 +458,10 @@
                 },
                 {
                     "data_path": "action_result.message",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values": [
+                        "Total Count: 10"
+                    ]
                 },
                 {
                     "data_path": "action_result.summary.total_count",
@@ -494,7 +518,10 @@
                         "email",
                         "user name"
                     ],
-                    "column_name": "Filter Type",
+                    "example_values": [
+                        "test@gmail.com"
+                    ],
+                    "column_name": "Username",
                     "column_order": 0
                 },
                 {
@@ -549,7 +576,10 @@
                 },
                 {
                     "data_path": "action_result.message",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values": [
+                        "Is Departing Employee: false"
+                    ]
                 },
                 {
                     "data_path": "action_result.summary.is_departing_employee",
@@ -613,12 +643,18 @@
                         "email",
                         "user name"
                     ],
+                    "example_values": [
+                        "test@gmail.com"
+                    ],
                     "column_name": "Username",
                     "column_order": 0
                 },
                 {
                     "data_path": "action_result.parameter.note",
                     "data_type": "string",
+                    "example_values": [
+                        "Notes"
+                    ],
                     "column_name": "Note",
                     "column_order": 3
                 },
@@ -663,7 +699,10 @@
                 },
                 {
                     "data_path": "action_result.message",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values": [
+                        "Username was added to the high risk employees list"
+                    ]
                 },
                 {
                     "data_path": "action_result.summary",
@@ -717,6 +756,9 @@
                         "email",
                         "user name"
                     ],
+                    "example_values": [
+                        "test@gmail.com"
+                    ],
                     "column_name": "Username",
                     "column_order": 0
                 },
@@ -741,7 +783,10 @@
                 },
                 {
                     "data_path": "action_result.message",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values": [
+                        "Username was removed from the high risk employees list"
+                    ]
                 },
                 {
                     "data_path": "action_result.summary",
@@ -790,6 +835,9 @@
                 {
                     "data_path": "action_result.parameter.filter_type",
                     "data_type": "string",
+                    "example_values": [
+                        "OPEN"
+                    ],
                     "column_name": "Filter Type",
                     "column_order": 0
                 },
@@ -854,7 +902,10 @@
                 },
                 {
                     "data_path": "action_result.message",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values": [
+                        "Total Count: 10"
+                    ]
                 },
                 {
                     "data_path": "summary.total_objects",
@@ -969,7 +1020,10 @@
                 },
                 {
                     "data_path": "action_result.message",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values": [
+                        "Is High Risk Employee: true"
+                    ]
                 },
                 {
                     "data_path": "action_result.summary.is_high_risk_employee",
@@ -1059,6 +1113,9 @@
                     "contains": [
                         "code42 risk tag"
                     ],
+                    "example_values": [
+                        "FLIGHT_RISK"
+                    ],
                     "column_name": "Risk Tag",
                     "column_order": 3
                 },
@@ -1094,7 +1151,10 @@
                 },
                 {
                     "data_path": "action_result.message",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values": [
+                        "All risk tags for user: PERFORMANCE_CONCERNS"
+                    ]
                 },
                 {
                     "data_path": "action_result.summary",
@@ -1161,6 +1221,9 @@
                         "email",
                         "user name"
                     ],
+                    "example_values": [
+                        "test@gmail.com"
+                    ],
                     "column_name": "Username",
                     "column_order": 0
                 },
@@ -1169,6 +1232,9 @@
                     "data_type": "string",
                     "contains": [
                         "code42 risk tag"
+                    ],
+                    "example_values": [
+                        "FLIGHT_RISK"
                     ],
                     "column_name": "Risk Tag",
                     "column_order": 3
@@ -1205,7 +1271,10 @@
                 },
                 {
                     "data_path": "action_result.message",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values": [
+                        "All risk tags for user: [PERFORMANCE_CONCERNS]"
+                    ]
                 },
                 {
                     "data_path": "action_result.summary",
@@ -1255,6 +1324,9 @@
                     "data_type": "string",
                     "contains": [
                         "code42 alert id"
+                    ],
+                    "example_values": [
+                        "f2ca08f9-2b97-4e5f-85cc-d12e13cba845"
                     ],
                     "column_name": "Alert ID",
                     "column_order": 0
@@ -1322,7 +1394,10 @@
                 },
                 {
                     "data_path": "action_result.message",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values": [
+                        "Username: test@gmail.com, User Id: 1234567"
+                    ]
                 },
                 {
                     "data_path": "action_result.summary",
@@ -1415,6 +1490,9 @@
                     "contains": [
                         "email",
                         "user name"
+                    ],
+                    "example_values": [
+                        "test@gmail.com"
                     ]
                 },
                 {
@@ -1422,15 +1500,24 @@
                     "data_type": "string",
                     "contains": [
                         "code42 alert state"
+                    ],
+                    "example_values": [
+                        "OPEN"
                     ]
                 },
                 {
                     "data_path": "action_result.parameter.start_date",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values": [
+                        "2021-12-14T06:05:28.0965750Z"
+                    ]
                 },
                 {
                     "data_path": "action_result.parameter.end_date",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values": [
+                        "2021-12-17T06:05:28.0965750Z"
+                    ]
                 },
                 {
                     "data_path": "action_result.data.*.actor",
@@ -1482,7 +1569,10 @@
                 },
                 {
                     "data_path": "action_result.message",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values": [
+                        "Total Count: 10"
+                    ]
                 },
                 {
                     "data_path": "action_result.summary",
@@ -1551,18 +1641,27 @@
                     "contains": [
                         "code42 alert id"
                     ],
+                    "example_values": [
+                        "2021-12-17T06:05:28.0965750Z"
+                    ],
                     "column_name": "Alert ID",
                     "column_order": 0
                 },
                 {
                     "data_path": "action_result.parameter.alert_state",
                     "data_type": "string",
+                    "example_values": [
+                        "OPEN"
+                    ],
                     "column_name": "Alert State",
                     "column_order": 1
                 },
                 {
                     "data_path": "action_result.parameter.note",
                     "data_type": "string",
+                    "example_values": [
+                        "Notes"
+                    ],
                     "column_name": "Note",
                     "column_order": 2
                 },
@@ -1582,7 +1681,10 @@
                 },
                 {
                     "data_path": "action_result.message",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values": [
+                        "State of alert 123456 was updated to Pending"
+                    ]
                 },
                 {
                     "data_path": "action_result.summary",
@@ -1874,7 +1976,10 @@
                 },
                 {
                     "data_path": "action_result.message",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values": [
+                        "Total users: 151"
+                    ]
                 },
                 {
                     "data_path": "action_result.summary",
@@ -1904,7 +2009,7 @@
             "action": "create user",
             "identifier": "create_user",
             "description": "Create a new Code42 user account",
-            "verbose": "There is a short delay before you will be able to add the new user to departing employee or high risk employee list. For the password parameter: Defaults to no password set, which leaves user in 'invited' state. They will need to reset password via email prior to first login. <b>Note:</b> If the provided username already exists for a user, it will be updated in the database instead.",
+            "verbose": "There is a short delay before you will be able to add the new user to the departing employee or high risk employee lists. For the password parameter: Defaults to no password set, which leaves user in 'invited' state. They will need to reset password via email prior to first login. <b>Note:</b> If the provided username already exists for a user, it will be updated in the database instead.",
             "type": "generic",
             "read_only": false,
             "parameters": {
@@ -1954,30 +2059,45 @@
                         "email",
                         "user name"
                     ],
+                    "example_values": [
+                        "test@gmail.com"
+                    ],
                     "column_name": "Username",
                     "column_order": 0
                 },
                 {
                     "data_path": "action_result.parameter.org_uid",
                     "data_type": "string",
+                    "example_values": [
+                        "1005855504102065902"
+                    ],
                     "column_name": "Org ID",
                     "column_order": 1
                 },
                 {
                     "data_path": "action_result.parameter.first_name",
                     "data_type": "string",
+                    "example_values": [
+                        "FirstName"
+                    ],
                     "column_name": "First Name",
                     "column_order": 2
                 },
                 {
                     "data_path": "action_result.parameter.last_name",
                     "data_type": "string",
+                    "example_values": [
+                        "LastName"
+                    ],
                     "column_name": "Last Name",
                     "column_order": 3
                 },
                 {
                     "data_path": "action_result.parameter.notes",
                     "data_type": "string",
+                    "example_values": [
+                        "Notes"
+                    ],
                     "column_name": "Notes",
                     "column_order": 4
                 },
@@ -2001,7 +2121,10 @@
                 },
                 {
                     "data_path": "action_result.message",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values": [
+                        "Username was created with user_id: 12345678912"
+                    ]
                 },
                 {
                     "data_path": "action_result.summary.user_id",
@@ -2060,6 +2183,9 @@
                         "email",
                         "user name"
                     ],
+                    "example_values": [
+                        "test@gmail.com"
+                    ],
                     "column_name": "Username",
                     "column_order": 0
                 },
@@ -2079,7 +2205,10 @@
                 },
                 {
                     "data_path": "action_result.message",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values": [
+                        "Username was blocked"
+                    ]
                 },
                 {
                     "data_path": "action_result.summary",
@@ -2133,6 +2262,9 @@
                         "email",
                         "user name"
                     ],
+                    "example_values": [
+                        "test@gmail.com"
+                    ],
                     "column_name": "Username",
                     "column_order": 0
                 },
@@ -2152,7 +2284,10 @@
                 },
                 {
                     "data_path": "action_result.message",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values": [
+                        "Username was deactivated"
+                    ]
                 },
                 {
                     "data_path": "action_result.summary",
@@ -2206,6 +2341,9 @@
                         "email",
                         "user name"
                     ],
+                    "example_values": [
+                        "test@gmail.com"
+                    ],
                     "column_name": "Username",
                     "column_order": 0
                 },
@@ -2225,7 +2363,10 @@
                 },
                 {
                     "data_path": "action_result.message",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values": [
+                        "Username was reactivated"
+                    ]
                 },
                 {
                     "data_path": "action_result.summary",
@@ -2279,6 +2420,9 @@
                         "email",
                         "user name"
                     ],
+                    "example_values": [
+                        "test@gmail.com"
+                    ],
                     "column_name": "Username",
                     "column_order": 0
                 },
@@ -2298,7 +2442,10 @@
                 },
                 {
                     "data_path": "action_result.message",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values": [
+                        "Username was unblocked"
+                    ]
                 },
                 {
                     "data_path": "action_result.summary",
@@ -2350,6 +2497,9 @@
                     "contains": [
                         "email",
                         "user name"
+                    ],
+                    "example_values": [
+                        "test@gmail.com"
                     ],
                     "column_name": "Username",
                     "column_order": 0
@@ -2484,7 +2634,10 @@
                 },
                 {
                     "data_path": "action_result.message",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values": [
+                        "User Id: 12345678"
+                    ]
                 },
                 {
                     "data_path": "action_result.summary",
@@ -2553,6 +2706,9 @@
                         "email",
                         "user name"
                     ],
+                    "example_values": [
+                        "test@gmail.com"
+                    ],
                     "column_name": "username",
                     "column_order": 0
                 },
@@ -2561,6 +2717,9 @@
                     "data_type": "string",
                     "contains": [
                         "code42 matter id"
+                    ],
+                    "example_values": [
+                        "1005855504"
                     ],
                     "column_name": "Matter ID",
                     "column_order": 1
@@ -2581,7 +2740,10 @@
                 },
                 {
                     "data_path": "action_result.message",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values": [
+                        "Username was added to legal hold matter 12345678912"
+                    ]
                 },
                 {
                     "data_path": "action_result.summary",
@@ -2645,6 +2807,9 @@
                         "email",
                         "user name"
                     ],
+                    "example_values": [
+                        "test@gmail.com"
+                    ],
                     "column_name": "Username",
                     "column_order": 0
                 },
@@ -2653,6 +2818,9 @@
                     "data_type": "string",
                     "contains": [
                         "code42 matter id"
+                    ],
+                    "example_values": [
+                        "1005855504"
                     ],
                     "column_name": "Matter ID",
                     "column_order": 3
@@ -2682,7 +2850,10 @@
                 },
                 {
                     "data_path": "action_result.message",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values": [
+                        "Username was removed from legal hold matter 12345678912"
+                    ]
                 },
                 {
                     "data_path": "action_result.summary",
@@ -2756,12 +2927,18 @@
                 {
                     "data_path": "action_result.parameter.case_name",
                     "data_type": "string",
+                    "example_values": [
+                        "Test Case"
+                    ],
                     "column_name": "Case name",
                     "column_order": 1
                 },
                 {
                     "data_path": "action_result.parameter.description",
                     "data_type": "string",
+                    "example_values": [
+                        "Case Description"
+                    ],
                     "column_name": "Description",
                     "column_order": 2
                 },
@@ -2772,6 +2949,9 @@
                         "email",
                         "user name"
                     ],
+                    "example_values": [
+                        "test2@example.com"
+                    ],
                     "column_name": "Subject",
                     "column_order": 3
                 },
@@ -2781,6 +2961,9 @@
                     "contains": [
                         "email",
                         "user name"
+                    ],
+                    "example_values": [
+                        "test3@example.com"
                     ],
                     "column_name": "Assignee",
                     "column_order": 4
@@ -2810,7 +2993,10 @@
                 },
                 {
                     "data_path": "action_result.message",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values": [
+                        "Case successfully created with case_id:r 132"
+                    ]
                 },
                 {
                     "data_path": "action_result.summary.case_number",
@@ -2895,15 +3081,24 @@
                     "data_type": "numeric",
                     "contains": [
                         "code42 case number"
+                    ],
+                    "example_values": [
+                        123
                     ]
                 },
                 {
                     "data_path": "action_result.parameter.case_name",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values": [
+                        "Case Name"
+                    ]
                 },
                 {
                     "data_path": "action_result.parameter.description",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values": [
+                        "Action Created Case"
+                    ]
                 },
                 {
                     "data_path": "action_result.parameter.subject",
@@ -2911,6 +3106,9 @@
                     "contains": [
                         "email",
                         "user name"
+                    ],
+                    "example_values": [
+                        "test@gmail.com"
                     ]
                 },
                 {
@@ -2919,11 +3117,17 @@
                     "contains": [
                         "email",
                         "user name"
+                    ],
+                    "example_values": [
+                        "test@gmail.com"
                     ]
                 },
                 {
                     "data_path": "action_result.parameter.findings",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values": [
+                        "test2@gmail.com"
+                    ]
                 },
                 {
                     "data_path": "action_result.data.*.number",
@@ -2982,7 +3186,10 @@
                 },
                 {
                     "data_path": "action_result.message",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values": [
+                        "Case number 123 successfully updated"
+                    ]
                 },
                 {
                     "data_path": "action_result.summary.case_number",
@@ -3032,6 +3239,9 @@
                     "data_type": "numeric",
                     "contains": [
                         "code42 case number"
+                    ],
+                    "example_values": [
+                        123
                     ]
                 },
                 {
@@ -3095,7 +3305,10 @@
                 },
                 {
                     "data_path": "action_result.message",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values": [
+                        "Case number 123 successfully closed"
+                    ]
                 },
                 {
                     "data_path": "action_result.summary.case_number",
@@ -3164,7 +3377,10 @@
             "output": [
                 {
                     "data_path": "action_result.parameter.status",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values": [
+                        "ALL"
+                    ]
                 },
                 {
                     "data_path": "action_result.parameter.assignee",
@@ -3172,6 +3388,9 @@
                     "contains": [
                         "email",
                         "user name"
+                    ],
+                    "example_values": [
+                        "test@gmail.com"
                     ]
                 },
                 {
@@ -3180,6 +3399,9 @@
                     "contains": [
                         "email",
                         "user name"
+                    ],
+                    "example_values": [
+                        "test@gmail.com"
                     ]
                 },
                 {
@@ -3269,7 +3491,10 @@
                 },
                 {
                     "data_path": "action_result.message",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values": [
+                        "Total Count: 10"
+                    ]
                 },
                 {
                     "data_path": "action_result.summary.total_count",
@@ -3331,6 +3556,9 @@
                     "column_order": 0,
                     "contains": [
                         "code42 case number"
+                    ],
+                    "example_values": [
+                        123
                     ]
                 },
                 {
@@ -3340,6 +3568,9 @@
                     "column_order": 1,
                     "contains": [
                         "code42 file event"
+                    ],
+                    "example_values": [
+                        "10058"
                     ]
                 },
                 {
@@ -3358,7 +3589,10 @@
                 },
                 {
                     "data_path": "action_result.message",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values": [
+                        "Event 341235 added to case number 132"
+                    ]
                 },
                 {
                     "data_path": "action_result.summary.case_number",
@@ -3396,7 +3630,7 @@
             "read_only": true,
             "parameters": {
                 "hash": {
-                    "description": "The md5 or sha256 hash of the file to download",
+                    "description": "The MD5 or SHA256 hash of the file to download",
                     "data_type": "string",
                     "required": true,
                     "primary": true,
@@ -3424,6 +3658,9 @@
                         "md5",
                         "sha256"
                     ],
+                    "example_values": [
+                        "89131efabab2aca2bf36d70b3999a0e0"
+                    ],
                     "column_name": "Hash",
                     "column_order": 0
                 },
@@ -3432,6 +3669,9 @@
                     "data_type": "string",
                     "contains": [
                         "file name"
+                    ],
+                    "example_values": [
+                        "next.txt"
                     ],
                     "column_name": "File Name",
                     "column_order": 1
@@ -3452,7 +3692,10 @@
                 },
                 {
                     "data_path": "action_result.message",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values": [
+                        "next.txt was successfully downloaded and attached to container 123"
+                    ]
                 },
                 {
                     "data_path": "action_result.summary",
@@ -3497,7 +3740,7 @@
                     "order": 1
                 },
                 "file_hash": {
-                    "description": "Md5 or sha256 hash of a file",
+                    "description": "MD5 or SHA256 hash of a file",
                     "data_type": "string",
                     "primary": true,
                     "contains": [
@@ -3638,7 +3881,7 @@
                     "order": 14
                 },
                 "max_results": {
-                    "description": "Maximum result want to fetch (default: 1000)",
+                    "description": "Maximum number of results to fetch (default: 1000)",
                     "data_type": "numeric",
                     "default": 1000,
                     "order": 15
@@ -3647,17 +3890,26 @@
             "output": [
                 {
                     "data_path": "action_result.parameter.start_date",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values": [
+                        "2021-12-09T22:10:59.951Z"
+                    ]
                 },
                 {
                     "data_path": "action_result.parameter.end_date",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values": [
+                        "2021-12-20T22:10:59.951Z"
+                    ]
                 },
                 {
                     "data_path": "action_result.parameter.file_name",
                     "data_type": "string",
                     "contains": [
                         "file name"
+                    ],
+                    "example_values": [
+                        "next.txt"
                     ]
                 },
                 {
@@ -3666,6 +3918,9 @@
                     "contains": [
                         "md5",
                         "sha256"
+                    ],
+                    "example_values": [
+                        "89131efabab2aca2bf36d70b3999a0e0"
                     ]
                 },
                 {
@@ -3673,17 +3928,27 @@
                     "data_type": "string",
                     "contains": [
                         "file path"
+                    ],
+                    "example_values": [
+                        "/opt/example/02"
                     ]
                 },
                 {
                     "data_path": "action_result.parameter.untrusted_only",
-                    "data_type": "boolean"
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
                 },
                 {
                     "data_path": "action_result.parameter.file_category",
                     "data_type": "string",
                     "contains": [
                         "code42 file category"
+                    ],
+                    "example_values": [
+                        "Audio"
                     ]
                 },
                 {
@@ -3692,6 +3957,9 @@
                     "contains": [
                         "email",
                         "user name"
+                    ],
+                    "example_values": [
+                        "test@gmail.com"
                     ]
                 },
                 {
@@ -3699,6 +3967,9 @@
                     "data_type": "string",
                     "contains": [
                         "host name"
+                    ],
+                    "example_values": [
+                        "Host"
                     ]
                 },
                 {
@@ -3707,6 +3978,9 @@
                     "contains": [
                         "ip",
                         "ipv6"
+                    ],
+                    "example_values": [
+                        "8.8.8.8"
                     ]
                 },
                 {
@@ -3715,6 +3989,9 @@
                     "contains": [
                         "ip",
                         "ipv6"
+                    ],
+                    "example_values": [
+                        "0.0.0.0"
                     ]
                 },
                 {
@@ -3722,6 +3999,9 @@
                     "data_type": "string",
                     "contains": [
                         "code42 exposure type"
+                    ],
+                    "example_values": [
+                        "ALL"
                     ]
                 },
                 {
@@ -3729,6 +4009,9 @@
                     "data_type": "string",
                     "contains": [
                         "code42 process name"
+                    ],
+                    "example_values": [
+                        "Extension Process"
                     ]
                 },
                 {
@@ -3736,6 +4019,9 @@
                     "data_type": "string",
                     "contains": [
                         "url"
+                    ],
+                    "example_values": [
+                        "https://wwww.example.com/"
                     ]
                 },
                 {
@@ -3743,6 +4029,9 @@
                     "data_type": "string",
                     "contains": [
                         "code42 window title"
+                    ],
+                    "example_values": [
+                        "Zip File Extension"
                     ]
                 },
                 {
@@ -4071,7 +4360,10 @@
                 },
                 {
                     "data_path": "action_result.message",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values": [
+                        "Total Count: 10, Results Returned Count: 5"
+                    ]
                 },
                 {
                     "data_path": "action_result.summary.total_count",
@@ -4117,7 +4409,7 @@
                     "order": 0
                 },
                 "max_results": {
-                    "description": "Maximum result want to fetch (default: 1000)",
+                    "description": "Maximum number of results to fetch (default: 1000)",
                     "data_type": "numeric",
                     "default": 1000,
                     "order": 1
@@ -4126,7 +4418,10 @@
             "output": [
                 {
                     "data_path": "action_result.parameter.json_query",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values": [
+                        "{\"groups\": [ { \"filters\": [ { \"operator\": \"IS\", \"term\": \"deviceUserName\", \"value\": \"test@example.com\" }], \"filterClause\": \"AND\" } ]}"
+                    ]
                 },
                 {
                     "data_path": "action_result.parameter.max_results",
@@ -4445,7 +4740,10 @@
                 },
                 {
                     "data_path": "action_result.message",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values": [
+                        "Total Count: 10, Results Returned Count: 5"
+                    ]
                 },
                 {
                     "data_path": "action_result.summary.total_count",
