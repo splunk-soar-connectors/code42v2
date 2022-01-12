@@ -1,6 +1,6 @@
 [comment]: # " File: readme.md"
 [comment]: # ""
-[comment]: # "  Copyright (c) 2022 Splunk Inc., Code42"
+[comment]: # "  Copyright (c) Code42, 2022"
 [comment]: # ""
 [comment]: # "  Licensed under the Apache License, Version 2.0 (the \"License\");"
 [comment]: # "  you may not use this file except in compliance with the License."

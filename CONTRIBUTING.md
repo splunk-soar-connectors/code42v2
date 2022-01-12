@@ -1,3 +1,6 @@
+## Contributing
+For more information about contributing to Splunk SOAR Apps please take a look at our app [Contribution Guide](https://github.com/splunk-soar-connectors/.github/blob/main/.github/CONTRIBUTING.md)!
+
 ## Set up your development environment
 
 You'll need a Phantom OVA VM image to run this application. To download the image, first
