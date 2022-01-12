@@ -1,6 +1,6 @@
 # File: code42v2_on_poll_connector.py
 #
-# Copyright (c) Code42, 2022
+# Copyright (c) 2022 Splunk Inc., Code42
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
