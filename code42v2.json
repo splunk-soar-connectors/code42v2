@@ -2036,7 +2036,7 @@
                 },
                 "password": {
                     "description": "Password for newly created user",
-                    "data_type": "password",
+                    "data_type": "string",
                     "order": 2
                 },
                 "first_name": {
