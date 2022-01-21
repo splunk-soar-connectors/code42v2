@@ -390,7 +390,7 @@ class Code42Connector(BaseConnector):
             org_uid=param["org_uid"],
             username=username,
             email=username,
-            password=param.get("password"),
+            password=param["password"],
             first_name=param.get("first_name"),
             last_name=param.get("last_name"),
             notes=param.get("notes"),

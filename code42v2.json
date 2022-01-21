@@ -2013,7 +2013,7 @@
             "action": "create user",
             "identifier": "create_user",
             "description": "Create a new Code42 user account",
-            "verbose": "There is a short delay before you will be able to add the new user to the departing employee or high risk employee lists. For the password parameter: Defaults to no password set, which leaves user in 'invited' state. They will need to reset password via email prior to first login. <b>Note:</b> If the provided username already exists for a user, it will be updated in the database instead.",
+            "verbose": "There is a short delay before you will be able to add the new user to the departing employee or high risk employee lists. For security reasons, we strongly recommend you to reset your password after first time login. <b>Note:</b> If the provided username already exists for a user, it will be updated in the database instead.",
             "type": "generic",
             "read_only": false,
             "parameters": {
@@ -2037,6 +2037,7 @@
                 "password": {
                     "description": "Password for newly created user",
                     "data_type": "string",
+                    "required": true,
                     "order": 2
                 },
                 "first_name": {
