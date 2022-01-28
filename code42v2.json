@@ -38,7 +38,7 @@
             },
             {
                 "module": "py42",
-                "input_file": "wheels/py42-1.15.1-py2.py3-none-any.whl"
+                "input_file": "wheels/py42-1.20.0-py2.py3-none-any.whl"
             },
             {
                 "module": "python_dateutil",
@@ -46,7 +46,7 @@
             },
             {
                 "module": "requests",
-                "input_file": "wheels/requests-2.27.0-py2.py3-none-any.whl"
+                "input_file": "wheels/requests-2.27.1-py2.py3-none-any.whl"
             },
             {
                 "module": "six",
@@ -58,7 +58,7 @@
             },
             {
                 "module": "urllib3",
-                "input_file": "wheels/urllib3-1.26.7-py2.py3-none-any.whl"
+                "input_file": "wheels/urllib3-1.26.8-py2.py3-none-any.whl"
             }
         ]
     },
@@ -93,7 +93,7 @@
             "order": 4
         },
         "severity_to_poll_for": {
-            "description": "A comma separated list of alert severities to poll for, such as HIGH, LOW, or MEDIUM (defaults to getting all alerts)",
+            "description": "A comma-separated list of alert severities to poll for, such as HIGH, LOW, MODERATE or CRITICAL (defaults to getting all alerts)",
             "data_type": "string",
             "order": 5
         }
@@ -237,6 +237,48 @@
                     ],
                     "column_name": "Created At",
                     "column_order": 5
+                },
+                {
+                    "data_path": "action_result.data.*.type$",
+                    "data_type": "string",
+                    "example_values": [
+                        "DEPARTING_EMPLOYEE_V2"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "OPEN"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.tenantId",
+                    "data_type": "string",
+                    "example_values": [
+                        "f6b12138-e9b5-4739-9fdd-99886f368888"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.displayName",
+                    "data_type": "string",
+                    "example_values": [
+                        "Username"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.notes",
+                    "data_type": "string",
+                    "example_values": [
+                        "This is an example of notes about Sample User1."
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.departureDate",
+                    "data_type": "string",
+                    "example_values": [
+                        "2010-01-02"
+                    ]
                 },
                 {
                     "data_path": "action_result.status",
@@ -447,6 +489,48 @@
                     "column_order": 6
                 },
                 {
+                    "data_path": "action_result.data.*.type$",
+                    "data_type": "string",
+                    "example_values": [
+                        "DEPARTING_EMPLOYEE_V2"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "OPEN"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.tenantId",
+                    "data_type": "string",
+                    "example_values": [
+                        "f6b12138-e9b5-4739-9fdd-99886f368888"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.totalBytes",
+                    "data_type": "numeric",
+                    "example_values": [
+                        10
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.displayName",
+                    "data_type": "string",
+                    "example_values": [
+                        "First1 Last1"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.departureDate",
+                    "data_type": "string",
+                    "example_values": [
+                        "1001-12-01"
+                    ]
+                },
+                {
                     "data_path": "action_result.status",
                     "data_type": "string",
                     "example_values": [
@@ -563,6 +647,41 @@
                     ],
                     "column_name": "Creation Date",
                     "column_order": 5
+                },
+                {
+                    "data_path": "action_result.data.*.type$",
+                    "data_type": "string",
+                    "example_values": [
+                        "DEPARTING_EMPLOYEE_V2"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "OPEN"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.tenantId",
+                    "data_type": "string",
+                    "example_values": [
+                        "f6b12138-e9b5-4739-9fdd-99886f369978"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.displayName",
+                    "data_type": "string",
+                    "example_values": [
+                        "First10 Last10"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.departureDate",
+                    "data_type": "string",
+                    "example_values": [
+                        "1980-11-12"
+                    ]
                 },
                 {
                     "data_path": "action_result.status",
@@ -686,6 +805,41 @@
                     ],
                     "column_name": "Created At",
                     "column_order": 4
+                },
+                {
+                    "data_path": "action_result.data.*.notes",
+                    "data_type": "string",
+                    "example_values": [
+                        "Notes"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.type$",
+                    "data_type": "string",
+                    "example_values": [
+                        "HIGH_RISK_EMPLOYEE_V2"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "OPEN"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.tenantId",
+                    "data_type": "string",
+                    "example_values": [
+                        "f6b12138-e9b5-4739-9fdd-99886f369999"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.displayName",
+                    "data_type": "string",
+                    "example_values": [
+                        "First12 Last12"
+                    ]
                 },
                 {
                     "data_path": "action_result.status",
@@ -891,6 +1045,53 @@
                     "column_order": 6
                 },
                 {
+                    "data_path": "action_result.data.*.type$",
+                    "data_type": "string",
+                    "example_value": "HIGH_RISK_EMPLOYEE_V2"
+                },
+                {
+                    "data_path": "action_result.data.*.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "OPEN"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.tenantId",
+                    "data_type": "string",
+                    "example_values": [
+                        "f6b12138-e9b5-4739-9fdd-99886f368888"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.totalBytes",
+                    "data_type": "numeric",
+                    "example_values": [
+                        10
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.displayName",
+                    "data_type": "string",
+                    "example_values": [
+                        "First Last"
+                    ]
+                },
+                {
+                    "data_path": "action_result.summary.total_count",
+                    "data_type": "numeric",
+                    "example_values": [
+                        10
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.riskFactors.*.tag",
+                    "data_type": "string",
+                    "example_values": [
+                        "HIGH_IMPACT_EMPLOYEE"
+                    ]
+                },
+                {
                     "data_path": "action_result.status",
                     "data_type": "string",
                     "example_values": [
@@ -1011,6 +1212,34 @@
                     ],
                     "column_name": "Risk Tag",
                     "column_order": 5
+                },
+                {
+                    "data_path": "action_result.data.*.type$",
+                    "data_type": "string",
+                    "example_values": [
+                        "HIGH_RISK_EMPLOYEE_V2"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "OPEN"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.tenantId",
+                    "data_type": "string",
+                    "example_values": [
+                        "f6b12138-e9b5-4739-9fdd-99886f369999"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.displayName",
+                    "data_type": "string",
+                    "example_values": [
+                        "First Last"
+                    ]
                 },
                 {
                     "data_path": "action_result.status",
@@ -1144,6 +1373,41 @@
                     ]
                 },
                 {
+                    "data_path": "action_result.data.*.notes",
+                    "data_type": "string",
+                    "example_values": [
+                        "Notes"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.type$",
+                    "data_type": "string",
+                    "example_values": [
+                        "USER_V2"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.tenantId",
+                    "data_type": "string",
+                    "example_values": [
+                        "f6b12138-e9b5-4739-9fdd-99886f369999"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.displayName",
+                    "data_type": "string",
+                    "example_values": [
+                        "First1 Last1"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.riskFactors.*.tag",
+                    "data_type": "string",
+                    "example_values": [
+                        "HIGH_IMPACT_EMPLOYEE"
+                    ]
+                },
+                {
                     "data_path": "action_result.status",
                     "data_type": "string",
                     "example_values": [
@@ -1264,6 +1528,41 @@
                     ]
                 },
                 {
+                    "data_path": "action_result.data.*.type$",
+                    "data_type": "string",
+                    "example_values": [
+                        "USER_V2"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.tenantId",
+                    "data_type": "string",
+                    "example_values": [
+                        "f6b12138-e9b5-4739-9fdd-99886f369999"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.displayName",
+                    "data_type": "string",
+                    "example_values": [
+                        "First Last"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.notes",
+                    "data_type": "string",
+                    "example_values": [
+                        "This is action execution using playbook"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.riskFactors.*.tag",
+                    "data_type": "string",
+                    "example_values": [
+                        "HIGH_IMPACT_EMPLOYEE"
+                    ]
+                },
+                {
                     "data_path": "action_result.status",
                     "data_type": "string",
                     "example_values": [
@@ -1277,7 +1576,7 @@
                     "data_path": "action_result.message",
                     "data_type": "string",
                     "example_values": [
-                        "All risk tags for user: [PERFORMANCE_CONCERNS]"
+                        "All risk tags for user: PERFORMANCE_CONCERNS"
                     ]
                 },
                 {
@@ -1389,6 +1688,409 @@
                     "column_order": 7
                 },
                 {
+                    "data_path": "action_result.data.*.id",
+                    "data_type": "string",
+                    "example_values": [
+                        "40b2176a-7a5e-45a4-b9d8-330eb1852a03"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.note.id",
+                    "data_type": "string",
+                    "example_values": [
+                        "3edc64e7-8c8a-4fdd-9bc1-38ee5c0fff58"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.note.type$",
+                    "data_type": "string",
+                    "example_values": [
+                        "NOTE"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.note.message",
+                    "data_type": "string",
+                    "example_values": [
+                        "Message"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.note.lastModifiedAt",
+                    "data_type": "string",
+                    "example_values": [
+                        "2022-01-05T13:04:52.0517450Z"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.note.lastModifiedBy",
+                    "data_type": "string",
+                    "example_values": [
+                        "first@gmail.com"
+                    ],
+                    "contains": [
+                        "user name",
+                        "email"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.type$",
+                    "data_type": "string",
+                    "example_values": [
+                        "ALERT_DETAILS"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.ruleId",
+                    "data_type": "string",
+                    "example_values": [
+                        "31e8082b-1f63-4d07-9c00-4120a52289c6"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.target",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.tenantId",
+                    "data_type": "string",
+                    "example_values": [
+                        "f6b12138-e9b5-4739-9fdd-99886f369978"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.ruleSource",
+                    "data_type": "string",
+                    "example_values": [
+                        "Alerting"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.observations.*.id",
+                    "data_type": "string",
+                    "example_values": [
+                        "356a5e85-d38f-4b2e-9ddf-1e0714785346-FedEndpoint"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.observations.*.data.id",
+                    "data_type": "string",
+                    "example_values": [
+                        "356a5e85-d38f-4b2e-9ddf-1e0714785346-FedEndpoint"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.observations.*.data.files.*.name",
+                    "data_type": "string",
+                    "example_values": [
+                        "854137.exe.zip"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.observations.*.data.files.*.path",
+                    "data_type": "string",
+                    "example_values": [
+                        "C:/Users/admin/Downloads/"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.observations.*.data.files.*.size",
+                    "data_type": "numeric",
+                    "example_values": [
+                        33060
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.observations.*.data.files.*.type$",
+                    "data_type": "string",
+                    "example_values": [
+                        "OBSERVED_FILE"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.observations.*.data.files.*.eventId",
+                    "data_type": "string",
+                    "example_values": [
+                        "0_f6b12138-e9b5-4739-9fdd-99886f369978_1003668363210389567_1040257476113969435_2_AAA"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.observations.*.data.files.*.category",
+                    "data_type": "string",
+                    "example_values": [
+                        "Archive"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.observations.*.data.files.*.observedAt",
+                    "data_type": "string",
+                    "example_values": [
+                        "2021-12-29T14:46:51.2320000Z"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.observations.*.data.files.*.riskSeverityInfo.score",
+                    "data_type": "numeric",
+                    "example_values": [
+                        7
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.observations.*.data.files.*.riskSeverityInfo.type$",
+                    "data_type": "string",
+                    "example_values": [
+                        "RISK_SEVERITY_INFO"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.observations.*.data.files.*.riskSeverityInfo.severity",
+                    "data_type": "string",
+                    "example_values": [
+                        "HIGH"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.observations.*.data.files.*.riskSeverityInfo.matchedRiskIndicators.*.name",
+                    "data_type": "string",
+                    "example_values": [
+                        "Zip"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.observations.*.data.files.*.riskSeverityInfo.matchedRiskIndicators.*.type$",
+                    "data_type": "string",
+                    "example_values": [
+                        "RISK_INDICATOR"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.observations.*.data.files.*.riskSeverityInfo.matchedRiskIndicators.*.weight",
+                    "data_type": "numeric",
+                    "example_values": [
+                        7
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.observations.*.data.type$",
+                    "data_type": "string",
+                    "example_values": [
+                        "OBSERVED_ENDPOINT_ACTIVITY"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.observations.*.data.fileCount",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.observations.*.data.totalFileSize",
+                    "data_type": "numeric",
+                    "example_values": [
+                        33060
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.observations.*.data.appReadDetails.*.type$",
+                    "data_type": "string",
+                    "example_values": [
+                        "APP_READ_DETAILS"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.observations.*.data.appReadDetails.*.destinationName",
+                    "data_type": "string",
+                    "example_values": [
+                        "Unknown"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.observations.*.data.appReadDetails.*.destinationCategory",
+                    "data_type": "string",
+                    "example_values": [
+                        "Unknown"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.observations.*.data.fileCategories.*.type$",
+                    "data_type": "string",
+                    "example_values": [
+                        "OBSERVED_FILE_CATEGORY"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.observations.*.data.fileCategories.*.category",
+                    "data_type": "string",
+                    "example_values": [
+                        "Archive"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.observations.*.data.fileCategories.*.fileCount",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.observations.*.data.fileCategories.*.isSignificant",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.observations.*.data.fileCategories.*.totalFileSize",
+                    "data_type": "numeric",
+                    "example_values": [
+                        33060
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.observations.*.data.lastActivityAt",
+                    "data_type": "string",
+                    "example_values": [
+                        "2021-12-29T14:50:00.0000000Z"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.observations.*.data.firstActivityAt",
+                    "data_type": "string",
+                    "example_values": [
+                        "2021-12-29T14:45:00.0000000Z"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.observations.*.data.isRemoteActivity",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.observations.*.data.riskSeveritySummary.*.type$",
+                    "data_type": "string",
+                    "example_values": [
+                        "RISK_SEVERITY_SUMMARY"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.observations.*.data.riskSeveritySummary.*.severity",
+                    "data_type": "string",
+                    "example_values": [
+                        "HIGH"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.observations.*.data.riskSeveritySummary.*.numEvents",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.observations.*.data.riskSeveritySummary.*.summarizedRiskIndicators.*.name",
+                    "data_type": "string",
+                    "example_values": [
+                        "Zip"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.observations.*.data.riskSeveritySummary.*.summarizedRiskIndicators.*.type$",
+                    "data_type": "string",
+                    "example_values": [
+                        "SUMMARIZED_RISK_INDICATOR"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.observations.*.data.riskSeveritySummary.*.summarizedRiskIndicators.*.numEvents",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.observations.*.data.destinationIsSignificant",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.observations.*.data.exposureTypeIsSignificant",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.observations.*.data.fileCategoryIsSignificant",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.observations.*.data.riskSeverityIsSignificant",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.observations.*.type",
+                    "data_type": "string",
+                    "example_values": [
+                        "FedEndpointExfiltration"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.observations.*.type$",
+                    "data_type": "string",
+                    "example_values": [
+                        "OBSERVATION"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.observations.*.observedAt",
+                    "data_type": "string",
+                    "example_values": [
+                        "2021-12-29T14:45:00.0000000Z"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.riskSeverity",
+                    "data_type": "string",
+                    "example_values": [
+                        "HIGH"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.stateLastModifiedAt",
+                    "data_type": "string",
+                    "example_values": [
+                        "2022-01-05T13:04:52.0516870Z"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.stateLastModifiedBy",
+                    "data_type": "string",
+                    "example_values": [
+                        "test@gmail.com"
+                    ],
+                    "contains": [
+                        "user name",
+                        "email"
+                    ]
+                },
+                {
                     "data_path": "action_result.status",
                     "data_type": "string",
                     "example_values": [
@@ -1400,7 +2102,7 @@
                     "data_path": "action_result.message",
                     "data_type": "string",
                     "example_values": [
-                        "Username: test@gmail.com, User Id: 1234567"
+                        "Username: test@gmail.com, User Id: 116627747487575997"
                     ]
                 },
                 {
@@ -1564,6 +2266,84 @@
                     "column_order": 5
                 },
                 {
+                    "data_path": "action_result.data.*.id",
+                    "data_type": "string",
+                    "example_values": [
+                        "2c425fc4-6875-46a3-95e0-2940dd83ae2b"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.type",
+                    "data_type": "string",
+                    "example_values": [
+                        "FED_COMPOSITE"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.type$",
+                    "data_type": "string",
+                    "example_values": [
+                        "ALERT_SUMMARY"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.ruleId",
+                    "data_type": "string",
+                    "example_values": [
+                        "1cc3aad3-e94c-40d9-8c9d-4c6d80f4ad57"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.target",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.actorId",
+                    "data_type": "string",
+                    "example_values": [
+                        "996627747487575003"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.tenantId",
+                    "data_type": "string",
+                    "example_values": [
+                        "f6b12138-e9b5-4739-9fdd-99886f369978"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.ruleSource",
+                    "data_type": "string",
+                    "example_values": [
+                        "Alerting"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.riskSeverity",
+                    "data_type": "string",
+                    "example_values": [
+                        "CRITICAL"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.stateLastModifiedAt",
+                    "data_type": "string",
+                    "example_values": [
+                        "2021-12-31T09:38:19.8698500Z"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.stateLastModifiedBy",
+                    "data_type": "string",
+                    "example_values": [
+                        "first@gmail.com"
+                    ],
+                    "contains": [
+                        "user name",
+                        "email"
+                    ]
+                },
+                {
                     "data_path": "action_result.status",
                     "data_type": "string",
                     "example_values": [
@@ -1576,6 +2356,13 @@
                     "data_type": "string",
                     "example_values": [
                         "Total Count: 10"
+                    ]
+                },
+                {
+                    "data_path": "action_result.summary.total_count",
+                    "data_type": "numeric",
+                    "example_values": [
+                        10
                     ]
                 },
                 {
@@ -1687,7 +2474,14 @@
                     "data_path": "action_result.message",
                     "data_type": "string",
                     "example_values": [
-                        "State of alert 123456 was updated to Pending"
+                        "State of alert 2c425fc4-6875-46a3-95e0-2940dd83ae2b was updated to PENDING"
+                    ]
+                },
+                {
+                    "data_path": "action_result.summary.alert_id",
+                    "data_type": "string",
+                    "example_values": [
+                        "f2ca08f9-2b97-4e5f-85cc-d12e13cnbhg"
                     ]
                 },
                 {
@@ -1971,6 +2765,13 @@
                     ]
                 },
                 {
+                    "data_path": "action_result.data.*.userUid",
+                    "data_type": "string",
+                    "example_values": [
+                        "1041122388848023999"
+                    ]
+                },
+                {
                     "data_path": "action_result.status",
                     "data_type": "string",
                     "example_values": [
@@ -1983,6 +2784,13 @@
                     "data_type": "string",
                     "example_values": [
                         "Total users: 151"
+                    ]
+                },
+                {
+                    "data_path": "action_result.summary.total_users",
+                    "data_type": "numeric",
+                    "example_values": [
+                        144
                     ]
                 },
                 {
@@ -2111,8 +2919,170 @@
                     "data_type": "password"
                 },
                 {
-                    "data_path": "action_result.data",
+                    "data_path": "action_result.data.*.email",
+                    "data_type": "string",
+                    "example_values": [
+                        "firstlast111@gmail.com"
+                    ],
+                    "contains": [
+                        "user name",
+                        "email"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.notes",
                     "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.orgId",
+                    "data_type": "numeric",
+                    "example_values": [
+                        8361
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.active",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.orgUid",
+                    "data_type": "string",
+                    "example_values": [
+                        "996627746816486999"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "Active"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.userId",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1116873
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.blocked",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.invited",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.orgName",
+                    "data_type": "string",
+                    "example_values": [
+                        "Org Name"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.orgType",
+                    "data_type": "string",
+                    "example_values": [
+                        "ENTERPRISE"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.userUid",
+                    "data_type": "string",
+                    "example_values": [
+                        "1038022770287047000"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.lastName",
+                    "data_type": "string",
+                    "example_values": [
+                        "Last Name"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.username",
+                    "data_type": "string",
+                    "example_values": [
+                        "first@gmail.com"
+                    ],
+                    "contains": [
+                        "user name",
+                        "email"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.firstName",
+                    "data_type": "string",
+                    "example_values": [
+                        "first"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.emailPromo",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.userExtRef",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.creationDate",
+                    "data_type": "string",
+                    "example_values": [
+                        "2021-12-14T04:49:45.059Z"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.quotaInBytes",
+                    "data_type": "numeric",
+                    "example_values": [
+                        10
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.passwordReset",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.modificationDate",
+                    "data_type": "string",
+                    "example_values": [
+                        "2021-12-14T04:49:45.190Z"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.usernameIsAnEmail",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.localAuthenticationOnly",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
                 },
                 {
                     "data_path": "action_result.status",
@@ -2128,7 +3098,7 @@
                     "data_path": "action_result.message",
                     "data_type": "string",
                     "example_values": [
-                        "Username was created with user_id: 12345678912"
+                        "Username was created with user_id: 116627747487575997"
                     ]
                 },
                 {
@@ -2628,6 +3598,27 @@
                     ]
                 },
                 {
+                    "data_path": "action_result.data.*.type$",
+                    "data_type": "string",
+                    "example_values": [
+                        "USER_V2"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.tenantId",
+                    "data_type": "string",
+                    "example_values": [
+                        "f6b12138-e9b5-4739-9fdd-99886f369999"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.notes",
+                    "data_type": "string",
+                    "example_values": [
+                        "Notes"
+                    ]
+                },
+                {
                     "data_path": "action_result.status",
                     "data_type": "string",
                     "example_values": [
@@ -2641,7 +3632,7 @@
                     "data_path": "action_result.message",
                     "data_type": "string",
                     "example_values": [
-                        "User Id: 12345678"
+                        "User Id: 116627747487575997"
                     ]
                 },
                 {
@@ -2730,8 +3721,73 @@
                     "column_order": 1
                 },
                 {
-                    "data_path": "action_result.data",
+                    "data_path": "action_result.data.*.user.email",
+                    "data_type": "string",
+                    "example_values": [
+                        "first@gmail.com"
+                    ],
+                    "contains": [
+                        "user name",
+                        "email"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.user.userUid",
+                    "data_type": "string",
+                    "example_values": [
+                        "1008493941083534000"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.user.username",
+                    "data_type": "string",
+                    "example_values": [
+                        "first@gmail.com"
+                    ],
+                    "contains": [
+                        "user name",
+                        "email"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.user.userExtRef",
                     "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.active",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.legalHold.name",
+                    "data_type": "string",
+                    "example_values": [
+                        "This is testing purpose created matter"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.legalHold.legalHoldUid",
+                    "data_type": "string",
+                    "example_values": [
+                        "1036893598491521000"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.creationDate",
+                    "data_type": "string",
+                    "example_values": [
+                        "2021-12-06T09:54:00.256Z"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.legalHoldMembershipUid",
+                    "data_type": "string",
+                    "example_values": [
+                        "1036893756264460000"
+                    ]
                 },
                 {
                     "data_path": "action_result.status",
@@ -2747,7 +3803,7 @@
                     "data_path": "action_result.message",
                     "data_type": "string",
                     "example_values": [
-                        "Username was added to legal hold matter 12345678912"
+                        "Username was added to legal hold matter 1936895883179241577"
                     ]
                 },
                 {
@@ -2857,7 +3913,7 @@
                     "data_path": "action_result.message",
                     "data_type": "string",
                     "example_values": [
-                        "Username was removed from legal hold matter 12345678912"
+                        "Username was removed from legal hold matter 1936895883179241577"
                     ]
                 },
                 {
@@ -2989,6 +4045,97 @@
                     "column_order": 0
                 },
                 {
+                    "data_path": "action_result.data.*.name",
+                    "data_type": "string",
+                    "example_values": [
+                        "Case_p1"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "OPEN"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.subject",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.assignee",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.findings",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.createdAt",
+                    "data_type": "string",
+                    "example_values": [
+                        "2021-12-08T11:00:37.615887Z"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.updatedAt",
+                    "data_type": "string",
+                    "example_values": [
+                        "2021-12-08T11:00:37.615887Z"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.description",
+                    "data_type": "string",
+                    "example_values": [
+                        "Action Created Case"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.subjectUsername",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.assigneeUsername",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.createdByUserUid",
+                    "data_type": "string",
+                    "example_values": [
+                        "996627747487575000"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.createdByUsername",
+                    "data_type": "string",
+                    "example_values": [
+                        "first@gmail.com"
+                    ],
+                    "contains": [
+                        "user name",
+                        "email"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.lastModifiedByUserUid",
+                    "data_type": "string",
+                    "example_values": [
+                        "996627747487575000"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.lastModifiedByUsername",
+                    "data_type": "string",
+                    "example_values": [
+                        "first@gmail.com"
+                    ],
+                    "contains": [
+                        "user name",
+                        "email"
+                    ]
+                },
+                {
                     "data_path": "action_result.status",
                     "data_type": "string",
                     "example_values": [
@@ -3000,7 +4147,7 @@
                     "data_path": "action_result.message",
                     "data_type": "string",
                     "example_values": [
-                        "Case successfully created with case_id:r 132"
+                        "Case successfully created with case_id: 132"
                     ]
                 },
                 {
@@ -3136,7 +4283,7 @@
                 },
                 {
                     "data_path": "action_result.data.*.number",
-                    "data_type": "string",
+                    "data_type": "numeric",
                     "contains": [
                         "code42 case number"
                     ],
@@ -3180,6 +4327,71 @@
                     "data_type": "string",
                     "column_name": "Findings",
                     "column_order": 5
+                },
+                {
+                    "data_path": "action_result.data.*.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "OPEN"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.subject",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.assignee",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.createdAt",
+                    "data_type": "string",
+                    "example_values": [
+                        "2021-12-08T11:00:37.615887Z"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.updatedAt",
+                    "data_type": "string",
+                    "example_values": [
+                        "2021-12-08T11:03:23.442793Z"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.createdByUserUid",
+                    "data_type": "string",
+                    "example_values": [
+                        "996627747487575000"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.createdByUsername",
+                    "data_type": "string",
+                    "example_values": [
+                        "first@gmail.com"
+                    ],
+                    "contains": [
+                        "user name",
+                        "email"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.lastModifiedByUserUid",
+                    "data_type": "string",
+                    "example_values": [
+                        "996627747487575000"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.lastModifiedByUsername",
+                    "data_type": "string",
+                    "example_values": [
+                        "first@gmail.com"
+                    ],
+                    "contains": [
+                        "user name",
+                        "email"
+                    ]
                 },
                 {
                     "data_path": "action_result.status",
@@ -3255,7 +4467,7 @@
                 },
                 {
                     "data_path": "action_result.data.*.number",
-                    "data_type": "string",
+                    "data_type": "numeric",
                     "contains": [
                         "code42 case number"
                     ],
@@ -3299,6 +4511,71 @@
                     "data_type": "string",
                     "column_name": "Findings",
                     "column_order": 5
+                },
+                {
+                    "data_path": "action_result.data.*.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "CLOSED"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.subject",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.assignee",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.createdAt",
+                    "data_type": "string",
+                    "example_values": [
+                        "2022-01-04T15:40:37.896084Z"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.updatedAt",
+                    "data_type": "string",
+                    "example_values": [
+                        "2022-01-04T15:41:05.365791Z"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.createdByUserUid",
+                    "data_type": "string",
+                    "example_values": [
+                        "996627747487575000"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.createdByUsername",
+                    "data_type": "string",
+                    "example_value": [
+                        "first@gmail.com"
+                    ],
+                    "contains": [
+                        "user name",
+                        "email"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.lastModifiedByUserUid",
+                    "data_type": "string",
+                    "example_values": [
+                        "996627747487575000"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.lastModifiedByUsername",
+                    "data_type": "string",
+                    "example_values": [
+                        "first@gmail.com"
+                    ],
+                    "contains": [
+                        "user name",
+                        "email"
+                    ]
                 },
                 {
                     "data_path": "action_result.status",
@@ -3418,12 +4695,12 @@
                 {
                     "column_name": "Case Number",
                     "data_path": "action_result.data.*.number",
-                    "data_type": "string",
+                    "data_type": "numeric",
                     "contains": [
                         "code42 case number"
                     ],
                     "example_values": [
-                        "1"
+                        10
                     ],
                     "column_order": 1
                 },
@@ -3483,6 +4760,49 @@
                         "user name"
                     ],
                     "column_order": 6
+                },
+                {
+                    "data_path": "action_result.data.*.subject",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.assignee",
+                    "data_type": "string",
+                    "example_values": [
+                        "99662774748757500"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.updatedAt",
+                    "data_type": "string",
+                    "example_values": [
+                        "2022-01-04T16:15:43.229173Z"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.createdByUserUid",
+                    "data_type": "string",
+                    "example_values": [
+                        "996627747487575000"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.lastModifiedByUserUid",
+                    "data_type": "string",
+                    "example_values": [
+                        "996627747487575000"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.lastModifiedByUsername",
+                    "data_type": "string",
+                    "example_values": [
+                        "first@gmail.com"
+                    ],
+                    "contains": [
+                        "user name",
+                        "email"
+                    ]
                 },
                 {
                     "data_path": "action_result.status",
@@ -3596,7 +4916,7 @@
                     "data_path": "action_result.message",
                     "data_type": "string",
                     "example_values": [
-                        "Event 341235 added to case number 132"
+                        "Event 0_f6b12138-e9b5-4739-9fdd-99886f369978_1003668363210389567_1039064704673624347_20 added to case number 132"
                     ]
                 },
                 {
@@ -4356,6 +5676,103 @@
                     "data_type": "string"
                 },
                 {
+                    "data_path": "action_result.data.*.tabs.*.url",
+                    "data_type": "string",
+                    "example_values": [
+                        "https://test.com/mail?sid=db709a83421a3e305c82"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.tabs.*.title",
+                    "data_type": "string",
+                    "example_values": [
+                        "Free Email Addresses: Web based and secure"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.tabs.*.urlError",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.tabs.*.titleError",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.reportId",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.reportName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.reportType",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.sourceName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.trustReason",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.riskIndicators.*.name",
+                    "data_type": "string",
+                    "example_values": [
+                        "First use of destination"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.riskIndicators.*.weight",
+                    "data_type": "numeric",
+                    "example_values": [
+                        3
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.sourceCategory",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.reportDescription",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.reportRecordCount",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.reportColumnHeaders",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.sourceTabs.*.url",
+                    "data_type": "string",
+                    "example_values": [
+                        "https://test.com/download/2ba67828100783fb3/"
+                    ],
+                    "contains": [
+                        "url"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.sourceTabs.*.title",
+                    "data_type": "string",
+                    "example_values": [
+                        "MalwareBazaar | Download malware samples"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.sourceTabs.*.urlError",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.sourceTabs.*.titleError",
+                    "data_type": "string"
+                },
+                {
                     "data_path": "action_result.status",
                     "data_type": "string",
                     "example_values": [
@@ -4566,7 +5983,10 @@
                 },
                 {
                     "data_path": "action_result.data.*.riskScore",
-                    "data_type": "string"
+                    "data_type": "numeric",
+                    "example_values": [
+                        10
+                    ]
                 },
                 {
                     "data_path": "action_result.data.*.domainName",
@@ -4732,6 +6152,108 @@
                 {
                     "data_path": "action_result.data.*.removableMediaSerialNumber",
                     "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.tabs.*.url",
+                    "data_type": "string",
+                    "example_values": [
+                        "https://test.com/download/2ba67828100783fb3/"
+                    ],
+                    "contains": [
+                        "url"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.tabs.*.title",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.tabs.*.urlError",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.tabs.*.titleError",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.reportId",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.reportName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.reportType",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.sourceName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.trustReason",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.windowTitle.*.windowTitle",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.riskIndicators.*.name",
+                    "data_type": "string",
+                    "example_values": [
+                        "Zip"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.riskIndicators.*.weight",
+                    "data_type": "numeric",
+                    "example_values": [
+                        7
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.sourceCategory",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.reportDescription",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.reportRecordCount",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.reportColumnHeaders",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.sourceTabs.*.url",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.sourceTabs.*.title",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.sourceTabs.*.urlError",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.sourceTabs.*.titleError",
+                    "data_type": "string",
+                    "example_values": [
+                        "Unavailable"
+                    ]
+                },
+                {
+                    "data_path": "action_result.summary.results_returned_count",
+                    "data_type": "numeric",
+                    "example_values": [
+                        3
+                    ]
                 },
                 {
                     "data_path": "action_result.status",

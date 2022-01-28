@@ -127,7 +127,8 @@ class Code42OnPollConnector:
                 alerts, artifact_count=artifact_count
             )
 
-        self._save_last_time(last_alert, source_id)
+        if not self._connector.is_poll_now():
+            self._save_last_time(last_alert, source_id)
         return action_result.set_status(phantom.APP_SUCCESS)
 
     def _get_alerts(self, start_date, end_date, container_count=None):
@@ -212,10 +213,17 @@ class Code42OnPollConnector:
         self._connector.save_artifacts(artifacts)
 
     def _get_date_parameters(self):
+        config = self._connector.get_config()
+        if self._connector.is_poll_now():
+            given_start_date = config.get("initial_poll_start_date")
+            start_time = given_start_date or get_thirty_days_ago().strftime(
+                "%Y-%m-%dT%H:%M:%S.%f"
+            )
+            end_time = config.get("initial_poll_end_date")
+            return start_time, end_time
         last_time = self._state.get("last_time")
         if not last_time:
             # If there was never a stored last_time.
-            config = self._connector.get_config()
             given_start_date = config.get("initial_poll_start_date")
             start_time = given_start_date or get_thirty_days_ago().strftime(
                 "%Y-%m-%dT%H:%M:%S.%f"
