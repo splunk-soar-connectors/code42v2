@@ -35,7 +35,7 @@ and password to use to connect to Code42.
 If using the polling feature, you may set the Start Date and End Date for the initial ingest.
 Otherwise, it ingests up to 30 days back. Ongoing queries will only get new alerts. Configure the
 polling interval in the Ingest Settings tab. Additionally, you can configure which alert severities
-to poll for, such as HIGH, MEDIUM, or LOW.
+to poll for, such as HIGH, LOW, MODERATE or CRITICAL.
 
 ## On Poll
 
