@@ -44,3 +44,13 @@ start and end dates). Note that if you use the "poll now" feature, you are limit
 containers and artifacts listed in the parameter fields. Adjust the polling interval in the ingest
 settings to determine how frequent polling occurs. The app ingests individual alerts only once
 unless deleted and re-polled.
+
+## Port Information
+
+The app uses HTTP/ HTTPS protocol for communicating with the Code42 v2 server. Below are the
+default ports used by the Splunk SOAR Connector.
+
+| SERVICE NAME | TRANSPORT PROTOCOL | PORT |
+|--------------|--------------------|------|
+| http         | tcp                | 80   |
+| https        | tcp                | 443  |
