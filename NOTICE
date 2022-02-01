@@ -1,17 +1,19 @@
 Splunk SOAR Code42
-Copyright (c) Code42, 2021
+Copyright (c) 2022 Splunk Inc., Code42
 
 Third-party Software Attributions:
+
+Library: beautifulsoup4
+Version: 4.9.1
+License: MIT
+Copyright 2004-2017 Leonard Richardson
+Copyright 2004-2019 Leonard Richardson
+Copyright 2018 Isaac Muse
 
 Library: pudb
 Version: 2019.2
 License: MIT
 Copyright 2009 Andreas Kloeckner and contributors
-
-Library: py42
-Version: 1.15.1
-License: MIT
-Copyright 2020 Code42 Software
 
 Library: python-dateutil
 Version: 2.8.1
@@ -25,7 +27,7 @@ Copyright 2015 - dateutil contributors (see AUTHORS file)
 Copyright 2017 Paul Ganssle <paul@ganssle.io>
 Copyright 2017 dateutil contributors (see AUTHORS file)
 
-Library: requests
-Version: 2.25.0
-License: Apache 2.0
-Kenneth Reitz
+Library: py42
+Version: 1.20.0
+License: MIT
+Copyright 2020 Code42 Software
