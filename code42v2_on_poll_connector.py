@@ -231,10 +231,27 @@ class Code42OnPollConnector:
             end_time = config.get("initial_poll_end_date")
             return start_time, end_time
         else:
-            # Last time is stored as a float timestamp
-            last_time_as_date_str = datetime.fromtimestamp(
-                last_time, tz=timezone.utc
-            ).strftime("%Y-%m-%dT%H:%M:%S.%f")
+            try:
+                # Last time is stored as a float timestamp
+                last_time_as_date_str = datetime.fromtimestamp(
+                    last_time, tz=timezone.utc
+                ).strftime("%Y-%m-%dT%H:%M:%S.%f")
+            except Exception:
+                self._connector.debug_print(
+                    "Error occurred while parsing 'last_time' from the state file."
+                    "Hence, reverting the state file to initial poll cycle."
+                )
+                # Removing invalid 'last_time'
+                self._state.pop('last_time', None)
+
+                # Setting to initial poll time
+                given_start_date = config.get("initial_poll_start_date")
+                start_time = given_start_date or get_thirty_days_ago().strftime(
+                    "%Y-%m-%dT%H:%M:%S.%f"
+                )
+                end_time = config.get("initial_poll_end_date")
+                return start_time, end_time
+
             return last_time_as_date_str, None
 
     def _get_limit_counts(self, param):

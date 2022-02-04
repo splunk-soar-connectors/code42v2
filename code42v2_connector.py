@@ -101,14 +101,19 @@ class Code42Connector(BaseConnector):
 
         try:
             ipaddress.ip_address(input_ip_address)
-        except:
+        except Exception:
             return False
 
         return True
 
     def initialize(self):
+
         # use this to store data that needs to be accessed across actions
         self._state = self.load_state()
+        if not isinstance(self._state, dict):
+            self.debug_print("Resetting the state file with the default format")
+            self._state = {"app_version": self.get_app_json().get("app_version")}
+            return self.set_status(phantom.APP_ERROR, CODE42V2_STATE_FILE_CORRUPT_ERR)
 
         config = self.get_config()
         self._cloud_instance = config["cloud_instance"]
@@ -117,16 +122,12 @@ class Code42Connector(BaseConnector):
 
         # handle proxies
         self._proxy = {}
-        env_vars = config.get('_reserved_environment_variables', {})
-        if 'HTTP_PROXY' in env_vars:
-            self._proxy['http'] = env_vars['HTTP_PROXY']['value']
-        elif 'HTTP_PROXY' in os.environ:
+        if 'HTTP_PROXY' in os.environ:
             self._proxy['http'] = os.environ.get('HTTP_PROXY')
 
-        if 'HTTPS_PROXY' in env_vars:
-            self._proxy['https'] = env_vars['HTTPS_PROXY']['value']
-        elif 'HTTPS_PROXY' in os.environ:
+        if 'HTTPS_PROXY' in os.environ:
             self._proxy['https'] = os.environ.get('HTTPS_PROXY')
+
         settings.proxies = self._proxy
 
         self.set_validator('ipv6', self._is_valid_ip)
@@ -139,7 +140,7 @@ class Code42Connector(BaseConnector):
                     return action_result.set_status(phantom.APP_ERROR, CODE42V2_VALID_INT_MSG.format(param=key)), None
 
                 parameter = int(parameter)
-            except:
+            except Exception:
                 return action_result.set_status(phantom.APP_ERROR, CODE42V2_VALID_INT_MSG.format(param=key)), None
 
             if parameter < 0:
