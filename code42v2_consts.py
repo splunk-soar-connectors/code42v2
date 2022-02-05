@@ -108,3 +108,9 @@ CODE42V2_ROLE_ID_KEY = "role_id"
 
 # value_list validation constants
 CODE42V2_VALUE_LIST_ERR_MSG = "Please provide a valid value in the '{}' action parameter. Expected values are {}"
+
+# state file corrupt error message
+CODE42V2_STATE_FILE_CORRUPT_ERR = (
+    "Error occurred while loading the state file due to its unexpected format. "
+    "Resetting the state file with the default format. Please try again."
+)
