@@ -1,8 +1,8 @@
 [comment]: # "Auto-generated SOAR connector documentation"
 # Code42 v2
 
-Publisher: Code42  
-Connector Version: 1\.0\.1  
+Publisher: Splunk  
+Connector Version: 1\.0\.2  
 Product Vendor: Code42  
 Product Name: Code42 v2  
 Product Version Supported (regex): "\.\*"  
