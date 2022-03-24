@@ -174,19 +174,23 @@ class Code42Connector(BaseConnector):
 
     @action_handler_for("test_connectivity")
     def _handle_test_connectivity(self, param, action_result):
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
         self._client.users.get_current()
         self.save_progress("Test Connectivity Passed")
         return action_result.set_status(phantom.APP_SUCCESS)
 
     @action_handler_for("on_poll")
     def _handle_on_poll(self, param, action_result):
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
         connector = Code42OnPollConnector(self, self._client, self._state)
+        self.save_progress("On-Poll Connector initialized.")
         return connector.handle_on_poll(param, action_result)
 
     """ DEPARTING EMPLOYEE ACTIONS """
 
     @action_handler_for("add_departing_employee")
     def _handle_add_departing_employee(self, param, action_result):
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
         username = param["username"]
         departure_date = param.get("departure_date")
         user_id = self._get_user_id(username)
@@ -196,6 +200,7 @@ class Code42Connector(BaseConnector):
 
         note = param.get("note")
         if note:
+            self.save_progress("Adding or updating notes related to the user.")
             self._client.detectionlists.update_user_notes(user_id, note)
 
         action_result.add_data(response.data)
@@ -204,8 +209,10 @@ class Code42Connector(BaseConnector):
 
     @action_handler_for("remove_departing_employee")
     def _handle_remove_departing_employee(self, param, action_result):
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
         username = param["username"]
         user_id = self._get_user_id(username)
+        self.save_progress("Removing a user from the Departing Employees list.")
         self._client.detectionlists.departing_employee.remove(user_id)
         action_result.add_data({"userId": user_id})
         status_message = f"{username} was removed from the departing employees list"
@@ -213,10 +220,13 @@ class Code42Connector(BaseConnector):
 
     @action_handler_for("list_departing_employees")
     def _handle_list_departing_employees(self, param, action_result):
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
         filter_type = param.get("filter_type", DepartingEmployeeFilters.OPEN)
         if filter_type not in CODE42V2_FILTER_TYPE_DEPARTING_LIST:
             msg = CODE42V2_VALUE_LIST_ERR_MSG.format('filter_type', CODE42V2_FILTER_TYPE_DEPARTING_LIST)
             return action_result.set_status(phantom.APP_ERROR, msg)
+
+        self.save_progress("Getting all Departing Employees. Filter results by filter_type.")
         results_generator = self._client.detectionlists.departing_employee.get_all(
             filter_type=filter_type
         )
@@ -233,14 +243,18 @@ class Code42Connector(BaseConnector):
 
     @action_handler_for("get_departing_employee")
     def _handle_get_departing_employee(self, param, action_result):
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
         username = param["username"]
         user_id = self._get_user_id(username)
 
         try:
+            self.save_progress("Getting departing employee data of a user.")
             response = self._client.detectionlists.departing_employee.get(user_id)
             action_result.add_data(response.data)
             action_result.update_summary({"is_departing_employee": True})
-        except Py42NotFoundError:
+        except Py42NotFoundError as e:
+            self.debug_print("Error occurred while getting departing employee data of a user. "
+                "Error: {}".format(str(e)))
             action_result.update_summary({"is_departing_employee": False})
 
         return action_result.set_status(phantom.APP_SUCCESS)
@@ -248,33 +262,40 @@ class Code42Connector(BaseConnector):
     """ HIGH RISK EMPLOYEE ACTIONS """
 
     @action_handler_for("add_highrisk_employee")
-    def _handle_add_high_risk_employee(self, param, action_result):
+    def _handle_add_highrisk_employee(self, param, action_result):
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
         username = param["username"]
         user_id = self._get_user_id(username)
+        self.save_progress("Adding a user to the High Risk Employee detection list.")
         response = self._client.detectionlists.high_risk_employee.add(user_id)
 
         note = param.get("note")
         if note:
+            self.save_progress("Adding or updating notes related to the user.")
             self._client.detectionlists.update_user_notes(user_id, note)
         action_result.add_data(response.data)
         status_message = f"{username} was added to the high risk employees list"
         return action_result.set_status(phantom.APP_SUCCESS, status_message)
 
     @action_handler_for("remove_highrisk_employee")
-    def _handle_remove_high_risk_employee(self, param, action_result):
+    def _handle_remove_highrisk_employee(self, param, action_result):
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
         username = param["username"]
         user_id = self._get_user_id(username)
+        self.save_progress("Removing a user from the High Risk Employee detection list.")
         self._client.detectionlists.high_risk_employee.remove(user_id)
         action_result.add_data({"userId": user_id})
         status_message = f"{username} was removed from the high risk employees list"
         return action_result.set_status(phantom.APP_SUCCESS, status_message)
 
     @action_handler_for("list_highrisk_employees")
-    def _handle_list_high_risk_employees(self, param, action_result):
+    def _handle_list_highrisk_employees(self, param, action_result):
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
         filter_type = param.get("filter_type", HighRiskEmployeeFilters.OPEN)
         if filter_type not in CODE42V2_FILTER_TYPE_HIGH_RISK_LIST:
             msg = CODE42V2_VALUE_LIST_ERR_MSG.format('filter_type', CODE42V2_FILTER_TYPE_HIGH_RISK_LIST)
             return action_result.set_status(phantom.APP_ERROR, msg)
+        self.save_progress("Searching High Risk Employee list. Filter results by filter_type.")
         results_generator = self._client.detectionlists.high_risk_employee.get_all(
             filter_type=filter_type
         )
@@ -293,11 +314,13 @@ class Code42Connector(BaseConnector):
         return action_result.set_status(phantom.APP_SUCCESS)
 
     @action_handler_for("get_highrisk_employee")
-    def _handle_get_high_risk_employee(self, param, action_result):
+    def _handle_get_highrisk_employee(self, param, action_result):
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
         username = param["username"]
         user_id = self._get_user_id(username)
 
         try:
+            self.save_progress("Getting user information.")
             response = self._client.detectionlists.high_risk_employee.get(user_id)
             all_tags = response.data.get("riskFactors", [])
             response["riskFactors"] = _convert_to_obj_list(all_tags, "tag")
@@ -309,7 +332,8 @@ class Code42Connector(BaseConnector):
         return action_result.set_status(phantom.APP_SUCCESS)
 
     @action_handler_for("add_highrisk_tag")
-    def _handle_add_high_risk_tag(self, param, action_result):
+    def _handle_add_highrisk_tag(self, param, action_result):
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
         username = param["username"]
 
         risk_tag = param["risk_tag"]
@@ -318,6 +342,7 @@ class Code42Connector(BaseConnector):
             return action_result.set_status(phantom.APP_ERROR, msg)
 
         user_id = self._get_user_id(username)
+        self.save_progress("Adding one or more risk factor tags.")
         response = self._client.detectionlists.add_user_risk_tags(user_id, risk_tag)
         all_tags = response.data.get("riskFactors", [])
         response["riskFactors"] = _convert_to_obj_list(all_tags, "tag")
@@ -326,7 +351,8 @@ class Code42Connector(BaseConnector):
         return action_result.set_status(phantom.APP_SUCCESS, message)
 
     @action_handler_for("remove_highrisk_tag")
-    def _handle_remove_high_risk_tag(self, param, action_result):
+    def _handle_remove_highrisk_tag(self, param, action_result):
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
         username = param["username"]
 
         risk_tag = param["risk_tag"]
@@ -335,6 +361,7 @@ class Code42Connector(BaseConnector):
             return action_result.set_status(phantom.APP_ERROR, msg)
 
         user_id = self._get_user_id(username)
+        self.save_progress("Removing one or more risk factor tags.")
         response = self._client.detectionlists.remove_user_risk_tags(user_id, risk_tag)
         all_tags = response.data.get("riskFactors", [])
         response["riskFactors"] = _convert_to_obj_list(all_tags, "tag")
@@ -350,6 +377,7 @@ class Code42Connector(BaseConnector):
 
     @action_handler_for("list_users")
     def _handle_list_users(self, param, action_result):
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
         org_uid = param.get("org_uid")
         email = param.get("email")
         role_id = param.get("role_id")
@@ -366,6 +394,8 @@ class Code42Connector(BaseConnector):
             active = True
         elif active_user == 'Inactive':
             active = False
+
+        self.save_progress("Getting all users.")
         response = self._client.users.get_all(
             org_uid=org_uid,
             role_id=role_id,
@@ -385,7 +415,9 @@ class Code42Connector(BaseConnector):
 
     @action_handler_for("create_user")
     def _handle_create_user(self, param, action_result):
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
         username = param["username"]
+        self.save_progress("Creating a new user.")
         response = self._client.users.create_user(
             org_uid=param["org_uid"],
             username=username,
@@ -403,16 +435,20 @@ class Code42Connector(BaseConnector):
 
     @action_handler_for("block_user")
     def _handle_block_user(self, param, action_result):
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
         username = param["username"]
         user = self._get_user(username)
+        self.save_progress("Blocking the user with the given ID.")
         response = self._client.users.block(user["userId"])
         action_result.add_data(response.data)
         return action_result.set_status(phantom.APP_SUCCESS, f"{username} was blocked")
 
     @action_handler_for("unblock_user")
     def _handle_unblock_user(self, param, action_result):
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
         username = param["username"]
         user = self._get_user(username)
+        self.save_progress("Removing a block, if one exists, on the user with the given user ID.")
         response = self._client.users.unblock(user["userId"])
         action_result.add_data(response.data)
         return action_result.set_status(
@@ -421,8 +457,10 @@ class Code42Connector(BaseConnector):
 
     @action_handler_for("deactivate_user")
     def _handle_deactivate_user(self, param, action_result):
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
         username = param["username"]
         user = self._get_user(username)
+        self.save_progress("Deactivating the user with the given user ID.")
         response = self._client.users.deactivate(user["userId"])
         action_result.add_data(response.data)
         return action_result.set_status(
@@ -431,8 +469,10 @@ class Code42Connector(BaseConnector):
 
     @action_handler_for("reactivate_user")
     def _handle_reactivate_user(self, param, action_result):
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
         username = param["username"]
         user = self._get_user(username)
+        self.save_progress("Reactivating the user with the given ID.")
         response = self._client.users.reactivate(user["userId"])
         action_result.add_data(response.data)
         return action_result.set_status(
@@ -441,8 +481,10 @@ class Code42Connector(BaseConnector):
 
     @action_handler_for("get_user_profile")
     def _handle_get_user_profile(self, param, action_result):
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
         username = param["username"]
         user_id = self._get_user_id(username)
+        self.save_progress("Getting user details by user id.")
         response = self._client.detectionlists.get_user_by_id(user_id)
         all_tags = response.data.get("riskFactors", [])
         all_cloud_usernames = response.data.get("cloudUsernames", [])
@@ -458,7 +500,9 @@ class Code42Connector(BaseConnector):
 
     @action_handler_for("get_alert_details")
     def _handle_get_alert_details(self, param, action_result):
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
         alert_id = param["alert_id"]
+        self.save_progress("Getting the details for the alerts with the given IDs.")
         response = self._client.alerts.get_details([alert_id])
         alert = response["alerts"][0]
         action_result.add_data(alert)
@@ -469,7 +513,7 @@ class Code42Connector(BaseConnector):
 
     @action_handler_for("search_alerts")
     def _handle_search_alerts(self, param, action_result):
-
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
         if is_default_dict(param):
             return action_result.set_status(
                 phantom.APP_ERROR,
@@ -488,7 +532,7 @@ class Code42Connector(BaseConnector):
         query = build_alerts_query(
             start_date, end_date, username=username, alert_state=alert_state
         )
-
+        self.save_progress("Starting to searches alerts using the given query.")
         response = self._client.alerts.search(query)
         for alert in response["alerts"]:
             action_result.add_data(alert)
@@ -497,6 +541,7 @@ class Code42Connector(BaseConnector):
 
     @action_handler_for("set_alert_state")
     def _handle_set_alert_state(self, param, action_result):
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
         alert_id = param["alert_id"]
         alert_state = param["alert_state"]
         note = param.get("note")
@@ -504,6 +549,7 @@ class Code42Connector(BaseConnector):
         if alert_state not in CODE42V2_ALERT_STATE:
             msg = CODE42V2_VALUE_LIST_ERR_MSG.format('alert_state', CODE42V2_ALERT_STATE)
             return action_result.set_status(phantom.APP_ERROR, msg)
+        self.save_progress("Updating the status of alerts.")
         response = self._client.alerts.update_state(alert_state, [alert_id], note=note)
         action_result.add_data(response.data)
         action_result.update_summary({"alert_id": alert_id})
@@ -511,18 +557,21 @@ class Code42Connector(BaseConnector):
         return action_result.set_status(phantom.APP_SUCCESS, status_message)
 
     @action_handler_for("add_legalhold_custodian")
-    def _handle_add_legal_hold_custodian(self, param, action_result):
+    def _handle_add_legalhold_custodian(self, param, action_result):
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
         username = param["username"]
         matter_id = param["matter_id"]
         user_id = self._get_user_id(username)
         self._check_matter_is_accessible(matter_id)
+        self.save_progress("Adding a user (Custodian) to a Legal Hold Matter.")
         response = self._client.legalhold.add_to_matter(user_id, matter_id)
         action_result.add_data(response.data)
         status_message = f"{username} was added to legal hold matter {matter_id}"
         return action_result.set_status(phantom.APP_SUCCESS, status_message)
 
     @action_handler_for("remove_legalhold_custodian")
-    def _handle_remove_legal_hold_custodian(self, param, action_result):
+    def _handle_remove_legalhold_custodian(self, param, action_result):
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
         username = param["username"]
         matter_id = param["matter_id"]
         user_id = self._get_user_id(username)
@@ -536,6 +585,7 @@ class Code42Connector(BaseConnector):
                 f"Code42: User is not an active member of "
                 f"legal hold matter {matter_id} for action 'remove_legalhold_custodian'",
             )
+        self.save_progress("Removing a user (Custodian) from a Legal Hold Matter.")
         self._client.legalhold.remove_from_matter(legal_hold_membership_id)
         action_result.add_data({"userId": user_id})
         status_message = f"{username} was removed from legal hold matter {matter_id}"
@@ -545,6 +595,7 @@ class Code42Connector(BaseConnector):
 
     @action_handler_for("create_case")
     def _handle_create_case(self, param, action_result):
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
         name = param["case_name"]
         description = param.get("description")
         subject = param.get("subject")
@@ -554,6 +605,7 @@ class Code42Connector(BaseConnector):
         if assignee:
             assignee = self._get_user_id(assignee)
         findings = param.get("findings")
+        self.save_progress("Creating a new case.")
         response = self._client.cases.create(
             name,
             description=description,
@@ -569,6 +621,7 @@ class Code42Connector(BaseConnector):
 
     @action_handler_for("update_case")
     def _handle_update_case(self, param, action_result):
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
         ret_val, case_number = self._validate_integer(action_result, param["case_number"], CODE42V2_CASE_NUM_KEY)
         if phantom.is_fail(ret_val):
             return action_result.get_status()
@@ -583,6 +636,7 @@ class Code42Connector(BaseConnector):
         description = param.get("description")
         findings = param.get("findings")
         try:
+            self.save_progress("Updating case details for the given case number.")
             response = self._client.cases.update(
                 case_number,
                 name=name,
@@ -600,11 +654,13 @@ class Code42Connector(BaseConnector):
 
     @action_handler_for("close_case")
     def _handle_close_case(self, param, action_result):
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
         ret_val, case_number = self._validate_integer(action_result, param["case_number"], CODE42V2_CASE_NUM_KEY)
         if phantom.is_fail(ret_val):
             return action_result.get_status()
 
         try:
+            self.save_progress("Closing the case with the given case number.")
             response = self._client.cases.update(case_number, status="CLOSED")
             status_message = f"Case number {case_number} successfully closed"
         except Py42NotFoundError as err:
@@ -618,6 +674,7 @@ class Code42Connector(BaseConnector):
 
     @action_handler_for("list_cases")
     def _handle_list_cases(self, param, action_result):
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
         status = param["status"]
         if status not in CODE42V2_CASE_STATUS_LIST:
             msg = CODE42V2_VALUE_LIST_ERR_MSG.format('status', CODE42V2_CASE_STATUS_LIST)
@@ -631,6 +688,8 @@ class Code42Connector(BaseConnector):
         subject = param.get("subject")
         if subject:
             subject = self._get_user_id(subject)
+
+        self.save_progress("Getting all cases.")
         results_generator = self._client.cases.get_all(
             status=status, assignee=assignee, subject=subject
         )
@@ -646,12 +705,14 @@ class Code42Connector(BaseConnector):
 
     @action_handler_for("add_case_event")
     def _handle_add_case_event(self, param, action_result):
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
         ret_val, case_number = self._validate_integer(action_result, param["case_number"], CODE42V2_CASE_NUM_KEY)
         if phantom.is_fail(ret_val):
             return action_result.get_status()
 
         event_id = param["event_id"]
         try:
+            self.save_progress("Adding an event to the case.")
             self._client.cases.file_events.add(
                 case_number=case_number, event_id=event_id
             )
@@ -679,6 +740,7 @@ class Code42Connector(BaseConnector):
 
     @action_handler_for("hunt_file")
     def _handle_hunt_file(self, param, action_result):
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
         file_hash = param["hash"]
         file_name = param.get("file_name")
         if not file_name:
@@ -686,6 +748,7 @@ class Code42Connector(BaseConnector):
             action_result.update_param(param)
             file_name = file_hash
 
+        self.save_progress("Getting file content.")
         file_content = self._get_file_content(file_hash)
         container_id = self.get_container_id()
         Vault.create_attachment(file_content, container_id, file_name=file_name)
@@ -694,6 +757,7 @@ class Code42Connector(BaseConnector):
 
     @action_handler_for("run_query")
     def _handle_run_query(self, param, action_result):
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
         # Boolean action parameters are passed as lowercase string representations, fix that here.
         if "untrusted_only" in param:
             param["untrusted_only"] = str(param["untrusted_only"]).lower() == "true"
@@ -744,7 +808,8 @@ class Code42Connector(BaseConnector):
         return action_result.set_status(phantom.APP_SUCCESS)
 
     @action_handler_for("run_advanced_query")
-    def _handle_run_json_query(self, param, action_result):
+    def _handle_run_advanced_query(self, param, action_result):
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
         query = json.loads(param["json_query"])
 
         # removed page related keys from query
@@ -861,6 +926,8 @@ class Code42Connector(BaseConnector):
         results = None
 
         while True:
+            self.save_progress("Searches for all file events, "
+                "returning a page of events with a token in the response to retrieve next page.")
             results = self._client.securitydata.search_file_events(
                 query if isinstance(query, FileEventQuery) else json.dumps(query)
             )

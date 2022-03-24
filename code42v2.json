@@ -11,7 +11,7 @@
     "fips_compliant": true,
     "product_version_regex": ".*",
     "publisher": "Splunk",
-    "license": "Copyright (c) 2022 Splunk Inc., Code42",
+    "license": "Copyright (c) 2022 Splunk Inc.",
     "app_version": "1.0.1",
     "utctime_updated": "2022-02-01T13:23:39.000000Z",
     "package_name": "phantom_code42v2",
