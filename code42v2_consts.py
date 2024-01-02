@@ -1,6 +1,6 @@
 # File: code42v2_consts.py
 #
-# Copyright (c) 2022 Splunk Inc., Code42
+# Copyright (c) 2023 Splunk Inc., Code42
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -94,6 +94,19 @@ CODE42V2_USER_STATUS_LIST = [
     "Inactive",
     "All"
 ]
+
+CODE42V2_WATCHLIST_TYPE_LIST = {
+    "contractor" : "CONTRACT_EMPLOYEE",
+    "departing" : "DEPARTING_EMPLOYEE",
+    "elevated_access" : "ELEVATED_ACCESS_PRIVILEGES",
+    "flight_risk" : "FLIGHT_RISK",
+    "high_impact" : "HIGH_IMPACT_EMPLOYEE",
+    "new_hire" : "NEW_EMPLOYEE",
+    "performance_concerns" : "PERFORMANCE_CONCERNS",
+    "poor_security_practices" : "POOR_SECURITY_PRACTICES",
+    "suspicious_system_activity" : "SUSPICIOUS_SYSTEM_ACTIVITY",
+    "custom" : "CUSTOM",
+}
 
 # page related keys
 PAGE_KEYS = ['pgNum', 'pgSize', 'pgToken']

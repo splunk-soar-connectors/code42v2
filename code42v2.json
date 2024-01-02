@@ -16,8 +16,8 @@
             "name": "Code42"
         }
     ],
-    "license": "Copyright (c) 2022 Splunk Inc., Code42",
-    "app_version": "1.0.2",
+    "license": "Copyright (c) 2023 Splunk Inc., Code42",
+    "app_version": "1.2.0",
     "utctime_updated": "2022-03-24T23:46:23.000000Z",
     "package_name": "phantom_code42v2",
     "main_module": "code42v2_connector.py",
@@ -31,7 +31,7 @@
             },
             {
                 "module": "certifi",
-                "input_file": "wheels/shared/certifi-2021.10.8-py2.py3-none-any.whl"
+                "input_file": "wheels/py3/certifi-2023.11.17-py3-none-any.whl"
             },
             {
                 "module": "charset_normalizer",
@@ -39,11 +39,11 @@
             },
             {
                 "module": "idna",
-                "input_file": "wheels/py3/idna-3.3-py3-none-any.whl"
+                "input_file": "wheels/py3/idna-3.6-py3-none-any.whl"
             },
             {
                 "module": "py42",
-                "input_file": "wheels/shared/py42-1.20.0-py2.py3-none-any.whl"
+                "input_file": "wheels/shared/py42-1.27.0-py2.py3-none-any.whl"
             },
             {
                 "module": "python_dateutil",
@@ -59,11 +59,11 @@
             },
             {
                 "module": "soupsieve",
-                "input_file": "wheels/py3/soupsieve-2.3.1-py3-none-any.whl"
+                "input_file": "wheels/py3/soupsieve-2.3.2.post1-py3-none-any.whl"
             },
             {
                 "module": "urllib3",
-                "input_file": "wheels/shared/urllib3-1.26.9-py2.py3-none-any.whl"
+                "input_file": "wheels/shared/urllib3-1.26.18-py2.py3-none-any.whl"
             }
         ]
     },
@@ -149,1475 +149,6 @@
                 }
             },
             "output": [],
-            "versions": "EQ(*)"
-        },
-        {
-            "action": "add departing employee",
-            "identifier": "add_departing_employee",
-            "description": "Add a departing employee to the departing employees detection list",
-            "verbose": "There is a short delay before you can query the updated results.",
-            "type": "contain",
-            "undo": "remove departing employee",
-            "read_only": false,
-            "parameters": {
-                "username": {
-                    "description": "Username of the employee to add",
-                    "data_type": "string",
-                    "required": true,
-                    "primary": true,
-                    "contains": [
-                        "email",
-                        "user name"
-                    ],
-                    "order": 0
-                },
-                "departure_date": {
-                    "description": "Date of departure for employee in format yyyy-MM-dd",
-                    "data_type": "string",
-                    "order": 1
-                },
-                "note": {
-                    "description": "A note to include",
-                    "data_type": "string",
-                    "order": 2
-                }
-            },
-            "output": [
-                {
-                    "data_path": "action_result.parameter.username",
-                    "data_type": "string",
-                    "contains": [
-                        "email",
-                        "user name"
-                    ],
-                    "example_values": [
-                        "test@gmail.com"
-                    ],
-                    "column_name": "Username",
-                    "column_order": 0
-                },
-                {
-                    "data_path": "action_result.parameter.departure_date",
-                    "data_type": "string",
-                    "example_values": [
-                        "2021-12-21"
-                    ],
-                    "column_name": "Departure Date",
-                    "column_order": 3
-                },
-                {
-                    "data_path": "action_result.parameter.note",
-                    "data_type": "string",
-                    "example_values": [
-                        "Notes"
-                    ],
-                    "column_name": "Note",
-                    "column_order": 4
-                },
-                {
-                    "column_name": "User ID",
-                    "data_path": "action_result.data.*.userId",
-                    "data_type": "string",
-                    "example_values": [
-                        "1"
-                    ],
-                    "column_order": 1
-                },
-                {
-                    "data_path": "action_result.data.*.userName",
-                    "data_type": "string",
-                    "example_values": [
-                        "test@gmail.com"
-                    ],
-                    "contains": [
-                        "email",
-                        "user name"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.createdAt",
-                    "data_type": "string",
-                    "example_values": [
-                        "2021-05-20T19:40:14.8909434Z"
-                    ],
-                    "column_name": "Created At",
-                    "column_order": 5
-                },
-                {
-                    "data_path": "action_result.data.*.type$",
-                    "data_type": "string",
-                    "example_values": [
-                        "DEPARTING_EMPLOYEE_V2"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.status",
-                    "data_type": "string",
-                    "example_values": [
-                        "OPEN"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.tenantId",
-                    "data_type": "string",
-                    "example_values": [
-                        "f6b12138-e9b5-4739-9fdd-99886f368888"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.displayName",
-                    "data_type": "string",
-                    "example_values": [
-                        "Username"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.notes",
-                    "data_type": "string",
-                    "example_values": [
-                        "This is an example of notes about Sample User1."
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.departureDate",
-                    "data_type": "string",
-                    "example_values": [
-                        "2010-01-02"
-                    ]
-                },
-                {
-                    "data_path": "action_result.status",
-                    "data_type": "string",
-                    "example_values": [
-                        "success",
-                        "failed"
-                    ],
-                    "column_name": "Status",
-                    "column_order": 2
-                },
-                {
-                    "data_path": "action_result.message",
-                    "data_type": "string",
-                    "example_values": [
-                        "Username was added to the departing employees list"
-                    ]
-                },
-                {
-                    "data_path": "action_result.summary",
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "summary.total_objects",
-                    "data_type": "numeric",
-                    "example_values": [
-                        1
-                    ]
-                },
-                {
-                    "data_path": "summary.total_objects_successful",
-                    "data_type": "numeric",
-                    "example_values": [
-                        1
-                    ]
-                }
-            ],
-            "render": {
-                "type": "table"
-            },
-            "versions": "EQ(*)"
-        },
-        {
-            "action": "remove departing employee",
-            "identifier": "remove_departing_employee",
-            "description": "Remove a departing employee from the departing employees detection list",
-            "verbose": "There is a short delay before you can query the updated results.",
-            "type": "correct",
-            "undo": "add departing employee",
-            "read_only": false,
-            "parameters": {
-                "username": {
-                    "description": "Username of the employee to remove",
-                    "data_type": "string",
-                    "required": true,
-                    "primary": true,
-                    "contains": [
-                        "email",
-                        "user name"
-                    ],
-                    "order": 0
-                }
-            },
-            "output": [
-                {
-                    "data_path": "action_result.parameter.username",
-                    "data_type": "string",
-                    "contains": [
-                        "email",
-                        "user name"
-                    ],
-                    "example_values": [
-                        "test@gmail.com"
-                    ],
-                    "column_name": "Username",
-                    "column_order": 0
-                },
-                {
-                    "data_path": "action_result.data.*.userId",
-                    "data_type": "string",
-                    "example_values": [
-                        "1"
-                    ],
-                    "column_name": "User ID",
-                    "column_order": 1
-                },
-                {
-                    "data_path": "action_result.status",
-                    "data_type": "string",
-                    "example_values": [
-                        "success",
-                        "failed"
-                    ],
-                    "column_name": "Status",
-                    "column_order": 2
-                },
-                {
-                    "data_path": "action_result.message",
-                    "data_type": "string",
-                    "example_values": [
-                        "Username was removed from the departing employees list"
-                    ]
-                },
-                {
-                    "data_path": "action_result.summary",
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "summary.total_objects",
-                    "data_type": "numeric",
-                    "example_values": [
-                        1
-                    ]
-                },
-                {
-                    "data_path": "summary.total_objects_successful",
-                    "data_type": "numeric",
-                    "example_values": [
-                        1
-                    ]
-                }
-            ],
-            "render": {
-                "type": "table"
-            },
-            "versions": "EQ(*)"
-        },
-        {
-            "action": "list departing employees",
-            "identifier": "list_departing_employees",
-            "description": "Returns a list of users who are on the departing employees list",
-            "type": "investigate",
-            "read_only": true,
-            "parameters": {
-                "filter_type": {
-                    "description": "Filters the results based on specific filters",
-                    "data_type": "string",
-                    "value_list": [
-                        "EXFILTRATION_30_DAYS",
-                        "EXFILTRATION_24_HOURS",
-                        "OPEN",
-                        "LEAVING_TODAY"
-                    ],
-                    "default": "OPEN",
-                    "order": 0
-                }
-            },
-            "output": [
-                {
-                    "data_path": "action_result.parameter.filter_type",
-                    "data_type": "string",
-                    "example_values": [
-                        "OPEN"
-                    ],
-                    "column_name": "Filter Type",
-                    "column_order": 0
-                },
-                {
-                    "data_path": "action_result.data.*.userId",
-                    "data_type": "string",
-                    "example_values": [
-                        "1"
-                    ],
-                    "column_name": "User ID",
-                    "column_order": 2
-                },
-                {
-                    "data_path": "action_result.data.*.userName",
-                    "data_type": "string",
-                    "example_values": [
-                        "test@example.com"
-                    ],
-                    "contains": [
-                        "email",
-                        "user name"
-                    ],
-                    "column_name": "Username",
-                    "column_order": 1
-                },
-                {
-                    "data_path": "action_result.data.*.riskFactors.*.tag",
-                    "data_type": "string",
-                    "contains": [
-                        "code42 risk tag"
-                    ],
-                    "column_name": "Risk Tag",
-                    "column_order": 7
-                },
-                {
-                    "data_path": "action_result.data.*.notes",
-                    "data_type": "string",
-                    "example_values": [
-                        "note"
-                    ],
-                    "column_name": "Notes",
-                    "column_order": 4
-                },
-                {
-                    "column_name": "Creation Date",
-                    "data_path": "action_result.data.*.createdAt",
-                    "data_type": "string",
-                    "example_values": [
-                        "2021-05-21T00:00:00.0000000Z"
-                    ],
-                    "column_order": 5
-                },
-                {
-                    "column_name": "Number of Events",
-                    "data_path": "action_result.data.*.numEvents",
-                    "data_type": "numeric",
-                    "example_values": [
-                        0
-                    ],
-                    "column_order": 6
-                },
-                {
-                    "data_path": "action_result.data.*.type$",
-                    "data_type": "string",
-                    "example_values": [
-                        "DEPARTING_EMPLOYEE_V2"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.status",
-                    "data_type": "string",
-                    "example_values": [
-                        "OPEN"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.tenantId",
-                    "data_type": "string",
-                    "example_values": [
-                        "f6b12138-e9b5-4739-9fdd-99886f368888"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.totalBytes",
-                    "data_type": "numeric",
-                    "example_values": [
-                        10
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.displayName",
-                    "data_type": "string",
-                    "example_values": [
-                        "First1 Last1"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.departureDate",
-                    "data_type": "string",
-                    "example_values": [
-                        "1001-12-01"
-                    ]
-                },
-                {
-                    "data_path": "action_result.status",
-                    "data_type": "string",
-                    "example_values": [
-                        "success",
-                        "failed"
-                    ],
-                    "column_name": "Status",
-                    "column_order": 3
-                },
-                {
-                    "data_path": "action_result.message",
-                    "data_type": "string",
-                    "example_values": [
-                        "Total Count: 10"
-                    ]
-                },
-                {
-                    "data_path": "action_result.summary.total_count",
-                    "data_type": "numeric",
-                    "example_values": [
-                        1
-                    ]
-                },
-                {
-                    "data_path": "summary.total_objects",
-                    "data_type": "numeric",
-                    "example_values": [
-                        1
-                    ]
-                },
-                {
-                    "data_path": "summary.total_objects_successful",
-                    "data_type": "numeric",
-                    "example_values": [
-                        1
-                    ]
-                }
-            ],
-            "render": {
-                "type": "custom",
-                "view": "code42v2_view.display_view"
-            },
-            "versions": "EQ(*)"
-        },
-        {
-            "action": "get departing employee",
-            "identifier": "get_departing_employee",
-            "description": "Get a departing employee",
-            "type": "investigate",
-            "read_only": true,
-            "parameters": {
-                "username": {
-                    "description": "The username of the departing employee to get",
-                    "data_type": "string",
-                    "contains": [
-                        "email",
-                        "user name"
-                    ],
-                    "required": true,
-                    "primary": true,
-                    "order": 0
-                }
-            },
-            "output": [
-                {
-                    "data_path": "action_result.parameter.username",
-                    "data_type": "string",
-                    "contains": [
-                        "email",
-                        "user name"
-                    ],
-                    "example_values": [
-                        "test@gmail.com"
-                    ],
-                    "column_name": "Username",
-                    "column_order": 0
-                },
-                {
-                    "data_path": "action_result.data.*.userId",
-                    "data_type": "string",
-                    "example_values": [
-                        "1"
-                    ],
-                    "column_name": "User ID",
-                    "column_order": 2
-                },
-                {
-                    "data_path": "action_result.data.*.userName",
-                    "data_type": "string",
-                    "example_values": [
-                        "test@example.com"
-                    ],
-                    "contains": [
-                        "email",
-                        "user name"
-                    ],
-                    "column_name": "Username",
-                    "column_order": 1
-                },
-                {
-                    "data_path": "action_result.data.*.notes",
-                    "data_type": "string",
-                    "example_values": [
-                        "note"
-                    ],
-                    "column_name": "Notes",
-                    "column_order": 4
-                },
-                {
-                    "data_path": "action_result.data.*.createdAt",
-                    "data_type": "string",
-                    "example_values": [
-                        "2021-05-21T00:00:00.0000000Z"
-                    ],
-                    "column_name": "Creation Date",
-                    "column_order": 5
-                },
-                {
-                    "data_path": "action_result.data.*.type$",
-                    "data_type": "string",
-                    "example_values": [
-                        "DEPARTING_EMPLOYEE_V2"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.status",
-                    "data_type": "string",
-                    "example_values": [
-                        "OPEN"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.tenantId",
-                    "data_type": "string",
-                    "example_values": [
-                        "f6b12138-e9b5-4739-9fdd-99886f369978"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.displayName",
-                    "data_type": "string",
-                    "example_values": [
-                        "First10 Last10"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.departureDate",
-                    "data_type": "string",
-                    "example_values": [
-                        "1980-11-12"
-                    ]
-                },
-                {
-                    "data_path": "action_result.status",
-                    "data_type": "string",
-                    "example_values": [
-                        "success",
-                        "failed"
-                    ],
-                    "column_name": "Status",
-                    "column_order": 3
-                },
-                {
-                    "data_path": "action_result.message",
-                    "data_type": "string",
-                    "example_values": [
-                        "Is Departing Employee: false"
-                    ]
-                },
-                {
-                    "data_path": "action_result.summary.is_departing_employee",
-                    "data_type": "boolean",
-                    "example_values": [
-                        true,
-                        false
-                    ]
-                },
-                {
-                    "data_path": "summary.total_objects",
-                    "data_type": "numeric",
-                    "example_values": [
-                        1
-                    ]
-                },
-                {
-                    "data_path": "summary.total_objects_successful",
-                    "data_type": "numeric",
-                    "example_values": [
-                        1
-                    ]
-                }
-            ],
-            "render": {
-                "type": "custom",
-                "view": "code42v2_view.display_view"
-            },
-            "versions": "EQ(*)"
-        },
-        {
-            "action": "add highrisk employee",
-            "identifier": "add_highrisk_employee",
-            "description": "Add a high risk employee to the high risk employees detection list",
-            "undo": "remove highrisk employee",
-            "type": "contain",
-            "read_only": false,
-            "parameters": {
-                "username": {
-                    "description": "Username of the employee to add",
-                    "data_type": "string",
-                    "required": true,
-                    "primary": true,
-                    "contains": [
-                        "email",
-                        "user name"
-                    ],
-                    "order": 0
-                },
-                "note": {
-                    "description": "A note to include",
-                    "data_type": "string",
-                    "order": 1
-                }
-            },
-            "output": [
-                {
-                    "data_path": "action_result.parameter.username",
-                    "data_type": "string",
-                    "contains": [
-                        "email",
-                        "user name"
-                    ],
-                    "example_values": [
-                        "test@gmail.com"
-                    ],
-                    "column_name": "Username",
-                    "column_order": 0
-                },
-                {
-                    "data_path": "action_result.parameter.note",
-                    "data_type": "string",
-                    "example_values": [
-                        "Notes"
-                    ],
-                    "column_name": "Note",
-                    "column_order": 3
-                },
-                {
-                    "data_path": "action_result.data.*.userId",
-                    "data_type": "string",
-                    "example_values": [
-                        "1"
-                    ],
-                    "column_name": "User ID",
-                    "column_order": 1
-                },
-                {
-                    "data_path": "action_result.data.*.userName",
-                    "data_type": "string",
-                    "example_values": [
-                        "1"
-                    ],
-                    "contains": [
-                        "email",
-                        "user name"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.createdAt",
-                    "data_type": "string",
-                    "example_values": [
-                        "2021-05-20T19:40:14.8909434Z"
-                    ],
-                    "column_name": "Created At",
-                    "column_order": 4
-                },
-                {
-                    "data_path": "action_result.data.*.notes",
-                    "data_type": "string",
-                    "example_values": [
-                        "Notes"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.type$",
-                    "data_type": "string",
-                    "example_values": [
-                        "HIGH_RISK_EMPLOYEE_V2"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.status",
-                    "data_type": "string",
-                    "example_values": [
-                        "OPEN"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.tenantId",
-                    "data_type": "string",
-                    "example_values": [
-                        "f6b12138-e9b5-4739-9fdd-99886f369999"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.displayName",
-                    "data_type": "string",
-                    "example_values": [
-                        "First12 Last12"
-                    ]
-                },
-                {
-                    "data_path": "action_result.status",
-                    "data_type": "string",
-                    "example_values": [
-                        "success",
-                        "failed"
-                    ],
-                    "column_name": "Status",
-                    "column_order": 2
-                },
-                {
-                    "data_path": "action_result.message",
-                    "data_type": "string",
-                    "example_values": [
-                        "Username was added to the high risk employees list"
-                    ]
-                },
-                {
-                    "data_path": "action_result.summary",
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "summary.total_objects",
-                    "data_type": "numeric",
-                    "example_values": [
-                        1
-                    ]
-                },
-                {
-                    "data_path": "summary.total_objects_successful",
-                    "data_type": "numeric",
-                    "example_values": [
-                        1
-                    ]
-                }
-            ],
-            "render": {
-                "type": "table"
-            },
-            "versions": "EQ(*)"
-        },
-        {
-            "action": "remove highrisk employee",
-            "identifier": "remove_highrisk_employee",
-            "description": "Remove a high risk employee from the high risk employees detection list",
-            "undo": "add highrisk employee",
-            "type": "correct",
-            "read_only": false,
-            "parameters": {
-                "username": {
-                    "description": "Username of the employee to remove",
-                    "data_type": "string",
-                    "required": true,
-                    "primary": true,
-                    "contains": [
-                        "email",
-                        "user name"
-                    ],
-                    "order": 0
-                }
-            },
-            "output": [
-                {
-                    "data_path": "action_result.parameter.username",
-                    "data_type": "string",
-                    "contains": [
-                        "email",
-                        "user name"
-                    ],
-                    "example_values": [
-                        "test@gmail.com"
-                    ],
-                    "column_name": "Username",
-                    "column_order": 0
-                },
-                {
-                    "data_path": "action_result.data.*.userId",
-                    "data_type": "string",
-                    "example_values": [
-                        "1"
-                    ],
-                    "column_name": "User ID",
-                    "column_order": 1
-                },
-                {
-                    "data_path": "action_result.status",
-                    "data_type": "string",
-                    "example_values": [
-                        "success",
-                        "failed"
-                    ],
-                    "column_name": "Status",
-                    "column_order": 2
-                },
-                {
-                    "data_path": "action_result.message",
-                    "data_type": "string",
-                    "example_values": [
-                        "Username was removed from the high risk employees list"
-                    ]
-                },
-                {
-                    "data_path": "action_result.summary",
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "summary.total_objects",
-                    "data_type": "numeric",
-                    "example_values": [
-                        1
-                    ]
-                },
-                {
-                    "data_path": "summary.total_objects_successful",
-                    "data_type": "numeric",
-                    "example_values": [
-                        1
-                    ]
-                }
-            ],
-            "render": {
-                "type": "table"
-            },
-            "versions": "EQ(*)"
-        },
-        {
-            "action": "list highrisk employees",
-            "identifier": "list_highrisk_employees",
-            "description": "Returns a list of users who are on the high-risk employees list",
-            "type": "investigate",
-            "read_only": true,
-            "parameters": {
-                "filter_type": {
-                    "description": "Filters the results based on specific filters",
-                    "data_type": "string",
-                    "value_list": [
-                        "EXFILTRATION_30_DAYS",
-                        "EXFILTRATION_24_HOURS",
-                        "OPEN"
-                    ],
-                    "default": "OPEN",
-                    "order": 0
-                }
-            },
-            "output": [
-                {
-                    "data_path": "action_result.parameter.filter_type",
-                    "data_type": "string",
-                    "example_values": [
-                        "OPEN"
-                    ],
-                    "column_name": "Filter Type",
-                    "column_order": 0
-                },
-                {
-                    "data_path": "action_result.data.*.userId",
-                    "data_type": "string",
-                    "example_values": [
-                        "1"
-                    ],
-                    "column_name": "User ID",
-                    "column_order": 2
-                },
-                {
-                    "data_path": "action_result.data.*.userName",
-                    "data_type": "string",
-                    "example_values": [
-                        "test@example.com"
-                    ],
-                    "contains": [
-                        "email",
-                        "user name"
-                    ],
-                    "column_name": "Username",
-                    "column_order": 1
-                },
-                {
-                    "data_path": "action_result.data.*.notes",
-                    "data_type": "string",
-                    "example_values": [
-                        "note"
-                    ],
-                    "column_name": "Notes",
-                    "column_order": 4
-                },
-                {
-                    "data_path": "action_result.data.*.createdAt",
-                    "data_type": "string",
-                    "example_values": [
-                        "2021-05-21T00:00:00.0000000Z"
-                    ],
-                    "column_name": "Creation Date",
-                    "column_order": 5
-                },
-                {
-                    "data_path": "action_result.data.*.numEvents",
-                    "data_type": "numeric",
-                    "example_values": [
-                        0
-                    ],
-                    "column_name": "Number of Events",
-                    "column_order": 6
-                },
-                {
-                    "data_path": "action_result.data.*.type$",
-                    "data_type": "string",
-                    "example_value": "HIGH_RISK_EMPLOYEE_V2"
-                },
-                {
-                    "data_path": "action_result.data.*.status",
-                    "data_type": "string",
-                    "example_values": [
-                        "OPEN"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.tenantId",
-                    "data_type": "string",
-                    "example_values": [
-                        "f6b12138-e9b5-4739-9fdd-99886f368888"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.totalBytes",
-                    "data_type": "numeric",
-                    "example_values": [
-                        10
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.displayName",
-                    "data_type": "string",
-                    "example_values": [
-                        "First Last"
-                    ]
-                },
-                {
-                    "data_path": "action_result.summary.total_count",
-                    "data_type": "numeric",
-                    "example_values": [
-                        10
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.riskFactors.*.tag",
-                    "data_type": "string",
-                    "example_values": [
-                        "HIGH_IMPACT_EMPLOYEE"
-                    ]
-                },
-                {
-                    "data_path": "action_result.status",
-                    "data_type": "string",
-                    "example_values": [
-                        "success",
-                        "failed"
-                    ],
-                    "column_name": "Status",
-                    "column_order": 3
-                },
-                {
-                    "data_path": "action_result.message",
-                    "data_type": "string",
-                    "example_values": [
-                        "Total Count: 10"
-                    ]
-                },
-                {
-                    "data_path": "action_result.summary",
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "summary.total_objects",
-                    "data_type": "numeric",
-                    "example_values": [
-                        1
-                    ]
-                },
-                {
-                    "data_path": "summary.total_objects_successful",
-                    "data_type": "numeric",
-                    "example_values": [
-                        1
-                    ]
-                }
-            ],
-            "render": {
-                "type": "custom",
-                "view": "code42v2_view.display_view"
-            },
-            "versions": "EQ(*)"
-        },
-        {
-            "action": "get highrisk employee",
-            "identifier": "get_highrisk_employee",
-            "description": "Get a high risk employee",
-            "type": "investigate",
-            "read_only": true,
-            "parameters": {
-                "username": {
-                    "description": "The username of the high risk employee to get",
-                    "data_type": "string",
-                    "contains": [
-                        "email",
-                        "user name"
-                    ],
-                    "required": true,
-                    "primary": true,
-                    "order": 0
-                }
-            },
-            "output": [
-                {
-                    "data_path": "action_result.parameter.username",
-                    "data_type": "string",
-                    "example_values": [
-                        "test@example.com"
-                    ],
-                    "contains": [
-                        "email",
-                        "user name"
-                    ],
-                    "column_name": "Username",
-                    "column_order": 0
-                },
-                {
-                    "data_path": "action_result.data.*.userId",
-                    "data_type": "string",
-                    "example_values": [
-                        "1"
-                    ],
-                    "column_name": "User ID",
-                    "column_order": 1
-                },
-                {
-                    "data_path": "action_result.data.*.userName",
-                    "data_type": "string",
-                    "example_values": [
-                        "test@example.com"
-                    ],
-                    "contains": [
-                        "email",
-                        "user name"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.notes",
-                    "data_type": "string",
-                    "example_values": [
-                        "note"
-                    ],
-                    "column_name": "Notes",
-                    "column_order": 3
-                },
-                {
-                    "data_path": "action_result.data.*.createdAt",
-                    "data_type": "string",
-                    "example_values": [
-                        "2021-05-21T00:00:00.0000000Z"
-                    ],
-                    "column_name": "Creation Date",
-                    "column_order": 4
-                },
-                {
-                    "data_path": "action_result.data.*.riskFactors.*.tag",
-                    "data_type": "string",
-                    "contains": [
-                        "code42 risk tag"
-                    ],
-                    "column_name": "Risk Tag",
-                    "column_order": 5
-                },
-                {
-                    "data_path": "action_result.data.*.type$",
-                    "data_type": "string",
-                    "example_values": [
-                        "HIGH_RISK_EMPLOYEE_V2"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.status",
-                    "data_type": "string",
-                    "example_values": [
-                        "OPEN"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.tenantId",
-                    "data_type": "string",
-                    "example_values": [
-                        "f6b12138-e9b5-4739-9fdd-99886f369999"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.displayName",
-                    "data_type": "string",
-                    "example_values": [
-                        "First Last"
-                    ]
-                },
-                {
-                    "data_path": "action_result.status",
-                    "data_type": "string",
-                    "example_values": [
-                        "success",
-                        "failed"
-                    ],
-                    "column_name": "Status",
-                    "column_order": 2
-                },
-                {
-                    "data_path": "action_result.message",
-                    "data_type": "string",
-                    "example_values": [
-                        "Is High Risk Employee: true"
-                    ]
-                },
-                {
-                    "data_path": "action_result.summary.is_high_risk_employee",
-                    "data_type": "boolean",
-                    "example_values": [
-                        true,
-                        false
-                    ]
-                },
-                {
-                    "data_path": "summary.total_objects",
-                    "data_type": "numeric",
-                    "example_values": [
-                        1
-                    ]
-                },
-                {
-                    "data_path": "summary.total_objects_successful",
-                    "data_type": "numeric",
-                    "example_values": [
-                        1
-                    ]
-                }
-            ],
-            "render": {
-                "type": "custom",
-                "view": "code42v2_view.display_view"
-            },
-            "versions": "EQ(*)"
-        },
-        {
-            "action": "add highrisk tag",
-            "identifier": "add_highrisk_tag",
-            "description": "Add a risk tag to a user",
-            "undo": "remove highrisk tag",
-            "type": "contain",
-            "read_only": false,
-            "parameters": {
-                "username": {
-                    "description": "Username of the employee to add a risk tag to",
-                    "data_type": "string",
-                    "required": true,
-                    "primary": true,
-                    "contains": [
-                        "email",
-                        "user name"
-                    ],
-                    "order": 0
-                },
-                "risk_tag": {
-                    "description": "A risk tag to add to the user",
-                    "data_type": "string",
-                    "required": true,
-                    "primary": true,
-                    "value_list": [
-                        "HIGH_IMPACT_EMPLOYEE",
-                        "CONTRACT_EMPLOYEE",
-                        "POOR_SECURITY_PRACTICES",
-                        "PERFORMANCE_CONCERNS",
-                        "FLIGHT_RISK",
-                        "ELEVATED_ACCESS_PRIVILEGES",
-                        "SUSPICIOUS_SYSTEM_ACTIVITY"
-                    ],
-                    "contains": [
-                        "code42 risk tag"
-                    ],
-                    "order": 1
-                }
-            },
-            "output": [
-                {
-                    "data_path": "action_result.parameter.username",
-                    "data_type": "string",
-                    "contains": [
-                        "email",
-                        "user name"
-                    ],
-                    "example_values": [
-                        "test@gmail.com"
-                    ],
-                    "column_name": "Username",
-                    "column_order": 0
-                },
-                {
-                    "data_path": "action_result.parameter.risk_tag",
-                    "data_type": "string",
-                    "contains": [
-                        "code42 risk tag"
-                    ],
-                    "example_values": [
-                        "FLIGHT_RISK"
-                    ],
-                    "column_name": "Risk Tag",
-                    "column_order": 3
-                },
-                {
-                    "data_path": "action_result.data.*.userId",
-                    "data_type": "string",
-                    "example_values": [
-                        "1"
-                    ],
-                    "column_name": "User ID",
-                    "column_order": 1
-                },
-                {
-                    "data_path": "action_result.data.*.userName",
-                    "data_type": "string",
-                    "example_values": [
-                        "1"
-                    ],
-                    "contains": [
-                        "email",
-                        "user name"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.notes",
-                    "data_type": "string",
-                    "example_values": [
-                        "Notes"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.type$",
-                    "data_type": "string",
-                    "example_values": [
-                        "USER_V2"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.tenantId",
-                    "data_type": "string",
-                    "example_values": [
-                        "f6b12138-e9b5-4739-9fdd-99886f369999"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.displayName",
-                    "data_type": "string",
-                    "example_values": [
-                        "First1 Last1"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.riskFactors.*.tag",
-                    "data_type": "string",
-                    "example_values": [
-                        "HIGH_IMPACT_EMPLOYEE"
-                    ]
-                },
-                {
-                    "data_path": "action_result.status",
-                    "data_type": "string",
-                    "example_values": [
-                        "success",
-                        "failed"
-                    ],
-                    "column_name": "Status",
-                    "column_order": 2
-                },
-                {
-                    "data_path": "action_result.message",
-                    "data_type": "string",
-                    "example_values": [
-                        "All risk tags for user: PERFORMANCE_CONCERNS"
-                    ]
-                },
-                {
-                    "data_path": "action_result.summary",
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "summary.total_objects",
-                    "data_type": "numeric",
-                    "example_values": [
-                        1
-                    ]
-                },
-                {
-                    "data_path": "summary.total_objects_successful",
-                    "data_type": "numeric",
-                    "example_values": [
-                        1
-                    ]
-                }
-            ],
-            "render": {
-                "type": "table"
-            },
-            "versions": "EQ(*)"
-        },
-        {
-            "action": "remove highrisk tag",
-            "identifier": "remove_highrisk_tag",
-            "description": "Remove a risk tag from a user",
-            "undo": "add highrisk tag",
-            "type": "correct",
-            "read_only": false,
-            "parameters": {
-                "username": {
-                    "description": "Username of the employee to remove a risk tag from",
-                    "data_type": "string",
-                    "required": true,
-                    "primary": true,
-                    "contains": [
-                        "email",
-                        "user name"
-                    ],
-                    "order": 0
-                },
-                "risk_tag": {
-                    "description": "A risk tag to remove from the user",
-                    "data_type": "string",
-                    "required": true,
-                    "primary": true,
-                    "value_list": [
-                        "HIGH_IMPACT_EMPLOYEE",
-                        "CONTRACT_EMPLOYEE",
-                        "POOR_SECURITY_PRACTICES",
-                        "PERFORMANCE_CONCERNS",
-                        "FLIGHT_RISK",
-                        "ELEVATED_ACCESS_PRIVILEGES",
-                        "SUSPICIOUS_SYSTEM_ACTIVITY"
-                    ],
-                    "contains": [
-                        "code42 risk tag"
-                    ],
-                    "order": 1
-                }
-            },
-            "output": [
-                {
-                    "data_path": "action_result.parameter.username",
-                    "data_type": "string",
-                    "contains": [
-                        "email",
-                        "user name"
-                    ],
-                    "example_values": [
-                        "test@gmail.com"
-                    ],
-                    "column_name": "Username",
-                    "column_order": 0
-                },
-                {
-                    "data_path": "action_result.parameter.risk_tag",
-                    "data_type": "string",
-                    "contains": [
-                        "code42 risk tag"
-                    ],
-                    "example_values": [
-                        "FLIGHT_RISK"
-                    ],
-                    "column_name": "Risk Tag",
-                    "column_order": 3
-                },
-                {
-                    "data_path": "action_result.data.*.userId",
-                    "data_type": "string",
-                    "example_values": [
-                        "1"
-                    ],
-                    "column_name": "User ID",
-                    "column_order": 1
-                },
-                {
-                    "data_path": "action_result.data.*.userName",
-                    "data_type": "string",
-                    "example_values": [
-                        "test@example.com"
-                    ],
-                    "contains": [
-                        "email",
-                        "user name"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.type$",
-                    "data_type": "string",
-                    "example_values": [
-                        "USER_V2"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.tenantId",
-                    "data_type": "string",
-                    "example_values": [
-                        "f6b12138-e9b5-4739-9fdd-99886f369999"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.displayName",
-                    "data_type": "string",
-                    "example_values": [
-                        "First Last"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.notes",
-                    "data_type": "string",
-                    "example_values": [
-                        "This is action execution using playbook"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.riskFactors.*.tag",
-                    "data_type": "string",
-                    "example_values": [
-                        "HIGH_IMPACT_EMPLOYEE"
-                    ]
-                },
-                {
-                    "data_path": "action_result.status",
-                    "data_type": "string",
-                    "example_values": [
-                        "success",
-                        "failed"
-                    ],
-                    "column_name": "Status",
-                    "column_order": 2
-                },
-                {
-                    "data_path": "action_result.message",
-                    "data_type": "string",
-                    "example_values": [
-                        "All risk tags for user: PERFORMANCE_CONCERNS"
-                    ]
-                },
-                {
-                    "data_path": "action_result.summary",
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "summary.total_objects",
-                    "data_type": "numeric",
-                    "example_values": [
-                        1
-                    ]
-                },
-                {
-                    "data_path": "summary.total_objects_successful",
-                    "data_type": "numeric",
-                    "example_values": [
-                        1
-                    ]
-                }
-            ],
-            "render": {
-                "type": "table"
-            },
             "versions": "EQ(*)"
         },
         {
@@ -6312,6 +4843,723 @@
                 "type": "table"
             },
             "versions": "EQ(*)"
+        },
+        {
+            "action": "list watchlists",
+            "identifier": "list_watchlists",
+            "description": "list all the watchlists",
+            "type": "investigate",
+            "read_only": true,
+            "parameters": {},
+            "output": [
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.watchlistId",
+                    "data_type": "string",
+                    "column_name": "Watchlist ID",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.data.*.listType",
+                    "data_type": "string",
+                    "column_name": "List Type",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.data.*.title",
+                    "data_type": "string",
+                    "column_name": "Title",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.data.*.description",
+                    "data_type": "string",
+                    "column_name": "Description",
+                    "column_order": 3
+                },
+                {
+                    "data_path": "action_result.data.*.includedUsersCount",
+                    "data_type": "string",
+                    "column_name": "Users in watchlist",
+                    "column_order": 4
+                },
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string",
+                    "example_values": [
+                        "Created global table successfully"
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "create watchlist",
+            "identifier": "create_watchlist",
+            "description": "Create a watchlist",
+            "type": "generic",
+            "read_only": true,
+            "parameters": {
+                "watchlist_type": {
+                    "description": "Type of watchlist",
+                    "data_type": "string",
+                    "value_list": [
+                        "contractor",
+                        "departing",
+                        "elevated_access",
+                        "flight_risk",
+                        "high_impact",
+                        "new_hire",
+                        "performance_concerns",
+                        "poor_security_practices",
+                        "suspicious_system_activity",
+                        "custom"
+                    ],
+                    "order": 0,
+                    "required": true
+                },
+                "title": {
+                    "description": "Title of the watchlist",
+                    "data_type": "string",
+                    "order": 1
+                },
+                "description": {
+                    "description": "Description of the watchlist",
+                    "data_type": "string",
+                    "order": 2
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.parameter.title",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.watchlist_type",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.description",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.listType",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.watchlistId",
+                    "data_type": "string",
+                    "column_name": "Watchlist ID",
+                    "column_order": 0,
+                    "contains": [
+                        "watchlist id"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.title",
+                    "data_type": "string",
+                    "column_name": "Title",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.data.*.description",
+                    "data_type": "string",
+                    "column_name": "Description",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.data.*.tenantId",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data",
+                    "data_type": "string",
+                    "example_values": []
+                },
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string",
+                    "example_values": [
+                        "Created global table successfully"
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "delete watchlist",
+            "identifier": "delete_watchlist",
+            "description": "delete a watchlist",
+            "type": "generic",
+            "read_only": true,
+            "parameters": {
+                "watchlist_id": {
+                    "description": "ID of the watchlist",
+                    "data_type": "string",
+                    "order": 0,
+                    "required": true,
+                    "primary": true,
+                    "contains": [
+                        "watchlist id"
+                    ]
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.parameter.watchlist_id",
+                    "data_type": "string",
+                    "contains": [
+                        "watchlist id"
+                    ]
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data",
+                    "data_type": "string",
+                    "column_name": "Tables",
+                    "column_order": 0,
+                    "example_values": []
+                },
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string",
+                    "example_values": [
+                        "Created global table successfully"
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                }
+            ],
+            "render": {
+                "type": "json"
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "list watchlist users",
+            "identifier": "list_watchlist_users",
+            "description": "List all the users in a watchlist",
+            "type": "generic",
+            "read_only": true,
+            "parameters": {
+                "watchlist_id": {
+                    "description": "ID of the watchlist",
+                    "data_type": "string",
+                    "order": 0,
+                    "primary": true,
+                    "required": true,
+                    "contains": [
+                        "watchlist id"
+                    ]
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.parameter.watchlist_id",
+                    "data_type": "string",
+                    "contains": [
+                        "watchlist id"
+                    ]
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data",
+                    "data_type": "string",
+                    "example_values": []
+                },
+                {
+                    "data_path": "action_result.data.*.userId",
+                    "data_type": "string",
+                    "column_name": "User ID",
+                    "column_order": 0,
+                    "example_values": []
+                },
+                {
+                    "data_path": "action_result.data.*.username",
+                    "data_type": "string",
+                    "column_name": "Username",
+                    "column_order": 1,
+                    "example_values": []
+                },
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string",
+                    "example_values": [
+                        "Created global table successfully"
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "add watchlist users",
+            "identifier": "add_watchlist_users",
+            "description": "Add a user to watchlist",
+            "type": "generic",
+            "read_only": true,
+            "parameters": {
+                "usernames": {
+                    "description": "Usernames of users to be added in watchlist (comma separated string)",
+                    "data_type": "string",
+                    "order": 0,
+                    "required": true
+                },
+                "add_user_using": {
+                    "description": "Add user by watchlist_id or watchlist_type",
+                    "data_type": "string",
+                    "value_list": [
+                        "watchlist id",
+                        "watchlist type"
+                    ],
+                    "order": 1,
+                    "required": true
+                },
+                "watchlist_id": {
+                    "description": "ID of the watchlist",
+                    "data_type": "string",
+                    "order": 2,
+                    "primary":true,
+                    "contains": [
+                        "watchlist id"
+                    ]
+                },
+                "watchlist_type": {
+                    "description": "Type of watchlist",
+                    "data_type": "string",
+                    "value_list": [
+                        "contractor",
+                        "departing",
+                        "elevated_access",
+                        "flight_risk",
+                        "high_impact",
+                        "new_hire",
+                        "performance_concerns",
+                        "poor_security_practices",
+                        "suspicious_system_activity",
+                        "custom"
+                    ],
+                    "order": 3
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.parameter.usernames",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.add_user_using",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.watchlist_id",
+                    "data_type": "string",
+                    "contains": [
+                        "watchlist id"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.watchlist_type",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data",
+                    "data_type": "string",
+                    "column_name": "Tables",
+                    "column_order": 0,
+                    "example_values": []
+                },
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string",
+                    "example_values": [
+                        "Created global table successfully"
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                }
+            ],
+            "render": {
+                "type": "json"
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "remove watchlist users",
+            "identifier": "remove_watchlist_users",
+            "description": "Remove a user from watchlist",
+            "type": "generic",
+            "read_only": true,
+            "parameters": {
+                "usernames": {
+                    "description": "Usernames to be removed from watchlist (comma separated string)",
+                    "data_type": "string",
+                    "order": 0,
+                    "required": true
+                },
+                "remove_user_using": {
+                    "description": "Add user by watchlist_id or watchlist_type",
+                    "data_type": "string",
+                    "value_list": [
+                        "watchlist id",
+                        "watchlist type"
+                    ],
+                    "order": 1,
+                    "required": true
+                },
+                "watchlist_id": {
+                    "description": "ID of the watchlist",
+                    "data_type": "string",
+                    "order": 2,
+                    "primary":true,
+                    "contains": [
+                        "watchlist id"
+                    ]
+                },
+                "watchlist_type": {
+                    "description": "Type of watchlist",
+                    "data_type": "string",
+                    "value_list": [
+                        "contractor",
+                        "departing",
+                        "elevated_access",
+                        "flight_risk",
+                        "high_impact",
+                        "new_hire",
+                        "performance_concerns",
+                        "poor_security_practices",
+                        "suspicious_system_activity",
+                        "custom"
+                    ],
+                    "order": 3
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.parameter.usernames",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.remove_user_using",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.watchlist_id",
+                    "data_type": "string",
+                    "contains": [
+                        "watchlist id"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.watchlist_type",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data",
+                    "data_type": "string",
+                    "column_name": "Tables",
+                    "column_order": 0,
+                    "example_values": []
+                },
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string",
+                    "example_values": [
+                        "Created global table successfully"
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                }
+            ],
+            "render": {
+                "type": "json"
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "get watchlist user",
+            "identifier": "get_watchlist_user",
+            "description": "Remove a user from watchlist",
+            "type": "generic",
+            "read_only": true,
+            "parameters": {
+                "username": {
+                    "description": "Usernames to be removed from watchlist (comma separated string)",
+                    "data_type": "string",
+                    "order": 0,
+                    "required": true
+                },
+                "watchlist_id": {
+                    "description": "ID of the watchlist",
+                    "data_type": "string",
+                    "order": 2,
+                    "primary":true,
+                    "required": true,
+                    "contains": [
+                        "watchlist id"
+                    ]
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.parameter.username",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.watchlist_id",
+                    "data_type": "string",
+                    "contains": [
+                        "watchlist id"
+                    ]
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data",
+                    "data_type": "string",
+                    "column_name": "Tables",
+                    "column_order": 0,
+                    "example_values": []
+                },
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string",
+                    "example_values": [
+                        "Created global table successfully"
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                }
+            ],
+            "render": {
+                "type": "json"
+            },
+            "versions": "EQ(*)"
         }
-    ]
+    ],
+    "pip39_dependencies": {
+        "wheel": [
+            {
+                "module": "beautifulsoup4",
+                "input_file": "wheels/py3/beautifulsoup4-4.9.1-py3-none-any.whl"
+            },
+            {
+                "module": "certifi",
+                "input_file": "wheels/py3/certifi-2023.11.17-py3-none-any.whl"
+            },
+            {
+                "module": "charset_normalizer",
+                "input_file": "wheels/py39/charset_normalizer-3.3.2-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
+            },
+            {
+                "module": "idna",
+                "input_file": "wheels/py3/idna-3.6-py3-none-any.whl"
+            },
+            {
+                "module": "py42",
+                "input_file": "wheels/shared/py42-1.27.0-py2.py3-none-any.whl"
+            },
+            {
+                "module": "python_dateutil",
+                "input_file": "wheels/shared/python_dateutil-2.8.1-py2.py3-none-any.whl"
+            },
+            {
+                "module": "requests",
+                "input_file": "wheels/py3/requests-2.31.0-py3-none-any.whl"
+            },
+            {
+                "module": "six",
+                "input_file": "wheels/shared/six-1.16.0-py2.py3-none-any.whl"
+            },
+            {
+                "module": "soupsieve",
+                "input_file": "wheels/py3/soupsieve-2.5-py3-none-any.whl"
+            },
+            {
+                "module": "urllib3",
+                "input_file": "wheels/shared/urllib3-1.26.18-py2.py3-none-any.whl"
+            }
+        ]
+    }
 }
