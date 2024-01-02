@@ -2,11 +2,11 @@
 # Code42 v2
 
 Publisher: Splunk  
-Connector Version: 1\.0\.2  
+Connector Version: 1.2.0  
 Product Vendor: Code42  
 Product Name: Code42 v2  
-Product Version Supported (regex): "\.\*"  
-Minimum Product Version: 5\.1\.0  
+Product Version Supported (regex): ".\*"  
+Minimum Product Version: 5.1.0  
 
 Code42 provides simple, fast detection and response to everyday data loss from insider threats by focusing on customer data on endpoints and the cloud
 
@@ -73,26 +73,16 @@ The below configuration variables are required for this Connector to operate.  T
 
 VARIABLE | REQUIRED | TYPE | DESCRIPTION
 -------- | -------- | ---- | -----------
-**cloud\_instance** |  required  | string | Cloud instance to connect to
+**cloud_instance** |  required  | string | Cloud instance to connect to
 **username** |  required  | string | Username to connect with
 **password** |  required  | password | Password to connect with
-**initial\_poll\_start\_date** |  optional  | string | The start date to use in the initial poll in yyyy\-MM\-dd HH\:MM\:SS format \(defaults to 30 days back\)
-**initial\_poll\_end\_date** |  optional  | string | The end date to use in the initial poll in yyyy\-MM\-dd HH\:MM\:SS format \(defaults to the current time\)
-**severity\_to\_poll\_for** |  optional  | string | A comma\-separated list of alert severities to poll for, such as HIGH, LOW, MODERATE or CRITICAL \(defaults to getting all alerts\)
+**initial_poll_start_date** |  optional  | string | The start date to use in the initial poll in yyyy-MM-dd HH:MM:SS format (defaults to 30 days back)
+**initial_poll_end_date** |  optional  | string | The end date to use in the initial poll in yyyy-MM-dd HH:MM:SS format (defaults to the current time)
+**severity_to_poll_for** |  optional  | string | A comma-separated list of alert severities to poll for, such as HIGH, LOW, MODERATE or CRITICAL (defaults to getting all alerts)
 
 ### Supported Actions  
 [test connectivity](#action-test-connectivity) - Validate the asset configuration for connectivity using supplied configuration  
-[on poll](#action-on-poll) - Callback action for the on\_poll ingest functionality  
-[add departing employee](#action-add-departing-employee) - Add a departing employee to the departing employees detection list  
-[remove departing employee](#action-remove-departing-employee) - Remove a departing employee from the departing employees detection list  
-[list departing employees](#action-list-departing-employees) - Returns a list of users who are on the departing employees list  
-[get departing employee](#action-get-departing-employee) - Get a departing employee  
-[add highrisk employee](#action-add-highrisk-employee) - Add a high risk employee to the high risk employees detection list  
-[remove highrisk employee](#action-remove-highrisk-employee) - Remove a high risk employee from the high risk employees detection list  
-[list highrisk employees](#action-list-highrisk-employees) - Returns a list of users who are on the high\-risk employees list  
-[get highrisk employee](#action-get-highrisk-employee) - Get a high risk employee  
-[add highrisk tag](#action-add-highrisk-tag) - Add a risk tag to a user  
-[remove highrisk tag](#action-remove-highrisk-tag) - Remove a risk tag from a user  
+[on poll](#action-on-poll) - Callback action for the on_poll ingest functionality  
 [get alert details](#action-get-alert-details) - Get alert details  
 [search alerts](#action-search-alerts) - Search Alerts  
 [set alert state](#action-set-alert-state) - Set the state of the alert  
@@ -103,16 +93,23 @@ VARIABLE | REQUIRED | TYPE | DESCRIPTION
 [reactivate user](#action-reactivate-user) - Reactivates a deactivated user's Code42 account  
 [unblock user](#action-unblock-user) - Unblocks a user, allowing access to their Code42 account  
 [get user profile](#action-get-user-profile) - Get user profile  
-[add legalhold custodian](#action-add-legalhold-custodian) - Add a user \(custodian\) to a legal hold matter  
-[remove legalhold custodian](#action-remove-legalhold-custodian) - Remove user \(custodian\) from a legal hold matter  
+[add legalhold custodian](#action-add-legalhold-custodian) - Add a user (custodian) to a legal hold matter  
+[remove legalhold custodian](#action-remove-legalhold-custodian) - Remove user (custodian) from a legal hold matter  
 [create case](#action-create-case) - Create a Code42 case  
 [update case](#action-update-case) - Update the details of a case  
 [close case](#action-close-case) - Change the status of a Code42 case to 'CLOSED'  
 [list cases](#action-list-cases) - List Code42 Cases  
 [add case event](#action-add-case-event) - Associates a file event with a Code42 case  
-[hunt file](#action-hunt-file) - Searches Code42 for a backed\-up file with a matching hash and downloads it  
+[hunt file](#action-hunt-file) - Searches Code42 for a backed-up file with a matching hash and downloads it  
 [run query](#action-run-query) - Search for Code42 file events  
 [run advanced query](#action-run-advanced-query) - Run an advanced query using JSON  
+[list watchlists](#action-list-watchlists) - list all the watchlists  
+[create watchlist](#action-create-watchlist) - Create a watchlist  
+[delete watchlist](#action-delete-watchlist) - delete a watchlist  
+[list watchlist users](#action-list-watchlist-users) - List all the users in a watchlist  
+[add watchlist users](#action-add-watchlist-users) - Add a user to watchlist  
+[remove watchlist users](#action-remove-watchlist-users) - Remove a user from watchlist  
+[get watchlist user](#action-get-watchlist-user) - Remove a user from watchlist  
 
 ## action: 'test connectivity'
 Validate the asset configuration for connectivity using supplied configuration
@@ -127,7 +124,7 @@ No parameters are required for this action
 No Output  
 
 ## action: 'on poll'
-Callback action for the on\_poll ingest functionality
+Callback action for the on_poll ingest functionality
 
 Type: **ingest**  
 Read only: **True**
@@ -135,313 +132,14 @@ Read only: **True**
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**container\_id** |  optional  | Alert IDs to limit the ingestion to \(limited to 100\) | string | 
-**start\_time** |  optional  | Parameter ignored in this app | string | 
-**end\_time** |  optional  | Parameter ignored in this app | string | 
-**container\_count** |  optional  | Maximum number of alerts to create \(only used in Poll Now\) | numeric | 
-**artifact\_count** |  optional  | Maximum number of artifacts to create \(only used in Poll Now\) | numeric | 
+**container_id** |  optional  | Alert IDs to limit the ingestion to (limited to 100) | string | 
+**start_time** |  optional  | Parameter ignored in this app | string | 
+**end_time** |  optional  | Parameter ignored in this app | string | 
+**container_count** |  optional  | Maximum number of alerts to create (only used in Poll Now) | numeric | 
+**artifact_count** |  optional  | Maximum number of artifacts to create (only used in Poll Now) | numeric | 
 
 #### Action Output
 No Output  
-
-## action: 'add departing employee'
-Add a departing employee to the departing employees detection list
-
-Type: **contain**  
-Read only: **False**
-
-There is a short delay before you can query the updated results\.
-
-#### Action Parameters
-PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
---------- | -------- | ----------- | ---- | --------
-**username** |  required  | Username of the employee to add | string |  `email`  `user name` 
-**departure\_date** |  optional  | Date of departure for employee in format yyyy\-MM\-dd | string | 
-**note** |  optional  | A note to include | string | 
-
-#### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.parameter\.username | string |  `email`  `user name` 
-action\_result\.parameter\.departure\_date | string | 
-action\_result\.parameter\.note | string | 
-action\_result\.data\.\*\.userId | string | 
-action\_result\.data\.\*\.userName | string |  `email`  `user name` 
-action\_result\.data\.\*\.createdAt | string | 
-action\_result\.data\.\*\.type$ | string | 
-action\_result\.data\.\*\.status | string | 
-action\_result\.data\.\*\.tenantId | string | 
-action\_result\.data\.\*\.displayName | string | 
-action\_result\.data\.\*\.notes | string | 
-action\_result\.data\.\*\.departureDate | string | 
-action\_result\.status | string | 
-action\_result\.message | string | 
-action\_result\.summary | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
-
-## action: 'remove departing employee'
-Remove a departing employee from the departing employees detection list
-
-Type: **correct**  
-Read only: **False**
-
-There is a short delay before you can query the updated results\.
-
-#### Action Parameters
-PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
---------- | -------- | ----------- | ---- | --------
-**username** |  required  | Username of the employee to remove | string |  `email`  `user name` 
-
-#### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.parameter\.username | string |  `email`  `user name` 
-action\_result\.data\.\*\.userId | string | 
-action\_result\.status | string | 
-action\_result\.message | string | 
-action\_result\.summary | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
-
-## action: 'list departing employees'
-Returns a list of users who are on the departing employees list
-
-Type: **investigate**  
-Read only: **True**
-
-#### Action Parameters
-PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
---------- | -------- | ----------- | ---- | --------
-**filter\_type** |  optional  | Filters the results based on specific filters | string | 
-
-#### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.parameter\.filter\_type | string | 
-action\_result\.data\.\*\.userId | string | 
-action\_result\.data\.\*\.userName | string |  `email`  `user name` 
-action\_result\.data\.\*\.riskFactors\.\*\.tag | string |  `code42 risk tag` 
-action\_result\.data\.\*\.notes | string | 
-action\_result\.data\.\*\.createdAt | string | 
-action\_result\.data\.\*\.numEvents | numeric | 
-action\_result\.data\.\*\.type$ | string | 
-action\_result\.data\.\*\.status | string | 
-action\_result\.data\.\*\.tenantId | string | 
-action\_result\.data\.\*\.totalBytes | numeric | 
-action\_result\.data\.\*\.displayName | string | 
-action\_result\.data\.\*\.departureDate | string | 
-action\_result\.status | string | 
-action\_result\.message | string | 
-action\_result\.summary\.total\_count | numeric | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
-
-## action: 'get departing employee'
-Get a departing employee
-
-Type: **investigate**  
-Read only: **True**
-
-#### Action Parameters
-PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
---------- | -------- | ----------- | ---- | --------
-**username** |  required  | The username of the departing employee to get | string |  `email`  `user name` 
-
-#### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.parameter\.username | string |  `email`  `user name` 
-action\_result\.data\.\*\.userId | string | 
-action\_result\.data\.\*\.userName | string |  `email`  `user name` 
-action\_result\.data\.\*\.notes | string | 
-action\_result\.data\.\*\.createdAt | string | 
-action\_result\.data\.\*\.type$ | string | 
-action\_result\.data\.\*\.status | string | 
-action\_result\.data\.\*\.tenantId | string | 
-action\_result\.data\.\*\.displayName | string | 
-action\_result\.data\.\*\.departureDate | string | 
-action\_result\.status | string | 
-action\_result\.message | string | 
-action\_result\.summary\.is\_departing\_employee | boolean | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
-
-## action: 'add highrisk employee'
-Add a high risk employee to the high risk employees detection list
-
-Type: **contain**  
-Read only: **False**
-
-#### Action Parameters
-PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
---------- | -------- | ----------- | ---- | --------
-**username** |  required  | Username of the employee to add | string |  `email`  `user name` 
-**note** |  optional  | A note to include | string | 
-
-#### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.parameter\.username | string |  `email`  `user name` 
-action\_result\.parameter\.note | string | 
-action\_result\.data\.\*\.userId | string | 
-action\_result\.data\.\*\.userName | string |  `email`  `user name` 
-action\_result\.data\.\*\.createdAt | string | 
-action\_result\.data\.\*\.notes | string | 
-action\_result\.data\.\*\.type$ | string | 
-action\_result\.data\.\*\.status | string | 
-action\_result\.data\.\*\.tenantId | string | 
-action\_result\.data\.\*\.displayName | string | 
-action\_result\.status | string | 
-action\_result\.message | string | 
-action\_result\.summary | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
-
-## action: 'remove highrisk employee'
-Remove a high risk employee from the high risk employees detection list
-
-Type: **correct**  
-Read only: **False**
-
-#### Action Parameters
-PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
---------- | -------- | ----------- | ---- | --------
-**username** |  required  | Username of the employee to remove | string |  `email`  `user name` 
-
-#### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.parameter\.username | string |  `email`  `user name` 
-action\_result\.data\.\*\.userId | string | 
-action\_result\.status | string | 
-action\_result\.message | string | 
-action\_result\.summary | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
-
-## action: 'list highrisk employees'
-Returns a list of users who are on the high\-risk employees list
-
-Type: **investigate**  
-Read only: **True**
-
-#### Action Parameters
-PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
---------- | -------- | ----------- | ---- | --------
-**filter\_type** |  optional  | Filters the results based on specific filters | string | 
-
-#### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.parameter\.filter\_type | string | 
-action\_result\.data\.\*\.userId | string | 
-action\_result\.data\.\*\.userName | string |  `email`  `user name` 
-action\_result\.data\.\*\.notes | string | 
-action\_result\.data\.\*\.createdAt | string | 
-action\_result\.data\.\*\.numEvents | numeric | 
-action\_result\.data\.\*\.type$ | string | 
-action\_result\.data\.\*\.status | string | 
-action\_result\.data\.\*\.tenantId | string | 
-action\_result\.data\.\*\.totalBytes | numeric | 
-action\_result\.data\.\*\.displayName | string | 
-action\_result\.summary\.total\_count | numeric | 
-action\_result\.data\.\*\.riskFactors\.\*\.tag | string | 
-action\_result\.status | string | 
-action\_result\.message | string | 
-action\_result\.summary | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
-
-## action: 'get highrisk employee'
-Get a high risk employee
-
-Type: **investigate**  
-Read only: **True**
-
-#### Action Parameters
-PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
---------- | -------- | ----------- | ---- | --------
-**username** |  required  | The username of the high risk employee to get | string |  `email`  `user name` 
-
-#### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.parameter\.username | string |  `email`  `user name` 
-action\_result\.data\.\*\.userId | string | 
-action\_result\.data\.\*\.userName | string |  `email`  `user name` 
-action\_result\.data\.\*\.notes | string | 
-action\_result\.data\.\*\.createdAt | string | 
-action\_result\.data\.\*\.riskFactors\.\*\.tag | string |  `code42 risk tag` 
-action\_result\.data\.\*\.type$ | string | 
-action\_result\.data\.\*\.status | string | 
-action\_result\.data\.\*\.tenantId | string | 
-action\_result\.data\.\*\.displayName | string | 
-action\_result\.status | string | 
-action\_result\.message | string | 
-action\_result\.summary\.is\_high\_risk\_employee | boolean | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
-
-## action: 'add highrisk tag'
-Add a risk tag to a user
-
-Type: **contain**  
-Read only: **False**
-
-#### Action Parameters
-PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
---------- | -------- | ----------- | ---- | --------
-**username** |  required  | Username of the employee to add a risk tag to | string |  `email`  `user name` 
-**risk\_tag** |  required  | A risk tag to add to the user | string |  `code42 risk tag` 
-
-#### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.parameter\.username | string |  `email`  `user name` 
-action\_result\.parameter\.risk\_tag | string |  `code42 risk tag` 
-action\_result\.data\.\*\.userId | string | 
-action\_result\.data\.\*\.userName | string |  `email`  `user name` 
-action\_result\.data\.\*\.notes | string | 
-action\_result\.data\.\*\.type$ | string | 
-action\_result\.data\.\*\.tenantId | string | 
-action\_result\.data\.\*\.displayName | string | 
-action\_result\.data\.\*\.riskFactors\.\*\.tag | string | 
-action\_result\.status | string | 
-action\_result\.message | string | 
-action\_result\.summary | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
-
-## action: 'remove highrisk tag'
-Remove a risk tag from a user
-
-Type: **correct**  
-Read only: **False**
-
-#### Action Parameters
-PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
---------- | -------- | ----------- | ---- | --------
-**username** |  required  | Username of the employee to remove a risk tag from | string |  `email`  `user name` 
-**risk\_tag** |  required  | A risk tag to remove from the user | string |  `code42 risk tag` 
-
-#### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.parameter\.username | string |  `email`  `user name` 
-action\_result\.parameter\.risk\_tag | string |  `code42 risk tag` 
-action\_result\.data\.\*\.userId | string | 
-action\_result\.data\.\*\.userName | string |  `email`  `user name` 
-action\_result\.data\.\*\.type$ | string | 
-action\_result\.data\.\*\.tenantId | string | 
-action\_result\.data\.\*\.displayName | string | 
-action\_result\.data\.\*\.notes | string | 
-action\_result\.data\.\*\.riskFactors\.\*\.tag | string | 
-action\_result\.status | string | 
-action\_result\.message | string | 
-action\_result\.summary | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
 
 ## action: 'get alert details'
 Get alert details
@@ -452,83 +150,83 @@ Read only: **True**
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**alert\_id** |  required  | ID of the alert to retrieve | string |  `code42 alert id` 
+**alert_id** |  required  | ID of the alert to retrieve | string |  `code42 alert id` 
 
 #### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.parameter\.alert\_id | string |  `code42 alert id` 
-action\_result\.data\.\*\.name | string | 
-action\_result\.data\.\*\.actor | string |  `email`  `user name` 
-action\_result\.data\.\*\.actorId | string |  `email` 
-action\_result\.data\.\*\.createdAt | string | 
-action\_result\.data\.\*\.description | string | 
-action\_result\.data\.\*\.state | string | 
-action\_result\.data\.\*\.type | string | 
-action\_result\.data\.\*\.severity | string | 
-action\_result\.data\.\*\.id | string | 
-action\_result\.data\.\*\.note\.id | string | 
-action\_result\.data\.\*\.note\.type$ | string | 
-action\_result\.data\.\*\.note\.message | string | 
-action\_result\.data\.\*\.note\.lastModifiedAt | string | 
-action\_result\.data\.\*\.note\.lastModifiedBy | string |  `user name`  `email` 
-action\_result\.data\.\*\.type$ | string | 
-action\_result\.data\.\*\.ruleId | string | 
-action\_result\.data\.\*\.target | string | 
-action\_result\.data\.\*\.tenantId | string | 
-action\_result\.data\.\*\.ruleSource | string | 
-action\_result\.data\.\*\.observations\.\*\.id | string | 
-action\_result\.data\.\*\.observations\.\*\.data\.id | string | 
-action\_result\.data\.\*\.observations\.\*\.data\.files\.\*\.name | string | 
-action\_result\.data\.\*\.observations\.\*\.data\.files\.\*\.path | string | 
-action\_result\.data\.\*\.observations\.\*\.data\.files\.\*\.size | numeric | 
-action\_result\.data\.\*\.observations\.\*\.data\.files\.\*\.type$ | string | 
-action\_result\.data\.\*\.observations\.\*\.data\.files\.\*\.eventId | string | 
-action\_result\.data\.\*\.observations\.\*\.data\.files\.\*\.category | string | 
-action\_result\.data\.\*\.observations\.\*\.data\.files\.\*\.observedAt | string | 
-action\_result\.data\.\*\.observations\.\*\.data\.files\.\*\.riskSeverityInfo\.score | numeric | 
-action\_result\.data\.\*\.observations\.\*\.data\.files\.\*\.riskSeverityInfo\.type$ | string | 
-action\_result\.data\.\*\.observations\.\*\.data\.files\.\*\.riskSeverityInfo\.severity | string | 
-action\_result\.data\.\*\.observations\.\*\.data\.files\.\*\.riskSeverityInfo\.matchedRiskIndicators\.\*\.name | string | 
-action\_result\.data\.\*\.observations\.\*\.data\.files\.\*\.riskSeverityInfo\.matchedRiskIndicators\.\*\.type$ | string | 
-action\_result\.data\.\*\.observations\.\*\.data\.files\.\*\.riskSeverityInfo\.matchedRiskIndicators\.\*\.weight | numeric | 
-action\_result\.data\.\*\.observations\.\*\.data\.type$ | string | 
-action\_result\.data\.\*\.observations\.\*\.data\.fileCount | numeric | 
-action\_result\.data\.\*\.observations\.\*\.data\.totalFileSize | numeric | 
-action\_result\.data\.\*\.observations\.\*\.data\.appReadDetails\.\*\.type$ | string | 
-action\_result\.data\.\*\.observations\.\*\.data\.appReadDetails\.\*\.destinationName | string | 
-action\_result\.data\.\*\.observations\.\*\.data\.appReadDetails\.\*\.destinationCategory | string | 
-action\_result\.data\.\*\.observations\.\*\.data\.fileCategories\.\*\.type$ | string | 
-action\_result\.data\.\*\.observations\.\*\.data\.fileCategories\.\*\.category | string | 
-action\_result\.data\.\*\.observations\.\*\.data\.fileCategories\.\*\.fileCount | numeric | 
-action\_result\.data\.\*\.observations\.\*\.data\.fileCategories\.\*\.isSignificant | boolean | 
-action\_result\.data\.\*\.observations\.\*\.data\.fileCategories\.\*\.totalFileSize | numeric | 
-action\_result\.data\.\*\.observations\.\*\.data\.lastActivityAt | string | 
-action\_result\.data\.\*\.observations\.\*\.data\.firstActivityAt | string | 
-action\_result\.data\.\*\.observations\.\*\.data\.isRemoteActivity | boolean | 
-action\_result\.data\.\*\.observations\.\*\.data\.riskSeveritySummary\.\*\.type$ | string | 
-action\_result\.data\.\*\.observations\.\*\.data\.riskSeveritySummary\.\*\.severity | string | 
-action\_result\.data\.\*\.observations\.\*\.data\.riskSeveritySummary\.\*\.numEvents | numeric | 
-action\_result\.data\.\*\.observations\.\*\.data\.riskSeveritySummary\.\*\.summarizedRiskIndicators\.\*\.name | string | 
-action\_result\.data\.\*\.observations\.\*\.data\.riskSeveritySummary\.\*\.summarizedRiskIndicators\.\*\.type$ | string | 
-action\_result\.data\.\*\.observations\.\*\.data\.riskSeveritySummary\.\*\.summarizedRiskIndicators\.\*\.numEvents | numeric | 
-action\_result\.data\.\*\.observations\.\*\.data\.destinationIsSignificant | boolean | 
-action\_result\.data\.\*\.observations\.\*\.data\.exposureTypeIsSignificant | boolean | 
-action\_result\.data\.\*\.observations\.\*\.data\.fileCategoryIsSignificant | boolean | 
-action\_result\.data\.\*\.observations\.\*\.data\.riskSeverityIsSignificant | boolean | 
-action\_result\.data\.\*\.observations\.\*\.type | string | 
-action\_result\.data\.\*\.observations\.\*\.type$ | string | 
-action\_result\.data\.\*\.observations\.\*\.observedAt | string | 
-action\_result\.data\.\*\.riskSeverity | string | 
-action\_result\.data\.\*\.stateLastModifiedAt | string | 
-action\_result\.data\.\*\.stateLastModifiedBy | string |  `user name`  `email` 
-action\_result\.status | string | 
-action\_result\.message | string | 
-action\_result\.summary | string | 
-action\_result\.summary\.username | string |  `email`  `user name` 
-action\_result\.summary\.user\_id | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.parameter.alert_id | string |  `code42 alert id`  |   f2ca08f9-2b97-4e5f-85cc-d12e13cba845 
+action_result.data.\*.name | string |  |  
+action_result.data.\*.actor | string |  `email`  `user name`  |  
+action_result.data.\*.actorId | string |  `email`  |  
+action_result.data.\*.createdAt | string |  |  
+action_result.data.\*.description | string |  |  
+action_result.data.\*.state | string |  |  
+action_result.data.\*.type | string |  |  
+action_result.data.\*.severity | string |  |  
+action_result.data.\*.id | string |  |   40b2176a-7a5e-45a4-b9d8-330eb1852a03 
+action_result.data.\*.note.id | string |  |   3edc64e7-8c8a-4fdd-9bc1-38ee5c0fff58 
+action_result.data.\*.note.type$ | string |  |   NOTE 
+action_result.data.\*.note.message | string |  |   Message 
+action_result.data.\*.note.lastModifiedAt | string |  |   2022-01-05T13:04:52.0517450Z 
+action_result.data.\*.note.lastModifiedBy | string |  `user name`  `email`  |   first@gmail.com 
+action_result.data.\*.type$ | string |  |   ALERT_DETAILS 
+action_result.data.\*.ruleId | string |  |   31e8082b-1f63-4d07-9c00-4120a52289c6 
+action_result.data.\*.target | string |  |  
+action_result.data.\*.tenantId | string |  |   f6b12138-e9b5-4739-9fdd-99886f369978 
+action_result.data.\*.ruleSource | string |  |   Alerting 
+action_result.data.\*.observations.\*.id | string |  |   356a5e85-d38f-4b2e-9ddf-1e0714785346-FedEndpoint 
+action_result.data.\*.observations.\*.data.id | string |  |   356a5e85-d38f-4b2e-9ddf-1e0714785346-FedEndpoint 
+action_result.data.\*.observations.\*.data.files.\*.name | string |  |   854137.exe.zip 
+action_result.data.\*.observations.\*.data.files.\*.path | string |  |   C:/Users/admin/Downloads/ 
+action_result.data.\*.observations.\*.data.files.\*.size | numeric |  |   33060 
+action_result.data.\*.observations.\*.data.files.\*.type$ | string |  |   OBSERVED_FILE 
+action_result.data.\*.observations.\*.data.files.\*.eventId | string |  |   0_f6b12138-e9b5-4739-9fdd-99886f369978_1003668363210389567_1040257476113969435_2_AAA 
+action_result.data.\*.observations.\*.data.files.\*.category | string |  |   Archive 
+action_result.data.\*.observations.\*.data.files.\*.observedAt | string |  |   2021-12-29T14:46:51.2320000Z 
+action_result.data.\*.observations.\*.data.files.\*.riskSeverityInfo.score | numeric |  |   7 
+action_result.data.\*.observations.\*.data.files.\*.riskSeverityInfo.type$ | string |  |   RISK_SEVERITY_INFO 
+action_result.data.\*.observations.\*.data.files.\*.riskSeverityInfo.severity | string |  |   HIGH 
+action_result.data.\*.observations.\*.data.files.\*.riskSeverityInfo.matchedRiskIndicators.\*.name | string |  |   Zip 
+action_result.data.\*.observations.\*.data.files.\*.riskSeverityInfo.matchedRiskIndicators.\*.type$ | string |  |   RISK_INDICATOR 
+action_result.data.\*.observations.\*.data.files.\*.riskSeverityInfo.matchedRiskIndicators.\*.weight | numeric |  |   7 
+action_result.data.\*.observations.\*.data.type$ | string |  |   OBSERVED_ENDPOINT_ACTIVITY 
+action_result.data.\*.observations.\*.data.fileCount | numeric |  |   1 
+action_result.data.\*.observations.\*.data.totalFileSize | numeric |  |   33060 
+action_result.data.\*.observations.\*.data.appReadDetails.\*.type$ | string |  |   APP_READ_DETAILS 
+action_result.data.\*.observations.\*.data.appReadDetails.\*.destinationName | string |  |   Unknown 
+action_result.data.\*.observations.\*.data.appReadDetails.\*.destinationCategory | string |  |   Unknown 
+action_result.data.\*.observations.\*.data.fileCategories.\*.type$ | string |  |   OBSERVED_FILE_CATEGORY 
+action_result.data.\*.observations.\*.data.fileCategories.\*.category | string |  |   Archive 
+action_result.data.\*.observations.\*.data.fileCategories.\*.fileCount | numeric |  |   1 
+action_result.data.\*.observations.\*.data.fileCategories.\*.isSignificant | boolean |  |   True  False 
+action_result.data.\*.observations.\*.data.fileCategories.\*.totalFileSize | numeric |  |   33060 
+action_result.data.\*.observations.\*.data.lastActivityAt | string |  |   2021-12-29T14:50:00.0000000Z 
+action_result.data.\*.observations.\*.data.firstActivityAt | string |  |   2021-12-29T14:45:00.0000000Z 
+action_result.data.\*.observations.\*.data.isRemoteActivity | boolean |  |   True  False 
+action_result.data.\*.observations.\*.data.riskSeveritySummary.\*.type$ | string |  |   RISK_SEVERITY_SUMMARY 
+action_result.data.\*.observations.\*.data.riskSeveritySummary.\*.severity | string |  |   HIGH 
+action_result.data.\*.observations.\*.data.riskSeveritySummary.\*.numEvents | numeric |  |   1 
+action_result.data.\*.observations.\*.data.riskSeveritySummary.\*.summarizedRiskIndicators.\*.name | string |  |   Zip 
+action_result.data.\*.observations.\*.data.riskSeveritySummary.\*.summarizedRiskIndicators.\*.type$ | string |  |   SUMMARIZED_RISK_INDICATOR 
+action_result.data.\*.observations.\*.data.riskSeveritySummary.\*.summarizedRiskIndicators.\*.numEvents | numeric |  |   1 
+action_result.data.\*.observations.\*.data.destinationIsSignificant | boolean |  |   True  False 
+action_result.data.\*.observations.\*.data.exposureTypeIsSignificant | boolean |  |   True  False 
+action_result.data.\*.observations.\*.data.fileCategoryIsSignificant | boolean |  |   True  False 
+action_result.data.\*.observations.\*.data.riskSeverityIsSignificant | boolean |  |   True  False 
+action_result.data.\*.observations.\*.type | string |  |   FedEndpointExfiltration 
+action_result.data.\*.observations.\*.type$ | string |  |   OBSERVATION 
+action_result.data.\*.observations.\*.observedAt | string |  |   2021-12-29T14:45:00.0000000Z 
+action_result.data.\*.riskSeverity | string |  |   HIGH 
+action_result.data.\*.stateLastModifiedAt | string |  |   2022-01-05T13:04:52.0516870Z 
+action_result.data.\*.stateLastModifiedBy | string |  `user name`  `email`  |   test@gmail.com 
+action_result.status | string |  |   success  failed 
+action_result.message | string |  |   Username: test@gmail.com, User Id: 116627747487575997 
+action_result.summary | string |  |  
+action_result.summary.username | string |  `email`  `user name`  |  
+action_result.summary.user_id | string |  |  
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'search alerts'
 Search Alerts
@@ -536,46 +234,46 @@ Search Alerts
 Type: **investigate**  
 Read only: **True**
 
-All query parameters are optional; at least one search term is required\. All query parameters are in logical AND with each other\. Defaults to last 30 days if no date range is provided\.
+All query parameters are optional; at least one search term is required. All query parameters are in logical AND with each other. Defaults to last 30 days if no date range is provided.
 
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
 **username** |  optional  | Username of the actor listed on alert | string |  `email`  `user name` 
-**alert\_state** |  optional  | Alert state | string |  `code42 alert state` 
-**start\_date** |  optional  | Beginning of date range to search\. Time \(in UTC\) may also be supplied but is not required | string | 
-**end\_date** |  optional  | End of date range to search\. Time \(in UTC\) may also be supplied but is not required | string | 
+**alert_state** |  optional  | Alert state | string |  `code42 alert state` 
+**start_date** |  optional  | Beginning of date range to search. Time (in UTC) may also be supplied but is not required | string | 
+**end_date** |  optional  | End of date range to search. Time (in UTC) may also be supplied but is not required | string | 
 
 #### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.parameter\.username | string |  `email`  `user name` 
-action\_result\.parameter\.alert\_state | string |  `code42 alert state` 
-action\_result\.parameter\.start\_date | string | 
-action\_result\.parameter\.end\_date | string | 
-action\_result\.data\.\*\.actor | string |  `email`  `user name` 
-action\_result\.data\.\*\.state | string | 
-action\_result\.data\.\*\.createdAt | string | 
-action\_result\.data\.\*\.name | string | 
-action\_result\.data\.\*\.severity | string | 
-action\_result\.data\.\*\.description | string | 
-action\_result\.data\.\*\.id | string | 
-action\_result\.data\.\*\.type | string | 
-action\_result\.data\.\*\.type$ | string | 
-action\_result\.data\.\*\.ruleId | string | 
-action\_result\.data\.\*\.target | string | 
-action\_result\.data\.\*\.actorId | string | 
-action\_result\.data\.\*\.tenantId | string | 
-action\_result\.data\.\*\.ruleSource | string | 
-action\_result\.data\.\*\.riskSeverity | string | 
-action\_result\.data\.\*\.stateLastModifiedAt | string | 
-action\_result\.data\.\*\.stateLastModifiedBy | string |  `user name`  `email` 
-action\_result\.status | string | 
-action\_result\.message | string | 
-action\_result\.summary\.total\_count | numeric | 
-action\_result\.summary | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.parameter.username | string |  `email`  `user name`  |   test@gmail.com 
+action_result.parameter.alert_state | string |  `code42 alert state`  |   OPEN 
+action_result.parameter.start_date | string |  |   2021-12-14T06:05:28.0965750Z 
+action_result.parameter.end_date | string |  |   2021-12-17T06:05:28.0965750Z 
+action_result.data.\*.actor | string |  `email`  `user name`  |  
+action_result.data.\*.state | string |  |  
+action_result.data.\*.createdAt | string |  |  
+action_result.data.\*.name | string |  |  
+action_result.data.\*.severity | string |  |  
+action_result.data.\*.description | string |  |  
+action_result.data.\*.id | string |  |   2c425fc4-6875-46a3-95e0-2940dd83ae2b 
+action_result.data.\*.type | string |  |   FED_COMPOSITE 
+action_result.data.\*.type$ | string |  |   ALERT_SUMMARY 
+action_result.data.\*.ruleId | string |  |   1cc3aad3-e94c-40d9-8c9d-4c6d80f4ad57 
+action_result.data.\*.target | string |  |  
+action_result.data.\*.actorId | string |  |   996627747487575003 
+action_result.data.\*.tenantId | string |  |   f6b12138-e9b5-4739-9fdd-99886f369978 
+action_result.data.\*.ruleSource | string |  |   Alerting 
+action_result.data.\*.riskSeverity | string |  |   CRITICAL 
+action_result.data.\*.stateLastModifiedAt | string |  |   2021-12-31T09:38:19.8698500Z 
+action_result.data.\*.stateLastModifiedBy | string |  `user name`  `email`  |   first@gmail.com 
+action_result.status | string |  |   success  failed 
+action_result.message | string |  |   Total Count: 10 
+action_result.summary.total_count | numeric |  |   10 
+action_result.summary | string |  |  
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'set alert state'
 Set the state of the alert
@@ -586,23 +284,23 @@ Read only: **False**
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**alert\_id** |  required  | Alert ID | string |  `code42 alert id` 
-**alert\_state** |  required  | Alert State | string | 
+**alert_id** |  required  | Alert ID | string |  `code42 alert id` 
+**alert_state** |  required  | Alert State | string | 
 **note** |  optional  | A note to include | string | 
 
 #### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.parameter\.alert\_id | string |  `code42 alert id` 
-action\_result\.parameter\.alert\_state | string | 
-action\_result\.parameter\.note | string | 
-action\_result\.data | string | 
-action\_result\.status | string | 
-action\_result\.message | string | 
-action\_result\.summary\.alert\_id | string | 
-action\_result\.summary | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.parameter.alert_id | string |  `code42 alert id`  |   2021-12-17T06:05:28.0965750Z 
+action_result.parameter.alert_state | string |  |   OPEN 
+action_result.parameter.note | string |  |   Notes 
+action_result.data | string |  |  
+action_result.status | string |  |   success  failed 
+action_result.message | string |  |   State of alert 2c425fc4-6875-46a3-95e0-2940dd83ae2b was updated to PENDING 
+action_result.summary.alert_id | string |  |   f2ca08f9-2b97-4e5f-85cc-d12e13cnbhg 
+action_result.summary | string |  |  
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'list users'
 List all users
@@ -613,49 +311,49 @@ Read only: **True**
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**org\_uid** |  optional  | Organization UID | string | 
-**role\_id** |  optional  | User role ID | numeric | 
+**org_uid** |  optional  | Organization UID | string | 
+**role_id** |  optional  | User role ID | numeric | 
 **email** |  optional  | User's email | string |  `email` 
-**user\_status** |  optional  | User's status \(Default\: All\) | string | 
+**user_status** |  optional  | User's status (Default: All) | string | 
 
 #### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.parameter\.org\_uid | string | 
-action\_result\.parameter\.role\_id | numeric | 
-action\_result\.parameter\.email | string |  `email` 
-action\_result\.parameter\.user\_status | string | 
-action\_result\.data\.\*\.email | string |  `email` 
-action\_result\.data\.\*\.notes | string | 
-action\_result\.data\.\*\.orgId | numeric | 
-action\_result\.data\.\*\.active | boolean | 
-action\_result\.data\.\*\.orgUid | string | 
-action\_result\.data\.\*\.status | string | 
-action\_result\.data\.\*\.userId | numeric | 
-action\_result\.data\.\*\.blocked | boolean | 
-action\_result\.data\.\*\.invited | boolean | 
-action\_result\.data\.\*\.orgName | string | 
-action\_result\.data\.\*\.orgType | string | 
-action\_result\.data\.\*\.userUId | string | 
-action\_result\.data\.\*\.lastName | string | 
-action\_result\.data\.\*\.licenses | string | 
-action\_result\.data\.\*\.username | string |  `user name`  `email` 
-action\_result\.data\.\*\.firstName | string | 
-action\_result\.data\.\*\.emailPromo | boolean | 
-action\_result\.data\.\*\.userExtRef | string | 
-action\_result\.data\.\*\.creationDate | string | 
-action\_result\.data\.\*\.quotaInBytes | numeric | 
-action\_result\.data\.\*\.passwordReset | boolean | 
-action\_result\.data\.\*\.modificationDate | string | 
-action\_result\.data\.\*\.usernameIsAnEmail | boolean | 
-action\_result\.data\.\*\.localAuthenticationOnly | boolean | 
-action\_result\.data\.\*\.userUid | string | 
-action\_result\.status | string | 
-action\_result\.message | string | 
-action\_result\.summary\.total\_users | numeric | 
-action\_result\.summary | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.parameter.org_uid | string |  |   1005855504102065902 
+action_result.parameter.role_id | numeric |  |   123 
+action_result.parameter.email | string |  `email`  |   test@gmail.com 
+action_result.parameter.user_status | string |  |   Active  Inactive  All 
+action_result.data.\*.email | string |  `email`  |   test@gmail.com 
+action_result.data.\*.notes | string |  |   Notes 
+action_result.data.\*.orgId | numeric |  |   8960 
+action_result.data.\*.active | boolean |  |   True  False 
+action_result.data.\*.orgUid | string |  |   1005855504102065902 
+action_result.data.\*.status | string |  |   Deactivated, Blocked 
+action_result.data.\*.userId | numeric |  |   8960 
+action_result.data.\*.blocked | boolean |  |   True  False 
+action_result.data.\*.invited | boolean |  |   True  False 
+action_result.data.\*.orgName | string |  |   Organization Name 
+action_result.data.\*.orgType | string |  |   ENTERPRISE 
+action_result.data.\*.userUId | string |  |   1005855885800507118 
+action_result.data.\*.lastName | string |  |   LastName 
+action_result.data.\*.licenses | string |  |  
+action_result.data.\*.username | string |  `user name`  `email`  |   test@gmail.com 
+action_result.data.\*.firstName | string |  |   FirstName 
+action_result.data.\*.emailPromo | boolean |  |   True  False 
+action_result.data.\*.userExtRef | string |  |  
+action_result.data.\*.creationDate | string |  |   2021-05-06T07:00:27.823Z 
+action_result.data.\*.quotaInBytes | numeric |  |   1 
+action_result.data.\*.passwordReset | boolean |  |   True  False 
+action_result.data.\*.modificationDate | string |  |   2021-11-18T02:30:49.347Z 
+action_result.data.\*.usernameIsAnEmail | boolean |  |   True  False 
+action_result.data.\*.localAuthenticationOnly | boolean |  |   True  False 
+action_result.data.\*.userUid | string |  |   1041122388848023999 
+action_result.status | string |  |   success  failed 
+action_result.message | string |  |   Total users: 151 
+action_result.summary.total_users | numeric |  |   144 
+action_result.summary | string |  |  
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'create user'
 Create a new Code42 user account
@@ -663,56 +361,56 @@ Create a new Code42 user account
 Type: **generic**  
 Read only: **False**
 
-There is a short delay before you will be able to add the new user to the departing employee or high risk employee lists\. For security reasons, we strongly recommend you to reset your password after first time login\. <b>Note\:</b> If the provided username already exists for a user, it will be updated in the database instead\.
+There is a short delay before you will be able to add the new user to the departing employee or high risk employee lists. For security reasons, we strongly recommend you to reset your password after first time login. <b>Note:</b> If the provided username already exists for a user, it will be updated in the database instead.
 
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**org\_uid** |  required  | Org UID to create user in | string | 
+**org_uid** |  required  | Org UID to create user in | string | 
 **username** |  required  | Username to create | string |  `email`  `user name` 
 **password** |  required  | Password for newly created user | string | 
-**first\_name** |  optional  | User's first name | string | 
-**last\_name** |  optional  | User's last name | string | 
+**first_name** |  optional  | User's first name | string | 
+**last_name** |  optional  | User's last name | string | 
 **notes** |  optional  | Notes about user | string | 
 
 #### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.parameter\.username | string |  `email`  `user name` 
-action\_result\.parameter\.org\_uid | string | 
-action\_result\.parameter\.first\_name | string | 
-action\_result\.parameter\.last\_name | string | 
-action\_result\.parameter\.notes | string | 
-action\_result\.parameter\.password | password | 
-action\_result\.data\.\*\.email | string |  `user name`  `email` 
-action\_result\.data\.\*\.notes | string | 
-action\_result\.data\.\*\.orgId | numeric | 
-action\_result\.data\.\*\.active | boolean | 
-action\_result\.data\.\*\.orgUid | string | 
-action\_result\.data\.\*\.status | string | 
-action\_result\.data\.\*\.userId | numeric | 
-action\_result\.data\.\*\.blocked | boolean | 
-action\_result\.data\.\*\.invited | boolean | 
-action\_result\.data\.\*\.orgName | string | 
-action\_result\.data\.\*\.orgType | string | 
-action\_result\.data\.\*\.userUid | string | 
-action\_result\.data\.\*\.lastName | string | 
-action\_result\.data\.\*\.username | string |  `user name`  `email` 
-action\_result\.data\.\*\.firstName | string | 
-action\_result\.data\.\*\.emailPromo | boolean | 
-action\_result\.data\.\*\.userExtRef | string | 
-action\_result\.data\.\*\.creationDate | string | 
-action\_result\.data\.\*\.quotaInBytes | numeric | 
-action\_result\.data\.\*\.passwordReset | boolean | 
-action\_result\.data\.\*\.modificationDate | string | 
-action\_result\.data\.\*\.usernameIsAnEmail | string | 
-action\_result\.data\.\*\.localAuthenticationOnly | boolean | 
-action\_result\.status | string | 
-action\_result\.message | string | 
-action\_result\.summary\.user\_id | string | 
-action\_result\.summary\.username | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.parameter.username | string |  `email`  `user name`  |   test@gmail.com 
+action_result.parameter.org_uid | string |  |   1005855504102065902 
+action_result.parameter.first_name | string |  |   FirstName 
+action_result.parameter.last_name | string |  |   LastName 
+action_result.parameter.notes | string |  |   Notes 
+action_result.parameter.password | password |  |  
+action_result.data.\*.email | string |  `user name`  `email`  |   firstlast111@gmail.com 
+action_result.data.\*.notes | string |  |  
+action_result.data.\*.orgId | numeric |  |   8361 
+action_result.data.\*.active | boolean |  |   True  False 
+action_result.data.\*.orgUid | string |  |   996627746816486999 
+action_result.data.\*.status | string |  |   Active 
+action_result.data.\*.userId | numeric |  |   1116873 
+action_result.data.\*.blocked | boolean |  |   True  False 
+action_result.data.\*.invited | boolean |  |   True  False 
+action_result.data.\*.orgName | string |  |   Org Name 
+action_result.data.\*.orgType | string |  |   ENTERPRISE 
+action_result.data.\*.userUid | string |  |   1038022770287047000 
+action_result.data.\*.lastName | string |  |   Last Name 
+action_result.data.\*.username | string |  `user name`  `email`  |   first@gmail.com 
+action_result.data.\*.firstName | string |  |   first 
+action_result.data.\*.emailPromo | boolean |  |   True  False 
+action_result.data.\*.userExtRef | string |  |  
+action_result.data.\*.creationDate | string |  |   2021-12-14T04:49:45.059Z 
+action_result.data.\*.quotaInBytes | numeric |  |   10 
+action_result.data.\*.passwordReset | boolean |  |   True  False 
+action_result.data.\*.modificationDate | string |  |   2021-12-14T04:49:45.190Z 
+action_result.data.\*.usernameIsAnEmail | string |  |  
+action_result.data.\*.localAuthenticationOnly | boolean |  |   True  False 
+action_result.status | string |  |   success  failed 
+action_result.message | string |  |   Username was created with user_id: 116627747487575997 
+action_result.summary.user_id | string |  |  
+action_result.summary.username | string |  |  
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'block user'
 Blocks a user from accessing their Code42 account
@@ -720,7 +418,7 @@ Blocks a user from accessing their Code42 account
 Type: **contain**  
 Read only: **False**
 
-Blocks a user from accessing their Code42 account \(endpoint backup/security processes continue while blocked\)\.
+Blocks a user from accessing their Code42 account (endpoint backup/security processes continue while blocked).
 
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
@@ -728,15 +426,15 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 **username** |  required  | Username to block | string |  `email`  `user name` 
 
 #### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.parameter\.username | string |  `email`  `user name` 
-action\_result\.data | string | 
-action\_result\.status | string | 
-action\_result\.message | string | 
-action\_result\.summary | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.parameter.username | string |  `email`  `user name`  |   test@gmail.com 
+action_result.data | string |  |  
+action_result.status | string |  |   success  failed 
+action_result.message | string |  |   Username was blocked 
+action_result.summary | string |  |  
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'deactivate user'
 Deactivates user's Code42 account
@@ -750,15 +448,15 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 **username** |  required  | Username to deactivate | string |  `email`  `user name` 
 
 #### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.parameter\.username | string |  `email`  `user name` 
-action\_result\.status | string | 
-action\_result\.data | string | 
-action\_result\.message | string | 
-action\_result\.summary | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.parameter.username | string |  `email`  `user name`  |   test@gmail.com 
+action_result.status | string |  |   success  failed 
+action_result.data | string |  |  
+action_result.message | string |  |   Username was deactivated 
+action_result.summary | string |  |  
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'reactivate user'
 Reactivates a deactivated user's Code42 account
@@ -772,15 +470,15 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 **username** |  required  | Username to reactivate | string |  `email`  `user name` 
 
 #### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.parameter\.username | string |  `email`  `user name` 
-action\_result\.status | string | 
-action\_result\.data | string | 
-action\_result\.message | string | 
-action\_result\.summary | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.parameter.username | string |  `email`  `user name`  |   test@gmail.com 
+action_result.status | string |  |   success  failed 
+action_result.data | string |  |  
+action_result.message | string |  |   Username was reactivated 
+action_result.summary | string |  |  
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'unblock user'
 Unblocks a user, allowing access to their Code42 account
@@ -794,15 +492,15 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 **username** |  required  | Username to unblock | string |  `email`  `user name` 
 
 #### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.parameter\.username | string |  `email`  `user name` 
-action\_result\.status | string | 
-action\_result\.data | string | 
-action\_result\.message | string | 
-action\_result\.summary | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.parameter.username | string |  `email`  `user name`  |   test@gmail.com 
+action_result.status | string |  |   success  failed 
+action_result.data | string |  |  
+action_result.message | string |  |   Username was unblocked 
+action_result.summary | string |  |  
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'get user profile'
 Get user profile
@@ -816,33 +514,33 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 **username** |  required  | The username associated with the user profile to get | string |  `email`  `user name` 
 
 #### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.parameter\.username | string |  `email`  `user name` 
-action\_result\.data\.\*\.city | string | 
-action\_result\.data\.\*\.cloudUsernames\.\*\.username | string |  `email`  `user name` 
-action\_result\.data\.\*\.country | string | 
-action\_result\.data\.\*\.department | string | 
-action\_result\.data\.\*\.displayName | string | 
-action\_result\.data\.\*\.managerDisplayName | string | 
-action\_result\.data\.\*\.managerUsername | string |  `email`  `user name` 
-action\_result\.data\.\*\.riskFactors\.\*\.tag | string | 
-action\_result\.data\.\*\.state | string | 
-action\_result\.data\.\*\.title | string | 
-action\_result\.data\.\*\.userId | string | 
-action\_result\.data\.\*\.userName | string |  `email`  `user name` 
-action\_result\.data\.\*\.type$ | string | 
-action\_result\.data\.\*\.tenantId | string | 
-action\_result\.data\.\*\.notes | string | 
-action\_result\.status | string | 
-action\_result\.message | string | 
-action\_result\.summary | string | 
-action\_result\.summary\.user\_id | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.parameter.username | string |  `email`  `user name`  |   test@gmail.com 
+action_result.data.\*.city | string |  |   New York 
+action_result.data.\*.cloudUsernames.\*.username | string |  `email`  `user name`  |   test@example.com 
+action_result.data.\*.country | string |  |   US 
+action_result.data.\*.department | string |  |   Sales 
+action_result.data.\*.displayName | string |  |   Jane Doe 
+action_result.data.\*.managerDisplayName | string |  |   Jane Doe 
+action_result.data.\*.managerUsername | string |  `email`  `user name`  |   test@example.com 
+action_result.data.\*.riskFactors.\*.tag | string |  |   FLIGHT_RISK 
+action_result.data.\*.state | string |  |   AZ 
+action_result.data.\*.title | string |  |   Vice President 
+action_result.data.\*.userId | string |  |   1 
+action_result.data.\*.userName | string |  `email`  `user name`  |   test@example.com 
+action_result.data.\*.type$ | string |  |   USER_V2 
+action_result.data.\*.tenantId | string |  |   f6b12138-e9b5-4739-9fdd-99886f369999 
+action_result.data.\*.notes | string |  |   Notes 
+action_result.status | string |  |   success  failed 
+action_result.message | string |  |   User Id: 116627747487575997 
+action_result.summary | string |  |  
+action_result.summary.user_id | string |  |  
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'add legalhold custodian'
-Add a user \(custodian\) to a legal hold matter
+Add a user (custodian) to a legal hold matter
 
 Type: **contain**  
 Read only: **False**
@@ -851,30 +549,30 @@ Read only: **False**
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
 **username** |  required  | Username to be added to legal hold matter | string |  `email`  `user name` 
-**matter\_id** |  required  | The identifier of the legal hold matter | string |  `code42 matter id` 
+**matter_id** |  required  | The identifier of the legal hold matter | string |  `code42 matter id` 
 
 #### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.parameter\.username | string |  `email`  `user name` 
-action\_result\.parameter\.matter\_id | string |  `code42 matter id` 
-action\_result\.data\.\*\.user\.email | string |  `user name`  `email` 
-action\_result\.data\.\*\.user\.userUid | string | 
-action\_result\.data\.\*\.user\.username | string |  `user name`  `email` 
-action\_result\.data\.\*\.user\.userExtRef | string | 
-action\_result\.data\.\*\.active | boolean | 
-action\_result\.data\.\*\.legalHold\.name | string | 
-action\_result\.data\.\*\.legalHold\.legalHoldUid | string | 
-action\_result\.data\.\*\.creationDate | string | 
-action\_result\.data\.\*\.legalHoldMembershipUid | string | 
-action\_result\.status | string | 
-action\_result\.message | string | 
-action\_result\.summary | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.parameter.username | string |  `email`  `user name`  |   test@gmail.com 
+action_result.parameter.matter_id | string |  `code42 matter id`  |   1005855504 
+action_result.data.\*.user.email | string |  `user name`  `email`  |   first@gmail.com 
+action_result.data.\*.user.userUid | string |  |   1008493941083534000 
+action_result.data.\*.user.username | string |  `user name`  `email`  |   first@gmail.com 
+action_result.data.\*.user.userExtRef | string |  |  
+action_result.data.\*.active | boolean |  |   True  False 
+action_result.data.\*.legalHold.name | string |  |   This is testing purpose created matter 
+action_result.data.\*.legalHold.legalHoldUid | string |  |   1036893598491521000 
+action_result.data.\*.creationDate | string |  |   2021-12-06T09:54:00.256Z 
+action_result.data.\*.legalHoldMembershipUid | string |  |   1036893756264460000 
+action_result.status | string |  |   success  failed 
+action_result.message | string |  |   Username was added to legal hold matter 1936895883179241577 
+action_result.summary | string |  |  
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'remove legalhold custodian'
-Remove user \(custodian\) from a legal hold matter
+Remove user (custodian) from a legal hold matter
 
 Type: **correct**  
 Read only: **False**
@@ -883,20 +581,20 @@ Read only: **False**
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
 **username** |  required  | Username of user to be removed from legal hold matter | string |  `email`  `user name` 
-**matter\_id** |  required  | ID of the legal hold matter to remove the user from | string |  `code42 matter id` 
+**matter_id** |  required  | ID of the legal hold matter to remove the user from | string |  `code42 matter id` 
 
 #### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.parameter\.username | string |  `email`  `user name` 
-action\_result\.parameter\.matter\_id | string |  `code42 matter id` 
-action\_result\.data | string | 
-action\_result\.data\.\*\.userId | string | 
-action\_result\.status | string | 
-action\_result\.message | string | 
-action\_result\.summary | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.parameter.username | string |  `email`  `user name`  |   test@gmail.com 
+action_result.parameter.matter_id | string |  `code42 matter id`  |   1005855504 
+action_result.data | string |  |  
+action_result.data.\*.userId | string |  |   1 
+action_result.status | string |  |   success  failed 
+action_result.message | string |  |   Username was removed from legal hold matter 1936895883179241577 
+action_result.summary | string |  |  
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'create case'
 Create a Code42 case
@@ -907,40 +605,40 @@ Read only: **False**
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**case\_name** |  required  | Case name | string | 
-**subject** |  optional  | Subject of case \(username\) | string |  `email`  `user name` 
+**case_name** |  required  | Case name | string | 
+**subject** |  optional  | Subject of case (username) | string |  `email`  `user name` 
 **description** |  optional  | Description | string | 
-**assignee** |  optional  | Assignee \(username\) | string |  `email`  `user name` 
-**findings** |  optional  | Findings \(markdown text\) | string | 
+**assignee** |  optional  | Assignee (username) | string |  `email`  `user name` 
+**findings** |  optional  | Findings (markdown text) | string | 
 
 #### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.parameter\.case\_name | string | 
-action\_result\.parameter\.description | string | 
-action\_result\.parameter\.subject | string |  `email`  `user name` 
-action\_result\.parameter\.assignee | string |  `email`  `user name` 
-action\_result\.parameter\.findings | string | 
-action\_result\.data\.\*\.number | string |  `code42 case number` 
-action\_result\.data\.\*\.name | string | 
-action\_result\.data\.\*\.status | string | 
-action\_result\.data\.\*\.subject | string | 
-action\_result\.data\.\*\.assignee | string | 
-action\_result\.data\.\*\.findings | string | 
-action\_result\.data\.\*\.createdAt | string | 
-action\_result\.data\.\*\.updatedAt | string | 
-action\_result\.data\.\*\.description | string | 
-action\_result\.data\.\*\.subjectUsername | string | 
-action\_result\.data\.\*\.assigneeUsername | string | 
-action\_result\.data\.\*\.createdByUserUid | string | 
-action\_result\.data\.\*\.createdByUsername | string |  `user name`  `email` 
-action\_result\.data\.\*\.lastModifiedByUserUid | string | 
-action\_result\.data\.\*\.lastModifiedByUsername | string |  `user name`  `email` 
-action\_result\.status | string | 
-action\_result\.message | string | 
-action\_result\.summary\.case\_number | numeric | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.parameter.case_name | string |  |   Test Case 
+action_result.parameter.description | string |  |   Case Description 
+action_result.parameter.subject | string |  `email`  `user name`  |   test2@example.com 
+action_result.parameter.assignee | string |  `email`  `user name`  |   test3@example.com 
+action_result.parameter.findings | string |  |  
+action_result.data.\*.number | string |  `code42 case number`  |  
+action_result.data.\*.name | string |  |   Case_p1 
+action_result.data.\*.status | string |  |   OPEN 
+action_result.data.\*.subject | string |  |  
+action_result.data.\*.assignee | string |  |  
+action_result.data.\*.findings | string |  |  
+action_result.data.\*.createdAt | string |  |   2021-12-08T11:00:37.615887Z 
+action_result.data.\*.updatedAt | string |  |   2021-12-08T11:00:37.615887Z 
+action_result.data.\*.description | string |  |   Action Created Case 
+action_result.data.\*.subjectUsername | string |  |  
+action_result.data.\*.assigneeUsername | string |  |  
+action_result.data.\*.createdByUserUid | string |  |   996627747487575000 
+action_result.data.\*.createdByUsername | string |  `user name`  `email`  |   first@gmail.com 
+action_result.data.\*.lastModifiedByUserUid | string |  |   996627747487575000 
+action_result.data.\*.lastModifiedByUsername | string |  `user name`  `email`  |   first@gmail.com 
+action_result.status | string |  |   success  failed 
+action_result.message | string |  |   Case successfully created with case_id: 132 
+action_result.summary.case_number | numeric |  |  
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'update case'
 Update the details of a case
@@ -951,42 +649,42 @@ Read only: **False**
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**case\_number** |  required  | Case number | numeric |  `code42 case number` 
-**case\_name** |  optional  | Case name | string | 
+**case_number** |  required  | Case number | numeric |  `code42 case number` 
+**case_name** |  optional  | Case name | string | 
 **description** |  optional  | Description | string | 
 **subject** |  optional  | Subject | string |  `email`  `user name` 
 **assignee** |  optional  | Assignee | string |  `email`  `user name` 
-**findings** |  optional  | Findings \(markdown\) | string | 
+**findings** |  optional  | Findings (markdown) | string | 
 
 #### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.parameter\.case\_number | numeric |  `code42 case number` 
-action\_result\.parameter\.case\_name | string | 
-action\_result\.parameter\.description | string | 
-action\_result\.parameter\.subject | string |  `email`  `user name` 
-action\_result\.parameter\.assignee | string |  `email`  `user name` 
-action\_result\.parameter\.findings | string | 
-action\_result\.data\.\*\.number | numeric |  `code42 case number` 
-action\_result\.data\.\*\.name | string | 
-action\_result\.data\.\*\.description | string | 
-action\_result\.data\.\*\.subjectUsername | string |  `email`  `user name` 
-action\_result\.data\.\*\.assigneeUsername | string |  `email`  `user name` 
-action\_result\.data\.\*\.findings | string | 
-action\_result\.data\.\*\.status | string | 
-action\_result\.data\.\*\.subject | string | 
-action\_result\.data\.\*\.assignee | string | 
-action\_result\.data\.\*\.createdAt | string | 
-action\_result\.data\.\*\.updatedAt | string | 
-action\_result\.data\.\*\.createdByUserUid | string | 
-action\_result\.data\.\*\.createdByUsername | string |  `user name`  `email` 
-action\_result\.data\.\*\.lastModifiedByUserUid | string | 
-action\_result\.data\.\*\.lastModifiedByUsername | string |  `user name`  `email` 
-action\_result\.status | string | 
-action\_result\.message | string | 
-action\_result\.summary\.case\_number | numeric | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.parameter.case_number | numeric |  `code42 case number`  |   123 
+action_result.parameter.case_name | string |  |   Case Name 
+action_result.parameter.description | string |  |   Action Created Case 
+action_result.parameter.subject | string |  `email`  `user name`  |   test@gmail.com 
+action_result.parameter.assignee | string |  `email`  `user name`  |   test@gmail.com 
+action_result.parameter.findings | string |  |   test2@gmail.com 
+action_result.data.\*.number | numeric |  `code42 case number`  |  
+action_result.data.\*.name | string |  |  
+action_result.data.\*.description | string |  |  
+action_result.data.\*.subjectUsername | string |  `email`  `user name`  |  
+action_result.data.\*.assigneeUsername | string |  `email`  `user name`  |  
+action_result.data.\*.findings | string |  |  
+action_result.data.\*.status | string |  |   OPEN 
+action_result.data.\*.subject | string |  |  
+action_result.data.\*.assignee | string |  |  
+action_result.data.\*.createdAt | string |  |   2021-12-08T11:00:37.615887Z 
+action_result.data.\*.updatedAt | string |  |   2021-12-08T11:03:23.442793Z 
+action_result.data.\*.createdByUserUid | string |  |   996627747487575000 
+action_result.data.\*.createdByUsername | string |  `user name`  `email`  |   first@gmail.com 
+action_result.data.\*.lastModifiedByUserUid | string |  |   996627747487575000 
+action_result.data.\*.lastModifiedByUsername | string |  `user name`  `email`  |   first@gmail.com 
+action_result.status | string |  |   success  failed 
+action_result.message | string |  |   Case number 123 successfully updated 
+action_result.summary.case_number | numeric |  |  
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'close case'
 Change the status of a Code42 case to 'CLOSED'
@@ -997,33 +695,33 @@ Read only: **False**
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**case\_number** |  required  | Case number | numeric |  `code42 case number` 
+**case_number** |  required  | Case number | numeric |  `code42 case number` 
 
 #### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.parameter\.case\_number | numeric |  `code42 case number` 
-action\_result\.data | string | 
-action\_result\.data\.\*\.number | numeric |  `code42 case number` 
-action\_result\.data\.\*\.name | string | 
-action\_result\.data\.\*\.description | string | 
-action\_result\.data\.\*\.subjectUsername | string |  `email`  `user name` 
-action\_result\.data\.\*\.assigneeUsername | string |  `email`  `user name` 
-action\_result\.data\.\*\.findings | string | 
-action\_result\.data\.\*\.status | string | 
-action\_result\.data\.\*\.subject | string | 
-action\_result\.data\.\*\.assignee | string | 
-action\_result\.data\.\*\.createdAt | string | 
-action\_result\.data\.\*\.updatedAt | string | 
-action\_result\.data\.\*\.createdByUserUid | string | 
-action\_result\.data\.\*\.createdByUsername | string |  `user name`  `email` 
-action\_result\.data\.\*\.lastModifiedByUserUid | string | 
-action\_result\.data\.\*\.lastModifiedByUsername | string |  `user name`  `email` 
-action\_result\.status | string | 
-action\_result\.message | string | 
-action\_result\.summary\.case\_number | numeric | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.parameter.case_number | numeric |  `code42 case number`  |   123 
+action_result.data | string |  |  
+action_result.data.\*.number | numeric |  `code42 case number`  |  
+action_result.data.\*.name | string |  |  
+action_result.data.\*.description | string |  |  
+action_result.data.\*.subjectUsername | string |  `email`  `user name`  |  
+action_result.data.\*.assigneeUsername | string |  `email`  `user name`  |  
+action_result.data.\*.findings | string |  |  
+action_result.data.\*.status | string |  |   CLOSED 
+action_result.data.\*.subject | string |  |  
+action_result.data.\*.assignee | string |  |  
+action_result.data.\*.createdAt | string |  |   2022-01-04T15:40:37.896084Z 
+action_result.data.\*.updatedAt | string |  |   2022-01-04T15:41:05.365791Z 
+action_result.data.\*.createdByUserUid | string |  |   996627747487575000 
+action_result.data.\*.createdByUsername | string |  `user name`  `email`  |  
+action_result.data.\*.lastModifiedByUserUid | string |  |   996627747487575000 
+action_result.data.\*.lastModifiedByUsername | string |  `user name`  `email`  |   first@gmail.com 
+action_result.status | string |  |   success  failed 
+action_result.message | string |  |   Case number 123 successfully closed 
+action_result.summary.case_number | numeric |  |  
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'list cases'
 List Code42 Cases
@@ -1039,29 +737,29 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 **subject** |  optional  | Filter cases by subject username | string |  `email`  `user name` 
 
 #### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.parameter\.status | string | 
-action\_result\.parameter\.assignee | string |  `email`  `user name` 
-action\_result\.parameter\.subject | string |  `email`  `user name` 
-action\_result\.data\.\*\.status | string | 
-action\_result\.data\.\*\.number | numeric |  `code42 case number` 
-action\_result\.data\.\*\.name | string | 
-action\_result\.data\.\*\.subjectUsername | string |  `email`  `user name` 
-action\_result\.data\.\*\.assigneeUsername | string |  `email`  `user name` 
-action\_result\.data\.\*\.createdAt | string | 
-action\_result\.data\.\*\.createdByUsername | string |  `email`  `user name` 
-action\_result\.data\.\*\.subject | string | 
-action\_result\.data\.\*\.assignee | string | 
-action\_result\.data\.\*\.updatedAt | string | 
-action\_result\.data\.\*\.createdByUserUid | string | 
-action\_result\.data\.\*\.lastModifiedByUserUid | string | 
-action\_result\.data\.\*\.lastModifiedByUsername | string |  `user name`  `email` 
-action\_result\.status | string | 
-action\_result\.message | string | 
-action\_result\.summary\.total\_count | numeric | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.parameter.status | string |  |   ALL 
+action_result.parameter.assignee | string |  `email`  `user name`  |   test@gmail.com 
+action_result.parameter.subject | string |  `email`  `user name`  |   test@gmail.com 
+action_result.data.\*.status | string |  |  
+action_result.data.\*.number | numeric |  `code42 case number`  |   10 
+action_result.data.\*.name | string |  |   Insider Risk Case 
+action_result.data.\*.subjectUsername | string |  `email`  `user name`  |   user1@example.com 
+action_result.data.\*.assigneeUsername | string |  `email`  `user name`  |   admin@example.com 
+action_result.data.\*.createdAt | string |  |   2021-01-01T12:00:00.000000Z 
+action_result.data.\*.createdByUsername | string |  `email`  `user name`  |   admin@example.com 
+action_result.data.\*.subject | string |  |  
+action_result.data.\*.assignee | string |  |   99662774748757500 
+action_result.data.\*.updatedAt | string |  |   2022-01-04T16:15:43.229173Z 
+action_result.data.\*.createdByUserUid | string |  |   996627747487575000 
+action_result.data.\*.lastModifiedByUserUid | string |  |   996627747487575000 
+action_result.data.\*.lastModifiedByUsername | string |  `user name`  `email`  |   first@gmail.com 
+action_result.status | string |  |   success  failed 
+action_result.message | string |  |   Total Count: 10 
+action_result.summary.total_count | numeric |  |  
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'add case event'
 Associates a file event with a Code42 case
@@ -1072,24 +770,24 @@ Read only: **False**
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**case\_number** |  required  | Case number | numeric |  `code42 case number` 
-**event\_id** |  required  | Event ID | string |  `code42 file event` 
+**case_number** |  required  | Case number | numeric |  `code42 case number` 
+**event_id** |  required  | Event ID | string |  `code42 file event` 
 
 #### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.parameter\.case\_number | string |  `code42 case number` 
-action\_result\.parameter\.event\_id | string |  `code42 file event` 
-action\_result\.data | string | 
-action\_result\.status | string | 
-action\_result\.message | string | 
-action\_result\.summary\.case\_number | numeric | 
-action\_result\.summary\.event\_id | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.parameter.case_number | string |  `code42 case number`  |   123 
+action_result.parameter.event_id | string |  `code42 file event`  |   10058 
+action_result.data | string |  |  
+action_result.status | string |  |   success  failed 
+action_result.message | string |  |   Event 0_f6b12138-e9b5-4739-9fdd-99886f369978_1003668363210389567_1039064704673624347_20 added to case number 132 
+action_result.summary.case_number | numeric |  |  
+action_result.summary.event_id | string |  |  
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'hunt file'
-Searches Code42 for a backed\-up file with a matching hash and downloads it
+Searches Code42 for a backed-up file with a matching hash and downloads it
 
 Type: **investigate**  
 Read only: **True**
@@ -1098,19 +796,19 @@ Read only: **True**
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
 **hash** |  required  | The MD5 or SHA256 hash of the file to download | string |  `md5`  `sha256` 
-**file\_name** |  optional  | The name to give to the file after it is downloaded\. If not supplied, the hash will be used | string |  `file name` 
+**file_name** |  optional  | The name to give to the file after it is downloaded. If not supplied, the hash will be used | string |  `file name` 
 
 #### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.parameter\.hash | string |  `md5`  `sha256` 
-action\_result\.parameter\.file\_name | string |  `file name` 
-action\_result\.data | string | 
-action\_result\.status | string | 
-action\_result\.message | string | 
-action\_result\.summary | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.parameter.hash | string |  `md5`  `sha256`  |   89131efabab2aca2bf36d70b3999a0e0 
+action_result.parameter.file_name | string |  `file name`  |   next.txt 
+action_result.data | string |  |  
+action_result.status | string |  |   success  failed 
+action_result.message | string |  |   next.txt was successfully downloaded and attached to container 123 
+action_result.summary | string |  |  
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'run query'
 Search for Code42 file events
@@ -1118,132 +816,132 @@ Search for Code42 file events
 Type: **investigate**  
 Read only: **True**
 
-You can use wildcards \(\*,?\) with most string\-based fields\. All query parameters are optional; at least one search term is required\. All query parameters are in logical AND with each other\.
+You can use wildcards (\*,?) with most string-based fields. All query parameters are optional; at least one search term is required. All query parameters are in logical AND with each other.
 
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**start\_date** |  optional  | Beginning of date range to search\. Time \(in UTC\) may also be supplied but is not required | string | 
-**end\_date** |  optional  | End of date range to search\. Time \(in UTC\) may also be supplied but is not required | string | 
-**file\_hash** |  optional  | MD5 or SHA256 hash of a file | string |  `md5`  `sha256` 
-**file\_name** |  optional  | Name of the file observed | string |  `file name` 
-**file\_path** |  optional  | Path of the file observed | string |  `file path` 
-**file\_category** |  optional  | Category of the file observed | string |  `code42 file category` 
+**start_date** |  optional  | Beginning of date range to search. Time (in UTC) may also be supplied but is not required | string | 
+**end_date** |  optional  | End of date range to search. Time (in UTC) may also be supplied but is not required | string | 
+**file_hash** |  optional  | MD5 or SHA256 hash of a file | string |  `md5`  `sha256` 
+**file_name** |  optional  | Name of the file observed | string |  `file name` 
+**file_path** |  optional  | Path of the file observed | string |  `file path` 
+**file_category** |  optional  | Category of the file observed | string |  `code42 file category` 
 **username** |  optional  | Name of the user associated with the event | string |  `email`  `user name` 
 **hostname** |  optional  | Hostname | string |  `host name` 
-**private\_ip** |  optional  | Private IPv4 or IPv6 address | string |  `ip`  `ipv6` 
-**public\_ip** |  optional  | Public IPv4 or IPv6 address | string |  `ip`  `ipv6` 
-**exposure\_type** |  optional  | Type of exposure that occurred | string |  `code42 exposure type` 
-**process\_name** |  optional  | Process name involved in the exposure | string |  `code42 process name` 
+**private_ip** |  optional  | Private IPv4 or IPv6 address | string |  `ip`  `ipv6` 
+**public_ip** |  optional  | Public IPv4 or IPv6 address | string |  `ip`  `ipv6` 
+**exposure_type** |  optional  | Type of exposure that occurred | string |  `code42 exposure type` 
+**process_name** |  optional  | Process name involved in the exposure | string |  `code42 process name` 
 **url** |  optional  | Urls of all the browser tabs open during exposure | string |  `url` 
-**window\_title** |  optional  | Names of all the open browser tabs or windows during exposure | string |  `code42 window title` 
-**untrusted\_only** |  optional  | Return only events representing untrusted activity | boolean | 
-**max\_results** |  optional  | Maximum number of results to fetch \(default\: 1000\) | numeric | 
+**window_title** |  optional  | Names of all the open browser tabs or windows during exposure | string |  `code42 window title` 
+**untrusted_only** |  optional  | Return only events representing untrusted activity | boolean | 
+**max_results** |  optional  | Maximum number of results to fetch (default: 1000) | numeric | 
 
 #### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.parameter\.start\_date | string | 
-action\_result\.parameter\.end\_date | string | 
-action\_result\.parameter\.file\_name | string |  `file name` 
-action\_result\.parameter\.file\_hash | string |  `md5`  `sha256` 
-action\_result\.parameter\.file\_path | string |  `file path` 
-action\_result\.parameter\.untrusted\_only | boolean | 
-action\_result\.parameter\.file\_category | string |  `code42 file category` 
-action\_result\.parameter\.username | string |  `email`  `user name` 
-action\_result\.parameter\.hostname | string |  `host name` 
-action\_result\.parameter\.private\_ip | string |  `ip`  `ipv6` 
-action\_result\.parameter\.public\_ip | string |  `ip`  `ipv6` 
-action\_result\.parameter\.exposure\_type | string |  `code42 exposure type` 
-action\_result\.parameter\.process\_name | string |  `code42 process name` 
-action\_result\.parameter\.url | string |  `url` 
-action\_result\.parameter\.window\_title | string |  `code42 window title` 
-action\_result\.parameter\.max\_results | numeric | 
-action\_result\.data\.\*\.eventTimestamp | string | 
-action\_result\.data\.\*\.eventType | string | 
-action\_result\.data\.\*\.fileName | string |  `file name` 
-action\_result\.data\.\*\.filePath | string |  `file path` 
-action\_result\.data\.\*\.createTimestamp | string | 
-action\_result\.data\.\*\.modifyTimestamp | string | 
-action\_result\.data\.\*\.md5Checksum | string |  `md5` 
-action\_result\.data\.\*\.sha256Checksum | string |  `sha256` 
-action\_result\.data\.\*\.url | string |  `url` 
-action\_result\.data\.\*\.actor | string |  `email`  `user name` 
-action\_result\.data\.\*\.fileId | string | 
-action\_result\.data\.\*\.shared | string | 
-action\_result\.data\.\*\.source | string | 
-action\_result\.data\.\*\.tabUrl | string |  `url` 
-action\_result\.data\.\*\.windowTitle\.\*\.windowTitle | string |  `code42 window title` 
-action\_result\.data\.\*\.eventId | string |  `code42 file event` 
-action\_result\.data\.\*\.trusted | boolean | 
-action\_result\.data\.\*\.userUid | string | 
-action\_result\.data\.\*\.fileSize | numeric | 
-action\_result\.data\.\*\.fileType | string | 
-action\_result\.data\.\*\.deviceUid | string | 
-action\_result\.data\.\*\.emailFrom | string |  `email`  `user name` 
-action\_result\.data\.\*\.fileOwner | string | 
-action\_result\.data\.\*\.riskScore | string | 
-action\_result\.data\.\*\.domainName | string |  `domain` 
-action\_result\.data\.\*\.osHostName | string |  `host name` 
-action\_result\.data\.\*\.emailSender | string |  `email`  `user name` 
-action\_result\.data\.\*\.printerName | string | 
-action\_result\.data\.\*\.processName | string | 
-action\_result\.data\.\*\.cloudDriveId | string | 
-action\_result\.data\.\*\.emailSubject | string | 
-action\_result\.data\.\*\.fileCategory | string | 
-action\_result\.data\.\*\.printJobName | string | 
-action\_result\.data\.\*\.processOwner | string | 
-action\_result\.data\.\*\.riskSeverity | string | 
-action\_result\.data\.\*\.deviceUserName | string |  `email`  `user name` 
-action\_result\.data\.\*\.remoteActivity | string | 
-action\_result\.data\.\*\.destinationName | string | 
-action\_result\.data\.\*\.emailRecipients | string | 
-action\_result\.data\.\*\.mimeTypeByBytes | string | 
-action\_result\.data\.\*\.publicIpAddress | string |  `ip` 
-action\_result\.data\.\*\.syncDestination | string | 
-action\_result\.data\.\*\.mimeTypeMismatch | boolean | 
-action\_result\.data\.\*\.insertionTimestamp | string | 
-action\_result\.data\.\*\.outsideActiveHours | boolean | 
-action\_result\.data\.\*\.privateIpAddresses | string |  `ip`  `ipv6` 
-action\_result\.data\.\*\.removableMediaName | string | 
-action\_result\.data\.\*\.destinationCategory | string | 
-action\_result\.data\.\*\.emailDlpPolicyNames | string | 
-action\_result\.data\.\*\.fileCategoryByBytes | string | 
-action\_result\.data\.\*\.mimeTypeByExtension | string | 
-action\_result\.data\.\*\.operatingSystemUser | string | 
-action\_result\.data\.\*\.detectionSourceAlias | string | 
-action\_result\.data\.\*\.removableMediaVendor | string | 
-action\_result\.data\.\*\.removableMediaBusType | string | 
-action\_result\.data\.\*\.printedFilesBackupPath | string | 
-action\_result\.data\.\*\.removableMediaCapacity | string | 
-action\_result\.data\.\*\.fileCategoryByExtension | string | 
-action\_result\.data\.\*\.removableMediaMediaName | string | 
-action\_result\.data\.\*\.removableMediaSerialNumber | string | 
-action\_result\.data\.\*\.tabs\.\*\.url | string | 
-action\_result\.data\.\*\.tabs\.\*\.title | string | 
-action\_result\.data\.\*\.tabs\.\*\.urlError | string | 
-action\_result\.data\.\*\.tabs\.\*\.titleError | string | 
-action\_result\.data\.\*\.reportId | string | 
-action\_result\.data\.\*\.reportName | string | 
-action\_result\.data\.\*\.reportType | string | 
-action\_result\.data\.\*\.sourceName | string | 
-action\_result\.data\.\*\.trustReason | string | 
-action\_result\.data\.\*\.riskIndicators\.\*\.name | string | 
-action\_result\.data\.\*\.riskIndicators\.\*\.weight | numeric | 
-action\_result\.data\.\*\.sourceCategory | string | 
-action\_result\.data\.\*\.reportDescription | string | 
-action\_result\.data\.\*\.reportRecordCount | string | 
-action\_result\.data\.\*\.reportColumnHeaders | string | 
-action\_result\.data\.\*\.sourceTabs\.\*\.url | string |  `url` 
-action\_result\.data\.\*\.sourceTabs\.\*\.title | string | 
-action\_result\.data\.\*\.sourceTabs\.\*\.urlError | string | 
-action\_result\.data\.\*\.sourceTabs\.\*\.titleError | string | 
-action\_result\.status | string | 
-action\_result\.message | string | 
-action\_result\.summary\.total\_count | numeric | 
-action\_result\.summary\.results\_returned\_count | numeric | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.parameter.start_date | string |  |   2021-12-09T22:10:59.951Z 
+action_result.parameter.end_date | string |  |   2021-12-20T22:10:59.951Z 
+action_result.parameter.file_name | string |  `file name`  |   next.txt 
+action_result.parameter.file_hash | string |  `md5`  `sha256`  |   89131efabab2aca2bf36d70b3999a0e0 
+action_result.parameter.file_path | string |  `file path`  |   /opt/example/02 
+action_result.parameter.untrusted_only | boolean |  |   True  False 
+action_result.parameter.file_category | string |  `code42 file category`  |   Audio 
+action_result.parameter.username | string |  `email`  `user name`  |   test@gmail.com 
+action_result.parameter.hostname | string |  `host name`  |   Host 
+action_result.parameter.private_ip | string |  `ip`  `ipv6`  |   8.8.8.8 
+action_result.parameter.public_ip | string |  `ip`  `ipv6`  |   0.0.0.0 
+action_result.parameter.exposure_type | string |  `code42 exposure type`  |   ALL 
+action_result.parameter.process_name | string |  `code42 process name`  |   Extension Process 
+action_result.parameter.url | string |  `url`  |   https://wwww.example.com/ 
+action_result.parameter.window_title | string |  `code42 window title`  |   Zip File Extension 
+action_result.parameter.max_results | numeric |  |   10000 
+action_result.data.\*.eventTimestamp | string |  |  
+action_result.data.\*.eventType | string |  |  
+action_result.data.\*.fileName | string |  `file name`  |  
+action_result.data.\*.filePath | string |  `file path`  |  
+action_result.data.\*.createTimestamp | string |  |  
+action_result.data.\*.modifyTimestamp | string |  |  
+action_result.data.\*.md5Checksum | string |  `md5`  |  
+action_result.data.\*.sha256Checksum | string |  `sha256`  |  
+action_result.data.\*.url | string |  `url`  |  
+action_result.data.\*.actor | string |  `email`  `user name`  |  
+action_result.data.\*.fileId | string |  |  
+action_result.data.\*.shared | string |  |  
+action_result.data.\*.source | string |  |  
+action_result.data.\*.tabUrl | string |  `url`  |  
+action_result.data.\*.windowTitle.\*.windowTitle | string |  `code42 window title`  |  
+action_result.data.\*.eventId | string |  `code42 file event`  |  
+action_result.data.\*.trusted | boolean |  |  
+action_result.data.\*.userUid | string |  |  
+action_result.data.\*.fileSize | numeric |  |  
+action_result.data.\*.fileType | string |  |  
+action_result.data.\*.deviceUid | string |  |  
+action_result.data.\*.emailFrom | string |  `email`  `user name`  |  
+action_result.data.\*.fileOwner | string |  |  
+action_result.data.\*.riskScore | string |  |  
+action_result.data.\*.domainName | string |  `domain`  |  
+action_result.data.\*.osHostName | string |  `host name`  |  
+action_result.data.\*.emailSender | string |  `email`  `user name`  |  
+action_result.data.\*.printerName | string |  |  
+action_result.data.\*.processName | string |  |  
+action_result.data.\*.cloudDriveId | string |  |  
+action_result.data.\*.emailSubject | string |  |  
+action_result.data.\*.fileCategory | string |  |  
+action_result.data.\*.printJobName | string |  |  
+action_result.data.\*.processOwner | string |  |  
+action_result.data.\*.riskSeverity | string |  |  
+action_result.data.\*.deviceUserName | string |  `email`  `user name`  |  
+action_result.data.\*.remoteActivity | string |  |  
+action_result.data.\*.destinationName | string |  |  
+action_result.data.\*.emailRecipients | string |  |  
+action_result.data.\*.mimeTypeByBytes | string |  |  
+action_result.data.\*.publicIpAddress | string |  `ip`  |  
+action_result.data.\*.syncDestination | string |  |  
+action_result.data.\*.mimeTypeMismatch | boolean |  |  
+action_result.data.\*.insertionTimestamp | string |  |  
+action_result.data.\*.outsideActiveHours | boolean |  |  
+action_result.data.\*.privateIpAddresses | string |  `ip`  `ipv6`  |  
+action_result.data.\*.removableMediaName | string |  |  
+action_result.data.\*.destinationCategory | string |  |  
+action_result.data.\*.emailDlpPolicyNames | string |  |  
+action_result.data.\*.fileCategoryByBytes | string |  |  
+action_result.data.\*.mimeTypeByExtension | string |  |  
+action_result.data.\*.operatingSystemUser | string |  |  
+action_result.data.\*.detectionSourceAlias | string |  |  
+action_result.data.\*.removableMediaVendor | string |  |  
+action_result.data.\*.removableMediaBusType | string |  |  
+action_result.data.\*.printedFilesBackupPath | string |  |  
+action_result.data.\*.removableMediaCapacity | string |  |  
+action_result.data.\*.fileCategoryByExtension | string |  |  
+action_result.data.\*.removableMediaMediaName | string |  |  
+action_result.data.\*.removableMediaSerialNumber | string |  |  
+action_result.data.\*.tabs.\*.url | string |  |   https://test.com/mail?sid=db709a83421a3e305c82 
+action_result.data.\*.tabs.\*.title | string |  |   Free Email Addresses: Web based and secure 
+action_result.data.\*.tabs.\*.urlError | string |  |  
+action_result.data.\*.tabs.\*.titleError | string |  |  
+action_result.data.\*.reportId | string |  |  
+action_result.data.\*.reportName | string |  |  
+action_result.data.\*.reportType | string |  |  
+action_result.data.\*.sourceName | string |  |  
+action_result.data.\*.trustReason | string |  |  
+action_result.data.\*.riskIndicators.\*.name | string |  |   First use of destination 
+action_result.data.\*.riskIndicators.\*.weight | numeric |  |   3 
+action_result.data.\*.sourceCategory | string |  |  
+action_result.data.\*.reportDescription | string |  |  
+action_result.data.\*.reportRecordCount | string |  |  
+action_result.data.\*.reportColumnHeaders | string |  |  
+action_result.data.\*.sourceTabs.\*.url | string |  `url`  |   https://test.com/download/2ba67828100783fb3/ 
+action_result.data.\*.sourceTabs.\*.title | string |  |   MalwareBazaar | Download malware samples 
+action_result.data.\*.sourceTabs.\*.urlError | string |  |  
+action_result.data.\*.sourceTabs.\*.titleError | string |  |  
+action_result.status | string |  |   success  failed 
+action_result.message | string |  |   Total Count: 10, Results Returned Count: 5 
+action_result.summary.total_count | numeric |  |  
+action_result.summary.results_returned_count | numeric |  |  
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'run advanced query'
 Run an advanced query using JSON
@@ -1251,101 +949,282 @@ Run an advanced query using JSON
 Type: **investigate**  
 Read only: **True**
 
-If page\-related keys \(pgNum, pgSize, pgToken\) are available in the query, they will be ignored\.
+If page-related keys (pgNum, pgSize, pgToken) are available in the query, they will be ignored.
 
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**json\_query** |  required  | The raw JSON of the query to execute | string | 
-**max\_results** |  optional  | Maximum number of results to fetch \(default\: 1000\) | numeric | 
+**json_query** |  required  | The raw JSON of the query to execute | string | 
+**max_results** |  optional  | Maximum number of results to fetch (default: 1000) | numeric | 
 
 #### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.parameter\.json\_query | string | 
-action\_result\.parameter\.max\_results | numeric | 
-action\_result\.data\.\*\.eventTimestamp | string | 
-action\_result\.data\.\*\.eventType | string | 
-action\_result\.data\.\*\.fileName | string |  `file name` 
-action\_result\.data\.\*\.filePath | string |  `file path` 
-action\_result\.data\.\*\.createTimestamp | string | 
-action\_result\.data\.\*\.modifyTimestamp | string | 
-action\_result\.data\.\*\.md5Checksum | string |  `md5` 
-action\_result\.data\.\*\.sha256Checksum | string |  `sha256` 
-action\_result\.data\.\*\.url | string |  `url` 
-action\_result\.data\.\*\.actor | string | 
-action\_result\.data\.\*\.fileId | string | 
-action\_result\.data\.\*\.shared | string | 
-action\_result\.data\.\*\.source | string | 
-action\_result\.data\.\*\.tabUrl | string |  `url` 
-action\_result\.data\.\*\.eventId | string |  `code42 file event` 
-action\_result\.data\.\*\.trusted | boolean | 
-action\_result\.data\.\*\.userUid | string | 
-action\_result\.data\.\*\.fileSize | numeric | 
-action\_result\.data\.\*\.fileType | string | 
-action\_result\.data\.\*\.deviceUid | string | 
-action\_result\.data\.\*\.emailFrom | string |  `email`  `user name` 
-action\_result\.data\.\*\.fileOwner | string | 
-action\_result\.data\.\*\.riskScore | numeric | 
-action\_result\.data\.\*\.domainName | string |  `domain` 
-action\_result\.data\.\*\.osHostName | string |  `host name` 
-action\_result\.data\.\*\.emailSender | string |  `email`  `user name` 
-action\_result\.data\.\*\.printerName | string | 
-action\_result\.data\.\*\.processName | string | 
-action\_result\.data\.\*\.cloudDriveId | string | 
-action\_result\.data\.\*\.emailSubject | string | 
-action\_result\.data\.\*\.fileCategory | string | 
-action\_result\.data\.\*\.printJobName | string | 
-action\_result\.data\.\*\.processOwner | string | 
-action\_result\.data\.\*\.riskSeverity | string | 
-action\_result\.data\.\*\.deviceUserName | string |  `email`  `user name` 
-action\_result\.data\.\*\.remoteActivity | string | 
-action\_result\.data\.\*\.destinationName | string | 
-action\_result\.data\.\*\.emailRecipients | string | 
-action\_result\.data\.\*\.mimeTypeByBytes | string | 
-action\_result\.data\.\*\.publicIpAddress | string |  `ip` 
-action\_result\.data\.\*\.syncDestination | string | 
-action\_result\.data\.\*\.mimeTypeMismatch | boolean | 
-action\_result\.data\.\*\.insertionTimestamp | string | 
-action\_result\.data\.\*\.outsideActiveHours | boolean | 
-action\_result\.data\.\*\.privateIpAddresses | string |  `ip`  `ipv6` 
-action\_result\.data\.\*\.removableMediaName | string | 
-action\_result\.data\.\*\.destinationCategory | string | 
-action\_result\.data\.\*\.emailDlpPolicyNames | string | 
-action\_result\.data\.\*\.fileCategoryByBytes | string | 
-action\_result\.data\.\*\.mimeTypeByExtension | string | 
-action\_result\.data\.\*\.operatingSystemUser | string | 
-action\_result\.data\.\*\.detectionSourceAlias | string | 
-action\_result\.data\.\*\.removableMediaVendor | string | 
-action\_result\.data\.\*\.removableMediaBusType | string | 
-action\_result\.data\.\*\.printedFilesBackupPath | string | 
-action\_result\.data\.\*\.removableMediaCapacity | string | 
-action\_result\.data\.\*\.fileCategoryByExtension | string | 
-action\_result\.data\.\*\.removableMediaMediaName | string | 
-action\_result\.data\.\*\.removableMediaSerialNumber | string | 
-action\_result\.data\.\*\.tabs\.\*\.url | string |  `url` 
-action\_result\.data\.\*\.tabs\.\*\.title | string | 
-action\_result\.data\.\*\.tabs\.\*\.urlError | string | 
-action\_result\.data\.\*\.tabs\.\*\.titleError | string | 
-action\_result\.data\.\*\.reportId | string | 
-action\_result\.data\.\*\.reportName | string | 
-action\_result\.data\.\*\.reportType | string | 
-action\_result\.data\.\*\.sourceName | string | 
-action\_result\.data\.\*\.trustReason | string | 
-action\_result\.data\.\*\.windowTitle\.\*\.windowTitle | string | 
-action\_result\.data\.\*\.riskIndicators\.\*\.name | string | 
-action\_result\.data\.\*\.riskIndicators\.\*\.weight | numeric | 
-action\_result\.data\.\*\.sourceCategory | string | 
-action\_result\.data\.\*\.reportDescription | string | 
-action\_result\.data\.\*\.reportRecordCount | string | 
-action\_result\.data\.\*\.reportColumnHeaders | string | 
-action\_result\.data\.\*\.sourceTabs\.\*\.url | string | 
-action\_result\.data\.\*\.sourceTabs\.\*\.title | string | 
-action\_result\.data\.\*\.sourceTabs\.\*\.urlError | string | 
-action\_result\.data\.\*\.sourceTabs\.\*\.titleError | string | 
-action\_result\.summary\.results\_returned\_count | numeric | 
-action\_result\.status | string | 
-action\_result\.message | string | 
-action\_result\.summary\.total\_count | numeric | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric | 
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.parameter.json_query | string |  |   {"groups": [ { "filters": [ { "operator": "IS", "term": "deviceUserName", "value": "test@example.com" }], "filterClause": "AND" } ]} 
+action_result.parameter.max_results | numeric |  |   10000 
+action_result.data.\*.eventTimestamp | string |  |  
+action_result.data.\*.eventType | string |  |  
+action_result.data.\*.fileName | string |  `file name`  |  
+action_result.data.\*.filePath | string |  `file path`  |  
+action_result.data.\*.createTimestamp | string |  |  
+action_result.data.\*.modifyTimestamp | string |  |  
+action_result.data.\*.md5Checksum | string |  `md5`  |  
+action_result.data.\*.sha256Checksum | string |  `sha256`  |  
+action_result.data.\*.url | string |  `url`  |  
+action_result.data.\*.actor | string |  |  
+action_result.data.\*.fileId | string |  |  
+action_result.data.\*.shared | string |  |  
+action_result.data.\*.source | string |  |  
+action_result.data.\*.tabUrl | string |  `url`  |  
+action_result.data.\*.eventId | string |  `code42 file event`  |  
+action_result.data.\*.trusted | boolean |  |  
+action_result.data.\*.userUid | string |  |  
+action_result.data.\*.fileSize | numeric |  |  
+action_result.data.\*.fileType | string |  |  
+action_result.data.\*.deviceUid | string |  |  
+action_result.data.\*.emailFrom | string |  `email`  `user name`  |  
+action_result.data.\*.fileOwner | string |  |  
+action_result.data.\*.riskScore | numeric |  |   10 
+action_result.data.\*.domainName | string |  `domain`  |  
+action_result.data.\*.osHostName | string |  `host name`  |  
+action_result.data.\*.emailSender | string |  `email`  `user name`  |  
+action_result.data.\*.printerName | string |  |  
+action_result.data.\*.processName | string |  |  
+action_result.data.\*.cloudDriveId | string |  |  
+action_result.data.\*.emailSubject | string |  |  
+action_result.data.\*.fileCategory | string |  |  
+action_result.data.\*.printJobName | string |  |  
+action_result.data.\*.processOwner | string |  |  
+action_result.data.\*.riskSeverity | string |  |  
+action_result.data.\*.deviceUserName | string |  `email`  `user name`  |  
+action_result.data.\*.remoteActivity | string |  |  
+action_result.data.\*.destinationName | string |  |  
+action_result.data.\*.emailRecipients | string |  |  
+action_result.data.\*.mimeTypeByBytes | string |  |  
+action_result.data.\*.publicIpAddress | string |  `ip`  |  
+action_result.data.\*.syncDestination | string |  |  
+action_result.data.\*.mimeTypeMismatch | boolean |  |  
+action_result.data.\*.insertionTimestamp | string |  |  
+action_result.data.\*.outsideActiveHours | boolean |  |  
+action_result.data.\*.privateIpAddresses | string |  `ip`  `ipv6`  |  
+action_result.data.\*.removableMediaName | string |  |  
+action_result.data.\*.destinationCategory | string |  |  
+action_result.data.\*.emailDlpPolicyNames | string |  |  
+action_result.data.\*.fileCategoryByBytes | string |  |  
+action_result.data.\*.mimeTypeByExtension | string |  |  
+action_result.data.\*.operatingSystemUser | string |  |  
+action_result.data.\*.detectionSourceAlias | string |  |  
+action_result.data.\*.removableMediaVendor | string |  |  
+action_result.data.\*.removableMediaBusType | string |  |  
+action_result.data.\*.printedFilesBackupPath | string |  |  
+action_result.data.\*.removableMediaCapacity | string |  |  
+action_result.data.\*.fileCategoryByExtension | string |  |  
+action_result.data.\*.removableMediaMediaName | string |  |  
+action_result.data.\*.removableMediaSerialNumber | string |  |  
+action_result.data.\*.tabs.\*.url | string |  `url`  |   https://test.com/download/2ba67828100783fb3/ 
+action_result.data.\*.tabs.\*.title | string |  |  
+action_result.data.\*.tabs.\*.urlError | string |  |  
+action_result.data.\*.tabs.\*.titleError | string |  |  
+action_result.data.\*.reportId | string |  |  
+action_result.data.\*.reportName | string |  |  
+action_result.data.\*.reportType | string |  |  
+action_result.data.\*.sourceName | string |  |  
+action_result.data.\*.trustReason | string |  |  
+action_result.data.\*.windowTitle.\*.windowTitle | string |  |  
+action_result.data.\*.riskIndicators.\*.name | string |  |   Zip 
+action_result.data.\*.riskIndicators.\*.weight | numeric |  |   7 
+action_result.data.\*.sourceCategory | string |  |  
+action_result.data.\*.reportDescription | string |  |  
+action_result.data.\*.reportRecordCount | string |  |  
+action_result.data.\*.reportColumnHeaders | string |  |  
+action_result.data.\*.sourceTabs.\*.url | string |  |  
+action_result.data.\*.sourceTabs.\*.title | string |  |  
+action_result.data.\*.sourceTabs.\*.urlError | string |  |  
+action_result.data.\*.sourceTabs.\*.titleError | string |  |   Unavailable 
+action_result.summary.results_returned_count | numeric |  |   3 
+action_result.status | string |  |   success  failed 
+action_result.message | string |  |   Total Count: 10, Results Returned Count: 5 
+action_result.summary.total_count | numeric |  |  
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
+
+## action: 'list watchlists'
+list all the watchlists
+
+Type: **investigate**  
+Read only: **True**
+
+#### Action Parameters
+No parameters are required for this action
+
+#### Action Output
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string |  |   success  failed 
+action_result.data | string |  |  
+action_result.data.\*.watchlistId | string |  |  
+action_result.data.\*.listType | string |  |  
+action_result.data.\*.title | string |  |  
+action_result.data.\*.description | string |  |  
+action_result.data.\*.includedUsersCount | string |  |  
+action_result.summary | string |  |  
+action_result.message | string |  |   Created global table successfully 
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
+
+## action: 'create watchlist'
+Create a watchlist
+
+Type: **generic**  
+Read only: **True**
+
+#### Action Parameters
+PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
+--------- | -------- | ----------- | ---- | --------
+**watchlist_type** |  required  | Type of watchlist | string | 
+**title** |  optional  | Title of the watchlist | string | 
+**description** |  optional  | Description of the watchlist | string | 
+
+#### Action Output
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.parameter.title | string |  |  
+action_result.parameter.watchlist_type | string |  |  
+action_result.parameter.description | string |  |  
+action_result.data.\*.listType | string |  |  
+action_result.data.\*.watchlistId | string |  `watchlist id`  |  
+action_result.data.\*.title | string |  |  
+action_result.data.\*.description | string |  |  
+action_result.data.\*.tenantId | string |  |  
+action_result.status | string |  |   success  failed 
+action_result.data | string |  |  
+action_result.summary | string |  |  
+action_result.message | string |  |   Created global table successfully 
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
+
+## action: 'delete watchlist'
+delete a watchlist
+
+Type: **generic**  
+Read only: **True**
+
+#### Action Parameters
+PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
+--------- | -------- | ----------- | ---- | --------
+**watchlist_id** |  required  | ID of the watchlist | string |  `watchlist id` 
+
+#### Action Output
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.parameter.watchlist_id | string |  `watchlist id`  |  
+action_result.status | string |  |   success  failed 
+action_result.data | string |  |  
+action_result.summary | string |  |  
+action_result.message | string |  |   Created global table successfully 
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
+
+## action: 'list watchlist users'
+List all the users in a watchlist
+
+Type: **generic**  
+Read only: **True**
+
+#### Action Parameters
+PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
+--------- | -------- | ----------- | ---- | --------
+**watchlist_id** |  required  | ID of the watchlist | string |  `watchlist id` 
+
+#### Action Output
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.parameter.watchlist_id | string |  `watchlist id`  |  
+action_result.status | string |  |   success  failed 
+action_result.data | string |  |  
+action_result.data.\*.userId | string |  |  
+action_result.data.\*.username | string |  |  
+action_result.summary | string |  |  
+action_result.message | string |  |   Created global table successfully 
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
+
+## action: 'add watchlist users'
+Add a user to watchlist
+
+Type: **generic**  
+Read only: **True**
+
+#### Action Parameters
+PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
+--------- | -------- | ----------- | ---- | --------
+**usernames** |  required  | Usernames of users to be added in watchlist (comma separated string) | string | 
+**add_user_using** |  required  | Add user by watchlist_id or watchlist_type | string | 
+**watchlist_id** |  optional  | ID of the watchlist | string |  `watchlist id` 
+**watchlist_type** |  optional  | Type of watchlist | string | 
+
+#### Action Output
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.parameter.usernames | string |  |  
+action_result.parameter.add_user_using | string |  |  
+action_result.parameter.watchlist_id | string |  `watchlist id`  |  
+action_result.parameter.watchlist_type | string |  |  
+action_result.status | string |  |   success  failed 
+action_result.data | string |  |  
+action_result.summary | string |  |  
+action_result.message | string |  |   Created global table successfully 
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
+
+## action: 'remove watchlist users'
+Remove a user from watchlist
+
+Type: **generic**  
+Read only: **True**
+
+#### Action Parameters
+PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
+--------- | -------- | ----------- | ---- | --------
+**usernames** |  required  | Usernames to be removed from watchlist (comma separated string) | string | 
+**remove_user_using** |  required  | Add user by watchlist_id or watchlist_type | string | 
+**watchlist_id** |  optional  | ID of the watchlist | string |  `watchlist id` 
+**watchlist_type** |  optional  | Type of watchlist | string | 
+
+#### Action Output
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.parameter.usernames | string |  |  
+action_result.parameter.remove_user_using | string |  |  
+action_result.parameter.watchlist_id | string |  `watchlist id`  |  
+action_result.parameter.watchlist_type | string |  |  
+action_result.status | string |  |   success  failed 
+action_result.data | string |  |  
+action_result.summary | string |  |  
+action_result.message | string |  |   Created global table successfully 
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
+
+## action: 'get watchlist user'
+Remove a user from watchlist
+
+Type: **generic**  
+Read only: **True**
+
+#### Action Parameters
+PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
+--------- | -------- | ----------- | ---- | --------
+**username** |  required  | Usernames to be removed from watchlist (comma separated string) | string | 
+**watchlist_id** |  required  | ID of the watchlist | string |  `watchlist id` 
+
+#### Action Output
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.parameter.username | string |  |  
+action_result.parameter.watchlist_id | string |  `watchlist id`  |  
+action_result.status | string |  |   success  failed 
+action_result.data | string |  |  
+action_result.summary | string |  |  
+action_result.message | string |  |   Created global table successfully 
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1 
