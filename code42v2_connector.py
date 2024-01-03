@@ -329,6 +329,11 @@ class Code42Connector(BaseConnector):
         # get the type of method to add user to watchlist
         add_user_type = param["add_user_using"]
 
+        if add_user_type not in ["watchlist id", "watchlist type"]:
+            return action_result.set_status(
+                phantom.APP_ERROR, "Invalid add user type. Please provide a valid add user type."
+            )
+
         # using watchlist id
         if add_user_type == "watchlist id":
             watchlist_id = param.get("watchlist_id")
@@ -378,6 +383,11 @@ class Code42Connector(BaseConnector):
 
         # get the type of method to add user to watchlist
         remove_user_type = param["remove_user_using"]
+
+        if remove_user_type not in ["watchlist id", "watchlist type"]:
+            return action_result.set_status(
+                phantom.APP_ERROR, "Invalid remove user type. Please provide a valid remove user type."
+            )
 
         # using watchlist id
         if remove_user_type == "watchlist id":

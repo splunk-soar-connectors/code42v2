@@ -4824,7 +4824,10 @@
                     "data_path": "action_result.data.*.watchlistId",
                     "data_type": "string",
                     "column_name": "Watchlist ID",
-                    "column_order": 0
+                    "column_order": 0,
+                    "contains": [
+                        "watchlist id"
+                    ]
                 },
                 {
                     "data_path": "action_result.data.*.listType",
@@ -5170,6 +5173,11 @@
                     "description": "Usernames of users to be added in watchlist (comma separated string)",
                     "data_type": "string",
                     "order": 0,
+                    "primary": true,
+                    "contains": [
+                        "email",
+                        "user name"
+                    ],
                     "required": true
                 },
                 "add_user_using": {
@@ -5212,7 +5220,10 @@
             "output": [
                 {
                     "data_path": "action_result.parameter.usernames",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "contains" : [
+                        "user name"
+                    ]
                 },
                 {
                     "data_path": "action_result.parameter.add_user_using",
@@ -5286,6 +5297,11 @@
                     "description": "Usernames to be removed from watchlist (comma separated string)",
                     "data_type": "string",
                     "order": 0,
+                    "primary": true,
+                    "contains":[
+                        "email",
+                        "user name"
+                    ],
                     "required": true
                 },
                 "remove_user_using": {
@@ -5328,7 +5344,10 @@
             "output": [
                 {
                     "data_path": "action_result.parameter.usernames",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "contains":[
+                        "user name"
+                    ]
                 },
                 {
                     "data_path": "action_result.parameter.remove_user_using",
@@ -5402,7 +5421,12 @@
                     "description": "Usernames to be removed from watchlist (comma separated string)",
                     "data_type": "string",
                     "order": 0,
-                    "required": true
+                    "primary": true,
+                    "required": true,
+                    "contains":[
+                        "email",
+                        "user name"
+                    ]
                 },
                 "watchlist_id": {
                     "description": "ID of the watchlist",
@@ -5418,7 +5442,11 @@
             "output": [
                 {
                     "data_path": "action_result.parameter.username",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "contains": [
+                        "email",
+                        "user name"
+                    ]
                 },
                 {
                     "data_path": "action_result.parameter.watchlist_id",
@@ -5484,7 +5512,12 @@
                     "description": "Username",
                     "data_type": "string",
                     "order": 0,
-                    "required": true
+                    "primary": true,
+                    "required": true,
+                    "contains":[
+                        "email",
+                        "user name"
+                    ]
                 },
                 "start_date": {
                     "description": "Joining Date of the employee (in format YYYY-MM-DD)",
@@ -5505,7 +5538,11 @@
             "output": [
                 {
                     "data_path": "action_result.parameter.username",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "contains":[
+                        "email",
+                        "user name"
+                    ]
                 },
                 {
                     "data_path": "action_result.parameter.start_date",
