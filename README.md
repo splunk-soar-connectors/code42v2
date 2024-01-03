@@ -92,7 +92,7 @@ VARIABLE | REQUIRED | TYPE | DESCRIPTION
 [deactivate user](#action-deactivate-user) - Deactivates user's Code42 account  
 [reactivate user](#action-reactivate-user) - Reactivates a deactivated user's Code42 account  
 [unblock user](#action-unblock-user) - Unblocks a user, allowing access to their Code42 account  
-[get user profile](#action-get-user-profile) - Get user profile  
+[get userrisk profile](#action-get-userrisk-profile) - Get userrisk profile  
 [add legalhold custodian](#action-add-legalhold-custodian) - Add a user (custodian) to a legal hold matter  
 [remove legalhold custodian](#action-remove-legalhold-custodian) - Remove user (custodian) from a legal hold matter  
 [create case](#action-create-case) - Create a Code42 case  
@@ -110,6 +110,7 @@ VARIABLE | REQUIRED | TYPE | DESCRIPTION
 [add watchlist users](#action-add-watchlist-users) - Add a user to watchlist  
 [remove watchlist users](#action-remove-watchlist-users) - Remove a user from watchlist  
 [get watchlist user](#action-get-watchlist-user) - Remove a user from watchlist  
+[update userrisk profile](#action-update-userrisk-profile) - Update user risk profile  
 
 ## action: 'test connectivity'
 Validate the asset configuration for connectivity using supplied configuration
@@ -502,8 +503,8 @@ action_result.summary | string |  |
 summary.total_objects | numeric |  |   1 
 summary.total_objects_successful | numeric |  |   1   
 
-## action: 'get user profile'
-Get user profile
+## action: 'get userrisk profile'
+Get userrisk profile
 
 Type: **investigate**  
 Read only: **True**
@@ -1222,6 +1223,34 @@ DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 --------- | ---- | -------- | --------------
 action_result.parameter.username | string |  |  
 action_result.parameter.watchlist_id | string |  `watchlist id`  |  
+action_result.status | string |  |   success  failed 
+action_result.data | string |  |  
+action_result.summary | string |  |  
+action_result.message | string |  |   Created global table successfully 
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
+
+## action: 'update userrisk profile'
+Update user risk profile
+
+Type: **generic**  
+Read only: **True**
+
+#### Action Parameters
+PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
+--------- | -------- | ----------- | ---- | --------
+**username** |  required  | Username | string | 
+**start_date** |  optional  | Joining Date of the employee (in format YYYY-MM-DD) | string | 
+**end_date** |  optional  | Departure Date of the employee (in format YYYY-MM-DD) | string | 
+**note** |  optional  | A note to include | string | 
+
+#### Action Output
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.parameter.username | string |  |  
+action_result.parameter.start_date | string |  |  
+action_result.parameter.end_date | string |  |  
+action_result.parameter.note | string |  |  
 action_result.status | string |  |   success  failed 
 action_result.data | string |  |  
 action_result.summary | string |  |  
