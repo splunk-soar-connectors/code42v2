@@ -1995,9 +1995,9 @@
             "versions": "EQ(*)"
         },
         {
-            "action": "get user profile",
-            "identifier": "get_user_profile",
-            "description": "Get user profile",
+            "action": "get userrisk profile",
+            "identifier": "get_userrisk_profile",
+            "description": "Get userrisk profile",
             "type": "investigate",
             "read_only": true,
             "parameters": {
@@ -5230,7 +5230,7 @@
                     "description": "ID of the watchlist",
                     "data_type": "string",
                     "order": 2,
-                    "primary":true,
+                    "primary": true,
                     "contains": [
                         "watchlist id"
                     ]
@@ -5346,7 +5346,7 @@
                     "description": "ID of the watchlist",
                     "data_type": "string",
                     "order": 2,
-                    "primary":true,
+                    "primary": true,
                     "contains": [
                         "watchlist id"
                     ]
@@ -5452,7 +5452,7 @@
                     "description": "ID of the watchlist",
                     "data_type": "string",
                     "order": 2,
-                    "primary":true,
+                    "primary": true,
                     "required": true,
                     "contains": [
                         "watchlist id"
@@ -5470,6 +5470,98 @@
                     "contains": [
                         "watchlist id"
                     ]
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data",
+                    "data_type": "string",
+                    "column_name": "Tables",
+                    "column_order": 0,
+                    "example_values": []
+                },
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string",
+                    "example_values": [
+                        "Created global table successfully"
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                }
+            ],
+            "render": {
+                "type": "json"
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "update userrisk profile",
+            "identifier": "update_userrisk_profile",
+            "description": "Update user risk profile",
+            "type": "generic",
+            "read_only": true,
+            "parameters": {
+                "username": {
+                    "description": "Username",
+                    "data_type": "string",
+                    "order": 0,
+                    "required": true
+                },
+                "start_date": {
+                    "description": "Joining Date of the employee (in format YYYY-MM-DD)",
+                    "data_type": "string",
+                    "order": 1
+                },
+                "end_date": {
+                    "description": "Departure Date of the employee (in format YYYY-MM-DD)",
+                    "data_type": "string",
+                    "order": 2
+                },
+                "note": {
+                    "description": "A note to include",
+                    "data_type": "string",
+                    "order": 3
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.parameter.username",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.start_date",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.end_date",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.note",
+                    "data_type": "string"
                 },
                 {
                     "data_path": "action_result.status",
@@ -5563,3 +5655,8 @@
         ]
     }
 }
+
+
+
+
+

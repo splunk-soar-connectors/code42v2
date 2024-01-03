@@ -9,7 +9,7 @@
 
 {% block widget_content %} <!-- Main Start Block -->
 
-<!-- File: code42v2_get_user_profile.html
+<!-- File: code42v2_get_userrisk_profile.html
 
   Copyright (c) 2023 Splunk Inc., Code42
 
@@ -78,11 +78,13 @@
                             <th class="widget-th">Username</th>
                             <th class="widget-th">User ID</th>
                             <th class="widget-th">Manager Username</th>
-                            <th class="widget-th">Risk Tags</th>
-                            <th class="widget-th">Cloud Usernames</th>
+                            <th class="widget-th">Cloud Aliases</th>
                             <th class="widget-th">Title</th>
                             <th class="widget-th">City</th>
                             <th class="widget-th">Department</th>
+                            <th class="widget-th">Start Date (YYYY-MM-DD)</th>
+                            <th class="widget-th">End Date (YYYY-MM-DD)</th>
+
                         </thead>
                         <tbody>
                             {% for user in result.data %}
@@ -91,7 +93,7 @@
                                         <a href="javascript:;" onclick="context_menu(this, [{'contains': ['email', 'user name'],
                                             'value':'{{ user.userName }}' }], 0,
                                             {{ container.id }}, null, false);">
-                                                {{ user.userName }}
+                                                {{ user.username }}
                                                 &nbsp;
                                             <span class="fa fa-caret-down" style="font-size: smaller;"></span>
                                         </a>
@@ -111,21 +113,7 @@
                                         {% endif %}
                                     </td>
                                     <td class="widget-td">
-                                        {% for tag in user.riskFactors %}
-                                            <span class="glyphicon glyphicon-dot"></span>&nbsp;
-                                            <a href="javascript:;"
-                                            onclick="context_menu(this, [{'contains': ['code42 risk tag'], 'value': '{{ tag.tag }}' }], 0, {{ container.id }}, null, false);">
-                                                {{ tag.tag }}
-                                                &nbsp;
-                                                <span class="fa fa-caret-down" style="font-size: smaller;"></span>
-                                            </a>
-                                            {% if not forloop.last %}<br/> {% endif %}
-                                        {% empty %}
-                                            None
-                                        {% endfor %}
-                                    </td>
-                                    <td class="widget-td">
-                                        {% for username in user.cloudUsernames %}
+                                        {% for username in user.cloudAliases %}
                                             <span class="glyphicon glyphicon-dot"></span>&nbsp;
                                             <a href="javascript:;"
                                             onclick="context_menu(this, [{'contains': ['email'], 'value': '{{ username.username }}' }], 0, {{ container.id }}, null, false);">
@@ -153,6 +141,20 @@
                                     <td class="widget-td">
                                         {% if user.department %}
                                             {{ user.department }}
+                                        {% else %}
+                                            None
+                                        {% endif %}
+                                    </td>
+                                    <td class="widget-td">
+                                        {% if user.startDate %}
+                                            {{ user.startDate.year }}-{{user.startDate.month}}-{{user.startDate.day}}
+                                        {% else %}
+                                            None
+                                        {% endif %}
+                                    </td>
+                                    <td class="widget-td">
+                                        {% if user.endDate %}
+                                        {{ user.endDate.year }}-{{user.endDate.month}}-{{user.endDate.day}}
                                         {% else %}
                                             None
                                         {% endif %}

@@ -543,9 +543,10 @@ class Code42Connector(BaseConnector):
         return action_result.set_status(
             phantom.APP_SUCCESS, f"{username} was reactivated"
         )
-
-    @action_handler_for("get_user_profile")
-    def _handle_get_user_profile(self, param, action_result):
+    
+    """ User risk profile actions"""
+    @action_handler_for("get_userrisk_profile")
+    def _handle_get_userrisk_profile(self, param, action_result):
         self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
         username = param["username"]
         user_id = self._get_user_id(username)
@@ -557,7 +558,32 @@ class Code42Connector(BaseConnector):
         )
         action_result.add_data(response.data)
         action_result.update_summary({"user_id": response.data['userId']})
-        return action_result.set_status(phantom.APP_SUCCESS)
+        return action_result.set_status(phantom.APP_SUCCESS, "Fetched user risk profile data successfully")
+    
+
+    @action_handler_for("update_userrisk_profile")
+    def _handle_update_userrisk_profile(self, param, action_result):
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        username = param["username"]
+        start_data = param.get("start_date", None)
+        end_data  = param.get("end_date", None)
+        note = param.get("note", None)
+
+        try:
+            user_id = self._get_user_id(username)
+        except Exception as e:
+            return action_result.set_status(phantom.APP_ERROR, f"Error {e}")
+        
+        self.save_progress("Updating user details by user id.")
+        try:
+            response = self._client.userriskprofile.update(user_id, start_data, end_data, note)
+        except Exception as e:
+            return action_result.set_status(
+                phantom.APP_ERROR, f"Code42 Error: {e.response.text}"
+            )
+        
+        action_result.add_data(response.data)
+        return action_result.set_status(phantom.APP_SUCCESS, "Updated user risk profile successfully")
 
     """ALERTS ACTIONS"""
 
@@ -956,7 +982,11 @@ class Code42Connector(BaseConnector):
         return query
 
     def _get_user(self, username):
+        
+        # user users with specific username
         users = self._client.users.get_by_username(username)["users"]
+        
+        # return error if no suck users are found
         if not users:
             raise Exception(
                 f"User '{username}' not found. Please enter valid username"
