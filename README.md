@@ -1063,7 +1063,7 @@ DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 --------- | ---- | -------- | --------------
 action_result.status | string |  |   success  failed 
 action_result.data | string |  |  
-action_result.data.\*.watchlistId | string |  |  
+action_result.data.\*.watchlistId | string |  `watchlist id`  |  
 action_result.data.\*.listType | string |  |  
 action_result.data.\*.title | string |  |  
 action_result.data.\*.description | string |  |  
@@ -1159,7 +1159,7 @@ Read only: **True**
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**usernames** |  required  | Usernames of users to be added in watchlist (comma separated string) | string | 
+**usernames** |  required  | Usernames of users to be added in watchlist (comma separated string) | string |  `email`  `user name` 
 **add_user_using** |  required  | Add user by watchlist_id or watchlist_type | string | 
 **watchlist_id** |  optional  | ID of the watchlist | string |  `watchlist id` 
 **watchlist_type** |  optional  | Type of watchlist | string | 
@@ -1167,7 +1167,7 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 #### Action Output
 DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 --------- | ---- | -------- | --------------
-action_result.parameter.usernames | string |  |  
+action_result.parameter.usernames | string |  `user name`  |  
 action_result.parameter.add_user_using | string |  |  
 action_result.parameter.watchlist_id | string |  `watchlist id`  |  
 action_result.parameter.watchlist_type | string |  |  
@@ -1187,7 +1187,7 @@ Read only: **True**
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**usernames** |  required  | Usernames to be removed from watchlist (comma separated string) | string | 
+**usernames** |  required  | Usernames to be removed from watchlist (comma separated string) | string |  `email`  `user name` 
 **remove_user_using** |  required  | Add user by watchlist_id or watchlist_type | string | 
 **watchlist_id** |  optional  | ID of the watchlist | string |  `watchlist id` 
 **watchlist_type** |  optional  | Type of watchlist | string | 
@@ -1195,7 +1195,7 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 #### Action Output
 DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 --------- | ---- | -------- | --------------
-action_result.parameter.usernames | string |  |  
+action_result.parameter.usernames | string |  `user name`  |  
 action_result.parameter.remove_user_using | string |  |  
 action_result.parameter.watchlist_id | string |  `watchlist id`  |  
 action_result.parameter.watchlist_type | string |  |  
@@ -1215,13 +1215,13 @@ Read only: **True**
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**username** |  required  | Usernames to be removed from watchlist (comma separated string) | string | 
+**username** |  required  | Usernames to be removed from watchlist (comma separated string) | string |  `email`  `user name` 
 **watchlist_id** |  required  | ID of the watchlist | string |  `watchlist id` 
 
 #### Action Output
 DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 --------- | ---- | -------- | --------------
-action_result.parameter.username | string |  |  
+action_result.parameter.username | string |  `email`  `user name`  |  
 action_result.parameter.watchlist_id | string |  `watchlist id`  |  
 action_result.status | string |  |   success  failed 
 action_result.data | string |  |  
@@ -1239,7 +1239,7 @@ Read only: **True**
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**username** |  required  | Username | string | 
+**username** |  required  | Username | string |  `email`  `user name` 
 **start_date** |  optional  | Joining Date of the employee (in format YYYY-MM-DD) | string | 
 **end_date** |  optional  | Departure Date of the employee (in format YYYY-MM-DD) | string | 
 **note** |  optional  | A note to include | string | 
@@ -1247,7 +1247,7 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 #### Action Output
 DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 --------- | ---- | -------- | --------------
-action_result.parameter.username | string |  |  
+action_result.parameter.username | string |  `email`  `user name`  |  
 action_result.parameter.start_date | string |  |  
 action_result.parameter.end_date | string |  |  
 action_result.parameter.note | string |  |  
