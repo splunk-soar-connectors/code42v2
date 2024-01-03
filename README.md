@@ -2,11 +2,11 @@
 # Code42 v2
 
 Publisher: Splunk  
-Connector Version: 1.2.0  
+Connector Version: 2.0.0  
 Product Vendor: Code42  
 Product Name: Code42 v2  
 Product Version Supported (regex): ".\*"  
-Minimum Product Version: 5.1.0  
+Minimum Product Version: 6.1.1  
 
 Code42 provides simple, fast detection and response to everyday data loss from insider threats by focusing on customer data on endpoints and the cloud
 
@@ -103,9 +103,9 @@ VARIABLE | REQUIRED | TYPE | DESCRIPTION
 [hunt file](#action-hunt-file) - Searches Code42 for a backed-up file with a matching hash and downloads it  
 [run query](#action-run-query) - Search for Code42 file events  
 [run advanced query](#action-run-advanced-query) - Run an advanced query using JSON  
-[list watchlists](#action-list-watchlists) - list all the watchlists  
+[list watchlists](#action-list-watchlists) - List all the watchlists  
 [create watchlist](#action-create-watchlist) - Create a watchlist  
-[delete watchlist](#action-delete-watchlist) - delete a watchlist  
+[delete watchlist](#action-delete-watchlist) - Delete a watchlist  
 [list watchlist users](#action-list-watchlist-users) - List all the users in a watchlist  
 [add watchlist users](#action-add-watchlist-users) - Add a user to watchlist  
 [remove watchlist users](#action-remove-watchlist-users) - Remove a user from watchlist  
@@ -1050,7 +1050,7 @@ summary.total_objects | numeric |  |   1
 summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'list watchlists'
-list all the watchlists
+List all the watchlists
 
 Type: **investigate**  
 Read only: **True**
@@ -1105,7 +1105,7 @@ summary.total_objects | numeric |  |   1
 summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'delete watchlist'
-delete a watchlist
+Delete a watchlist
 
 Type: **generic**  
 Read only: **True**
