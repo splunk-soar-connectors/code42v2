@@ -1,6 +1,6 @@
 # File: code42v2_connector.py
 #
-# Copyright (c) 2024 Splunk Inc., Code42
+# Copyright (c) 2022-2024 Splunk Inc., Code42
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ import requests
 from phantom.action_result import ActionResult
 from phantom.base_connector import BaseConnector
 from phantom.vault import Vault
-from py42.exceptions import Py42BadRequestError, Py42NotFoundError, Py42UpdateClosedCaseError, Py42WatchlistNotFound
+from py42.exceptions import Py42BadRequestError, Py42NotFoundError, Py42UpdateClosedCaseError
 from py42.sdk.queries.fileevents.file_event_query import FileEventQuery
 from py42.sdk.queries.fileevents.filters import (MD5, SHA256, DeviceUsername, EventTimestamp, FileCategory, OSHostname, PrivateIPAddress,
                                                  ProcessName, PublicIPAddress, TabURL, TrustedActivity, WindowTitle)
@@ -227,7 +227,7 @@ class Code42Connector(BaseConnector):
                     phantom.APP_ERROR, "Title is required for custom watchlist type."
                 )
 
-            if  len(title) > 50:
+            if len(title) > 50:
                 return action_result.set_status(
                     phantom.APP_ERROR, "Title cannot be longer than 50 characters."
                 )
@@ -241,7 +241,6 @@ class Code42Connector(BaseConnector):
         action_result.add_data(watchlist.data)
         return action_result.set_status(phantom.APP_SUCCESS, "Watchlist created successfully")
 
-
     # delete a watchlist
     @action_handler_for("delete_watchlist")
     def _handle_delete_watchlist(self, param, action_result):
@@ -252,7 +251,7 @@ class Code42Connector(BaseConnector):
         # get call to check if watchlist exists
         try:
             _ = self._client.watchlists.get(watchlist_id)
-        except Py42NotFoundError as e:
+        except Py42NotFoundError:
             return action_result.set_status(
                 phantom.APP_ERROR, f"Watchlist with ID {watchlist_id} does not exist. Please enter valid watchlist_id."
             )
@@ -260,17 +259,15 @@ class Code42Connector(BaseConnector):
         self._client.watchlists.delete(watchlist_id)
         return action_result.set_status(phantom.APP_SUCCESS, "Successfully deleted watchlist")
 
-
-
     """USER ACTIONS IN WATCHLIST"""
 
     def _usernames_to_user_ids(self, usernames, action_result):
         # get and parser user id's
         try:
-            usernames = usernames.strip(",").split(",") # removing extra commas and splitting
-            usernames = [user.strip(" ") for user in usernames] # removing extra spaces from each element
-            usernames = [user for user in usernames if user] # removing empty elements
-        except Exception as e:
+            usernames = usernames.strip(",").split(",")  # removing extra commas and splitting
+            usernames = [user.strip(" ") for user in usernames]  # removing extra spaces from each element
+            usernames = [user for user in usernames if user]  # removing empty elements
+        except Exception:
             return action_result.set_status(
                 phantom.APP_ERROR, "Error occurred while parsing usernames. Please enter usernames in valid format"
             ), []
@@ -299,7 +296,7 @@ class Code42Connector(BaseConnector):
         # get call to check if watchlist exists
         try:
             _ = self._client.watchlists.get(watchlist_id)
-        except Py42NotFoundError as e:
+        except Py42NotFoundError:
             return action_result.set_status(
                 phantom.APP_ERROR, f"Watchlist with ID {watchlist_id} does not exist. Please enter valid watchlist_id."
             )
@@ -338,12 +335,13 @@ class Code42Connector(BaseConnector):
 
             try:
                 _ = self._client.watchlists.get(watchlist_id)
-            except Py42NotFoundError as e:
+            except Py42NotFoundError:
                 return action_result.set_status(
                     phantom.APP_ERROR, f"Watchlist with ID {watchlist_id} does not exist. Please enter valid watchlist_id."
                 )
 
             try:
+                self.debug_print("SDK call to add users to watchlist")
                 response = self._client.watchlists.add_included_users_by_watchlist_id(user_ids, watchlist_id)
             except Py42NotFoundError as e:
                 return action_result.set_status(
@@ -387,7 +385,7 @@ class Code42Connector(BaseConnector):
 
             try:
                 _ = self._client.watchlists.get(watchlist_id)
-            except Py42NotFoundError as e:
+            except Py42NotFoundError:
                 return action_result.set_status(
                     phantom.APP_ERROR, f"Watchlist with ID {watchlist_id} does not exist. Please enter valid watchlist_id."
                 )
@@ -416,7 +414,6 @@ class Code42Connector(BaseConnector):
 
         action_result.add_data(response.data)
         return action_result.set_status(phantom.APP_SUCCESS, "Users removed from watchlist successfully")
-
 
     @action_handler_for("get_watchlist_user")
     def _handle_get_watchlist_user(self, param, action_result):
@@ -565,13 +562,12 @@ class Code42Connector(BaseConnector):
         action_result.update_summary({"user_id": response.data['userId']})
         return action_result.set_status(phantom.APP_SUCCESS, "Fetched user risk profile data successfully")
 
-
     @action_handler_for("update_userrisk_profile")
     def _handle_update_userrisk_profile(self, param, action_result):
         self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
         username = param["username"]
         start_data = param.get("start_date", None)
-        end_data  = param.get("end_date", None)
+        end_data = param.get("end_date", None)
         note = param.get("note", None)
 
         try:
