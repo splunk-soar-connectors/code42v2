@@ -354,7 +354,13 @@ class Code42Connector(BaseConnector):
 
         # using watchlist type
         elif add_user_type == "watchlist type":
-            watchlist_type = CODE42V2_WATCHLIST_TYPE_LIST.get(param.get("watchlist_type").lower(), None)
+            watchlist_type = param.get("watchlist_type")
+            if not watchlist_type:
+                return action_result.set_status(
+                    phantom.APP_ERROR, "Watchlist type is  required, please provide a valid watchlist type."
+                )
+            
+            watchlist_type = CODE42V2_WATCHLIST_TYPE_LIST.get(watchlist_type.lower(), None)
 
             if not watchlist_type:
                 return action_result.set_status(
@@ -409,7 +415,12 @@ class Code42Connector(BaseConnector):
 
         # using watchlist type
         elif remove_user_type == "watchlist type":
-            watchlist_type = CODE42V2_WATCHLIST_TYPE_LIST.get(param.get("watchlist_type").lower(), None)
+            watchlist_type = param.get("watchlist_type")
+            if not watchlist_type:
+                return action_result.set_status(
+                    phantom.APP_ERROR, "Watchlist type is  required, please provide a valid watchlist type."
+                )
+            watchlist_type = CODE42V2_WATCHLIST_TYPE_LIST.get(watchlist_type.lower(), None)
 
             if not watchlist_type:
                 return action_result.set_status(
@@ -570,7 +581,7 @@ class Code42Connector(BaseConnector):
         )
         action_result.add_data(response.data)
         action_result.update_summary({"user_id": response.data['userId']})
-        return action_result.set_status(phantom.APP_SUCCESS, "Fetched user risk profile data successfully")
+        return action_result.set_status(phantom.APP_SUCCESS)
 
     @action_handler_for("update_userrisk_profile")
     def _handle_update_userrisk_profile(self, param, action_result):
@@ -592,6 +603,11 @@ class Code42Connector(BaseConnector):
             return action_result.set_status(
                 phantom.APP_ERROR, f"Code42 Error: {e.response.text}"
             )
+
+        all_cloud_aliases = response.data.get("cloudAliases", [])
+        response["cloudAliases"] = _convert_to_obj_list(
+            all_cloud_aliases, "username"
+        )
 
         action_result.add_data(response.data)
         return action_result.set_status(phantom.APP_SUCCESS, "Updated user risk profile successfully")

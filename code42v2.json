@@ -2123,6 +2123,99 @@
                     ]
                 },
                 {
+                    "data_path": "action_result.data.*.active",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.region",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.deleted",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.endDate.day",
+                    "data_type": "numeric",
+                    "example_values": [
+                        20
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.endDate.year",
+                    "data_type": "numeric",
+                    "example_values": [
+                        2020
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.endDate.month",
+                    "data_type": "numeric",
+                    "example_values": [
+                        10
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.division",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.locality",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.username",
+                    "data_type": "string",
+                    "example_values": [
+                        "testuser-000363e34b6350@gmail.com"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.managerId",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.startDate.day",
+                    "data_type": "numeric",
+                    "example_values": [
+                        10
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.startDate.year",
+                    "data_type": "numeric",
+                    "example_values": [
+                        2020
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.startDate.month",
+                    "data_type": "numeric",
+                    "example_values": [
+                        10
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.supportUser",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.employmentType",
+                    "data_type": "string"
+                },
+                {
                     "data_path": "action_result.status",
                     "data_type": "string",
                     "example_values": [
@@ -5030,6 +5123,9 @@
                     "data_type": "string",
                     "contains": [
                         "watchlist id"
+                    ],
+                    "example_values":[
+                        "c66b842d-566e-4b7f-8af2-4cb5f1111111"
                     ]
                 },
                 {
@@ -5102,6 +5198,23 @@
                     "data_type": "string",
                     "contains": [
                         "watchlist id"
+                    ],
+                    "example_values":[
+                        "c66b842d-566e-4b7f-8af2-4cb5f1111111"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.addedTime",
+                    "data_type": "string",
+                    "example_values": [
+                        "2024-01-01T19:21:35.778759"
+                    ]
+                },
+                {
+                    "data_path": "action_result.summary.total_count",
+                    "data_type": "numeric",
+                    "example_values": [
+                        2
                     ]
                 },
                 {
@@ -5222,23 +5335,36 @@
                     "data_path": "action_result.parameter.usernames",
                     "data_type": "string",
                     "contains" : [
+                        "email",
                         "user name"
+                    ],
+                    "example_values" : [
+                        "test@test.com"
                     ]
                 },
                 {
                     "data_path": "action_result.parameter.add_user_using",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values":[
+                        "watchlist id"
+                    ]
                 },
                 {
                     "data_path": "action_result.parameter.watchlist_id",
                     "data_type": "string",
                     "contains": [
                         "watchlist id"
+                    ],
+                    "example_values":[
+                        "c66b842d-566e-4b7f-8af2-4cb5f1111111"
                     ]
                 },
                 {
                     "data_path": "action_result.parameter.watchlist_type",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values":[
+                        "custom"
+                    ]
                 },
                 {
                     "data_path": "action_result.status",
@@ -5346,6 +5472,7 @@
                     "data_path": "action_result.parameter.usernames",
                     "data_type": "string",
                     "contains":[
+                        "email",
                         "user name"
                     ]
                 },
@@ -5358,6 +5485,9 @@
                     "data_type": "string",
                     "contains": [
                         "watchlist id"
+                    ],
+                    "example_values":[
+                        "c66b842d-566e-4b7f-8af2-4cb5f1111111"
                     ]
                 },
                 {
@@ -5446,6 +5576,9 @@
                     "contains": [
                         "email",
                         "user name"
+                    ],
+                    "example_values":[
+                        "abc@abc.com"
                     ]
                 },
                 {
@@ -5453,6 +5586,30 @@
                     "data_type": "string",
                     "contains": [
                         "watchlist id"
+                    ],
+                    "example_values":[
+                        "c66b842d-566e-4b7f-8af2-4cb5f1111111"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.userId",
+                    "data_type": "string",
+                    "example_values": [
+                        "1116311141481111111"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.username",
+                    "data_type": "string",
+                    "example_values": [
+                        "abc@abc.com"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.addedTime",
+                    "data_type": "string",
+                    "example_values": [
+                        "2024-01-02T14:07:15.874703"
                     ]
                 },
                 {
@@ -5557,6 +5714,154 @@
                     "data_type": "string"
                 },
                 {
+                    "data_path": "action_result.data.*.notes",
+                    "data_type": "string",
+                    "example_values": [
+                        "updating note from phantom"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.title",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.active",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.region",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.userId",
+                    "data_type": "string",
+                    "example_values": [
+                        "1102842219721111111"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.country",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.deleted",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.endDate.day",
+                    "data_type": "numeric",
+                    "example_values": [
+                        11
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.endDate.year",
+                    "data_type": "numeric",
+                    "example_values": [
+                        2024
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.endDate.month",
+                    "data_type": "numeric",
+                    "example_values": [
+                        3
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.division",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.locality",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.tenantId",
+                    "data_type": "string",
+                    "example_values": [
+                        "1b9ade82-6f5d-4f19-a2e8-111111111111"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.username",
+                    "data_type": "string",
+                    "example_values": [
+                        "test@test.com"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.managerId",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.startDate.day",
+                    "data_type": "numeric",
+                    "example_values": [
+                        11
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.startDate.year",
+                    "data_type": "numeric",
+                    "example_values": [
+                        2024
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.startDate.month",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.department",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.displayName",
+                    "data_type": "string",
+                    "example_values": [
+                        " "
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.supportUser",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.employmentType",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.managerUsername",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.managerDisplayName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.summary.user_id",
+                    "data_type": "string",
+                    "example_values": [
+                        "1102842219721111111"
+                    ]
+                },
+                {
                     "data_path": "action_result.status",
                     "data_type": "string",
                     "example_values": [
@@ -5598,7 +5903,8 @@
                 }
             ],
             "render": {
-                "type": "json"
+                "type": "custom",
+                "view": "code42v2_view.display_view"
             },
             "versions": "EQ(*)"
         }
