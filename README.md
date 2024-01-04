@@ -533,6 +533,21 @@ action_result.data.\*.userName | string |  `email`  `user name`  |   test@exampl
 action_result.data.\*.type$ | string |  |   USER_V2 
 action_result.data.\*.tenantId | string |  |   f6b12138-e9b5-4739-9fdd-99886f369999 
 action_result.data.\*.notes | string |  |   Notes 
+action_result.data.\*.active | boolean |  |   True  False 
+action_result.data.\*.region | string |  |  
+action_result.data.\*.deleted | boolean |  |   True  False 
+action_result.data.\*.endDate.day | numeric |  |   20 
+action_result.data.\*.endDate.year | numeric |  |   2020 
+action_result.data.\*.endDate.month | numeric |  |   10 
+action_result.data.\*.division | string |  |  
+action_result.data.\*.locality | string |  |  
+action_result.data.\*.username | string |  |   testuser-000363e34b6350@gmail.com 
+action_result.data.\*.managerId | string |  |  
+action_result.data.\*.startDate.day | numeric |  |   10 
+action_result.data.\*.startDate.year | numeric |  |   2020 
+action_result.data.\*.startDate.month | numeric |  |   10 
+action_result.data.\*.supportUser | boolean |  |   True  False 
+action_result.data.\*.employmentType | string |  |  
 action_result.status | string |  |   success  failed 
 action_result.message | string |  |   User Id: 116627747487575997 
 action_result.summary | string |  |  
@@ -1118,7 +1133,7 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 #### Action Output
 DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 --------- | ---- | -------- | --------------
-action_result.parameter.watchlist_id | string |  `watchlist id`  |  
+action_result.parameter.watchlist_id | string |  `watchlist id`  |   c66b842d-566e-4b7f-8af2-4cb5f1111111 
 action_result.status | string |  |   success  failed 
 action_result.data | string |  |  
 action_result.summary | string |  |  
@@ -1140,7 +1155,9 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 #### Action Output
 DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 --------- | ---- | -------- | --------------
-action_result.parameter.watchlist_id | string |  `watchlist id`  |  
+action_result.parameter.watchlist_id | string |  `watchlist id`  |   c66b842d-566e-4b7f-8af2-4cb5f1111111 
+action_result.data.\*.addedTime | string |  |   2024-01-01T19:21:35.778759 
+action_result.summary.total_count | numeric |  |   2 
 action_result.status | string |  |   success  failed 
 action_result.data | string |  |  
 action_result.data.\*.userId | string |  |  
@@ -1167,10 +1184,10 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 #### Action Output
 DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 --------- | ---- | -------- | --------------
-action_result.parameter.usernames | string |  `user name`  |  
-action_result.parameter.add_user_using | string |  |  
-action_result.parameter.watchlist_id | string |  `watchlist id`  |  
-action_result.parameter.watchlist_type | string |  |  
+action_result.parameter.usernames | string |  `email`  `user name`  |   test@test.com 
+action_result.parameter.add_user_using | string |  |   watchlist id 
+action_result.parameter.watchlist_id | string |  `watchlist id`  |   c66b842d-566e-4b7f-8af2-4cb5f1111111 
+action_result.parameter.watchlist_type | string |  |   custom 
 action_result.status | string |  |   success  failed 
 action_result.data | string |  |  
 action_result.summary | string |  |  
@@ -1195,9 +1212,9 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 #### Action Output
 DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 --------- | ---- | -------- | --------------
-action_result.parameter.usernames | string |  `user name`  |  
+action_result.parameter.usernames | string |  `email`  `user name`  |  
 action_result.parameter.remove_user_using | string |  |  
-action_result.parameter.watchlist_id | string |  `watchlist id`  |  
+action_result.parameter.watchlist_id | string |  `watchlist id`  |   c66b842d-566e-4b7f-8af2-4cb5f1111111 
 action_result.parameter.watchlist_type | string |  |  
 action_result.status | string |  |   success  failed 
 action_result.data | string |  |  
@@ -1221,8 +1238,11 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 #### Action Output
 DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 --------- | ---- | -------- | --------------
-action_result.parameter.username | string |  `email`  `user name`  |  
-action_result.parameter.watchlist_id | string |  `watchlist id`  |  
+action_result.parameter.username | string |  `email`  `user name`  |   abc@abc.com 
+action_result.parameter.watchlist_id | string |  `watchlist id`  |   c66b842d-566e-4b7f-8af2-4cb5f1111111 
+action_result.data.\*.userId | string |  |   1116311141481111111 
+action_result.data.\*.username | string |  |   abc@abc.com 
+action_result.data.\*.addedTime | string |  |   2024-01-02T14:07:15.874703 
 action_result.status | string |  |   success  failed 
 action_result.data | string |  |  
 action_result.summary | string |  |  
@@ -1251,6 +1271,31 @@ action_result.parameter.username | string |  `email`  `user name`  |
 action_result.parameter.start_date | string |  |  
 action_result.parameter.end_date | string |  |  
 action_result.parameter.note | string |  |  
+action_result.data.\*.notes | string |  |   updating note from phantom 
+action_result.data.\*.title | string |  |  
+action_result.data.\*.active | boolean |  |   True  False 
+action_result.data.\*.region | string |  |  
+action_result.data.\*.userId | string |  |   1102842219721111111 
+action_result.data.\*.country | string |  |  
+action_result.data.\*.deleted | boolean |  |   True  False 
+action_result.data.\*.endDate.day | numeric |  |   11 
+action_result.data.\*.endDate.year | numeric |  |   2024 
+action_result.data.\*.endDate.month | numeric |  |   3 
+action_result.data.\*.division | string |  |  
+action_result.data.\*.locality | string |  |  
+action_result.data.\*.tenantId | string |  |   1b9ade82-6f5d-4f19-a2e8-111111111111 
+action_result.data.\*.username | string |  |   test@test.com 
+action_result.data.\*.managerId | string |  |  
+action_result.data.\*.startDate.day | numeric |  |   11 
+action_result.data.\*.startDate.year | numeric |  |   2024 
+action_result.data.\*.startDate.month | numeric |  |   1 
+action_result.data.\*.department | string |  |  
+action_result.data.\*.displayName | string |  |     
+action_result.data.\*.supportUser | boolean |  |   True  False 
+action_result.data.\*.employmentType | string |  |  
+action_result.data.\*.managerUsername | string |  |  
+action_result.data.\*.managerDisplayName | string |  |  
+action_result.summary.user_id | string |  |   1102842219721111111 
 action_result.status | string |  |   success  failed 
 action_result.data | string |  |  
 action_result.summary | string |  |  
