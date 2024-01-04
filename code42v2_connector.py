@@ -359,7 +359,7 @@ class Code42Connector(BaseConnector):
                 return action_result.set_status(
                     phantom.APP_ERROR, "Watchlist type is  required, please provide a valid watchlist type."
                 )
-            
+
             watchlist_type = CODE42V2_WATCHLIST_TYPE_LIST.get(watchlist_type.lower(), None)
 
             if not watchlist_type:
