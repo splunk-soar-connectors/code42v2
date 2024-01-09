@@ -6,7 +6,7 @@ Connector Version: 2.0.0
 Product Vendor: Code42  
 Product Name: Code42 v2  
 Product Version Supported (regex): ".\*"  
-Minimum Product Version: 6.1.1  
+Minimum Product Version: 6.0.1  
 
 Code42 provides simple, fast detection and response to everyday data loss from insider threats by focusing on customer data on endpoints and the cloud
 
@@ -109,7 +109,7 @@ VARIABLE | REQUIRED | TYPE | DESCRIPTION
 [list watchlist users](#action-list-watchlist-users) - List all the users in a watchlist  
 [add watchlist users](#action-add-watchlist-users) - Add a user to watchlist  
 [remove watchlist users](#action-remove-watchlist-users) - Remove a user from watchlist  
-[get watchlist user](#action-get-watchlist-user) - Remove a user from watchlist  
+[get watchlist user](#action-get-watchlist-user) - Get a user from watchlist  
 [update userrisk profile](#action-update-userrisk-profile) - Update user risk profile  
 
 ## action: 'test connectivity'
@@ -1082,7 +1082,7 @@ action_result.data.\*.watchlistId | string |  `watchlist id`  |
 action_result.data.\*.listType | string |  |  
 action_result.data.\*.title | string |  |  
 action_result.data.\*.description | string |  |  
-action_result.data.\*.includedUsersCount | string |  |  
+action_result.data.\*.stats.includedUsersCount | string |  |  
 action_result.summary | string |  |  
 action_result.message | string |  |   Created global table successfully 
 summary.total_objects | numeric |  |   1 
@@ -1135,7 +1135,8 @@ DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 --------- | ---- | -------- | --------------
 action_result.parameter.watchlist_id | string |  `watchlist id`  |   c66b842d-566e-4b7f-8af2-4cb5f1111111 
 action_result.status | string |  |   success  failed 
-action_result.data | string |  |  
+action_result.data.\*.watchlistId | string |  |  
+action_result.data.\*.status | string |  |  
 action_result.summary | string |  |  
 action_result.message | string |  |   Created global table successfully 
 summary.total_objects | numeric |  |   1 
@@ -1161,7 +1162,7 @@ action_result.summary.total_count | numeric |  |   2
 action_result.status | string |  |   success  failed 
 action_result.data | string |  |  
 action_result.data.\*.userId | string |  |  
-action_result.data.\*.username | string |  |  
+action_result.data.\*.username | string |  `email`  `user name`  |  
 action_result.summary | string |  |  
 action_result.message | string |  |   Created global table successfully 
 summary.total_objects | numeric |  |   1 
@@ -1170,14 +1171,16 @@ summary.total_objects_successful | numeric |  |   1
 ## action: 'add watchlist users'
 Add a user to watchlist
 
-Type: **generic**  
+Type: **contain**  
 Read only: **True**
+
+If the you are adding user by watchlist type, if the watchlist type does't exists it will create one
 
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
 **usernames** |  required  | Usernames of users to be added in watchlist (comma separated string) | string |  `email`  `user name` 
-**add_user_using** |  required  | Add user by watchlist_id or watchlist_type | string | 
+**perform_operation_using** |  required  | Add user by watchlist_id or watchlist_type | string | 
 **watchlist_id** |  optional  | ID of the watchlist | string |  `watchlist id` 
 **watchlist_type** |  optional  | Type of watchlist | string | 
 
@@ -1185,11 +1188,11 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 --------- | ---- | -------- | --------------
 action_result.parameter.usernames | string |  `email`  `user name`  |   test@test.com 
-action_result.parameter.add_user_using | string |  |   watchlist id 
+action_result.parameter.perform_operation_using | string |  |   watchlist id 
 action_result.parameter.watchlist_id | string |  `watchlist id`  |   c66b842d-566e-4b7f-8af2-4cb5f1111111 
 action_result.parameter.watchlist_type | string |  |   custom 
 action_result.status | string |  |   success  failed 
-action_result.data | string |  |  
+action_result.data.\*.status | string |  |   200 
 action_result.summary | string |  |  
 action_result.message | string |  |   Created global table successfully 
 summary.total_objects | numeric |  |   1 
@@ -1198,14 +1201,14 @@ summary.total_objects_successful | numeric |  |   1
 ## action: 'remove watchlist users'
 Remove a user from watchlist
 
-Type: **generic**  
+Type: **contain**  
 Read only: **True**
 
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
 **usernames** |  required  | Usernames to be removed from watchlist (comma separated string) | string |  `email`  `user name` 
-**remove_user_using** |  required  | Add user by watchlist_id or watchlist_type | string | 
+**perform_operation_using** |  required  | Add user by watchlist_id or watchlist_type | string | 
 **watchlist_id** |  optional  | ID of the watchlist | string |  `watchlist id` 
 **watchlist_type** |  optional  | Type of watchlist | string | 
 
@@ -1213,18 +1216,18 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 --------- | ---- | -------- | --------------
 action_result.parameter.usernames | string |  `email`  `user name`  |  
-action_result.parameter.remove_user_using | string |  |  
+action_result.parameter.perform_operation_using | string |  |  
 action_result.parameter.watchlist_id | string |  `watchlist id`  |   c66b842d-566e-4b7f-8af2-4cb5f1111111 
 action_result.parameter.watchlist_type | string |  |  
 action_result.status | string |  |   success  failed 
-action_result.data | string |  |  
+action_result.data.\*.status | string |  |  
 action_result.summary | string |  |  
 action_result.message | string |  |   Created global table successfully 
 summary.total_objects | numeric |  |   1 
 summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'get watchlist user'
-Remove a user from watchlist
+Get a user from watchlist
 
 Type: **generic**  
 Read only: **True**
@@ -1244,7 +1247,9 @@ action_result.data.\*.userId | string |  |   1116311141481111111
 action_result.data.\*.username | string |  |   abc@abc.com 
 action_result.data.\*.addedTime | string |  |   2024-01-02T14:07:15.874703 
 action_result.status | string |  |   success  failed 
-action_result.data | string |  |  
+action_result.data.\*.username | string |  |  
+action_result.data.\*.userId | string |  |  
+action_result.data.\*.addedTime | string |  |  
 action_result.summary | string |  |  
 action_result.message | string |  |   Created global table successfully 
 summary.total_objects | numeric |  |   1 
