@@ -237,8 +237,10 @@ class Code42Connector(BaseConnector):
                     phantom.APP_ERROR, "Description cannot be longer than 250 characters."
                 )
         self.debug_print("SDK call to create a watchlist")
-        watchlist = self._client.watchlists.create(watchlist_type, title, description)
-        action_result.add_data(watchlist.data)
+
+        response = self._client.watchlists.create(watchlist_type, title, description)
+        
+        action_result.add_data(response.data)
         return action_result.set_status(phantom.APP_SUCCESS, "Watchlist created successfully")
 
     # delete a watchlist
@@ -256,8 +258,10 @@ class Code42Connector(BaseConnector):
                 phantom.APP_ERROR, f"Watchlist with ID {watchlist_id} does not exist. Please enter valid watchlist_id."
             )
         self.debug_print("SDK call to delete a watchlist")
-        self._client.watchlists.delete(watchlist_id)
-        return action_result.set_status(phantom.APP_SUCCESS, "Successfully deleted watchlist")
+        response = self._client.watchlists.delete(watchlist_id)
+
+        action_result.add_data({"watchlistId": watchlist_id, "status": response.status_code})
+        return action_result.set_status(phantom.APP_SUCCESS, "Watchlist deleted Successfully")
 
     """USER ACTIONS IN WATCHLIST"""
 
@@ -305,7 +309,7 @@ class Code42Connector(BaseConnector):
         response = self._client.watchlists.get_all_watchlist_members(watchlist_id)
 
         for page in response:
-            users = page.data.get("includedUsers")
+            users = page.data.get("watchlistMembers")
             if users:
                 for user in users:
                     action_result.add_data(user)
@@ -327,7 +331,7 @@ class Code42Connector(BaseConnector):
             return action_result.get_status()
 
         # get the type of method to add user to watchlist
-        add_user_type = param["add_user_using"]
+        add_user_type = param["perform_operation_using"]
 
         if add_user_type not in ["watchlist id", "watchlist type"]:
             return action_result.set_status(
@@ -372,7 +376,7 @@ class Code42Connector(BaseConnector):
             except Py42NotFoundError as e:
                 return action_result.set_status(
                     phantom.APP_ERROR, f"Code42 Error : {e}")
-        action_result.add_data(response.data)
+        action_result.add_data({"status" : response.status_code})
         return action_result.set_status(phantom.APP_SUCCESS, "Users added to watchlist successfully")
 
     # remove user from watchlist
@@ -388,7 +392,7 @@ class Code42Connector(BaseConnector):
             return action_result.get_status()
 
         # get the type of method to add user to watchlist
-        remove_user_type = param["remove_user_using"]
+        remove_user_type = param["perform_operation_using"]
 
         if remove_user_type not in ["watchlist id", "watchlist type"]:
             return action_result.set_status(
@@ -398,6 +402,10 @@ class Code42Connector(BaseConnector):
         # using watchlist id
         if remove_user_type == "watchlist id":
             watchlist_id = param.get("watchlist_id")
+            if not watchlist_id:
+                return action_result.set_status(
+                    phantom.APP_ERROR, "Watchlist id is  required, please provide a valid watchlist id."
+                )
 
             try:
                 _ = self._client.watchlists.get(watchlist_id)
@@ -432,8 +440,8 @@ class Code42Connector(BaseConnector):
             except Py42NotFoundError as e:
                 return action_result.set_status(
                     phantom.APP_ERROR, f"Code42 Error : {e}")
-
-        action_result.add_data(response.data)
+        
+        action_result.add_data({"status" : response.status_code})
         return action_result.set_status(phantom.APP_SUCCESS, "Users removed from watchlist successfully")
 
     @action_handler_for("get_watchlist_user")

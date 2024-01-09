@@ -21,7 +21,7 @@
     "utctime_updated": "2022-03-24T23:46:23.000000Z",
     "package_name": "phantom_code42v2",
     "main_module": "code42v2_connector.py",
-    "min_phantom_version": "6.1.1",
+    "min_phantom_version": "6.0.1",
     "app_wizard_version": "1.0.0",
     "configuration": {
         "cloud_instance": {
@@ -4941,7 +4941,7 @@
                     "column_order": 3
                 },
                 {
-                    "data_path": "action_result.data.*.includedUsersCount",
+                    "data_path": "action_result.data.*.stats.includedUsersCount",
                     "data_type": "string",
                     "column_name": "Users in watchlist",
                     "column_order": 4
@@ -5137,11 +5137,16 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data",
+                    "data_path": "action_result.data.*.watchlistId",
                     "data_type": "string",
-                    "column_name": "Tables",
-                    "column_order": 0,
-                    "example_values": []
+                    "column_name": "Watchlist ID",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.data.*.status",
+                    "data_type": "string",
+                    "column_name": "Deleted Status",
+                    "column_order": 1
                 },
                 {
                     "data_path": "action_result.summary",
@@ -5170,7 +5175,7 @@
                 }
             ],
             "render": {
-                "type": "json"
+                "type": "table"
             },
             "versions": "EQ(*)"
         },
@@ -5242,7 +5247,11 @@
                     "data_type": "string",
                     "column_name": "Username",
                     "column_order": 1,
-                    "example_values": []
+                    "example_values": [],
+                    "contains":[
+                        "email",
+                        "user name"
+                    ]
                 },
                 {
                     "data_path": "action_result.summary",
@@ -5279,7 +5288,9 @@
             "action": "add watchlist users",
             "identifier": "add_watchlist_users",
             "description": "Add a user to watchlist",
-            "type": "generic",
+            "undo": "remove watchlist users",
+            "verbose":"If the you are adding user by watchlist type, if the watchlist type does't exists it will create one",
+            "type": "contain",
             "read_only": true,
             "parameters": {
                 "usernames": {
@@ -5293,7 +5304,7 @@
                     ],
                     "required": true
                 },
-                "add_user_using": {
+                "perform_operation_using": {
                     "description": "Add user by watchlist_id or watchlist_type",
                     "data_type": "string",
                     "value_list": [
@@ -5324,8 +5335,7 @@
                         "new_hire",
                         "performance_concerns",
                         "poor_security_practices",
-                        "suspicious_system_activity",
-                        "custom"
+                        "suspicious_system_activity" 
                     ],
                     "order": 3
                 }
@@ -5343,7 +5353,7 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.parameter.add_user_using",
+                    "data_path": "action_result.parameter.perform_operation_using",
                     "data_type": "string",
                     "example_values":[
                         "watchlist id"
@@ -5357,7 +5367,9 @@
                     ],
                     "example_values":[
                         "c66b842d-566e-4b7f-8af2-4cb5f1111111"
-                    ]
+                    ],
+                    "column_name": "Watchlist ID",
+                    "column_order": 0
                 },
                 {
                     "data_path": "action_result.parameter.watchlist_type",
@@ -5375,11 +5387,13 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data",
+                    "data_path": "action_result.data.*.status",
                     "data_type": "string",
-                    "column_name": "Tables",
+                    "column_name": "Status",
                     "column_order": 0,
-                    "example_values": []
+                    "example_values": [
+                        200
+                    ]
                 },
                 {
                     "data_path": "action_result.summary",
@@ -5408,7 +5422,7 @@
                 }
             ],
             "render": {
-                "type": "json"
+                "type": "table"
             },
             "versions": "EQ(*)"
         },
@@ -5416,7 +5430,8 @@
             "action": "remove watchlist users",
             "identifier": "remove_watchlist_users",
             "description": "Remove a user from watchlist",
-            "type": "generic",
+            "undo": "add watchlist users",
+            "type": "contain",
             "read_only": true,
             "parameters": {
                 "usernames": {
@@ -5430,7 +5445,7 @@
                     ],
                     "required": true
                 },
-                "remove_user_using": {
+                "perform_operation_using": {
                     "description": "Add user by watchlist_id or watchlist_type",
                     "data_type": "string",
                     "value_list": [
@@ -5461,8 +5476,7 @@
                         "new_hire",
                         "performance_concerns",
                         "poor_security_practices",
-                        "suspicious_system_activity",
-                        "custom"
+                        "suspicious_system_activity"
                     ],
                     "order": 3
                 }
@@ -5477,7 +5491,7 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.parameter.remove_user_using",
+                    "data_path": "action_result.parameter.perform_operation_using",
                     "data_type": "string"
                 },
                 {
@@ -5488,7 +5502,9 @@
                     ],
                     "example_values":[
                         "c66b842d-566e-4b7f-8af2-4cb5f1111111"
-                    ]
+                    ],
+                    "column_name": "Watchlist ID",
+                    "column_order": 0
                 },
                 {
                     "data_path": "action_result.parameter.watchlist_type",
@@ -5503,11 +5519,10 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data",
+                    "data_path": "action_result.data.*.status",
                     "data_type": "string",
-                    "column_name": "Tables",
-                    "column_order": 0,
-                    "example_values": []
+                    "column_name": "Status",
+                    "column_order": 1
                 },
                 {
                     "data_path": "action_result.summary",
@@ -5536,14 +5551,14 @@
                 }
             ],
             "render": {
-                "type": "json"
+                "type": "table"
             },
             "versions": "EQ(*)"
         },
         {
             "action": "get watchlist user",
             "identifier": "get_watchlist_user",
-            "description": "Remove a user from watchlist",
+            "description": "Get a user from watchlist",
             "type": "generic",
             "read_only": true,
             "parameters": {
@@ -5621,11 +5636,20 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data",
+                    "data_path": "action_result.data.*.username",
                     "data_type": "string",
-                    "column_name": "Tables",
-                    "column_order": 0,
-                    "example_values": []
+                    "column_name": "Username",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.data.*.userId",
+                    "data_type": "string",
+                    "column_name": "User ID",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.data.*.addedTime",
+                    "data_type": "string"
                 },
                 {
                     "data_path": "action_result.summary",
@@ -5654,7 +5678,7 @@
                 }
             ],
             "render": {
-                "type": "json"
+                "type": "table"
             },
             "versions": "EQ(*)"
         },
