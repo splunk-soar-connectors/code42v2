@@ -213,8 +213,8 @@ class Code42Connector(BaseConnector):
         self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
 
         watchlist_type = CODE42V2_WATCHLIST_TYPE_LIST.get(param["watchlist_type"].lower(), None)
-        title = param.get("title", None)
-        description = param.get("description", None)
+        title = None
+        description = None
 
         if not watchlist_type:
             return action_result.set_status(
@@ -222,6 +222,11 @@ class Code42Connector(BaseConnector):
             )
 
         if watchlist_type == "CUSTOM":
+
+            # getting params used in custom watchlists
+            title = param.get("title")
+            description = param.get("description")
+
             if not title:
                 return action_result.set_status(
                     phantom.APP_ERROR, "Title is required for custom watchlist type."
@@ -236,8 +241,8 @@ class Code42Connector(BaseConnector):
                 return action_result.set_status(
                     phantom.APP_ERROR, "Description cannot be longer than 250 characters."
                 )
-        self.debug_print("SDK call to create a watchlist")
 
+        self.debug_print("SDK call to create a watchlist")
         response = self._client.watchlists.create(watchlist_type, title, description)
         
         action_result.add_data(response.data)
