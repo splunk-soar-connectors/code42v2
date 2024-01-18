@@ -1174,7 +1174,7 @@ Add a user to watchlist
 Type: **contain**  
 Read only: **True**
 
-If the you are adding user by watchlist type, if the watchlist type does't exists it will create one
+If you are adding users using watchlist type, if the watchlist type does't exists it will create one.
 
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
