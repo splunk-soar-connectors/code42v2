@@ -244,7 +244,7 @@ class Code42Connector(BaseConnector):
 
         self.debug_print("SDK call to create a watchlist")
         response = self._client.watchlists.create(watchlist_type, title, description)
-        
+
         action_result.add_data(response.data)
         return action_result.set_status(phantom.APP_SUCCESS, "Watchlist created successfully")
 
@@ -381,7 +381,7 @@ class Code42Connector(BaseConnector):
             except Py42NotFoundError as e:
                 return action_result.set_status(
                     phantom.APP_ERROR, f"Code42 Error : {e}")
-        action_result.add_data({"status" : response.status_code})
+        action_result.add_data({"status": response.status_code})
         return action_result.set_status(phantom.APP_SUCCESS, "Users added to watchlist successfully")
 
     # remove user from watchlist
@@ -445,8 +445,8 @@ class Code42Connector(BaseConnector):
             except Py42NotFoundError as e:
                 return action_result.set_status(
                     phantom.APP_ERROR, f"Code42 Error : {e}")
-        
-        action_result.add_data({"status" : response.status_code})
+
+        action_result.add_data({"status": response.status_code})
         return action_result.set_status(phantom.APP_SUCCESS, "Users removed from watchlist successfully")
 
     @action_handler_for("get_watchlist_user")

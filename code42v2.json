@@ -5289,7 +5289,7 @@
             "identifier": "add_watchlist_users",
             "description": "Add a user to watchlist",
             "undo": "remove watchlist users",
-            "verbose":"If the you are adding user by watchlist type, if the watchlist type does't exists it will create one",
+            "verbose": "If you are adding users using watchlist type, if the watchlist type does't exists it will create one.",
             "type": "contain",
             "read_only": true,
             "parameters": {
@@ -5390,7 +5390,7 @@
                     "data_path": "action_result.data.*.status",
                     "data_type": "string",
                     "column_name": "Status",
-                    "column_order": 0,
+                    "column_order": 1,
                     "example_values": [
                         200
                     ]
