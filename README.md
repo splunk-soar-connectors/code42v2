@@ -6,7 +6,7 @@ Connector Version: 2.0.0
 Product Vendor: Code42  
 Product Name: Code42 v2  
 Product Version Supported (regex): ".\*"  
-Minimum Product Version: 6.0.1  
+Minimum Product Version: 6.1.1  
 
 Code42 provides simple, fast detection and response to everyday data loss from insider threats by focusing on customer data on endpoints and the cloud
 
