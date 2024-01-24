@@ -453,7 +453,7 @@ class Code42Connector(BaseConnector):
     def _handle_get_watchlist_user(self, param, action_result):
         self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
 
-        username = param["username"]
+        username = param["username"].lower()
         watchlist_id = param["watchlist_id"]
 
         try:
@@ -517,7 +517,7 @@ class Code42Connector(BaseConnector):
     @action_handler_for("create_user")
     def _handle_create_user(self, param, action_result):
         self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
-        username = param["username"]
+        username = param["username"].lower()
         self.save_progress("Creating a new user.")
         response = self._client.users.create_user(
             org_uid=param["org_uid"],
@@ -537,7 +537,7 @@ class Code42Connector(BaseConnector):
     @action_handler_for("block_user")
     def _handle_block_user(self, param, action_result):
         self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
-        username = param["username"]
+        username = param["username"].lower()
         user = self._get_user(username)
         self.save_progress("Blocking the user with the given ID.")
         response = self._client.users.block(user["userId"])
@@ -547,7 +547,7 @@ class Code42Connector(BaseConnector):
     @action_handler_for("unblock_user")
     def _handle_unblock_user(self, param, action_result):
         self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
-        username = param["username"]
+        username = param["username"].lower()
         user = self._get_user(username)
         self.save_progress("Removing a block, if one exists, on the user with the given user ID.")
         response = self._client.users.unblock(user["userId"])
@@ -559,7 +559,7 @@ class Code42Connector(BaseConnector):
     @action_handler_for("deactivate_user")
     def _handle_deactivate_user(self, param, action_result):
         self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
-        username = param["username"]
+        username = param["username"].lower()
         user = self._get_user(username)
         self.save_progress("Deactivating the user with the given user ID.")
         response = self._client.users.deactivate(user["userId"])
@@ -571,7 +571,7 @@ class Code42Connector(BaseConnector):
     @action_handler_for("reactivate_user")
     def _handle_reactivate_user(self, param, action_result):
         self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
-        username = param["username"]
+        username = param["username"].lower()
         user = self._get_user(username)
         self.save_progress("Reactivating the user with the given ID.")
         response = self._client.users.reactivate(user["userId"])
@@ -584,7 +584,7 @@ class Code42Connector(BaseConnector):
     @action_handler_for("get_userrisk_profile")
     def _handle_get_userrisk_profile(self, param, action_result):
         self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
-        username = param["username"]
+        username = param["username"].lower()
         user_id = self._get_user_id(username)
         self.save_progress("Getting user details by user id.")
         response = self._client.userriskprofile.get_by_id(user_id)
@@ -599,7 +599,7 @@ class Code42Connector(BaseConnector):
     @action_handler_for("update_userrisk_profile")
     def _handle_update_userrisk_profile(self, param, action_result):
         self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
-        username = param["username"]
+        username = param["username"].lower()
         start_data = param.get("start_date", None)
         end_data = param.get("end_date", None)
         note = param.get("note", None)
@@ -654,6 +654,8 @@ class Code42Connector(BaseConnector):
         end_date = param.get("end_date")
         alert_state = param.get("alert_state")
 
+        username = username.lower() if username else None
+
         if alert_state and alert_state not in CODE42V2_ALERT_STATE:
             msg = CODE42V2_VALUE_LIST_ERR_MSG.format('alert_state', CODE42V2_ALERT_STATE)
             return action_result.set_status(phantom.APP_ERROR, msg)
@@ -688,7 +690,7 @@ class Code42Connector(BaseConnector):
     @action_handler_for("add_legalhold_custodian")
     def _handle_add_legalhold_custodian(self, param, action_result):
         self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
-        username = param["username"]
+        username = param["username"].lower()
         matter_id = param["matter_id"]
         user_id = self._get_user_id(username)
         self._check_matter_is_accessible(matter_id)
@@ -701,7 +703,7 @@ class Code42Connector(BaseConnector):
     @action_handler_for("remove_legalhold_custodian")
     def _handle_remove_legalhold_custodian(self, param, action_result):
         self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
-        username = param["username"]
+        username = param["username"].lower()
         matter_id = param["matter_id"]
         user_id = self._get_user_id(username)
         self._check_matter_is_accessible(matter_id)
