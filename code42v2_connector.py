@@ -20,6 +20,7 @@ from __future__ import print_function, unicode_literals
 import ipaddress
 import json
 import os
+from datetime import datetime
 
 import phantom.app as phantom
 import phantom.utils as utils
@@ -130,6 +131,13 @@ class Code42Connector(BaseConnector):
 
         self.set_validator('ipv6', self._is_valid_ip)
         return phantom.APP_SUCCESS
+
+    def _validate_date(self, action_result, date, parameter):
+        try:
+            datetime.strptime(date, '%Y-%m-%d')
+        except ValueError:
+            return action_result.set_status(phantom.APP_ERROR, CODE42V2_INVALID_DATE_MSG.format(parameter)), None
+        return phantom.APP_SUCCESS, date
 
     def _validate_integer(self, action_result, parameter, key, allow_zero=False):
         if parameter is not None:
@@ -603,6 +611,22 @@ class Code42Connector(BaseConnector):
         start_data = param.get("start_date", None)
         end_data = param.get("end_date", None)
         note = param.get("note", None)
+
+        if not start_data and not end_data and not note:
+            return action_result.set_status(
+                phantom.APP_ERROR,
+                "Code42: No values provided for updating, please provide a value to update",
+            )
+
+        if start_data:
+            ret_val, _ = self._validate_date(action_result, start_data, "start_date")
+            if phantom.is_fail(ret_val):
+                return action_result.get_status()
+
+        if end_data:
+            ret_val, _ = self._validate_date(action_result, start_data, "end_date")
+            if phantom.is_fail(ret_val):
+                return action_result.get_status()
 
         try:
             user_id = self._get_user_id(username)
