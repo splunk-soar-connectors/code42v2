@@ -49,6 +49,37 @@ Otherwise, it ingests up to 30 days back. Ongoing queries will only get new aler
 polling interval in the Ingest Settings tab. Additionally, you can configure which alert severities
 to poll for, such as HIGH, LOW, MODERATE or CRITICAL.
 
+## Playbook Backward Compatibility
+
+-   Certain changes on the code42 platform have resulted in backward compatibility issues. These changes include the removal of existing 
+    actions and the introduction of new actions. Hence, it is requested to update existing playbooks created in the earlier versions of 
+    the app by re-inserting | modifying | deleting the corresponding action blocks.
+
+    -   Removed actions are mentioned below:
+        - add departing employee
+        - remove departing employee
+        - list departing employees
+        - get departing employee
+        - add highrisk employee
+        - remove highrisk employee
+        - list highrisk employee
+        - get highrisk employee
+        - add highrisk tag
+        - remove highrisk tag
+        - get user profile
+
+    -   Newly added actions are mentioned below:
+        - list watchlist
+        - create watchlist
+        - delete watchlist
+        - list watchlist users
+        - add watchlist users
+        - remove watchlist users
+        - get watchlist user
+        - get userrisk profile
+        - update userrisk profile
+
+
 ## On Poll
 
 The 'on poll' functionality first ingests the past 30 days of Code42 alerts (or uses the configured
@@ -108,9 +139,9 @@ VARIABLE | REQUIRED | TYPE | DESCRIPTION
 [delete watchlist](#action-delete-watchlist) - Delete a watchlist  
 [list watchlist users](#action-list-watchlist-users) - List all the users in a watchlist  
 [add watchlist users](#action-add-watchlist-users) - Add a user to watchlist  
-[remove watchlist users](#action-remove-watchlist-users) - Remove a user from watchlist  
-[get watchlist user](#action-get-watchlist-user) - Get a user from watchlist  
-[update userrisk profile](#action-update-userrisk-profile) - Update user risk profile  
+[remove watchlist users](#action-remove-watchlist-users) - Remove a user from the watchlist  
+[get watchlist user](#action-get-watchlist-user) - Get a user of a watchlist.  
+[update userrisk profile](#action-update-userrisk-profile) - Update details in user's risk profile  
 
 ## action: 'test connectivity'
 Validate the asset configuration for connectivity using supplied configuration
@@ -1084,7 +1115,7 @@ action_result.data.\*.title | string |  |
 action_result.data.\*.description | string |  |  
 action_result.data.\*.stats.includedUsersCount | string |  |  
 action_result.summary | string |  |  
-action_result.message | string |  |   Created global table successfully 
+action_result.message | string |  |  
 summary.total_objects | numeric |  |   1 
 summary.total_objects_successful | numeric |  |   1   
 
@@ -1092,7 +1123,7 @@ summary.total_objects_successful | numeric |  |   1
 Create a watchlist
 
 Type: **generic**  
-Read only: **True**
+Read only: **False**
 
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
@@ -1115,7 +1146,7 @@ action_result.data.\*.tenantId | string |  |
 action_result.status | string |  |   success  failed 
 action_result.data | string |  |  
 action_result.summary | string |  |  
-action_result.message | string |  |   Created global table successfully 
+action_result.message | string |  |  
 summary.total_objects | numeric |  |   1 
 summary.total_objects_successful | numeric |  |   1   
 
@@ -1123,7 +1154,7 @@ summary.total_objects_successful | numeric |  |   1
 Delete a watchlist
 
 Type: **generic**  
-Read only: **True**
+Read only: **False**
 
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
@@ -1138,14 +1169,14 @@ action_result.status | string |  |   success  failed
 action_result.data.\*.watchlistId | string |  |  
 action_result.data.\*.status | string |  |  
 action_result.summary | string |  |  
-action_result.message | string |  |   Created global table successfully 
+action_result.message | string |  |  
 summary.total_objects | numeric |  |   1 
 summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'list watchlist users'
 List all the users in a watchlist
 
-Type: **generic**  
+Type: **investigate**  
 Read only: **True**
 
 #### Action Parameters
@@ -1164,7 +1195,7 @@ action_result.data | string |  |
 action_result.data.\*.userId | string |  |  
 action_result.data.\*.username | string |  `email`  `user name`  |  
 action_result.summary | string |  |  
-action_result.message | string |  |   Created global table successfully 
+action_result.message | string |  |  
 summary.total_objects | numeric |  |   1 
 summary.total_objects_successful | numeric |  |   1   
 
@@ -1172,7 +1203,7 @@ summary.total_objects_successful | numeric |  |   1
 Add a user to watchlist
 
 Type: **contain**  
-Read only: **True**
+Read only: **False**
 
 If you are adding users using watchlist type, if the watchlist type does't exists it will create one.
 
@@ -1180,7 +1211,7 @@ If you are adding users using watchlist type, if the watchlist type does't exist
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
 **usernames** |  required  | Usernames of users to be added in watchlist (comma separated string) | string |  `email`  `user name` 
-**perform_operation_using** |  required  | Add user by watchlist_id or watchlist_type | string | 
+**perform_operation_using** |  required  | Remove user by watchlist_id or watchlist_type | string | 
 **watchlist_id** |  optional  | ID of the watchlist | string |  `watchlist id` 
 **watchlist_type** |  optional  | Type of watchlist | string | 
 
@@ -1190,25 +1221,25 @@ DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 action_result.parameter.usernames | string |  `email`  `user name`  |   test@test.com 
 action_result.parameter.perform_operation_using | string |  |   watchlist id 
 action_result.parameter.watchlist_id | string |  `watchlist id`  |   c66b842d-566e-4b7f-8af2-4cb5f1111111 
-action_result.parameter.watchlist_type | string |  |   custom 
+action_result.parameter.watchlist_type | string |  |   departing 
 action_result.status | string |  |   success  failed 
 action_result.data.\*.status | string |  |   200 
 action_result.summary | string |  |  
-action_result.message | string |  |   Created global table successfully 
+action_result.message | string |  |  
 summary.total_objects | numeric |  |   1 
 summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'remove watchlist users'
-Remove a user from watchlist
+Remove a user from the watchlist
 
 Type: **contain**  
-Read only: **True**
+Read only: **False**
 
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
 **usernames** |  required  | Usernames to be removed from watchlist (comma separated string) | string |  `email`  `user name` 
-**perform_operation_using** |  required  | Add user by watchlist_id or watchlist_type | string | 
+**perform_operation_using** |  required  | Remove user by watchlist_id or watchlist_type | string | 
 **watchlist_id** |  optional  | ID of the watchlist | string |  `watchlist id` 
 **watchlist_type** |  optional  | Type of watchlist | string | 
 
@@ -1218,24 +1249,24 @@ DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 action_result.parameter.usernames | string |  `email`  `user name`  |  
 action_result.parameter.perform_operation_using | string |  |  
 action_result.parameter.watchlist_id | string |  `watchlist id`  |   c66b842d-566e-4b7f-8af2-4cb5f1111111 
-action_result.parameter.watchlist_type | string |  |  
+action_result.parameter.watchlist_type | string |  |   contractor 
 action_result.status | string |  |   success  failed 
 action_result.data.\*.status | string |  |  
 action_result.summary | string |  |  
-action_result.message | string |  |   Created global table successfully 
+action_result.message | string |  |  
 summary.total_objects | numeric |  |   1 
 summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'get watchlist user'
-Get a user from watchlist
+Get a user of a watchlist.
 
-Type: **generic**  
+Type: **investigate**  
 Read only: **True**
 
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**username** |  required  | Usernames to be removed from watchlist (comma separated string) | string |  `email`  `user name` 
+**username** |  required  | Get a user of a watchlist. | string |  `email`  `user name` 
 **watchlist_id** |  required  | ID of the watchlist | string |  `watchlist id` 
 
 #### Action Output
@@ -1251,22 +1282,22 @@ action_result.data.\*.username | string |  |
 action_result.data.\*.userId | string |  |  
 action_result.data.\*.addedTime | string |  |  
 action_result.summary | string |  |  
-action_result.message | string |  |   Created global table successfully 
+action_result.message | string |  |  
 summary.total_objects | numeric |  |   1 
 summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'update userrisk profile'
-Update user risk profile
+Update details in user's risk profile
 
 Type: **generic**  
-Read only: **True**
+Read only: **False**
 
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
 **username** |  required  | Username | string |  `email`  `user name` 
-**start_date** |  optional  | Joining Date of the employee (in format YYYY-MM-DD) | string | 
-**end_date** |  optional  | Departure Date of the employee (in format YYYY-MM-DD) | string | 
+**start_date** |  optional  | Joining date of the employee (in format YYYY-MM-DD) | string | 
+**end_date** |  optional  | Departure date of the employee (in format YYYY-MM-DD) | string | 
 **note** |  optional  | A note to include | string | 
 
 #### Action Output
@@ -1304,6 +1335,6 @@ action_result.summary.user_id | string |  |   1102842219721111111
 action_result.status | string |  |   success  failed 
 action_result.data | string |  |  
 action_result.summary | string |  |  
-action_result.message | string |  |   Created global table successfully 
+action_result.message | string |  |  
 summary.total_objects | numeric |  |   1 
 summary.total_objects_successful | numeric |  |   1 
