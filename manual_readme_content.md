@@ -37,6 +37,37 @@ Otherwise, it ingests up to 30 days back. Ongoing queries will only get new aler
 polling interval in the Ingest Settings tab. Additionally, you can configure which alert severities
 to poll for, such as HIGH, LOW, MODERATE or CRITICAL.
 
+## Playbook Backward Compatibility
+
+-   Certain changes on the code42 platform have resulted in backward compatibility issues. These changes include the removal of existing 
+    actions and the introduction of new actions. Hence, it is requested to update existing playbooks created in the earlier versions of 
+    the app by re-inserting | modifying | deleting the corresponding action blocks.
+
+    -   Removed actions are mentioned below:
+        - add departing employee
+        - remove departing employee
+        - list departing employees
+        - get departing employee
+        - add highrisk employee
+        - remove highrisk employee
+        - list highrisk employee
+        - get highrisk employee
+        - add highrisk tag
+        - remove highrisk tag
+        - get user profile
+
+    -   Newly added actions are mentioned below:
+        - list watchlist
+        - create watchlist
+        - delete watchlist
+        - list watchlist users
+        - add watchlist users
+        - remove watchlist users
+        - get watchlist user
+        - get userrisk profile
+        - update userrisk profile
+
+
 ## On Poll
 
 The 'on poll' functionality first ingests the past 30 days of Code42 alerts (or uses the configured

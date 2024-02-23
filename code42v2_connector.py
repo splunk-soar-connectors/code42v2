@@ -252,8 +252,11 @@ class Code42Connector(BaseConnector):
 
         self.debug_print("SDK call to create a watchlist")
         response = self._client.watchlists.create(watchlist_type, title, description)
-
-        action_result.add_data(response.data)
+        try:
+            action_result.add_data(response.data)
+        except Exception:
+            return action_result.set_status(phantom.APP_ERROR, "Something went wrong while creating new watchlist.")
+    
         return action_result.set_status(phantom.APP_SUCCESS, "Watchlist created successfully")
 
     # delete a watchlist
@@ -472,7 +475,7 @@ class Code42Connector(BaseConnector):
             )
 
         try:
-            self.debug_print("SDK call to get watchlist users")
+            self.debug_print("SDK call to get watchlist user")
             response = self._client.watchlists.get_watchlist_member(watchlist_id, user_id)
         except Exception as e:
             return action_result.set_status(
@@ -624,7 +627,7 @@ class Code42Connector(BaseConnector):
                 return action_result.get_status()
 
         if end_data:
-            ret_val, _ = self._validate_date(action_result, start_data, "end_date")
+            ret_val, _ = self._validate_date(action_result, end_data, "end_date")
             if phantom.is_fail(ret_val):
                 return action_result.get_status()
 

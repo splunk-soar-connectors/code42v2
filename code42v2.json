@@ -22,6 +22,9 @@
     "package_name": "phantom_code42v2",
     "main_module": "code42v2_connector.py",
     "min_phantom_version": "6.1.1",
+    "latest_tested_versions": [
+        "Code42, Feb 20 2024"
+    ],
     "app_wizard_version": "1.0.0",
     "configuration": {
         "cloud_instance": {
@@ -4952,10 +4955,7 @@
                 },
                 {
                     "data_path": "action_result.message",
-                    "data_type": "string",
-                    "example_values": [
-                        "Created global table successfully"
-                    ]
+                    "data_type": "string"
                 },
                 {
                     "data_path": "summary.total_objects",
@@ -4982,7 +4982,7 @@
             "identifier": "create_watchlist",
             "description": "Create a watchlist",
             "type": "generic",
-            "read_only": true,
+            "read_only": false,
             "parameters": {
                 "watchlist_type": {
                     "description": "Type of watchlist",
@@ -5074,10 +5074,7 @@
                 },
                 {
                     "data_path": "action_result.message",
-                    "data_type": "string",
-                    "example_values": [
-                        "Created global table successfully"
-                    ]
+                    "data_type": "string"
                 },
                 {
                     "data_path": "summary.total_objects",
@@ -5104,7 +5101,7 @@
             "identifier": "delete_watchlist",
             "description": "Delete a watchlist",
             "type": "generic",
-            "read_only": true,
+            "read_only": false,
             "parameters": {
                 "watchlist_id": {
                     "description": "ID of the watchlist",
@@ -5154,10 +5151,7 @@
                 },
                 {
                     "data_path": "action_result.message",
-                    "data_type": "string",
-                    "example_values": [
-                        "Created global table successfully"
-                    ]
+                    "data_type": "string"
                 },
                 {
                     "data_path": "summary.total_objects",
@@ -5183,7 +5177,7 @@
             "action": "list watchlist users",
             "identifier": "list_watchlist_users",
             "description": "List all the users in a watchlist",
-            "type": "generic",
+            "type": "investigate",
             "read_only": true,
             "parameters": {
                 "watchlist_id": {
@@ -5259,10 +5253,7 @@
                 },
                 {
                     "data_path": "action_result.message",
-                    "data_type": "string",
-                    "example_values": [
-                        "Created global table successfully"
-                    ]
+                    "data_type": "string"
                 },
                 {
                     "data_path": "summary.total_objects",
@@ -5291,7 +5282,7 @@
             "undo": "remove watchlist users",
             "verbose": "If you are adding users using watchlist type, if the watchlist type does't exists it will create one.",
             "type": "contain",
-            "read_only": true,
+            "read_only": false,
             "parameters": {
                 "usernames": {
                     "description": "Usernames of users to be added in watchlist (comma separated string)",
@@ -5305,7 +5296,7 @@
                     "required": true
                 },
                 "perform_operation_using": {
-                    "description": "Add user by watchlist_id or watchlist_type",
+                    "description": "Remove user by watchlist_id or watchlist_type",
                     "data_type": "string",
                     "value_list": [
                         "watchlist id",
@@ -5375,7 +5366,7 @@
                     "data_path": "action_result.parameter.watchlist_type",
                     "data_type": "string",
                     "example_values":[
-                        "custom"
+                        "departing"
                     ]
                 },
                 {
@@ -5401,10 +5392,7 @@
                 },
                 {
                     "data_path": "action_result.message",
-                    "data_type": "string",
-                    "example_values": [
-                        "Created global table successfully"
-                    ]
+                    "data_type": "string"
                 },
                 {
                     "data_path": "summary.total_objects",
@@ -5429,10 +5417,10 @@
         {
             "action": "remove watchlist users",
             "identifier": "remove_watchlist_users",
-            "description": "Remove a user from watchlist",
+            "description": "Remove a user from the watchlist",
             "undo": "add watchlist users",
             "type": "contain",
-            "read_only": true,
+            "read_only": false,
             "parameters": {
                 "usernames": {
                     "description": "Usernames to be removed from watchlist (comma separated string)",
@@ -5446,7 +5434,7 @@
                     "required": true
                 },
                 "perform_operation_using": {
-                    "description": "Add user by watchlist_id or watchlist_type",
+                    "description": "Remove user by watchlist_id or watchlist_type",
                     "data_type": "string",
                     "value_list": [
                         "watchlist id",
@@ -5508,7 +5496,10 @@
                 },
                 {
                     "data_path": "action_result.parameter.watchlist_type",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values":[
+                        "contractor"
+                    ]
                 },
                 {
                     "data_path": "action_result.status",
@@ -5530,10 +5521,7 @@
                 },
                 {
                     "data_path": "action_result.message",
-                    "data_type": "string",
-                    "example_values": [
-                        "Created global table successfully"
-                    ]
+                    "data_type": "string"
                 },
                 {
                     "data_path": "summary.total_objects",
@@ -5558,12 +5546,12 @@
         {
             "action": "get watchlist user",
             "identifier": "get_watchlist_user",
-            "description": "Get a user from watchlist",
-            "type": "generic",
+            "description": "Get a user of a watchlist.",
+            "type": "investigate",
             "read_only": true,
             "parameters": {
                 "username": {
-                    "description": "Usernames to be removed from watchlist (comma separated string)",
+                    "description": "Get a user of a watchlist.",
                     "data_type": "string",
                     "order": 0,
                     "primary": true,
@@ -5657,10 +5645,7 @@
                 },
                 {
                     "data_path": "action_result.message",
-                    "data_type": "string",
-                    "example_values": [
-                        "Created global table successfully"
-                    ]
+                    "data_type": "string"
                 },
                 {
                     "data_path": "summary.total_objects",
@@ -5685,9 +5670,9 @@
         {
             "action": "update userrisk profile",
             "identifier": "update_userrisk_profile",
-            "description": "Update user risk profile",
+            "description": "Update details in user's risk profile",
             "type": "generic",
-            "read_only": true,
+            "read_only": false,
             "parameters": {
                 "username": {
                     "description": "Username",
@@ -5701,12 +5686,12 @@
                     ]
                 },
                 "start_date": {
-                    "description": "Joining Date of the employee (in format YYYY-MM-DD)",
+                    "description": "Joining date of the employee (in format YYYY-MM-DD)",
                     "data_type": "string",
                     "order": 1
                 },
                 "end_date": {
-                    "description": "Departure Date of the employee (in format YYYY-MM-DD)",
+                    "description": "Departure date of the employee (in format YYYY-MM-DD)",
                     "data_type": "string",
                     "order": 2
                 },
@@ -5906,10 +5891,7 @@
                 },
                 {
                     "data_path": "action_result.message",
-                    "data_type": "string",
-                    "example_values": [
-                        "Created global table successfully"
-                    ]
+                    "data_type": "string"
                 },
                 {
                     "data_path": "summary.total_objects",
