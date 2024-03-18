@@ -140,7 +140,7 @@ VARIABLE | REQUIRED | TYPE | DESCRIPTION
 [list watchlist users](#action-list-watchlist-users) - List all the users in a watchlist  
 [add watchlist users](#action-add-watchlist-users) - Add a user to watchlist  
 [remove watchlist users](#action-remove-watchlist-users) - Remove a user from the watchlist  
-[get watchlist user](#action-get-watchlist-user) - Get a user of a watchlist.  
+[get watchlist user](#action-get-watchlist-user) - Get a user of a watchlist  
 [update userrisk profile](#action-update-userrisk-profile) - Update details in user's risk profile  
 
 ## action: 'test connectivity'
@@ -1258,7 +1258,7 @@ summary.total_objects | numeric |  |   1
 summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'get watchlist user'
-Get a user of a watchlist.
+Get a user of a watchlist
 
 Type: **investigate**  
 Read only: **True**
@@ -1266,7 +1266,7 @@ Read only: **True**
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**username** |  required  | Get a user of a watchlist. | string |  `email`  `user name` 
+**username** |  required  | Get a user of a watchlist | string |  `email`  `user name` 
 **watchlist_id** |  required  | ID of the watchlist | string |  `watchlist id` 
 
 #### Action Output
