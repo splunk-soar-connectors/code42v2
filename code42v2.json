@@ -5065,8 +5065,7 @@
                 },
                 {
                     "data_path": "action_result.data",
-                    "data_type": "string",
-                    "example_values": []
+                    "data_type": "string"
                 },
                 {
                     "data_path": "action_result.summary",
@@ -5121,7 +5120,7 @@
                     "contains": [
                         "watchlist id"
                     ],
-                    "example_values":[
+                    "example_values": [
                         "c66b842d-566e-4b7f-8af2-4cb5f1111111"
                     ]
                 },
@@ -5198,7 +5197,7 @@
                     "contains": [
                         "watchlist id"
                     ],
-                    "example_values":[
+                    "example_values": [
                         "c66b842d-566e-4b7f-8af2-4cb5f1111111"
                     ]
                 },
@@ -5226,23 +5225,20 @@
                 },
                 {
                     "data_path": "action_result.data",
-                    "data_type": "string",
-                    "example_values": []
+                    "data_type": "string"
                 },
                 {
                     "data_path": "action_result.data.*.userId",
                     "data_type": "string",
                     "column_name": "User ID",
-                    "column_order": 0,
-                    "example_values": []
+                    "column_order": 0
                 },
                 {
                     "data_path": "action_result.data.*.username",
                     "data_type": "string",
                     "column_name": "Username",
                     "column_order": 1,
-                    "example_values": [],
-                    "contains":[
+                    "contains": [
                         "email",
                         "user name"
                     ]
@@ -5326,7 +5322,7 @@
                         "new_hire",
                         "performance_concerns",
                         "poor_security_practices",
-                        "suspicious_system_activity" 
+                        "suspicious_system_activity"
                     ],
                     "order": 3
                 }
@@ -5335,18 +5331,18 @@
                 {
                     "data_path": "action_result.parameter.usernames",
                     "data_type": "string",
-                    "contains" : [
+                    "contains": [
                         "email",
                         "user name"
                     ],
-                    "example_values" : [
+                    "example_values": [
                         "test@test.com"
                     ]
                 },
                 {
                     "data_path": "action_result.parameter.perform_operation_using",
                     "data_type": "string",
-                    "example_values":[
+                    "example_values": [
                         "watchlist id"
                     ]
                 },
@@ -5356,7 +5352,7 @@
                     "contains": [
                         "watchlist id"
                     ],
-                    "example_values":[
+                    "example_values": [
                         "c66b842d-566e-4b7f-8af2-4cb5f1111111"
                     ],
                     "column_name": "Watchlist ID",
@@ -5365,7 +5361,7 @@
                 {
                     "data_path": "action_result.parameter.watchlist_type",
                     "data_type": "string",
-                    "example_values":[
+                    "example_values": [
                         "departing"
                     ]
                 },
@@ -5427,7 +5423,7 @@
                     "data_type": "string",
                     "order": 0,
                     "primary": true,
-                    "contains":[
+                    "contains": [
                         "email",
                         "user name"
                     ],
@@ -5473,7 +5469,7 @@
                 {
                     "data_path": "action_result.parameter.usernames",
                     "data_type": "string",
-                    "contains":[
+                    "contains": [
                         "email",
                         "user name"
                     ]
@@ -5488,7 +5484,7 @@
                     "contains": [
                         "watchlist id"
                     ],
-                    "example_values":[
+                    "example_values": [
                         "c66b842d-566e-4b7f-8af2-4cb5f1111111"
                     ],
                     "column_name": "Watchlist ID",
@@ -5497,7 +5493,7 @@
                 {
                     "data_path": "action_result.parameter.watchlist_type",
                     "data_type": "string",
-                    "example_values":[
+                    "example_values": [
                         "contractor"
                     ]
                 },
@@ -5546,17 +5542,17 @@
         {
             "action": "get watchlist user",
             "identifier": "get_watchlist_user",
-            "description": "Get a user of a watchlist.",
+            "description": "Get a user of a watchlist",
             "type": "investigate",
             "read_only": true,
             "parameters": {
                 "username": {
-                    "description": "Get a user of a watchlist.",
+                    "description": "Get a user of a watchlist",
                     "data_type": "string",
                     "order": 0,
                     "primary": true,
                     "required": true,
-                    "contains":[
+                    "contains": [
                         "email",
                         "user name"
                     ]
@@ -5580,7 +5576,7 @@
                         "email",
                         "user name"
                     ],
-                    "example_values":[
+                    "example_values": [
                         "abc@abc.com"
                     ]
                 },
@@ -5590,7 +5586,7 @@
                     "contains": [
                         "watchlist id"
                     ],
-                    "example_values":[
+                    "example_values": [
                         "c66b842d-566e-4b7f-8af2-4cb5f1111111"
                     ]
                 },
@@ -5680,7 +5676,7 @@
                     "order": 0,
                     "primary": true,
                     "required": true,
-                    "contains":[
+                    "contains": [
                         "email",
                         "user name"
                     ]
@@ -5705,7 +5701,7 @@
                 {
                     "data_path": "action_result.parameter.username",
                     "data_type": "string",
-                    "contains":[
+                    "contains": [
                         "email",
                         "user name"
                     ]
@@ -5882,8 +5878,7 @@
                     "data_path": "action_result.data",
                     "data_type": "string",
                     "column_name": "Tables",
-                    "column_order": 0,
-                    "example_values": []
+                    "column_order": 0
                 },
                 {
                     "data_path": "action_result.summary",
