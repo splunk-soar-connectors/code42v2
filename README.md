@@ -761,7 +761,7 @@ action_result.data.\*.assignee | string |  |
 action_result.data.\*.createdAt | string |  |   2022-01-04T15:40:37.896084Z 
 action_result.data.\*.updatedAt | string |  |   2022-01-04T15:41:05.365791Z 
 action_result.data.\*.createdByUserUid | string |  |   996627747487575000 
-action_result.data.\*.createdByUsername | string |  `user name`  `email`  |  
+action_result.data.\*.createdByUsername | string |  `user name`  `email`  |   first@gmail.com 
 action_result.data.\*.lastModifiedByUserUid | string |  |   996627747487575000 
 action_result.data.\*.lastModifiedByUsername | string |  `user name`  `email`  |   first@gmail.com 
 action_result.status | string |  |   success  failed 
