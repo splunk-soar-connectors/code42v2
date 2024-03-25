@@ -15,7 +15,6 @@
 
 
 # Python 3 Compatibility imports
-from __future__ import print_function, unicode_literals
 
 import ipaddress
 import json
@@ -110,6 +109,13 @@ class Code42Connector(BaseConnector):
         # use this to store data that needs to be accessed across actions
         self._state = self.load_state()
 
+        if not isinstance(self._state, dict):
+            self.debug_print("Resetting the state file with the default format")
+            self._state = {"app_version": self.get_app_json().get("app_version")}
+            return self.set_status(phantom.APP_ERROR, STATE_FILE_CORRUPT_ERR)
+
+
+
         config = self.get_config()
         self._cloud_instance = config["cloud_instance"]
         self._username = config["username"]
@@ -155,6 +161,33 @@ class Code42Connector(BaseConnector):
                 return action_result.set_status(phantom.APP_ERROR, CODE42V2_NON_NEG_NON_ZERO_INT_MSG.format(param=key)), None
 
         return phantom.APP_SUCCESS, parameter
+    
+    def _get_error_message_from_exception(self, e):
+        """This function is used to get appropriate error message from the exception.
+        :param e: Exception object
+        :return: error message
+        """
+        error_message = CODE42V2_ERROR_MESSAGE
+        error_code = CODE42V2_ERROR_CODE_MESSAGE
+        self.error_print("Exception occurred: ", e)
+
+        try:
+            if hasattr(e, "args"):
+                if len(e.args) > 1:
+                    error_code = e.args[0]
+                    error_message = e.args[1]
+                elif len(e.args) == 1:
+                    error_code = CODE42V2_ERROR_CODE_MESSAGE
+                    error_message = e.args[0]
+        except Exception as ex:
+            self.error_print("Error occurred while retrieving exception information: ", ex)
+
+        if not error_code:
+            error_text = "Error Message: {}".format(error_message)
+        else:
+            error_text = CODE42V2_ERROR_MESSAGE_FORMAT.format(error_code, error_message)
+
+        return error_text
 
     def handle_action(self, param):
         action_id = self.get_action_identifier()
@@ -220,7 +253,7 @@ class Code42Connector(BaseConnector):
     def _handle_create_watchlist(self, param, action_result):
         self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
 
-        watchlist_type = CODE42V2_WATCHLIST_TYPE_LIST.get(param["watchlist_type"].lower(), None)
+        watchlist_type = CODE42V2_WATCHLIST_TYPE_LIST.get(param["watchlist_type"].lower())
         title = None
         description = None
 
@@ -250,8 +283,14 @@ class Code42Connector(BaseConnector):
                     phantom.APP_ERROR, "Description cannot be longer than 250 characters."
                 )
 
-        self.debug_print("SDK call to create a watchlist")
-        response = self._client.watchlists.create(watchlist_type, title, description)
+        try:
+            self.debug_print("SDK call to create a watchlist")
+            response = self._client.watchlists.create(watchlist_type, title, description)
+        except Exception as e:
+            return action_result.set_status(
+                phantom.APP_ERROR, f"Code42 Error: {self._get_error_message_from_exception(e)}"
+            )
+        
         try:
             action_result.add_data(response.data)
         except Exception:
@@ -284,9 +323,7 @@ class Code42Connector(BaseConnector):
     def _usernames_to_user_ids(self, usernames, action_result):
         # get and parser user id's
         try:
-            usernames = usernames.strip(",").split(",")  # removing extra commas and splitting
-            usernames = [user.strip(" ") for user in usernames]  # removing extra spaces from each element
-            usernames = [user for user in usernames if user]  # removing empty elements
+            usernames = [user.strip() for user in usernames.split(",") if user.strip()]
         except Exception:
             return action_result.set_status(
                 phantom.APP_ERROR, "Error occurred while parsing usernames. Please enter usernames in valid format"
@@ -302,7 +339,7 @@ class Code42Connector(BaseConnector):
             user_ids = list(map(self._get_user_id, usernames))
         except Exception as e:
             return action_result.set_status(
-                phantom.APP_ERROR, f"Error: {e}"
+                phantom.APP_ERROR, f"Error: {self._get_error_message_from_exception(e)}"
             ), []
         return phantom.APP_SUCCESS, user_ids
 
@@ -370,7 +407,7 @@ class Code42Connector(BaseConnector):
                 response = self._client.watchlists.add_included_users_by_watchlist_id(user_ids, watchlist_id)
             except Py42NotFoundError as e:
                 return action_result.set_status(
-                    phantom.APP_ERROR, f"Code42 Error : {e}")
+                    phantom.APP_ERROR, f"Code42 Error : {self._get_error_message_from_exception}")
 
         # using watchlist type
         elif add_user_type == "watchlist type":
@@ -380,7 +417,7 @@ class Code42Connector(BaseConnector):
                     phantom.APP_ERROR, "Watchlist type is  required, please provide a valid watchlist type."
                 )
 
-            watchlist_type = CODE42V2_WATCHLIST_TYPE_LIST.get(watchlist_type.lower(), None)
+            watchlist_type = CODE42V2_WATCHLIST_TYPE_LIST.get(watchlist_type.lower())
 
             if not watchlist_type:
                 return action_result.set_status(
@@ -391,7 +428,7 @@ class Code42Connector(BaseConnector):
                 response = self._client.watchlists.add_included_users_by_watchlist_type(user_ids, watchlist_type)
             except Py42NotFoundError as e:
                 return action_result.set_status(
-                    phantom.APP_ERROR, f"Code42 Error : {e}")
+                    phantom.APP_ERROR, f"Code42 Error : {self._get_error_message_from_exception(e)}")
         action_result.add_data({"status": response.status_code})
         return action_result.set_status(phantom.APP_SUCCESS, "Users added to watchlist successfully")
 
@@ -435,7 +472,7 @@ class Code42Connector(BaseConnector):
                 response = self._client.watchlists.remove_included_users_by_watchlist_id(user_ids, watchlist_id)
             except Py42NotFoundError as e:
                 return action_result.set_status(
-                    phantom.APP_ERROR, f"Code42 Error : {e}")
+                    phantom.APP_ERROR, f"Code42 Error : {self._get_error_message_from_exception(e)}")
 
         # using watchlist type
         elif remove_user_type == "watchlist type":
@@ -444,7 +481,7 @@ class Code42Connector(BaseConnector):
                 return action_result.set_status(
                     phantom.APP_ERROR, "Watchlist type is  required, please provide a valid watchlist type."
                 )
-            watchlist_type = CODE42V2_WATCHLIST_TYPE_LIST.get(watchlist_type.lower(), None)
+            watchlist_type = CODE42V2_WATCHLIST_TYPE_LIST.get(watchlist_type.lower())
 
             if not watchlist_type:
                 return action_result.set_status(
@@ -455,7 +492,7 @@ class Code42Connector(BaseConnector):
                 response = self._client.watchlists.remove_included_users_by_watchlist_type(user_ids, watchlist_type)
             except Py42NotFoundError as e:
                 return action_result.set_status(
-                    phantom.APP_ERROR, f"Code42 Error : {e}")
+                    phantom.APP_ERROR, f"Code42 Error : {self._get_error_message_from_exception(e)}")
 
         action_result.add_data({"status": response.status_code})
         return action_result.set_status(phantom.APP_SUCCESS, "Users removed from watchlist successfully")
@@ -471,7 +508,7 @@ class Code42Connector(BaseConnector):
             user_id = self._get_user_id(username)
         except Exception as e:
             return action_result.set_status(
-                phantom.APP_ERROR, f"Error: {e}"
+                phantom.APP_ERROR, f"Error: {self._get_error_message_from_exception(e)}"
             )
 
         try:
@@ -479,7 +516,7 @@ class Code42Connector(BaseConnector):
             response = self._client.watchlists.get_watchlist_member(watchlist_id, user_id)
         except Exception as e:
             return action_result.set_status(
-                phantom.APP_ERROR, f"Code42 Error: {e}"
+                phantom.APP_ERROR, f"Code42 Error: {self._get_error_message_from_exception(e)}"
             )
 
         action_result.add_data(response.data)
@@ -500,9 +537,9 @@ class Code42Connector(BaseConnector):
         if active_user not in CODE42V2_USER_STATUS_LIST:
             msg = CODE42V2_VALUE_LIST_ERR_MSG.format('user_status', CODE42V2_USER_STATUS_LIST)
             return action_result.set_status(phantom.APP_ERROR, msg)
-        if active_user == 'All':
-            active = None
-        elif active_user == 'Active':
+
+        active = None
+        if active_user == 'Active':
             active = True
         elif active_user == 'Inactive':
             active = False
@@ -611,9 +648,9 @@ class Code42Connector(BaseConnector):
     def _handle_update_userrisk_profile(self, param, action_result):
         self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
         username = param["username"].lower()
-        start_data = param.get("start_date", None)
-        end_data = param.get("end_date", None)
-        note = param.get("note", None)
+        start_data = param.get("start_date")
+        end_data = param.get("end_date")
+        note = param.get("note")
 
         if not start_data and not end_data and not note:
             return action_result.set_status(
@@ -634,7 +671,7 @@ class Code42Connector(BaseConnector):
         try:
             user_id = self._get_user_id(username)
         except Exception as e:
-            return action_result.set_status(phantom.APP_ERROR, f"Error {e}")
+            return action_result.set_status(phantom.APP_ERROR, f"Error {self._get_error_message_from_exception(e)}")
 
         self.save_progress("Updating user details by user id.")
         try:
@@ -1164,12 +1201,14 @@ def main():
     argparser.add_argument("input_test_json", help="Input Test JSON file")
     argparser.add_argument("-u", "--username", help="username", required=False)
     argparser.add_argument("-p", "--password", help="password", required=False)
+    argparser.add_argument('-v', '--verify', action='store_true', help='verify', required=False, default=False)
 
     args = argparser.parse_args()
     session_id = None
 
     username = args.username
     password = args.password
+    verify = args.verify
 
     if username is not None and password is None:
         # User specified a username but not a password, so ask
@@ -1184,7 +1223,7 @@ def main():
             login_url = Code42Connector._get_phantom_base_url() + "/login"
 
             print("Accessing the Login page")
-            r = requests.get(login_url, verify=False)  # nosemgrep
+            r = requests.get(login_url, verify=verify)  # nosemgrep
             csrftoken = r.cookies["csrftoken"]
 
             data = dict()
@@ -1197,7 +1236,7 @@ def main():
             headers["Referer"] = login_url
 
             print("Logging into Platform to get the session id")
-            r2 = requests.post(login_url, verify=False, data=data, headers=headers)  # nosemgrep
+            r2 = requests.post(login_url, verify=verify, data=data, headers=headers)  # nosemgrep
             session_id = r2.cookies["sessionid"]
         except Exception as e:
             print("Unable to get session id from the platform. Error: " + str(e))
