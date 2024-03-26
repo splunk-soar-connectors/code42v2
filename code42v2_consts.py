@@ -1,6 +1,6 @@
 # File: code42v2_consts.py
 #
-# Copyright (c) 2022 Splunk Inc., Code42
+# Copyright (c) 2022-2024 Splunk Inc., Code42
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -95,6 +95,19 @@ CODE42V2_USER_STATUS_LIST = [
     "All"
 ]
 
+CODE42V2_WATCHLIST_TYPE_LIST = {
+    "contractor": "CONTRACT_EMPLOYEE",
+    "departing": "DEPARTING_EMPLOYEE",
+    "elevated_access": "ELEVATED_ACCESS_PRIVILEGES",
+    "flight_risk": "FLIGHT_RISK",
+    "high_impact": "HIGH_IMPACT_EMPLOYEE",
+    "new_hire": "NEW_EMPLOYEE",
+    "performance_concerns": "PERFORMANCE_CONCERNS",
+    "poor_security_practices": "POOR_SECURITY_PRACTICES",
+    "suspicious_system_activity": "SUSPICIOUS_SYSTEM_ACTIVITY",
+    "custom": "CUSTOM",
+}
+
 # page related keys
 PAGE_KEYS = ['pgNum', 'pgSize', 'pgToken']
 
@@ -108,3 +121,14 @@ CODE42V2_ROLE_ID_KEY = "role_id"
 
 # value_list validation constants
 CODE42V2_VALUE_LIST_ERR_MSG = "Please provide a valid value in the '{}' action parameter. Expected values are {}"
+CODE42V2_INVALID_DATE_MSG = "Please provide a valid date in the '{}' action parameter. Expected format is YYYY-MM-DD"
+
+CODE42V2_ERROR_MESSAGE = "Unknown error occurred. Please check the asset configuration and|or action parameters"
+CODE42V2_ERROR_CODE_MESSAGE = "Error code unavailable"
+CODE42V2_ERROR_MESSAGE_FORMAT = "Error code: {}. Error message: {}"
+
+# state file resetting constant
+STATE_FILE_CORRUPT_ERR = (
+    "Error occurred while loading the state file due to its unexpected format. "
+    "Resetting the state file with the default format. Please try again."
+)

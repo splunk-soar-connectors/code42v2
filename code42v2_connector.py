@@ -1,6 +1,6 @@
 # File: code42v2_connector.py
 #
-# Copyright (c) 2022 Splunk Inc., Code42
+# Copyright (c) 2022-2024 Splunk Inc., Code42
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,14 +15,15 @@
 
 
 # Python 3 Compatibility imports
-from __future__ import print_function, unicode_literals
 
 import ipaddress
 import json
 import os
+from datetime import datetime
 
 import phantom.app as phantom
 import phantom.utils as utils
+import py42.constants
 import py42.sdk
 import py42.settings as settings
 import requests
@@ -35,8 +36,6 @@ from py42.sdk.queries.fileevents.filters import (MD5, SHA256, DeviceUsername, Ev
                                                  ProcessName, PublicIPAddress, TabURL, TrustedActivity, WindowTitle)
 from py42.sdk.queries.fileevents.filters.exposure_filter import ExposureType
 from py42.sdk.queries.fileevents.filters.file_filter import FileName, FilePath
-from py42.services.detectionlists.departing_employee import DepartingEmployeeFilters
-from py42.services.detectionlists.high_risk_employee import HighRiskEmployeeFilters
 
 # Phantom App imports
 from code42v2_consts import *
@@ -110,6 +109,13 @@ class Code42Connector(BaseConnector):
         # use this to store data that needs to be accessed across actions
         self._state = self.load_state()
 
+        if not isinstance(self._state, dict):
+            self.debug_print("Resetting the state file with the default format")
+            self._state = {"app_version": self.get_app_json().get("app_version")}
+            return self.set_status(phantom.APP_ERROR, STATE_FILE_CORRUPT_ERR)
+
+
+
         config = self.get_config()
         self._cloud_instance = config["cloud_instance"]
         self._username = config["username"]
@@ -132,6 +138,13 @@ class Code42Connector(BaseConnector):
         self.set_validator('ipv6', self._is_valid_ip)
         return phantom.APP_SUCCESS
 
+    def _validate_date(self, action_result, date, parameter):
+        try:
+            datetime.strptime(date, '%Y-%m-%d')
+        except ValueError:
+            return action_result.set_status(phantom.APP_ERROR, CODE42V2_INVALID_DATE_MSG.format(parameter)), None
+        return phantom.APP_SUCCESS, date
+
     def _validate_integer(self, action_result, parameter, key, allow_zero=False):
         if parameter is not None:
             try:
@@ -148,6 +161,33 @@ class Code42Connector(BaseConnector):
                 return action_result.set_status(phantom.APP_ERROR, CODE42V2_NON_NEG_NON_ZERO_INT_MSG.format(param=key)), None
 
         return phantom.APP_SUCCESS, parameter
+    
+    def _get_error_message_from_exception(self, e):
+        """This function is used to get appropriate error message from the exception.
+        :param e: Exception object
+        :return: error message
+        """
+        error_message = CODE42V2_ERROR_MESSAGE
+        error_code = CODE42V2_ERROR_CODE_MESSAGE
+        self.error_print("Exception occurred: ", e)
+
+        try:
+            if hasattr(e, "args"):
+                if len(e.args) > 1:
+                    error_code = e.args[0]
+                    error_message = e.args[1]
+                elif len(e.args) == 1:
+                    error_code = CODE42V2_ERROR_CODE_MESSAGE
+                    error_message = e.args[0]
+        except Exception as ex:
+            self.error_print("Error occurred while retrieving exception information: ", ex)
+
+        if not error_code:
+            error_text = "Error Message: {}".format(error_message)
+        else:
+            error_text = CODE42V2_ERROR_MESSAGE_FORMAT.format(error_code, error_message)
+
+        return error_text
 
     def handle_action(self, param):
         action_id = self.get_action_identifier()
@@ -186,192 +226,301 @@ class Code42Connector(BaseConnector):
         self.save_progress("On-Poll Connector initialized.")
         return connector.handle_on_poll(param, action_result)
 
-    """ DEPARTING EMPLOYEE ACTIONS """
-
-    @action_handler_for("add_departing_employee")
-    def _handle_add_departing_employee(self, param, action_result):
+    """ WATCHLIST ACTIONS"""
+    # list all the watchlists
+    @action_handler_for("list_watchlists")
+    def _handle_list_watchlists(self, param, action_result):
         self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
-        username = param["username"]
-        departure_date = param.get("departure_date")
-        user_id = self._get_user_id(username)
-        response = self._client.detectionlists.departing_employee.add(
-            user_id, departure_date=departure_date
-        )
 
-        note = param.get("note")
-        if note:
-            self.save_progress("Adding or updating notes related to the user.")
-            self._client.detectionlists.update_user_notes(user_id, note)
-
-        action_result.add_data(response.data)
-        status_message = f"{username} was added to the departing employees list"
-        return action_result.set_status(phantom.APP_SUCCESS, status_message)
-
-    @action_handler_for("remove_departing_employee")
-    def _handle_remove_departing_employee(self, param, action_result):
-        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
-        username = param["username"]
-        user_id = self._get_user_id(username)
-        self.save_progress("Removing a user from the Departing Employees list.")
-        self._client.detectionlists.departing_employee.remove(user_id)
-        action_result.add_data({"userId": user_id})
-        status_message = f"{username} was removed from the departing employees list"
-        return action_result.set_status(phantom.APP_SUCCESS, status_message)
-
-    @action_handler_for("list_departing_employees")
-    def _handle_list_departing_employees(self, param, action_result):
-        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
-        filter_type = param.get("filter_type", DepartingEmployeeFilters.OPEN)
-        if filter_type not in CODE42V2_FILTER_TYPE_DEPARTING_LIST:
-            msg = CODE42V2_VALUE_LIST_ERR_MSG.format('filter_type', CODE42V2_FILTER_TYPE_DEPARTING_LIST)
-            return action_result.set_status(phantom.APP_ERROR, msg)
-
-        self.save_progress("Getting all Departing Employees. Filter results by filter_type.")
-        results_generator = self._client.detectionlists.departing_employee.get_all(
-            filter_type=filter_type
-        )
+        # fetching all the watchlists
+        response = self._client.watchlists.get_all()
 
         page = None
-        for page in results_generator:
-            employees = page.data.get("items", [])
-            for employee in employees:
-                action_result.add_data(employee)
+        for page in response:
+            watchlists = page.data.get("watchlists")
 
-        total_count = page.data.get("totalCount", 0) if page else 0
+            if watchlists:
+                for watchlist in watchlists:
+                    action_result.add_data(watchlist)
+
+        self.debug_print("Getting total count for watchlists")
+        total_count = page.data.get("totalCount") if page else 0
         action_result.update_summary({"total_count": total_count})
         return action_result.set_status(phantom.APP_SUCCESS)
 
-    @action_handler_for("get_departing_employee")
-    def _handle_get_departing_employee(self, param, action_result):
+    # create a watchlist
+    @action_handler_for("create_watchlist")
+    def _handle_create_watchlist(self, param, action_result):
         self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
-        username = param["username"]
-        user_id = self._get_user_id(username)
+
+        watchlist_type = CODE42V2_WATCHLIST_TYPE_LIST.get(param["watchlist_type"].lower())
+        title = None
+        description = None
+
+        if not watchlist_type:
+            return action_result.set_status(
+                phantom.APP_ERROR, "Invalid watchlist type. Please provide a valid watchlist type."
+            )
+
+        if watchlist_type == "CUSTOM":
+
+            # getting params used in custom watchlists
+            title = param.get("title")
+            description = param.get("description")
+
+            if not title:
+                return action_result.set_status(
+                    phantom.APP_ERROR, "Title is required for custom watchlist type."
+                )
+
+            if len(title) > 50:
+                return action_result.set_status(
+                    phantom.APP_ERROR, "Title cannot be longer than 50 characters."
+                )
+
+            if description and len(description) > 250:
+                return action_result.set_status(
+                    phantom.APP_ERROR, "Description cannot be longer than 250 characters."
+                )
 
         try:
-            self.save_progress("Getting departing employee data of a user.")
-            response = self._client.detectionlists.departing_employee.get(user_id)
-            action_result.add_data(response.data)
-            action_result.update_summary({"is_departing_employee": True})
-        except Py42NotFoundError as e:
-            self.debug_print("Error occurred while getting departing employee data of a user. "
-                "Error: {}".format(str(e)))
-            action_result.update_summary({"is_departing_employee": False})
-
-        return action_result.set_status(phantom.APP_SUCCESS)
-
-    """ HIGH RISK EMPLOYEE ACTIONS """
-
-    @action_handler_for("add_highrisk_employee")
-    def _handle_add_highrisk_employee(self, param, action_result):
-        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
-        username = param["username"]
-        user_id = self._get_user_id(username)
-        self.save_progress("Adding a user to the High Risk Employee detection list.")
-        response = self._client.detectionlists.high_risk_employee.add(user_id)
-
-        note = param.get("note")
-        if note:
-            self.save_progress("Adding or updating notes related to the user.")
-            self._client.detectionlists.update_user_notes(user_id, note)
-        action_result.add_data(response.data)
-        status_message = f"{username} was added to the high risk employees list"
-        return action_result.set_status(phantom.APP_SUCCESS, status_message)
-
-    @action_handler_for("remove_highrisk_employee")
-    def _handle_remove_highrisk_employee(self, param, action_result):
-        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
-        username = param["username"]
-        user_id = self._get_user_id(username)
-        self.save_progress("Removing a user from the High Risk Employee detection list.")
-        self._client.detectionlists.high_risk_employee.remove(user_id)
-        action_result.add_data({"userId": user_id})
-        status_message = f"{username} was removed from the high risk employees list"
-        return action_result.set_status(phantom.APP_SUCCESS, status_message)
-
-    @action_handler_for("list_highrisk_employees")
-    def _handle_list_highrisk_employees(self, param, action_result):
-        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
-        filter_type = param.get("filter_type", HighRiskEmployeeFilters.OPEN)
-        if filter_type not in CODE42V2_FILTER_TYPE_HIGH_RISK_LIST:
-            msg = CODE42V2_VALUE_LIST_ERR_MSG.format('filter_type', CODE42V2_FILTER_TYPE_HIGH_RISK_LIST)
-            return action_result.set_status(phantom.APP_ERROR, msg)
-        self.save_progress("Searching High Risk Employee list. Filter results by filter_type.")
-        results_generator = self._client.detectionlists.high_risk_employee.get_all(
-            filter_type=filter_type
-        )
-
-        page = None
-        for page in results_generator:
-            employees = page.data.get("items", [])
-            for employee in employees:
-                all_tags = employee.get("riskFactors", [])
-                if all_tags:
-                    employee["riskFactors"] = _convert_to_obj_list(all_tags, "tag")
-                action_result.add_data(employee)
-
-        total_count = page.data.get("totalCount", 0) if page else 0
-        action_result.update_summary({"total_count": total_count})
-        return action_result.set_status(phantom.APP_SUCCESS)
-
-    @action_handler_for("get_highrisk_employee")
-    def _handle_get_highrisk_employee(self, param, action_result):
-        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
-        username = param["username"]
-        user_id = self._get_user_id(username)
-
+            self.debug_print("SDK call to create a watchlist")
+            response = self._client.watchlists.create(watchlist_type, title, description)
+        except Exception as e:
+            return action_result.set_status(
+                phantom.APP_ERROR, f"Code42 Error: {self._get_error_message_from_exception(e)}"
+            )
+        
         try:
-            self.save_progress("Getting user information.")
-            response = self._client.detectionlists.high_risk_employee.get(user_id)
-            all_tags = response.data.get("riskFactors", [])
-            response["riskFactors"] = _convert_to_obj_list(all_tags, "tag")
             action_result.add_data(response.data)
-            action_result.update_summary({"is_high_risk_employee": True})
+        except Exception:
+            return action_result.set_status(phantom.APP_ERROR, "Something went wrong while creating new watchlist.")
+    
+        return action_result.set_status(phantom.APP_SUCCESS, "Watchlist created successfully")
+
+    # delete a watchlist
+    @action_handler_for("delete_watchlist")
+    def _handle_delete_watchlist(self, param, action_result):
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+
+        watchlist_id = param["watchlist_id"]
+
+        # get call to check if watchlist exists
+        try:
+            _ = self._client.watchlists.get(watchlist_id)
         except Py42NotFoundError:
-            action_result.update_summary({"is_high_risk_employee": False})
+            return action_result.set_status(
+                phantom.APP_ERROR, f"Watchlist with ID {watchlist_id} does not exist. Please enter valid watchlist_id."
+            )
+        self.debug_print("SDK call to delete a watchlist")
+        response = self._client.watchlists.delete(watchlist_id)
 
+        action_result.add_data({"watchlistId": watchlist_id, "status": response.status_code})
+        return action_result.set_status(phantom.APP_SUCCESS, "Watchlist deleted Successfully")
+
+    """USER ACTIONS IN WATCHLIST"""
+
+    def _usernames_to_user_ids(self, usernames, action_result):
+        # get and parser user id's
+        try:
+            usernames = [user.strip() for user in usernames.split(",") if user.strip()]
+        except Exception:
+            return action_result.set_status(
+                phantom.APP_ERROR, "Error occurred while parsing usernames. Please enter usernames in valid format"
+            ), []
+
+        # check if there are any user ids
+        if not usernames:
+            return action_result.set_status(
+                phantom.APP_ERROR, "Invalid user id, please enter usernames in valid format"
+            ), []
+
+        try:
+            user_ids = list(map(self._get_user_id, usernames))
+        except Exception as e:
+            return action_result.set_status(
+                phantom.APP_ERROR, f"Error: {self._get_error_message_from_exception(e)}"
+            ), []
+        return phantom.APP_SUCCESS, user_ids
+
+    # list users in watchlist
+    @action_handler_for("list_watchlist_users")
+    def _handle_list_watchlist_users(self, param, action_result):
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+
+        watchlist_id = param["watchlist_id"]
+
+        # get call to check if watchlist exists
+        try:
+            _ = self._client.watchlists.get(watchlist_id)
+        except Py42NotFoundError:
+            return action_result.set_status(
+                phantom.APP_ERROR, f"Watchlist with ID {watchlist_id} does not exist. Please enter valid watchlist_id."
+            )
+
+        self.debug_print("SDK call to get all watchlist members")
+        response = self._client.watchlists.get_all_watchlist_members(watchlist_id)
+
+        for page in response:
+            users = page.data.get("watchlistMembers")
+            if users:
+                for user in users:
+                    action_result.add_data(user)
+
+        total_count = page.data.get("totalCount") if page else 0
+        action_result.update_summary({"total_count": total_count})
         return action_result.set_status(phantom.APP_SUCCESS)
 
-    @action_handler_for("add_highrisk_tag")
-    def _handle_add_highrisk_tag(self, param, action_result):
+    # add user to watchlist
+    @action_handler_for("add_watchlist_users")
+    def _handle_add_watchlist_users(self, param, action_result):
+        self.debug_print("In action handler for: {0}".format(self.get_action_identifier()))
+
+        # from usernames and parser user id's
+        usernames = param['usernames']
+        status, user_ids = self._usernames_to_user_ids(usernames, action_result)
+
+        if phantom.is_fail(status):
+            return action_result.get_status()
+
+        # get the type of method to add user to watchlist
+        add_user_type = param["perform_operation_using"]
+
+        if add_user_type not in ["watchlist id", "watchlist type"]:
+            return action_result.set_status(
+                phantom.APP_ERROR, "Invalid add user type. Please provide a valid add user type."
+            )
+
+        # using watchlist id
+        if add_user_type == "watchlist id":
+            watchlist_id = param.get("watchlist_id")
+
+            try:
+                _ = self._client.watchlists.get(watchlist_id)
+            except Py42NotFoundError:
+                return action_result.set_status(
+                    phantom.APP_ERROR, f"Watchlist with ID {watchlist_id} does not exist. Please enter valid watchlist_id."
+                )
+
+            try:
+                self.debug_print("SDK call to add users to watchlist")
+                response = self._client.watchlists.add_included_users_by_watchlist_id(user_ids, watchlist_id)
+            except Py42NotFoundError as e:
+                return action_result.set_status(
+                    phantom.APP_ERROR, f"Code42 Error : {self._get_error_message_from_exception}")
+
+        # using watchlist type
+        elif add_user_type == "watchlist type":
+            watchlist_type = param.get("watchlist_type")
+            if not watchlist_type:
+                return action_result.set_status(
+                    phantom.APP_ERROR, "Watchlist type is  required, please provide a valid watchlist type."
+                )
+
+            watchlist_type = CODE42V2_WATCHLIST_TYPE_LIST.get(watchlist_type.lower())
+
+            if not watchlist_type:
+                return action_result.set_status(
+                    phantom.APP_ERROR, "Invalid watchlist type. Please provide a valid watchlist type."
+                )
+            try:
+                self.debug_print("SDK call to add users to watchlist")
+                response = self._client.watchlists.add_included_users_by_watchlist_type(user_ids, watchlist_type)
+            except Py42NotFoundError as e:
+                return action_result.set_status(
+                    phantom.APP_ERROR, f"Code42 Error : {self._get_error_message_from_exception(e)}")
+        action_result.add_data({"status": response.status_code})
+        return action_result.set_status(phantom.APP_SUCCESS, "Users added to watchlist successfully")
+
+    # remove user from watchlist
+    @action_handler_for("remove_watchlist_users")
+    def _handle_remove_watchlist_users(self, param, action_result):
+        self.debug_print("In action handler for: {0}".format(self.get_action_identifier()))
+
+        # from usernames and parser user id's
+        usernames = param['usernames']
+        status, user_ids = self._usernames_to_user_ids(usernames, action_result)
+
+        if phantom.is_fail(status):
+            return action_result.get_status()
+
+        # get the type of method to add user to watchlist
+        remove_user_type = param["perform_operation_using"]
+
+        if remove_user_type not in ["watchlist id", "watchlist type"]:
+            return action_result.set_status(
+                phantom.APP_ERROR, "Invalid remove user type. Please provide a valid remove user type."
+            )
+
+        # using watchlist id
+        if remove_user_type == "watchlist id":
+            watchlist_id = param.get("watchlist_id")
+            if not watchlist_id:
+                return action_result.set_status(
+                    phantom.APP_ERROR, "Watchlist id is  required, please provide a valid watchlist id."
+                )
+
+            try:
+                _ = self._client.watchlists.get(watchlist_id)
+            except Py42NotFoundError:
+                return action_result.set_status(
+                    phantom.APP_ERROR, f"Watchlist with ID {watchlist_id} does not exist. Please enter valid watchlist_id."
+                )
+
+            try:
+                self.debug_print("SDK call to remove users from watchlist")
+                response = self._client.watchlists.remove_included_users_by_watchlist_id(user_ids, watchlist_id)
+            except Py42NotFoundError as e:
+                return action_result.set_status(
+                    phantom.APP_ERROR, f"Code42 Error : {self._get_error_message_from_exception(e)}")
+
+        # using watchlist type
+        elif remove_user_type == "watchlist type":
+            watchlist_type = param.get("watchlist_type")
+            if not watchlist_type:
+                return action_result.set_status(
+                    phantom.APP_ERROR, "Watchlist type is  required, please provide a valid watchlist type."
+                )
+            watchlist_type = CODE42V2_WATCHLIST_TYPE_LIST.get(watchlist_type.lower())
+
+            if not watchlist_type:
+                return action_result.set_status(
+                    phantom.APP_ERROR, "Invalid watchlist type. Please provide a valid watchlist type."
+                )
+            try:
+
+                response = self._client.watchlists.remove_included_users_by_watchlist_type(user_ids, watchlist_type)
+            except Py42NotFoundError as e:
+                return action_result.set_status(
+                    phantom.APP_ERROR, f"Code42 Error : {self._get_error_message_from_exception(e)}")
+
+        action_result.add_data({"status": response.status_code})
+        return action_result.set_status(phantom.APP_SUCCESS, "Users removed from watchlist successfully")
+
+    @action_handler_for("get_watchlist_user")
+    def _handle_get_watchlist_user(self, param, action_result):
         self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
-        username = param["username"]
 
-        risk_tag = param["risk_tag"]
-        if risk_tag not in CODE42V2_RISK_TAG_LIST:
-            msg = CODE42V2_VALUE_LIST_ERR_MSG.format('risk_tag', CODE42V2_RISK_TAG_LIST)
-            return action_result.set_status(phantom.APP_ERROR, msg)
+        username = param["username"].lower()
+        watchlist_id = param["watchlist_id"]
 
-        user_id = self._get_user_id(username)
-        self.save_progress("Adding one or more risk factor tags.")
-        response = self._client.detectionlists.add_user_risk_tags(user_id, risk_tag)
-        all_tags = response.data.get("riskFactors", [])
-        response["riskFactors"] = _convert_to_obj_list(all_tags, "tag")
+        try:
+            user_id = self._get_user_id(username)
+        except Exception as e:
+            return action_result.set_status(
+                phantom.APP_ERROR, f"Error: {self._get_error_message_from_exception(e)}"
+            )
+
+        try:
+            self.debug_print("SDK call to get watchlist user")
+            response = self._client.watchlists.get_watchlist_member(watchlist_id, user_id)
+        except Exception as e:
+            return action_result.set_status(
+                phantom.APP_ERROR, f"Code42 Error: {self._get_error_message_from_exception(e)}"
+            )
+
         action_result.add_data(response.data)
-        message = f"All risk tags for user: {', '.join(all_tags)}"
-        return action_result.set_status(phantom.APP_SUCCESS, message)
-
-    @action_handler_for("remove_highrisk_tag")
-    def _handle_remove_highrisk_tag(self, param, action_result):
-        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
-        username = param["username"]
-
-        risk_tag = param["risk_tag"]
-        if risk_tag not in CODE42V2_RISK_TAG_LIST:
-            msg = CODE42V2_VALUE_LIST_ERR_MSG.format('risk_tag', CODE42V2_RISK_TAG_LIST)
-            return action_result.set_status(phantom.APP_ERROR, msg)
-
-        user_id = self._get_user_id(username)
-        self.save_progress("Removing one or more risk factor tags.")
-        response = self._client.detectionlists.remove_user_risk_tags(user_id, risk_tag)
-        all_tags = response.data.get("riskFactors", [])
-        response["riskFactors"] = _convert_to_obj_list(all_tags, "tag")
-        action_result.add_data(response.data)
-        message = (
-            f"All risk tags for user: {', '.join(all_tags)}"
-            if all_tags
-            else "User has no risk tags"
-        )
-        return action_result.set_status(phantom.APP_SUCCESS, message)
+        return action_result.set_status(phantom.APP_SUCCESS, "Fetched user data successfully")
 
     """ USER ACTIONS """
 
@@ -388,9 +537,9 @@ class Code42Connector(BaseConnector):
         if active_user not in CODE42V2_USER_STATUS_LIST:
             msg = CODE42V2_VALUE_LIST_ERR_MSG.format('user_status', CODE42V2_USER_STATUS_LIST)
             return action_result.set_status(phantom.APP_ERROR, msg)
-        if active_user == 'All':
-            active = None
-        elif active_user == 'Active':
+
+        active = None
+        if active_user == 'Active':
             active = True
         elif active_user == 'Inactive':
             active = False
@@ -416,7 +565,7 @@ class Code42Connector(BaseConnector):
     @action_handler_for("create_user")
     def _handle_create_user(self, param, action_result):
         self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
-        username = param["username"]
+        username = param["username"].lower()
         self.save_progress("Creating a new user.")
         response = self._client.users.create_user(
             org_uid=param["org_uid"],
@@ -436,7 +585,7 @@ class Code42Connector(BaseConnector):
     @action_handler_for("block_user")
     def _handle_block_user(self, param, action_result):
         self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
-        username = param["username"]
+        username = param["username"].lower()
         user = self._get_user(username)
         self.save_progress("Blocking the user with the given ID.")
         response = self._client.users.block(user["userId"])
@@ -446,7 +595,7 @@ class Code42Connector(BaseConnector):
     @action_handler_for("unblock_user")
     def _handle_unblock_user(self, param, action_result):
         self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
-        username = param["username"]
+        username = param["username"].lower()
         user = self._get_user(username)
         self.save_progress("Removing a block, if one exists, on the user with the given user ID.")
         response = self._client.users.unblock(user["userId"])
@@ -458,7 +607,7 @@ class Code42Connector(BaseConnector):
     @action_handler_for("deactivate_user")
     def _handle_deactivate_user(self, param, action_result):
         self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
-        username = param["username"]
+        username = param["username"].lower()
         user = self._get_user(username)
         self.save_progress("Deactivating the user with the given user ID.")
         response = self._client.users.deactivate(user["userId"])
@@ -470,7 +619,7 @@ class Code42Connector(BaseConnector):
     @action_handler_for("reactivate_user")
     def _handle_reactivate_user(self, param, action_result):
         self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
-        username = param["username"]
+        username = param["username"].lower()
         user = self._get_user(username)
         self.save_progress("Reactivating the user with the given ID.")
         response = self._client.users.reactivate(user["userId"])
@@ -479,22 +628,66 @@ class Code42Connector(BaseConnector):
             phantom.APP_SUCCESS, f"{username} was reactivated"
         )
 
-    @action_handler_for("get_user_profile")
-    def _handle_get_user_profile(self, param, action_result):
+    """ User risk profile actions"""
+    @action_handler_for("get_userrisk_profile")
+    def _handle_get_userrisk_profile(self, param, action_result):
         self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
-        username = param["username"]
+        username = param["username"].lower()
         user_id = self._get_user_id(username)
         self.save_progress("Getting user details by user id.")
-        response = self._client.detectionlists.get_user_by_id(user_id)
-        all_tags = response.data.get("riskFactors", [])
-        all_cloud_usernames = response.data.get("cloudUsernames", [])
-        response["riskFactors"] = _convert_to_obj_list(all_tags, "tag")
-        response["cloudUsernames"] = _convert_to_obj_list(
-            all_cloud_usernames, "username"
+        response = self._client.userriskprofile.get_by_id(user_id)
+        all_cloud_aliases = response.data.get("cloudAliases", [])
+        response["cloudAliases"] = _convert_to_obj_list(
+            all_cloud_aliases, "username"
         )
         action_result.add_data(response.data)
         action_result.update_summary({"user_id": response.data['userId']})
         return action_result.set_status(phantom.APP_SUCCESS)
+
+    @action_handler_for("update_userrisk_profile")
+    def _handle_update_userrisk_profile(self, param, action_result):
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        username = param["username"].lower()
+        start_data = param.get("start_date")
+        end_data = param.get("end_date")
+        note = param.get("note")
+
+        if not start_data and not end_data and not note:
+            return action_result.set_status(
+                phantom.APP_ERROR,
+                "Code42: No values provided for updating, please provide a value to update",
+            )
+
+        if start_data:
+            ret_val, _ = self._validate_date(action_result, start_data, "start_date")
+            if phantom.is_fail(ret_val):
+                return action_result.get_status()
+
+        if end_data:
+            ret_val, _ = self._validate_date(action_result, end_data, "end_date")
+            if phantom.is_fail(ret_val):
+                return action_result.get_status()
+
+        try:
+            user_id = self._get_user_id(username)
+        except Exception as e:
+            return action_result.set_status(phantom.APP_ERROR, f"Error {self._get_error_message_from_exception(e)}")
+
+        self.save_progress("Updating user details by user id.")
+        try:
+            response = self._client.userriskprofile.update(user_id, start_data, end_data, note)
+        except Exception as e:
+            return action_result.set_status(
+                phantom.APP_ERROR, f"Code42 Error: {e.response.text}"
+            )
+
+        all_cloud_aliases = response.data.get("cloudAliases", [])
+        response["cloudAliases"] = _convert_to_obj_list(
+            all_cloud_aliases, "username"
+        )
+
+        action_result.add_data(response.data)
+        return action_result.set_status(phantom.APP_SUCCESS, "Updated user risk profile successfully")
 
     """ALERTS ACTIONS"""
 
@@ -524,6 +717,8 @@ class Code42Connector(BaseConnector):
         start_date = param.get("start_date")
         end_date = param.get("end_date")
         alert_state = param.get("alert_state")
+
+        username = username.lower() if username else None
 
         if alert_state and alert_state not in CODE42V2_ALERT_STATE:
             msg = CODE42V2_VALUE_LIST_ERR_MSG.format('alert_state', CODE42V2_ALERT_STATE)
@@ -559,7 +754,7 @@ class Code42Connector(BaseConnector):
     @action_handler_for("add_legalhold_custodian")
     def _handle_add_legalhold_custodian(self, param, action_result):
         self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
-        username = param["username"]
+        username = param["username"].lower()
         matter_id = param["matter_id"]
         user_id = self._get_user_id(username)
         self._check_matter_is_accessible(matter_id)
@@ -572,7 +767,7 @@ class Code42Connector(BaseConnector):
     @action_handler_for("remove_legalhold_custodian")
     def _handle_remove_legalhold_custodian(self, param, action_result):
         self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
-        username = param["username"]
+        username = param["username"].lower()
         matter_id = param["matter_id"]
         user_id = self._get_user_id(username)
         self._check_matter_is_accessible(matter_id)
@@ -893,10 +1088,14 @@ class Code42Connector(BaseConnector):
         return query
 
     def _get_user(self, username):
+
+        # user users with specific username
         users = self._client.users.get_by_username(username)["users"]
+
+        # return error if no suck users are found
         if not users:
             raise Exception(
-                f"User '{username}' not found. Do you have the correct permissions?"
+                f"User '{username}' not found. Please enter valid username"
             )
         return users[0]
 
@@ -1002,12 +1201,14 @@ def main():
     argparser.add_argument("input_test_json", help="Input Test JSON file")
     argparser.add_argument("-u", "--username", help="username", required=False)
     argparser.add_argument("-p", "--password", help="password", required=False)
+    argparser.add_argument('-v', '--verify', action='store_true', help='verify', required=False, default=False)
 
     args = argparser.parse_args()
     session_id = None
 
     username = args.username
     password = args.password
+    verify = args.verify
 
     if username is not None and password is None:
         # User specified a username but not a password, so ask
@@ -1022,7 +1223,7 @@ def main():
             login_url = Code42Connector._get_phantom_base_url() + "/login"
 
             print("Accessing the Login page")
-            r = requests.get(login_url, verify=False)  # nosemgrep
+            r = requests.get(login_url, verify=verify)  # nosemgrep
             csrftoken = r.cookies["csrftoken"]
 
             data = dict()
@@ -1035,7 +1236,7 @@ def main():
             headers["Referer"] = login_url
 
             print("Logging into Platform to get the session id")
-            r2 = requests.post(login_url, verify=False, data=data, headers=headers)  # nosemgrep
+            r2 = requests.post(login_url, verify=verify, data=data, headers=headers)  # nosemgrep
             session_id = r2.cookies["sessionid"]
         except Exception as e:
             print("Unable to get session id from the platform. Error: " + str(e))
