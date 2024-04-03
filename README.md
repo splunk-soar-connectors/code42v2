@@ -12,7 +12,7 @@ Code42 provides simple, fast detection and response to everyday data loss from i
 
 [comment]: # " File: README.md"
 [comment]: # ""
-[comment]: # "  Copyright (c) 2022 Splunk Inc., Code42"
+[comment]: # "  Copyright (c) 2024 Splunk Inc., Code42"
 [comment]: # ""
 [comment]: # "  Licensed under the Apache License, Version 2.0 (the 'License');"
 [comment]: # "  you may not use this file except in compliance with the License."
