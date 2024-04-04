@@ -2,7 +2,7 @@
 # Code42 v2
 
 Publisher: Splunk  
-Connector Version: 1.0.2  
+Connector Version: 1.0.3  
 Product Vendor: Code42  
 Product Name: Code42 v2  
 Product Version Supported (regex): ".\*"  

@@ -1,2 +1,1 @@
 **Unreleased**
-* Remove requests, urllib3, certifi dependencies and use the platform ones instead [PAPP-33595]
