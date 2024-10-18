@@ -113,19 +113,15 @@ class Code42OnPollConnector:
         source_id = param.get("container_id")
         if source_id:
             # Ignore all other query params when polling for specific alert IDs
-            alert_ids = [x.strip() for x in source_id.split(',')]
+            alert_ids = [x.strip() for x in source_id.split(",")]
             alert_ids = list(filter(None, alert_ids))
             alerts = self._get_alert_details(alert_ids)
             last_alert = self._create_containers_from_alert_detail_responses(alerts)
         else:
             start_date, end_date = self._get_date_parameters()
             container_count, artifact_count = self._get_limit_counts(param)
-            alerts = self._get_alerts(
-                start_date, end_date, container_count=container_count
-            )
-            last_alert = self._create_containers_from_alert_search_responses(
-                alerts, artifact_count=artifact_count
-            )
+            alerts = self._get_alerts(start_date, end_date, container_count=container_count)
+            last_alert = self._create_containers_from_alert_search_responses(alerts, artifact_count=artifact_count)
 
         if not self._connector.is_poll_now():
             self._save_last_time(last_alert, source_id)
@@ -156,9 +152,7 @@ class Code42OnPollConnector:
             self._create_container_from_alert(alert)
         return alert
 
-    def _create_containers_from_alert_search_responses(
-        self, alerts, artifact_count=None
-    ):
+    def _create_containers_from_alert_search_responses(self, alerts, artifact_count=None):
         alert = {}
         for alert in alerts:
             alert = dict(self._get_alert_details(alert["id"])[0])
@@ -168,9 +162,7 @@ class Code42OnPollConnector:
     def _create_container_from_alert(self, alert, artifact_count=None):
         container_id = self._init_container(alert)
         observations = alert.get("observations", [])
-        file_events = self._get_file_events(
-            observations, alert, artifact_count=artifact_count
-        )
+        file_events = self._get_file_events(observations, alert, artifact_count=artifact_count)
         self._save_artifacts_from_file_events(container_id, alert, file_events)
 
     def _init_container(self, alert_details):
@@ -207,34 +199,26 @@ class Code42OnPollConnector:
         return file_events
 
     def _save_artifacts_from_file_events(self, container_id, details, file_events):
-        artifacts = [
-            _create_artifact_json(container_id, details, event) for event in file_events
-        ]
+        artifacts = [_create_artifact_json(container_id, details, event) for event in file_events]
         self._connector.save_artifacts(artifacts)
 
     def _get_date_parameters(self):
         config = self._connector.get_config()
         if self._connector.is_poll_now():
             given_start_date = config.get("initial_poll_start_date")
-            start_time = given_start_date or get_thirty_days_ago().strftime(
-                "%Y-%m-%dT%H:%M:%S.%f"
-            )
+            start_time = given_start_date or get_thirty_days_ago().strftime("%Y-%m-%dT%H:%M:%S.%f")
             end_time = config.get("initial_poll_end_date")
             return start_time, end_time
         last_time = self._state.get("last_time")
         if not last_time:
             # If there was never a stored last_time.
             given_start_date = config.get("initial_poll_start_date")
-            start_time = given_start_date or get_thirty_days_ago().strftime(
-                "%Y-%m-%dT%H:%M:%S.%f"
-            )
+            start_time = given_start_date or get_thirty_days_ago().strftime("%Y-%m-%dT%H:%M:%S.%f")
             end_time = config.get("initial_poll_end_date")
             return start_time, end_time
         else:
             # Last time is stored as a float timestamp
-            last_time_as_date_str = datetime.fromtimestamp(
-                last_time, tz=timezone.utc
-            ).strftime("%Y-%m-%dT%H:%M:%S.%f")
+            last_time_as_date_str = datetime.fromtimestamp(last_time, tz=timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%f")
             return last_time_as_date_str, None
 
     def _get_limit_counts(self, param):
@@ -309,11 +293,7 @@ class ObservationToSecurityQueryMapper(object):
         return self._exfiltration_type == self._CLOUD_TYPE
 
     def _create_user_filter(self):
-        return (
-            DeviceUsername.eq(self._actor)
-            if self._is_endpoint_exfiltration
-            else Actor.eq(self._actor)
-        )
+        return DeviceUsername.eq(self._actor) if self._is_endpoint_exfiltration else Actor.eq(self._actor)
 
     def map(self):
         search_args = self._create_search_args()
@@ -355,9 +335,7 @@ class ObservationToSecurityQueryMapper(object):
                 return [ExposureType.not_in(supported_exp_types)]
         elif self._is_endpoint_exfiltration:
             return [
-                EventType.is_in(
-                    [EventType.CREATED, EventType.MODIFIED, EventType.READ_BY_APP]
-                ),
+                EventType.is_in([EventType.CREATED, EventType.MODIFIED, EventType.READ_BY_APP]),
                 ExposureType.is_in(exposure_types),
             ]
         return []
@@ -410,9 +388,7 @@ class FileEventQueryFilters:
 
 
 def _create_artifact_json(container_id, alert_details, file_event):
-    normalized_event = {
-        key: val for key, val in file_event.items() if val not in [[], None, ""]
-    }
+    normalized_event = {key: val for key, val in file_event.items() if val not in [[], None, ""]}
     cef = _map_event_to_cef(normalized_event)
     artifact_dict = {
         "name": "Code42 File Event Artifact",
@@ -430,9 +406,7 @@ def _create_artifact_json(container_id, alert_details, file_event):
 def _map_event_to_cef(normalized_event):
     cef_dict = {}
     init_cef_dict = _init_cef_dict(normalized_event)
-    sub_cef_dict_list = [
-        _format_cef_kvp(key, value) for key, value in init_cef_dict.items()
-    ]
+    sub_cef_dict_list = [_format_cef_kvp(key, value) for key, value in init_cef_dict.items()]
     for sub_dict in sub_cef_dict_list:
         cef_dict.update(sub_dict)
 
@@ -443,11 +417,7 @@ def _map_event_to_cef(normalized_event):
 
 
 def _init_cef_dict(normalized_event):
-    return {
-        cef_key: normalized_event[json_key]
-        for json_key, cef_key in JSON_TO_CEF_MAP.items()
-        if json_key in normalized_event
-    }
+    return {cef_key: normalized_event[json_key] for json_key, cef_key in JSON_TO_CEF_MAP.items() if json_key in normalized_event}
 
 
 def _format_cef_kvp(cef_field_key, cef_field_value):
@@ -475,9 +445,7 @@ def _format_custom_cef_kvp(custom_cef_field_key, custom_cef_field_value):
 def _handle_nested_json_fields(cef_field_key, cef_field_value):
     result = []
     if cef_field_key == "duser":
-        result = [
-            item["cloudUsername"] for item in cef_field_value if type(item) is dict
-        ]
+        result = [item["cloudUsername"] for item in cef_field_value if type(item) is dict]
 
     return result or cef_field_value
 
