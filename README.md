@@ -6,7 +6,7 @@ Connector Version: 1.0.3
 Product Vendor: Code42  
 Product Name: Code42 v2  
 Product Version Supported (regex): ".\*"  
-Minimum Product Version: 6.1.1  
+Minimum Product Version: 6.2.2  
 
 Code42 provides simple, fast detection and response to everyday data loss from insider threats by focusing on customer data on endpoints and the cloud
 
@@ -32,7 +32,7 @@ version](https://github.com/splunk-soar-connectors/code42) will be deprecated
 
 ## py42
 
-This app is built using [py42](https://github.com/code42/py42) , the official Code42 python SDK.
+This app is built using [py42](https://github.com/code42/py42) , the official Code42 python SDK. 
 
 ## Objective
 
