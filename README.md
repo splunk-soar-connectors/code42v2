@@ -32,7 +32,7 @@ version](https://github.com/splunk-soar-connectors/code42) will be deprecated
 
 ## py42
 
-This app is built using [py42](https://github.com/code42/py42) , the official Code42 python SDK.
+This app is built using [py42](https://github.com/code42/py42) , the official Code42 python SDK. 
 
 ## Objective
 
