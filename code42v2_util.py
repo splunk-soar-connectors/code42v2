@@ -50,9 +50,7 @@ def build_date_range_filter(date_filter_cls, start_date_str, end_date_str):
         return date_filter_cls.on_or_after(get_thirty_days_ago())
 
 
-def build_alerts_query(
-    start_date, end_date, username=None, alert_state=None, severities=None
-):
+def build_alerts_query(start_date, end_date, username=None, alert_state=None, severities=None):
     filters = []
     if username is not None:
         filters.append(Actor.eq(username))
