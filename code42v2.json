@@ -21,7 +21,7 @@
     "utctime_updated": "2024-04-04T18:07:50.000000Z",
     "package_name": "phantom_code42v2",
     "main_module": "code42v2_connector.py",
-    "min_phantom_version": "6.2.2",
+    "min_phantom_version": "6.3.0",
     "app_wizard_version": "1.0.0",
     "configuration": {
         "cloud_instance": {
