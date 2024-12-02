@@ -17,8 +17,8 @@
         }
     ],
     "license": "Copyright (c) 2022-2024 Splunk Inc., Code42",
-    "app_version": "1.0.3",
-    "utctime_updated": "2024-04-04T18:07:50.000000Z",
+    "app_version": "1.0.4",
+    "utctime_updated": "2024-12-02T22:13:20.000000Z",
     "package_name": "phantom_code42v2",
     "main_module": "code42v2_connector.py",
     "min_phantom_version": "6.3.0",
