@@ -20,19 +20,10 @@ MAX_RESULTS_DEFAULT = 1000
 PAGE_SIZE = 10000
 
 # value list for filter_type parameter in list departing employee action
-CODE42V2_FILTER_TYPE_DEPARTING_LIST = [
-    "EXFILTRATION_30_DAYS",
-    "EXFILTRATION_24_HOURS",
-    "OPEN",
-    "LEAVING_TODAY"
-]
+CODE42V2_FILTER_TYPE_DEPARTING_LIST = ["EXFILTRATION_30_DAYS", "EXFILTRATION_24_HOURS", "OPEN", "LEAVING_TODAY"]
 
 # value list for filter_type parameter in list high risk employee action
-CODE42V2_FILTER_TYPE_HIGH_RISK_LIST = [
-    "EXFILTRATION_30_DAYS",
-    "EXFILTRATION_24_HOURS",
-    "OPEN"
-]
+CODE42V2_FILTER_TYPE_HIGH_RISK_LIST = ["EXFILTRATION_30_DAYS", "EXFILTRATION_24_HOURS", "OPEN"]
 
 # value list for risk_tag parameter in add/remove highrisk tag action
 CODE42V2_RISK_TAG_LIST = [
@@ -42,23 +33,14 @@ CODE42V2_RISK_TAG_LIST = [
     "PERFORMANCE_CONCERNS",
     "FLIGHT_RISK",
     "ELEVATED_ACCESS_PRIVILEGES",
-    "SUSPICIOUS_SYSTEM_ACTIVITY"
+    "SUSPICIOUS_SYSTEM_ACTIVITY",
 ]
 
 # value list for alert_state parameter in set alert state and search alert action
-CODE42V2_ALERT_STATE = [
-    "OPEN",
-    "RESOLVED",
-    "PENDING",
-    "IN_PROGRESS"
-]
+CODE42V2_ALERT_STATE = ["OPEN", "RESOLVED", "PENDING", "IN_PROGRESS"]
 
 # value list for status parameter in list cases action
-CODE42V2_CASE_STATUS_LIST = [
-    "ALL",
-    "OPEN",
-    "CLOSED"
-]
+CODE42V2_CASE_STATUS_LIST = ["ALL", "OPEN", "CLOSED"]
 
 # value list for file_category parameter in run query action
 CODE42V2_FILE_CATEGORY_LIST = [
@@ -73,7 +55,7 @@ CODE42V2_FILE_CATEGORY_LIST = [
     "Spreadsheet",
     "Video",
     "VirtualDiskImage",
-    "Archive"
+    "Archive",
 ]
 
 # value list for exposure_type parameter in run query action
@@ -85,18 +67,14 @@ CODE42V2_EXPOSURE_TYPE_LIST = [
     "CloudStorage",
     "RemovableMedia",
     "IsPublic",
-    "OutsideTrustedDomains"
+    "OutsideTrustedDomains",
 ]
 
 # value list for active_user parameter in list users action
-CODE42V2_USER_STATUS_LIST = [
-    "Active",
-    "Inactive",
-    "All"
-]
+CODE42V2_USER_STATUS_LIST = ["Active", "Inactive", "All"]
 
 # page related keys
-PAGE_KEYS = ['pgNum', 'pgSize', 'pgToken']
+PAGE_KEYS = ["pgNum", "pgSize", "pgToken"]
 
 # integer validation constants
 CODE42V2_VALID_INT_MSG = "Please provide a valid integer value in the '{param}' action parameter"
