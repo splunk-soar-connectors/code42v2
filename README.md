@@ -2,11 +2,11 @@
 # Code42 v2
 
 Publisher: Splunk  
-Connector Version: 1.0.3  
+Connector Version: 1.0.4  
 Product Vendor: Code42  
 Product Name: Code42 v2  
 Product Version Supported (regex): ".\*"  
-Minimum Product Version: 6.1.1  
+Minimum Product Version: 6.3.0  
 
 Code42 provides simple, fast detection and response to everyday data loss from insider threats by focusing on customer data on endpoints and the cloud
 
