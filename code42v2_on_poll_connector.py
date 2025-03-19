@@ -1,6 +1,6 @@
 # File: code42v2_on_poll_connector.py
 #
-# Copyright (c) 2022-2024 Splunk Inc., Code42
+# Copyright (c) 2022-2025 Splunk Inc., Code42
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ from py42.sdk.queries.fileevents.file_event_query import FileEventQuery
 from py42.sdk.queries.fileevents.filters import Actor, DeviceUsername, EventTimestamp, EventType, ExposureType, FileCategory
 
 from code42v2_util import build_alerts_query, get_thirty_days_ago, parse_datetime
+
 
 """The contents of this module that related to mapping alert observations to file events borrows heavily from the
 Code42 Cortex XSOAR integration as well as the code42cli python package.
@@ -254,7 +255,7 @@ def _get_file_event_query(observation, alert):
     return mapper.map()
 
 
-class ObservationToSecurityQueryMapper(object):
+class ObservationToSecurityQueryMapper:
     """Class to simplify the process of mapping observation data to query objects."""
 
     # Exfiltration consts
