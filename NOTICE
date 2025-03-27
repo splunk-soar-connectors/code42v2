@@ -1,33 +1,54 @@
 Splunk SOAR Code42 v2
-Copyright (c) 2024 Splunk Inc., Code42
+Copyright (c) 2022-2025 Splunk Inc., Code42
 
-Third-party Software Attributions:
+Third Party Software Attributions:
 
-Library: beautifulsoup4
+Name: beautifulsoup4
 Version: 4.9.1
+Author: Leonard Richardson
 License: MIT
-Copyright 2004-2017 Leonard Richardson
-Copyright 2004-2019 Leonard Richardson
-Copyright 2018 Isaac Muse
 
-Library: pudb
-Version: 2019.2
+Name: certifi
+Version: 2025.1.31
+Author: Kenneth Reitz
+License: MPL-2.0
+
+Name: charset-normalizer
+Version: 3.4.1
+Author:
 License: MIT
-Copyright 2009 Andreas Kloeckner and contributors
 
-Library: py42
+Name: idna
+Version: 3.10
+Author:
+License:
+
+Name: py42
 Version: 1.20.0
-License: MIT
-Copyright 2020 Code42 Software
+Author:
+License: UNKNOWN
 
-Library: python-dateutil
+Name: python-dateutil
 Version: 2.8.1
-License: Apache 2.0
-License: BSD 3
-Copyright 2003-2011 - Gustavo Niemeyer <gustavo@niemeyer.net>
-Copyright 2012-2014 - Tomi Pieviläinen <tomi.pievilainen@iki.fi>
-Copyright 2014-2016 - Yaron de Leeuw <me@jarondl.net>
-Copyright 2015 - Paul Ganssle <paul@ganssle.io>
-Copyright 2015 - dateutil contributors (see AUTHORS file)
-Copyright 2017 Paul Ganssle <paul@ganssle.io>
-Copyright 2017 dateutil contributors (see AUTHORS file)
+Author: Gustavo Niemeyer
+License: Dual License
+
+Name: requests
+Version: 2.32.3
+Author: Kenneth Reitz
+License: Apache-2.0
+
+Name: six
+Version: 1.17.0
+Author: Benjamin Peterson
+License: MIT
+
+Name: soupsieve
+Version: 2.6
+Author:
+License:
+
+Name: urllib3
+Version: 2.3.0
+Author:
+License:
