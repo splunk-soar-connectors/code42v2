@@ -67,9 +67,8 @@ class Code42UnsupportedHashError(Exception):
 
 def action_handler_for(key):
     def wrapper(f):
-        if not hasattr(Code42Connector, "_action_map"):
-            Code42Connector._action_map = {}
-        Code42Connector._action_map[key] = f
+        # Store the key for when we build the action map
+        f._action_key = key
         return f
 
     return wrapper
@@ -101,8 +100,12 @@ class Code42Connector(BaseConnector):
         self._client = None
         self._proxy = None
 
-        # Instance action map to avoid global mutation
-        self._action_map = getattr(self.__class__, "_action_map", {})
+        # Build action map here to avoid global mutation
+        self._action_map = {}
+        for name in dir(self.__class__):
+            method = getattr(self.__class__, name)
+            if hasattr(method, "_action_key"):
+                self._action_map[method._action_key] = method
 
     def _is_valid_ip(self, input_ip_address):
         """Function that checks given address and return True if address is valid IPv4 or IPV6 address.
