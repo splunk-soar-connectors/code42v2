@@ -7,7 +7,7 @@
     "logo": "logo_code42v2.svg",
     "logo_dark": "logo_code42v2_dark.svg",
     "product_name": "Code42 v2",
-    "python_version": "3",
+    "python_version": "3.9, 3.13",
     "fips_compliant": true,
     "product_version_regex": ".*",
     "publisher": "Splunk",
