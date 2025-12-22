@@ -65,12 +65,10 @@ class Code42UnsupportedHashError(Exception):
         super().__init__("Unsupported hash format. Hash must be either md5 or sha256")
 
 
-ACTION_MAP = {}
-
-
 def action_handler_for(key):
     def wrapper(f):
-        ACTION_MAP[key] = f
+        # Store the key for when we build the action map
+        f._action_key = key
         return f
 
     return wrapper
@@ -95,13 +93,19 @@ def is_default_dict(_dict):
 class Code42Connector(BaseConnector):
     def __init__(self):
         super().__init__()
-
         self._state = None
         self._cloud_instance = None
         self._username = None
         self._password = None
         self._client = None
         self._proxy = None
+
+        # Build action map here to avoid global mutation
+        self._action_map = {}
+        for name in dir(self.__class__):
+            method = getattr(self.__class__, name)
+            if hasattr(method, "_action_key"):
+                self._action_map[method._action_key] = method
 
     def _is_valid_ip(self, input_ip_address):
         """Function that checks given address and return True if address is valid IPv4 or IPV6 address.
@@ -164,7 +168,7 @@ class Code42Connector(BaseConnector):
         action_id = self.get_action_identifier()
         self.debug_print("action_id", action_id)
 
-        action_handler = ACTION_MAP.get(action_id)
+        action_handler = self._action_map.get(action_id)
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         if not action_handler:
@@ -381,6 +385,7 @@ class Code42Connector(BaseConnector):
         if phantom.is_fail(ret_val):
             return action_result.get_status()
         active_user = param.get("user_status", "All")
+        active = None
         if active_user not in CODE42V2_USER_STATUS_LIST:
             msg = CODE42V2_VALUE_LIST_ERR_MSG.format("user_status", CODE42V2_USER_STATUS_LIST)
             return action_result.set_status(phantom.APP_ERROR, msg)
