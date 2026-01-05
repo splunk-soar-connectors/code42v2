@@ -1,9 +1,9 @@
 # Code42 v2
 
-Publisher: Splunk \
-Connector Version: 1.0.4 \
-Product Vendor: Code42 \
-Product Name: Code42 v2 \
+Publisher: Splunk <br>
+Connector Version: 1.0.4 <br>
+Product Vendor: Code42 <br>
+Product Name: Code42 v2 <br>
 Minimum Product Version: 6.3.0
 
 Code42 provides simple, fast detection and response to everyday data loss from insider threats by focusing on customer data on endpoints and the cloud
@@ -65,44 +65,44 @@ VARIABLE | REQUIRED | TYPE | DESCRIPTION
 
 ### Supported Actions
 
-[test connectivity](#action-test-connectivity) - Validate the asset configuration for connectivity using supplied configuration \
-[on poll](#action-on-poll) - Callback action for the on_poll ingest functionality \
-[add departing employee](#action-add-departing-employee) - Add a departing employee to the departing employees detection list \
-[remove departing employee](#action-remove-departing-employee) - Remove a departing employee from the departing employees detection list \
-[list departing employees](#action-list-departing-employees) - Returns a list of users who are on the departing employees list \
-[get departing employee](#action-get-departing-employee) - Get a departing employee \
-[add highrisk employee](#action-add-highrisk-employee) - Add a high risk employee to the high risk employees detection list \
-[remove highrisk employee](#action-remove-highrisk-employee) - Remove a high risk employee from the high risk employees detection list \
-[list highrisk employees](#action-list-highrisk-employees) - Returns a list of users who are on the high-risk employees list \
-[get highrisk employee](#action-get-highrisk-employee) - Get a high risk employee \
-[add highrisk tag](#action-add-highrisk-tag) - Add a risk tag to a user \
-[remove highrisk tag](#action-remove-highrisk-tag) - Remove a risk tag from a user \
-[get alert details](#action-get-alert-details) - Get alert details \
-[search alerts](#action-search-alerts) - Search Alerts \
-[set alert state](#action-set-alert-state) - Set the state of the alert \
-[list users](#action-list-users) - List all users \
-[create user](#action-create-user) - Create a new Code42 user account \
-[block user](#action-block-user) - Blocks a user from accessing their Code42 account \
-[deactivate user](#action-deactivate-user) - Deactivates user's Code42 account \
-[reactivate user](#action-reactivate-user) - Reactivates a deactivated user's Code42 account \
-[unblock user](#action-unblock-user) - Unblocks a user, allowing access to their Code42 account \
-[get user profile](#action-get-user-profile) - Get user profile \
-[add legalhold custodian](#action-add-legalhold-custodian) - Add a user (custodian) to a legal hold matter \
-[remove legalhold custodian](#action-remove-legalhold-custodian) - Remove user (custodian) from a legal hold matter \
-[create case](#action-create-case) - Create a Code42 case \
-[update case](#action-update-case) - Update the details of a case \
-[close case](#action-close-case) - Change the status of a Code42 case to 'CLOSED' \
-[list cases](#action-list-cases) - List Code42 Cases \
-[add case event](#action-add-case-event) - Associates a file event with a Code42 case \
-[hunt file](#action-hunt-file) - Searches Code42 for a backed-up file with a matching hash and downloads it \
-[run query](#action-run-query) - Search for Code42 file events \
+[test connectivity](#action-test-connectivity) - Validate the asset configuration for connectivity using supplied configuration <br>
+[on poll](#action-on-poll) - Callback action for the on_poll ingest functionality <br>
+[add departing employee](#action-add-departing-employee) - Add a departing employee to the departing employees detection list <br>
+[remove departing employee](#action-remove-departing-employee) - Remove a departing employee from the departing employees detection list <br>
+[list departing employees](#action-list-departing-employees) - Returns a list of users who are on the departing employees list <br>
+[get departing employee](#action-get-departing-employee) - Get a departing employee <br>
+[add highrisk employee](#action-add-highrisk-employee) - Add a high risk employee to the high risk employees detection list <br>
+[remove highrisk employee](#action-remove-highrisk-employee) - Remove a high risk employee from the high risk employees detection list <br>
+[list highrisk employees](#action-list-highrisk-employees) - Returns a list of users who are on the high-risk employees list <br>
+[get highrisk employee](#action-get-highrisk-employee) - Get a high risk employee <br>
+[add highrisk tag](#action-add-highrisk-tag) - Add a risk tag to a user <br>
+[remove highrisk tag](#action-remove-highrisk-tag) - Remove a risk tag from a user <br>
+[get alert details](#action-get-alert-details) - Get alert details <br>
+[search alerts](#action-search-alerts) - Search Alerts <br>
+[set alert state](#action-set-alert-state) - Set the state of the alert <br>
+[list users](#action-list-users) - List all users <br>
+[create user](#action-create-user) - Create a new Code42 user account <br>
+[block user](#action-block-user) - Blocks a user from accessing their Code42 account <br>
+[deactivate user](#action-deactivate-user) - Deactivates user's Code42 account <br>
+[reactivate user](#action-reactivate-user) - Reactivates a deactivated user's Code42 account <br>
+[unblock user](#action-unblock-user) - Unblocks a user, allowing access to their Code42 account <br>
+[get user profile](#action-get-user-profile) - Get user profile <br>
+[add legalhold custodian](#action-add-legalhold-custodian) - Add a user (custodian) to a legal hold matter <br>
+[remove legalhold custodian](#action-remove-legalhold-custodian) - Remove user (custodian) from a legal hold matter <br>
+[create case](#action-create-case) - Create a Code42 case <br>
+[update case](#action-update-case) - Update the details of a case <br>
+[close case](#action-close-case) - Change the status of a Code42 case to 'CLOSED' <br>
+[list cases](#action-list-cases) - List Code42 Cases <br>
+[add case event](#action-add-case-event) - Associates a file event with a Code42 case <br>
+[hunt file](#action-hunt-file) - Searches Code42 for a backed-up file with a matching hash and downloads it <br>
+[run query](#action-run-query) - Search for Code42 file events <br>
 [run advanced query](#action-run-advanced-query) - Run an advanced query using JSON
 
 ## action: 'test connectivity'
 
 Validate the asset configuration for connectivity using supplied configuration
 
-Type: **test** \
+Type: **test** <br>
 Read only: **True**
 
 #### Action Parameters
@@ -117,7 +117,7 @@ No Output
 
 Callback action for the on_poll ingest functionality
 
-Type: **ingest** \
+Type: **ingest** <br>
 Read only: **True**
 
 #### Action Parameters
@@ -138,7 +138,7 @@ No Output
 
 Add a departing employee to the departing employees detection list
 
-Type: **contain** \
+Type: **contain** <br>
 Read only: **False**
 
 There is a short delay before you can query the updated results.
@@ -177,7 +177,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Remove a departing employee from the departing employees detection list
 
-Type: **correct** \
+Type: **correct** <br>
 Read only: **False**
 
 There is a short delay before you can query the updated results.
@@ -204,7 +204,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Returns a list of users who are on the departing employees list
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 #### Action Parameters
@@ -240,7 +240,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Get a departing employee
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 #### Action Parameters
@@ -273,7 +273,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Add a high risk employee to the high risk employees detection list
 
-Type: **contain** \
+Type: **contain** <br>
 Read only: **False**
 
 #### Action Parameters
@@ -307,7 +307,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Remove a high risk employee from the high risk employees detection list
 
-Type: **correct** \
+Type: **correct** <br>
 Read only: **False**
 
 #### Action Parameters
@@ -332,7 +332,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Returns a list of users who are on the high-risk employees list
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 #### Action Parameters
@@ -368,7 +368,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Get a high risk employee
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 #### Action Parameters
@@ -401,7 +401,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Add a risk tag to a user
 
-Type: **contain** \
+Type: **contain** <br>
 Read only: **False**
 
 #### Action Parameters
@@ -434,7 +434,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Remove a risk tag from a user
 
-Type: **correct** \
+Type: **correct** <br>
 Read only: **False**
 
 #### Action Parameters
@@ -467,7 +467,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Get alert details
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 #### Action Parameters
@@ -557,7 +557,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Search Alerts
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 All query parameters are optional; at least one search term is required. All query parameters are in logical AND with each other. Defaults to last 30 days if no date range is provided.
@@ -607,7 +607,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Set the state of the alert
 
-Type: **generic** \
+Type: **generic** <br>
 Read only: **False**
 
 #### Action Parameters
@@ -637,7 +637,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 List all users
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 #### Action Parameters
@@ -693,7 +693,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Create a new Code42 user account
 
-Type: **generic** \
+Type: **generic** <br>
 Read only: **False**
 
 There is a short delay before you will be able to add the new user to the departing employee or high risk employee lists. For security reasons, we strongly recommend you to reset your password after first time login. <b>Note:</b> If the provided username already exists for a user, it will be updated in the database instead.
@@ -753,7 +753,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Blocks a user from accessing their Code42 account
 
-Type: **contain** \
+Type: **contain** <br>
 Read only: **False**
 
 Blocks a user from accessing their Code42 account (endpoint backup/security processes continue while blocked).
@@ -780,7 +780,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Deactivates user's Code42 account
 
-Type: **correct** \
+Type: **correct** <br>
 Read only: **False**
 
 #### Action Parameters
@@ -805,7 +805,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Reactivates a deactivated user's Code42 account
 
-Type: **contain** \
+Type: **contain** <br>
 Read only: **False**
 
 #### Action Parameters
@@ -830,7 +830,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Unblocks a user, allowing access to their Code42 account
 
-Type: **contain** \
+Type: **contain** <br>
 Read only: **False**
 
 #### Action Parameters
@@ -855,7 +855,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Get user profile
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 #### Action Parameters
@@ -895,7 +895,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Add a user (custodian) to a legal hold matter
 
-Type: **contain** \
+Type: **contain** <br>
 Read only: **False**
 
 #### Action Parameters
@@ -930,7 +930,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Remove user (custodian) from a legal hold matter
 
-Type: **correct** \
+Type: **correct** <br>
 Read only: **False**
 
 #### Action Parameters
@@ -958,7 +958,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Create a Code42 case
 
-Type: **generic** \
+Type: **generic** <br>
 Read only: **False**
 
 #### Action Parameters
@@ -1005,7 +1005,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Update the details of a case
 
-Type: **generic** \
+Type: **generic** <br>
 Read only: **False**
 
 #### Action Parameters
@@ -1054,7 +1054,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Change the status of a Code42 case to 'CLOSED'
 
-Type: **generic** \
+Type: **generic** <br>
 Read only: **False**
 
 #### Action Parameters
@@ -1094,7 +1094,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 List Code42 Cases
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 #### Action Parameters
@@ -1135,7 +1135,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Associates a file event with a Code42 case
 
-Type: **generic** \
+Type: **generic** <br>
 Read only: **False**
 
 #### Action Parameters
@@ -1163,7 +1163,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Searches Code42 for a backed-up file with a matching hash and downloads it
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 #### Action Parameters
@@ -1190,7 +1190,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Search for Code42 file events
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 You can use wildcards (\*,?) with most string-based fields. All query parameters are optional; at least one search term is required. All query parameters are in logical AND with each other.
@@ -1326,7 +1326,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Run an advanced query using JSON
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 If page-related keys (pgNum, pgSize, pgToken) are available in the query, they will be ignored.
@@ -1434,7 +1434,7 @@ ______________________________________________________________________
 
 Auto-generated Splunk SOAR Connector documentation.
 
-Copyright 2025 Splunk Inc.
+Copyright 2026 Splunk Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
