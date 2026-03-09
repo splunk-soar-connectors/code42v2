@@ -10,8 +10,7 @@ Code42 provides simple, fast detection and response to everyday data loss from i
 
 ## Note
 
-This app will be the one supported moving forward, and the [other
-version](https://github.com/splunk-soar-connectors/code42) will be deprecated
+This app will be archived. Please use [code42v3](https://github.com/splunk-soar-connectors/code42v3) going forward.
 
 ## py42
 
